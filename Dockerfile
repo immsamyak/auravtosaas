@@ -36,5 +36,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8080
 
 # Start Gunicorn WSGI server
-# Note: Database migrations will be handled via Coolify Pre-Deployment Hook
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "1"]
+CMD ["/bin/bash", "-c", "python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 1"]
