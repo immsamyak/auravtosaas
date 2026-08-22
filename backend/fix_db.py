@@ -30,23 +30,11 @@ def fix_corrupted_migrations():
         """)
         table_exists = cur.fetchone()[0]
         
-        cur.execute("""
-            SELECT EXISTS (
-                SELECT FROM information_schema.tables 
-                WHERE table_schema = 'public' 
-                AND table_name = 'auth_user'
-            );
-        """)
-        auth_exists = cur.fetchone()[0]
-        
         if not table_exists:
             print("django_content_type table is MISSING. Fixing django_migrations...")
-            if auth_exists:
-                print("Database is corrupted (some tables exist, others missing). Resetting schema because this is a fresh deployment.")
-                cur.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
-            else:
-                cur.execute("DELETE FROM django_migrations WHERE app IN ('contenttypes', 'auth', 'admin', 'sessions', 'core');")
-            print("Fixed database state. Django will run migrations.")
+            print("Database is corrupted. Resetting schema completely because this is a fresh deployment.")
+            cur.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
+            print("Fixed database state. Django will run migrations cleanly.")
         else:
             print("django_content_type table exists. Database seems fine.")
             
