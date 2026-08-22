@@ -1,5 +1,4 @@
 backend/venv/
-backend/media/
 .git/
 .DS_Store
 **/__pycache__/
