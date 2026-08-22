@@ -17,8 +17,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # Copy ML requirements first to leverage Docker layer caching
 COPY backend/requirements-ml.txt /app/
-# Use --no-cache-dir to prevent pip from storing massive ML wheels on the server disk
-RUN pip install --no-cache-dir --default-timeout=100 -r requirements-ml.txt
+# Use --no-cache-dir and PyTorch CPU wheels to prevent pip from storing massive ML wheels (saves ~4GB disk space)
+RUN pip install --no-cache-dir --default-timeout=100 --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-ml.txt
 
 # Copy standard requirements
 COPY backend/requirements.txt /app/
