@@ -1,0 +1,10 @@
+backend/venv/
+backend/media/
+.git/
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+db.sqlite3-journal
