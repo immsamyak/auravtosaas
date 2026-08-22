@@ -27,6 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-z@=&#mn-m1riv5zavxzzr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
 
+# DevOps Test Comment: This should not trigger PyTorch ML reinstall
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'aura.alvicsxinfo.tech,localhost,127.0.0.1,*').split(',')
 
 CSRF_TRUSTED_ORIGINS = [
