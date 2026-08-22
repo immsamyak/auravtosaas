@@ -36,5 +36,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8080
 
 # Start Gunicorn WSGI server
-# Migrations are removed to prevent crash loops from corrupted database schemas
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "1"]
+CMD ["/bin/bash", "-c", "python fix_db.py && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 1"]

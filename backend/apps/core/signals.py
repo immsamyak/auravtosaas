@@ -14,8 +14,14 @@ def _get_model_name(sender):
     except Exception:
         return sender.__name__.lower()
 
+import sys
+
 @receiver(post_save)
 def audit_log_post_save(sender, instance, created, **kwargs):
+    if len(sys.argv) > 1 and sys.argv[1] in ['migrate', 'makemigrations', 'flush', 'loaddata']:
+        # Don't run audit logs during migrations or management commands
+        return
+        
     model_name = _get_model_name(sender)
     
     if model_name in IGNORE_MODELS:
@@ -48,6 +54,10 @@ def audit_log_post_save(sender, instance, created, **kwargs):
 
 @receiver(post_delete)
 def audit_log_post_delete(sender, instance, **kwargs):
+    if len(sys.argv) > 1 and sys.argv[1] in ['migrate', 'makemigrations', 'flush', 'loaddata']:
+        # Don't run audit logs during migrations or management commands
+        return
+        
     model_name = _get_model_name(sender)
     
     if model_name in IGNORE_MODELS:
