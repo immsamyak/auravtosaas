@@ -27,7 +27,7 @@ COPY backend/ /app/
 RUN python manage.py collectstatic --noinput
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8080
 
-# Start Gunicorn WSGI server
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+# Run migrations and start Gunicorn WSGI server
+CMD ["/bin/bash", "-c", "python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 3"]
