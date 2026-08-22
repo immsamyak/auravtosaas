@@ -242,7 +242,7 @@ class GlobalSettingsAdmin(ModelAdmin):
             'description': 'Configure the core identity and appearance of the Aura platform globally.'
         }),
         ('Virtual Try-On (VTO) AI Engine', {
-            'fields': ('vto_engine', 'replicate_api_key', 'replicate_model_version'),
+            'fields': ('vto_engine', 'replicate_api_key', 'replicate_model_version', 'hf_space_id', 'hf_api_token'),
             'classes': ('tab',),
             'description': 'Configure which AI Model engine powers the Virtual Try-On feature across all brands. Using Replicate is highly recommended for production servers to prevent memory crashes.'
         }),

@@ -16,13 +16,19 @@ class VirtualTryOnService:
     @staticmethod
     def get_engine():
         from apps.core.models import GlobalSettings
-        engine_type = GlobalSettings.get_settings().vto_engine
-        
-        if engine_type == 'mock':
-            return MockVTOEngine()
-        elif engine_type == 'replicate':
+        if settings and settings.vto_engine == 'replicate':
             from apps.fitting.engines.replicate_vton import ReplicateVTONEngine
             return ReplicateVTONEngine()
+        elif settings and settings.vto_engine == 'huggingface':
+            from apps.fitting.engines.huggingface_vton import HuggingFaceVTONEngine
+            return HuggingFaceVTONEngine()
+        elif settings and settings.vto_engine == 'local':
+            from apps.fitting.engines.mock_vton import MockVTOEngine
+            return MockVTOEngine()
+            
+        engine_type = GlobalSettings.get_settings().vto_engine
+        if engine_type == 'mock':
+            return MockVTOEngine()
         elif engine_type == 'mobile_vton':
             from apps.fitting.engines.mobile_vton import MobileVTONEngine
             return MobileVTONEngine()

@@ -146,19 +146,25 @@ class GlobalSettings(models.Model):
     currency_symbol = models.CharField(max_length=10, default='$')
     
     # Virtual Try-On (VTO)
+    class VTOEngine(models.TextChoices):
+        LOCAL = 'local', 'Local API (ComfyUI / Stable Diffusion)'
+        REPLICATE = 'replicate', 'Cloud API: Replicate'
+        HUGGINGFACE = 'huggingface', 'Cloud API: Hugging Face Spaces'
+        
     vto_engine = models.CharField(
-        max_length=50, 
-        choices=[
-            ('replicate', 'Cloud API: Replicate (Recommended)'),
-            ('mobile_vton', 'Local: MobileVTON (Requires GPU)'), 
-            ('cat_vton', 'Local: CatVTON (Requires GPU)'), 
-            ('mock', 'Mock Engine (Testing Only)')
-        ], 
-        default='replicate',
+        max_length=20,
+        choices=VTOEngine.choices,
+        default=VTOEngine.LOCAL,
         help_text="Select which AI engine to use for Virtual Try-On."
     )
+    
+    # Replicate Config
     replicate_api_key = models.CharField(max_length=255, blank=True, null=True, help_text="Required if using Replicate API")
     replicate_model_version = models.CharField(max_length=255, default='cuuupid/idm-vton', help_text="e.g. cuuupid/idm-vton")
+    
+    # Hugging Face Config
+    hf_space_id = models.CharField(max_length=255, blank=True, null=True, default='Kwai-Kolors/Kolors-Virtual-Try-On', help_text="e.g. Kwai-Kolors/Kolors-Virtual-Try-On or your duplicated space ID")
+    hf_api_token = models.CharField(max_length=255, blank=True, null=True, help_text="Your Hugging Face Access Token (Required if space is private or duplicated)")
     
     
     # SMTP
