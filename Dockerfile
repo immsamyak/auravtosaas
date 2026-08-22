@@ -13,7 +13,7 @@ WORKDIR /app
 # Install system dependencies (Required for MediaPipe)
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && apt-get install -y libgl1 libglib2.0-0
+    apt-get update && apt-get install -y libgl1 libglib2.0-0 curl wget
 
 # Copy ML requirements first to leverage Docker layer caching
 COPY backend/requirements-ml.txt /app/
