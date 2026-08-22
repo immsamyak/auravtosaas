@@ -16,33 +16,35 @@ class HuggingFaceVTONEngine:
         from apps.core.models import GlobalSettings
         settings = GlobalSettings.objects.first()
         
-        space_id = settings.hf_space_id if settings and settings.hf_space_id else "Kwai-Kolors/Kolors-Virtual-Try-On"
+        space_id = settings.hf_space_id if settings and settings.hf_space_id else "yisol/IDM-VTON"
         api_token = settings.hf_api_token if settings and settings.hf_api_token else None
         
         logger.info(f"Connecting to Hugging Face Space: {space_id}")
         
+        client = None
         try:
-            # Initialize client
-            client = Client(space_id, hf_token=api_token)
-            
-            # Prepare inputs (Assuming a standard Kolors VTON interface for Hugging Face)
-            # This attempts to match common gradio endpoints for Kolors VTON spaces
-            # Usually: person_img, garment_img, seed, randomize_seed
+            # Initialize client with `token` instead of `hf_token` (gradio_client >= 1.0)
+            client = Client(space_id, token=api_token)
             
             logger.info("Sending prediction request to Hugging Face...")
             start_time = time.time()
             
-            # Most VTON spaces on HF take human_img and garm_img and return the result at index 0 or as a tuple
-            # We will use the handle_file helper to upload local files safely to Gradio
+            # yisol/IDM-VTON Signature: 
+            # dict(background, layers, composite), garm_img, garment_des, is_checked, is_checked_crop, denoise_steps, seed
+            garment_desc = kwargs.get('garment_description', 'clothing')
+            
             result = client.predict(
-                handle_file(user_photo_path),
-                handle_file(product_photo_path),
-                0,      # seed
-                True,   # randomize_seed
-                api_name="/tryon" # Try to hit named endpoint first
+                dict={"background": handle_file(user_photo_path), "layers": [], "composite": None},
+                garm_img=handle_file(product_photo_path),
+                garment_des=garment_desc,
+                is_checked=True,
+                is_checked_crop=False,
+                denoise_steps=30,
+                seed=42,
+                api_name="/tryon"
             )
             
-            # Result could be a tuple (image_path, mask_path) or just the image string path
+            # Result is a tuple: (output, masked_image_output)
             if isinstance(result, tuple) or isinstance(result, list):
                 output_path = result[0]
             else:
@@ -64,14 +66,23 @@ class HuggingFaceVTONEngine:
         except Exception as e:
             logger.error(f"Hugging Face API failed: {str(e)}", exc_info=True)
             
-            # Try fallback to unlabeled fn_index=2 if /tryon doesn't exist
+            if client is None:
+                return {
+                    'status': 'FAILED',
+                    'error_message': f"Failed to connect to Hugging Face Space: {str(e)}"
+                }
+                
+            # Try fallback without kwargs if the user is using a custom/unlabeled space
             logger.info("Attempting fallback to unnamed endpoint (fn_index=2)...")
             try:
                 result = client.predict(
                     handle_file(user_photo_path),
                     handle_file(product_photo_path),
-                    0,
+                    garment_desc,
                     True,
+                    False,
+                    30,
+                    42,
                     fn_index=2
                 )
                 
