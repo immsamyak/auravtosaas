@@ -29,26 +29,46 @@ class HuggingFaceVTONEngine:
             logger.info("Sending prediction request to Hugging Face...")
             start_time = time.time()
             
-            # yisol/IDM-VTON Signature: 
-            # dict(background, layers, composite), garm_img, garment_des, is_checked, is_checked_crop, denoise_steps, seed
-            garment_desc = kwargs.get('garment_description', 'clothing')
-            
-            result = client.predict(
-                dict={"background": handle_file(user_photo_path), "layers": [], "composite": None},
-                garm_img=handle_file(product_photo_path),
-                garment_des=garment_desc,
-                is_checked=True,
-                is_checked_crop=False,
-                denoise_steps=30,
-                seed=42,
-                api_name="/tryon"
-            )
-            
-            # Result is a tuple: (output, masked_image_output)
-            if isinstance(result, tuple) or isinstance(result, list):
-                output_path = result[0]
-            else:
+            if "fashn" in space_id.lower():
+                # Fashn VTON 1.5 signature
+                category = "tops"
+                garment_desc = kwargs.get('garment_description', 'clothing')
+                if "dress" in garment_desc:
+                    category = "one-pieces"
+                elif "pant" in garment_desc or "skirt" in garment_desc or "short" in garment_desc:
+                    category = "bottoms"
+                    
+                result = client.predict(
+                    person_image=handle_file(user_photo_path),
+                    garment_image=handle_file(product_photo_path),
+                    category=category,
+                    garment_photo_type="model",
+                    num_timesteps=30,
+                    guidance_scale=1.5,
+                    seed=42,
+                    segmentation_free=True,
+                    api_name="/try_on"
+                )
                 output_path = result
+            else:
+                # yisol/IDM-VTON Signature: 
+                garment_desc = kwargs.get('garment_description', 'clothing')
+                result = client.predict(
+                    dict={"background": handle_file(user_photo_path), "layers": [], "composite": None},
+                    garm_img=handle_file(product_photo_path),
+                    garment_des=garment_desc,
+                    is_checked=True,
+                    is_checked_crop=False,
+                    denoise_steps=30,
+                    seed=42,
+                    api_name="/tryon"
+                )
+                
+                # Result is a tuple: (output, masked_image_output)
+                if isinstance(result, tuple) or isinstance(result, list):
+                    output_path = result[0]
+                else:
+                    output_path = result
                 
             elapsed_time = time.time() - start_time
             logger.info(f"Hugging Face generation completed in {elapsed_time:.2f} seconds")

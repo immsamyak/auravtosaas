@@ -163,7 +163,7 @@ class GlobalSettings(models.Model):
     replicate_model_version = models.CharField(max_length=255, default='cuuupid/idm-vton', help_text="e.g. cuuupid/idm-vton")
     
     # Hugging Face Config
-    hf_space_id = models.CharField(max_length=255, blank=True, null=True, default='Kwai-Kolors/Kolors-Virtual-Try-On', help_text="e.g. Kwai-Kolors/Kolors-Virtual-Try-On or your duplicated space ID")
+    hf_space_id = models.CharField(max_length=255, blank=True, null=True, default='fashn-ai/fashn-vton-1.5', help_text="e.g. fashn-ai/fashn-vton-1.5 or your duplicated space ID")
     hf_api_token = models.CharField(max_length=255, blank=True, null=True, help_text="Your Hugging Face Access Token (Required if space is private or duplicated)")
     
     
