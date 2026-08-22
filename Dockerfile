@@ -34,5 +34,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8080
 
 # Start Gunicorn WSGI server
-# Adding '|| sleep 3600' prevents the container from crashing immediately so we can read the logs if it fails!
-CMD ["/bin/bash", "-c", "(python fix_db.py && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 1) || sleep 3600"]
+CMD ["/bin/bash", "-c", "python fix_db.py && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 1"]
