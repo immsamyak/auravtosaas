@@ -7,7 +7,7 @@ from gradio_client import Client, handle_file
 logger = logging.getLogger(__name__)
 
 class HuggingFaceVTONEngine:
-    def process_try_on(self, user_photo_path, product_photo_path, **kwargs):
+    def generate(self, user_photo_path, product_photo_path, **kwargs):
         """
         Process virtual try-on using Hugging Face Spaces (via Gradio Client)
         """
@@ -55,7 +55,11 @@ class HuggingFaceVTONEngine:
             with open(output_path, "rb") as f:
                 image_data = f.read()
                 
-            return ContentFile(image_data, name="hf_vto_result.jpg")
+            return {
+                'status': 'COMPLETED',
+                'result_image_file': ContentFile(image_data, name="hf_vto_result.jpg"),
+                'confidence_score': 95.0
+            }
             
         except Exception as e:
             logger.error(f"Hugging Face API failed: {str(e)}", exc_info=True)
@@ -79,8 +83,15 @@ class HuggingFaceVTONEngine:
                 with open(output_path, "rb") as f:
                     image_data = f.read()
                     
-                return ContentFile(image_data, name="hf_vto_result_fallback.jpg")
+                return {
+                    'status': 'COMPLETED',
+                    'result_image_file': ContentFile(image_data, name="hf_vto_result_fallback.jpg"),
+                    'confidence_score': 95.0
+                }
                 
             except Exception as e2:
                 logger.error(f"Fallback endpoint also failed: {str(e2)}")
-                raise Exception(f"Hugging Face Generation Failed: {str(e)}\nFallback failed: {str(e2)}")
+                return {
+                    'status': 'FAILED',
+                    'error_message': f"Hugging Face API failed: {str(e)} | Fallback failed: {str(e2)}"
+                }
