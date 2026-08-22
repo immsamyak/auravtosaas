@@ -27,8 +27,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-z@=&#mn-m1riv5zavxzzr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'aura.alvicsxinfo.tech,localhost,127.0.0.1,*').split(',')
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://aura.alvicsxinfo.tech',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
 
 # Application definition
 
