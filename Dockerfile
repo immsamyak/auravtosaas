@@ -10,6 +10,11 @@ ENV TORCH_HOME /app/models
 # Set work directory
 WORKDIR /app
 
+# Install system dependencies (Required for MediaPipe)
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y libgl1 libglib2.0-0
+
 # Copy ML requirements first to leverage Docker layer caching
 COPY backend/requirements-ml.txt /app/
 # Use Docker BuildKit cache to drastically speed up pip installs across rebuilds
@@ -32,4 +37,4 @@ EXPOSE 8080
 
 # Start Gunicorn WSGI server
 # Note: Database migrations will be handled via Coolify Pre-Deployment Hook
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "3"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "1"]
