@@ -34,12 +34,23 @@ class ReplicateVTONEngine(VTOEngine):
             
             # Open files
             with open(user_photo_path, "rb") as person_img, open(product_photo_path, "rb") as garment_img:
-                # Kolors-virtual-try-on API format:
-                # https://replicate.com/cuiaxi/kolors-virtual-try-on
+                # idm-vton API format:
+                # https://replicate.com/cuuupid/idm-vton
+                
+                # Determine category (upper_body, lower_body, dresses)
+                category = "upper_body"
+                garment_des = kwargs.get('garment_description', 'clothing').lower()
+                if "dress" in garment_des:
+                    category = "dresses"
+                elif "pant" in garment_des or "skirt" in garment_des or "short" in garment_des:
+                    category = "lower_body"
+                    
                 input_data = {
-                    "person_img": person_img,
-                    "garment_img": garment_img,
-                    "garment_des": kwargs.get('garment_description', 'clothing')
+                    "human_img": person_img,
+                    "garm_img": garment_img,
+                    "garment_des": garment_des,
+                    "category": category,
+                    "steps": 30
                 }
                 
                 # Run the prediction

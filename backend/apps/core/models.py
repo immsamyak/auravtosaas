@@ -158,7 +158,7 @@ class GlobalSettings(models.Model):
         help_text="Select which AI engine to use for Virtual Try-On."
     )
     replicate_api_key = models.CharField(max_length=255, blank=True, null=True, help_text="Required if using Replicate API")
-    replicate_model_version = models.CharField(max_length=255, default='cuiaxi/kolors-virtual-try-on', help_text="e.g. cuiaxi/kolors-virtual-try-on")
+    replicate_model_version = models.CharField(max_length=255, default='cuuupid/idm-vton', help_text="e.g. cuuupid/idm-vton")
     
     
     # SMTP
