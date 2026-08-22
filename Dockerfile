@@ -17,8 +17,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # Copy ML requirements first to leverage Docker layer caching
 COPY backend/requirements-ml.txt /app/
-# Use --no-cache-dir and PyTorch CPU wheels to prevent pip from storing massive ML wheels (saves ~4GB disk space)
-RUN pip install --no-cache-dir --default-timeout=100 --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-ml.txt
+# Split into batches to prevent Out Of Memory (OOM) crashes during Docker build on low-RAM servers
+RUN pip install --no-cache-dir --default-timeout=100 --extra-index-url https://download.pytorch.org/whl/cpu torch torchvision onnx onnxruntime
+RUN pip install --no-cache-dir --default-timeout=100 transformers diffusers accelerate huggingface_hub
+RUN pip install --no-cache-dir --default-timeout=100 opencv-python-headless opencv-contrib-python-headless mediapipe
+RUN pip install --no-cache-dir --default-timeout=100 -r requirements-ml.txt
 
 # Copy standard requirements
 COPY backend/requirements.txt /app/
