@@ -1,0 +1,14 @@
+/* Aura Global Styles */
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+@layer components {
+    /* Add reusable component classes here if necessary */
+}
+
+@layer utilities {
+    /* Add utility classes here if necessary */
+}

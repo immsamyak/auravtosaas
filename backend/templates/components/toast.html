@@ -1,0 +1,91 @@
+<!-- Toast Notifications Container -->
+<div id="toast-container" class="fixed top-20 right-4 z-[9999] flex flex-col space-y-2 pointer-events-none">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast-message pointer-events-auto flex items-center p-4 w-full max-w-xs text-gray-900 bg-white rounded-lg shadow-lg border-l-4 {% if message.tags == 'error' %}border-red-500{% elif message.tags == 'success' %}border-green-500{% elif message.tags == 'warning' %}border-yellow-500{% else %}border-blue-500{% endif %} transition-all duration-300 transform translate-x-full opacity-0" role="alert">
+                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 
+                    {% if message.tags == 'error' %}text-red-500 bg-red-100
+                    {% elif message.tags == 'success' %}text-green-500 bg-green-100
+                    {% elif message.tags == 'warning' %}text-yellow-500 bg-yellow-100
+                    {% else %}text-blue-500 bg-blue-100{% endif %} rounded-lg">
+                    {% if message.tags == 'error' %}<i class="fa-solid fa-xmark"></i>
+                    {% elif message.tags == 'success' %}<i class="fa-solid fa-check"></i>
+                    {% elif message.tags == 'warning' %}<i class="fa-solid fa-exclamation"></i>
+                    {% else %}<i class="fa-solid fa-info"></i>{% endif %}
+                </div>
+                <div class="ml-3 text-sm font-medium">{{ message }}</div>
+                <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition" onclick="this.parentElement.remove();">
+                    <span class="sr-only">Close</span>
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    // Global Toast Trigger Function (for JS events)
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        
+        let borderColor = 'border-blue-500';
+        let iconColor = 'text-blue-500 bg-blue-100';
+        let iconClass = 'fa-info';
+        
+        if (type === 'success') {
+            borderColor = 'border-green-500';
+            iconColor = 'text-green-500 bg-green-100';
+            iconClass = 'fa-check';
+        } else if (type === 'error') {
+            borderColor = 'border-red-500';
+            iconColor = 'text-red-500 bg-red-100';
+            iconClass = 'fa-xmark';
+        } else if (type === 'warning') {
+            borderColor = 'border-yellow-500';
+            iconColor = 'text-yellow-500 bg-yellow-100';
+            iconClass = 'fa-exclamation';
+        }
+
+        toast.className = `toast-message pointer-events-auto flex items-center p-4 w-full max-w-xs text-gray-900 bg-white rounded-lg shadow-lg border-l-4 ${borderColor} transition-all duration-300 transform translate-x-full opacity-0`;
+        toast.innerHTML = `
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 ${iconColor} rounded-lg">
+                <i class="fa-solid ${iconClass}"></i>
+            </div>
+            <div class="ml-3 text-sm font-medium">${message}</div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition" onclick="this.parentElement.remove();">
+                <span class="sr-only">Close</span>
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        `;
+        container.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full', 'opacity-0');
+        }, 10);
+        
+        // Auto remove
+        setTimeout(() => {
+            toast.classList.add('opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Animate Django Messages on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const toasts = document.querySelectorAll('.toast-message');
+        toasts.forEach((toast, index) => {
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full', 'opacity-0');
+            }, 100 + (index * 150)); // Stagger animations
+
+            // Auto dismiss after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000 + (index * 150));
+        });
+    });
+</script>

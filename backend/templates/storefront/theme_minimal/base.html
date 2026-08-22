@@ -1,0 +1,374 @@
+{% load static %}
+{% load marketing_tags %}
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>{% block title %}{{ brand.name|default:"Minimal Store" }}{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            800: '#292524',
+                            900: '#1c1917',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<!-- Alpine.js & Cart Store -->
+<script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('cart', {
+                items: JSON.parse(localStorage.getItem('aura_cart') || '[]'),
+                add(item) {
+                    // Check if already in cart
+                    const existing = this.items.find(i => i.id === item.id);
+                    if (existing) {
+                        existing.quantity += item.quantity || 1;
+                    } else {
+                        item.quantity = item.quantity || 1;
+                        this.items.push(item);
+                    }
+                    this.save();
+                },
+                remove(index) {
+                    this.items.splice(index, 1);
+                    this.save();
+                },
+                get count() { 
+                    return this.items.reduce((sum, item) => sum + item.quantity, 0); 
+                },
+                get total() { 
+                    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); 
+                },
+                
+                checkout() {
+                    if (this.items.length === 0) return;
+                    const variantId = this.items[0].id;
+                    window.location.href = `/checkout/{{ brand.slug }}/`;
+                },
+                save() { 
+                    localStorage.setItem('aura_cart', JSON.stringify(this.items)); 
+                }
+            });
+        });
+    </script>
+<style>[x-cloak] { display: none !important; }</style>
+</head>
+<body class="flex flex-col min-h-screen antialiased text-stone-800 bg-white selection:bg-stone-200" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false }">
+{% include 'components/popup_renderer.html' %}
+
+    {% if brand.top_announcement_text %}
+    <div class="bg-black text-white text-center py-2 text-xs md:text-sm font-sans tracking-wider w-full">
+        {{ brand.top_announcement_text }}
+    </div>
+    {% endif %}
+<!-- Ultra Minimal Nav -->
+<header class="py-8 px-8 md:px-16 flex justify-between items-center fixed w-full top-0 bg-white/80 backdrop-blur-sm z-50 transition-all duration-300">
+<div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
+    
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
+        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+    </nav>
+
+    <!-- Logo -->
+    <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
+        {% if brand.logo %}
+            <a href="{% url 'storefront' brand.slug %}" class="inline-block">
+                <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
+            </a>
+        {% else %}
+            <a class="inline-block" href="{% url 'storefront' brand.slug %}">
+                <span class="text-2xl font-bold tracking-tight">{{ brand.name }}</span>
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Right Icons -->
+    <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
+        <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        </button>
+        <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
+            <i class="fa-regular fa-user text-lg"></i>
+        </a>
+        <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
+            <i class="fa-solid fa-bag-shopping text-lg"></i>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
+        </button>
+    </div>
+
+</div>
+</header>
+<main class="flex-grow pt-24">
+        {% block content %}{% endblock %}
+    </main>
+<footer class="py-20 px-8 md:px-16 border-t border-stone-100 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm font-light">
+<div>
+<p class="uppercase tracking-[0.2em] mb-6 font-medium text-xs">{% if brand.description %}{{ brand.description }}{% else %}{{ brand.name }}{% endif %}</p>
+<div class="flex space-x-4 mt-6">
+                {% if brand.instagram_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
+                {% if brand.facebook_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
+                {% if brand.twitter_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
+                {% if brand.tiktok_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
+                {% if brand.pinterest_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+            </div>
+
+<p class="text-stone-500 max-w-xs">Intentionally designed essentials for everyday life.</p>
+</div>
+<div class="flex flex-col gap-3 text-stone-500">
+<a class="hover:text-stone-900 transition-colors w-fit" href="#">Terms</a>
+<a class="hover:text-stone-900 transition-colors w-fit" href="#">Privacy</a>
+<a class="hover:text-stone-900 transition-colors w-fit" href="#">Returns</a>
+</div>
+<div class="flex flex-col justify-between">
+<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="border-b border-stone-300 flex pb-2">
+<input class="outline-none w-full bg-transparent text-stone-800 placeholder-stone-400" placeholder="Email Address" type="email" name="email"/>
+<button class="uppercase tracking-[0.1em] text-xs hover:text-stone-400 transition-colors" type="submit">Join</button>
+</form>
+<p class="text-stone-400 text-xs mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %}{% endif %}</p>
+</div>
+</div>
+</footer>
+<!-- Search Modal -->
+<div class="fixed inset-0 z-[100] flex items-start justify-center pt-20" style="display: none;" x-show="isSearchOpen" x-transition.opacity="">
+<div @click="isSearchOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+<div @click.stop="" class="relative w-full max-w-3xl bg-white p-8 rounded-2xl shadow-2xl mx-4 transform transition-all">
+<button @click="isSearchOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+<i class="fa-solid fa-xmark text-xl"></i>
+</button>
+<h2 class="text-2xl font-bold mb-6 text-black">Search</h2>
+<form action="{% url 'storefront_shop' brand.slug %}" id="globalSearchForm" method="POST">
+                    {% csrf_token %}
+                <div class="relative">
+<input class="w-full text-black bg-gray-100 border-none rounded-xl px-6 py-4 text-lg focus:ring-2 focus:ring-black outline-none" id="globalSearchInput" name="search" placeholder="Search for products, collections..." required="" type="text"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black" type="submit">
+<i class="fa-solid fa-magnifying-glass text-xl"></i>
+</button>
+</div>
+</form>
+<div class="mt-8">
+<h3 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-4">Popular Searches</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Dresses'; document.getElementById('globalSearchForm').submit();">Dresses</button>
+<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Summer'; document.getElementById('globalSearchForm').submit();">Summer Collection</button>
+<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Accessories'; document.getElementById('globalSearchForm').submit();">Accessories</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Profile Modal -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center" style="display: none;" x-show="isProfileOpen" x-transition.opacity="">
+<div @click="isProfileOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+<div @click.stop="" class="relative w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl mx-4 text-center text-black" x-data="{ mode: 'login' }">
+<button @click="isProfileOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+<i class="fa-solid fa-xmark text-xl"></i>
+</button>
+            
+            {% if user.is_authenticated %}
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="fa-solid fa-user-check text-2xl text-green-500"></i>
+</div>
+<h2 class="text-2xl font-bold mb-2">Welcome, {{ user.first_name|default:user.username }}</h2>
+<p class="text-gray-500 mb-8">{{ user.email }}</p>
+<a class="block w-full bg-gray-100 text-black py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors mb-4" href="{% url 'storefront_account' brand.slug %}">View Orders</a>
+<a class="block w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors" href="{% url 'storefront_logout' brand.slug %}">Sign Out</a>
+            
+            {% else %}
+            
+            <!-- Login Form -->
+<div x-show="mode === 'login'">
+<div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="fa-regular fa-user text-2xl text-gray-500"></i>
+</div>
+<h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
+<p class="text-gray-500 mb-6">Sign in to view your orders and profile.</p>
+<form action="{% url 'storefront_login' brand.slug %}" class="space-y-4 text-left" method="POST">
+                    {% csrf_token %}
+                    <div>
+<label class="block text-sm font-medium text-gray-700">Email</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="email" required="" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700">Password</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="password" required="" type="password"/>
+</div>
+<button class="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors mt-6" type="submit">Sign In</button>
+</form>
+<div class="mt-4">
+<button @click="mode = 'register'" class="text-sm text-gray-500 hover:text-black">Don't have an account? Create one.</button>
+</div>
+</div>
+<!-- Register Form -->
+<div style="display:none;" x-show="mode === 'register'">
+<div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="fa-solid fa-user-plus text-2xl text-gray-500"></i>
+</div>
+<h2 class="text-2xl font-bold mb-2">Create Account</h2>
+<p class="text-gray-500 mb-6">Join us for a seamless shopping experience.</p>
+<form action="{% url 'storefront_register' brand.slug %}" class="space-y-4 text-left" method="POST">
+                    {% csrf_token %}
+                    <div>
+<label class="block text-sm font-medium text-gray-700">Full Name</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="name" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700">Email</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="email" required="" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700">Password</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="password" required="" type="password"/>
+</div>
+<button class="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors mt-6" type="submit">Create Account</button>
+</form>
+<div class="mt-4">
+<button @click="mode = 'login'" class="text-sm text-gray-500 hover:text-black">Already have an account? Sign in.</button>
+</div>
+</div>
+            
+            {% endif %}
+        </div>
+</div>
+<!-- Cart Slide-over -->
+<div aria-labelledby="slide-over-title" aria-modal="true" class="fixed inset-0 z-[100] overflow-hidden" role="dialog" style="display: none;" x-show="isCartOpen">
+<div @click="isCartOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" x-show="isCartOpen" x-transition.opacity=""></div>
+<div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+<div @click.stop="" class="w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700" x-show="isCartOpen" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:enter-start="translate-x-full" x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-full" x-transition:leave-start="translate-x-0">
+<div class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll text-black">
+<!-- Cart Header -->
+<div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+<div class="flex items-start justify-between">
+<h2 class="text-xl font-bold text-gray-900" id="slide-over-title">Shopping Cart</h2>
+<div class="ml-3 h-7 flex items-center">
+<button @click="isCartOpen = false" class="-m-2 p-2 text-gray-400 hover:text-gray-500" type="button">
+<span class="sr-only">Close panel</span>
+<i class="fa-solid fa-xmark text-xl"></i>
+</button>
+</div>
+</div>
+<div class="mt-8">
+<div class="flow-root">
+<ul class="-my-6 divide-y divide-gray-200" role="list">
+<template x-if="$store.cart.items.length === 0">
+<li class="py-12 text-center">
+<i class="fa-solid fa-bag-shopping text-4xl text-gray-300 mb-4"></i>
+<p class="text-gray-500 font-medium">Your cart is currently empty.</p>
+</li>
+</template>
+<template :key="index" x-for="(item, index) in $store.cart.items">
+<li class="py-6 flex">
+<div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden bg-gray-50">
+<img :alt="item.name" :src="item.image" class="w-full h-full object-center object-cover"/>
+</div>
+<div class="ml-4 flex-1 flex flex-col">
+<div>
+<div class="flex justify-between text-base font-medium text-gray-900">
+<h3 x-text="item.name"></h3>
+<p class="ml-4" x-text="'{{ brand.currency_symbol|default:'$'|escapejs }}' + (item.price * item.quantity).toFixed(2)"></p>
+</div>
+<p class="mt-1 text-sm text-gray-500" x-text="(!item.variant_name || item.variant_name === 'undefined / undefined') ? '' : item.variant_name"></p>
+</div>
+<div class="flex-1 flex items-end justify-between text-sm">
+<p class="text-gray-500">Qty <span x-text="item.quantity"></span></p>
+<div class="flex">
+<button @click="$store.cart.remove(index)" class="font-medium text-red-600 hover:text-red-500" type="button">Remove</button>
+</div>
+</div>
+</div>
+</li>
+</template>
+</ul>
+</div>
+</div>
+</div>
+<!-- Cart Footer -->
+<div class="border-t border-gray-200 py-6 px-4 sm:px-6">
+<div class="flex justify-between text-lg font-bold text-gray-900">
+<p>Subtotal</p>
+<p x-text="'{{ brand.currency_symbol|default:'$'|escapejs }}' + $store.cart.total.toFixed(2)"></p>
+</div>
+<p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+<div class="mt-6">
+<a class="flex justify-center items-center px-6 py-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-black hover:bg-gray-800 w-full" href="#" @click.prevent="$store.cart.checkout()" @click.prevent="$store.cart.checkout()">Checkout</a>
+</div>
+<div class="mt-6 flex justify-center text-sm text-center text-gray-500">
+<p>
+                                or <button @click="isCartOpen = false" class="text-black font-bold hover:underline" type="button">Continue Shopping<span aria-hidden="true"> →</span></button>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{% include 'components/toast.html' %}
+    
+
+<!-- Newsletter Subscribe JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('newsletter-subscribe-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const emailInput = form.querySelector('input[type="email"]');
+        const email = emailInput.value.trim();
+        if (!email) return;
+        const btn = form.querySelector('button[type="submit"]');
+        const origHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        btn.disabled = true;
+        fetch(form.action, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'email=' + encodeURIComponent(email)
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (typeof showToast === 'function') {
+                showToast(data.message, data.success ? 'success' : 'error');
+            } else {
+                alert(data.message);
+            }
+            if (data.success) emailInput.value = '';
+        })
+        .catch(() => {
+            if (typeof showToast === 'function') {
+                showToast('Something went wrong. Please try again.', 'error');
+            }
+        })
+        .finally(() => {
+            btn.innerHTML = origHTML;
+            btn.disabled = false;
+        });
+    });
+});
+</script>
+
+</body>
+</html>

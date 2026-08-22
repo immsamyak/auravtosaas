@@ -1,0 +1,70 @@
+{% extends "storefront/theme_fashion/base.html" %}
+
+{% block content %}
+<!-- Brand Banner -->
+<section class="min-h-[60vh] bg-[#f9f9f9] flex items-center relative overflow-hidden">
+    <div class="absolute inset-0 w-full h-full">
+        {% if brand.banner %}
+            <img src="{{ brand.banner.url }}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover">
+        {% else %}
+            <div class="w-full h-full bg-[#f0f0f0] flex items-center justify-center">
+                <span class="text-gray-400 text-sm uppercase tracking-widest">{{ brand.name }}</span>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Product Grid -->
+<section class="py-24 bg-white border-t border-black">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 block mb-3">Shop</span>
+            <h2 class="text-3xl font-serif font-bold tracking-tight text-black">All Products</h2>
+        </div>
+
+        {% if products %}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
+                {% for product in products|slice:":4" %}
+                    <div class="group">
+                        <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block relative mb-4 overflow-hidden bg-gray-50 aspect-[3/4] img-hover">
+                            {% if product.variants.first.image %}
+                                <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 p-4 text-center">
+                                    <i class="fa-solid fa-shirt text-2xl mb-2"></i>
+                                    <span class="text-xs font-semibold">{{ product.name }}</span>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                <button class="w-full bg-white text-black text-[10px] uppercase tracking-widest font-bold py-3 border border-black hover:bg-black hover:text-white transition-colors">
+                                    View Details
+                                </button>
+                            </div>
+                        </a>
+                        
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block text-sm font-semibold text-black hover:text-gray-500 transition-colors mb-1">{{ product.name }}</a>
+                                <p class="text-gray-500 text-sm font-light">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        <div class="mt-12 text-center w-full flex justify-center">
+            <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+                View All Products
+            </a>
+        </div>
+
+        {% else %}
+            <div class="text-center py-20 border border-gray-100 bg-gray-50">
+                <i class="fa-solid fa-box-open text-3xl text-gray-300 mb-4"></i>
+                <h3 class="text-lg font-serif font-bold text-black mb-2">No Products Yet</h3>
+                <p class="text-gray-500 text-sm font-light">Check back soon for our collection.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

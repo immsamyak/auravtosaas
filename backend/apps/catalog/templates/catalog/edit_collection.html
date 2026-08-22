@@ -1,0 +1,92 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto pb-12">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{% url 'dashboard' %}" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-indigo-600 transition">
+                    <i class="fa-solid fa-house mr-2"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-1"></i>
+                    <a href="{% url 'manage_collections' %}" class="ml-1 text-sm font-medium text-slate-500 hover:text-indigo-600 md:ml-2 transition">Collections</a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-1"></i>
+                    <span class="ml-1 text-sm font-medium text-slate-800 md:ml-2">Edit {{ collection.name }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Edit <span class="text-indigo-600 font-light">Collection</span></h1>
+        <p class="text-slate-500 mt-2 text-sm font-medium">Update the details and assigned products for this collection.</p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+        <form action="{% url 'edit_collection' collection.id %}" method="POST" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Collection Name</label>
+                    <input type="text" name="name" value="{{ collection.name }}" required class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Description</label>
+                    <textarea name="description" rows="3" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none">{{ collection.description|default:"" }}</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Cover Image</label>
+                    {% if collection.image %}
+                        <div class="mb-4">
+                            <p class="text-xs text-slate-500 mb-2">Current Image:</p>
+                            <img src="{{ collection.image.url }}" alt="Current Image" class="w-48 h-32 object-cover rounded-xl border border-slate-200">
+                        </div>
+                    {% endif %}
+                    <div class="flex items-center">
+                        <input type="file" name="image" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Selected Products</label>
+                    <div class="max-h-64 overflow-y-auto border border-slate-200 rounded-xl bg-slate-50 p-2 divide-y divide-slate-100">
+                        {% for product in products %}
+                        <label class="flex items-center py-2 px-2 hover:bg-slate-100 rounded cursor-pointer transition-colors">
+                            <input type="checkbox" name="products" value="{{ product.id }}" {% if product in collection.products.all %}checked{% endif %} class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-slate-900">{{ product.name }}</span>
+                            <span class="ml-auto text-xs text-slate-500">{{ request.user.owned_brand.get_currency_symbol }}{{ product.price }}</span>
+                        </label>
+                        {% empty %}
+                        <div class="p-4 text-center text-sm text-slate-500">No active products found. <a href="{% url 'create_product' %}" class="text-indigo-600 hover:underline">Add one first</a>.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-6 border-t border-slate-100 flex items-center justify-end space-x-4">
+                <a href="{% url 'manage_collections' %}" class="px-6 py-3 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-3 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-slate-300 hover:shadow-md transition-all duration-200 {% if classes %}{{ classes }}{% endif %} flex flex-col">
+    <div class="flex items-start justify-between mb-3">
+        <div class="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-100">
+            <i class="fa-solid fa-{{ icon|default:'chart-simple' }} text-slate-500"></i>
+        </div>
+        {% if trend %}
+            <div class="flex items-center space-x-1 text-xs font-bold px-2 py-1 rounded-md {% if trend == 'up' %}bg-emerald-50 text-emerald-600 border border-emerald-100{% elif trend == 'down' %}bg-rose-50 text-rose-600 border border-rose-100{% else %}bg-slate-50 text-slate-500 border border-slate-100{% endif %}">
+                {% if trend == 'up' %}
+                    <i class="fa-solid fa-arrow-trend-up mr-1"></i>
+                {% elif trend == 'down' %}
+                    <i class="fa-solid fa-arrow-trend-down mr-1"></i>
+                {% else %}
+                    <i class="fa-solid fa-minus mr-1"></i>
+                {% endif %}
+                {% if trend_value %}<span>{{ trend_value }}</span>{% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="flex-1">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{{ title }}</h3>
+        <p class="text-2xl font-extrabold text-slate-900">{{ value }}</p>
+    </div>
+    {% if footer %}
+    <div class="mt-4 pt-3 border-t border-slate-100">
+        <p class="text-xs font-medium text-slate-400">{{ footer }}</p>
+    </div>
+    {% endif %}
+</div>

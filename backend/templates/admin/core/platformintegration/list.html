@@ -1,0 +1,83 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Platform Integrations / Addons{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12" x-data="{ activeTab: 'all', searchTerm: '' }">
+    {% include "components/breadcrumb.html" with current="Platform Integrations" %}
+
+    <!-- Header & Actions -->
+    <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Platform <span class="text-indigo-600 font-light">Integrations</span></h1>
+            <p class="text-slate-500 mt-2 text-sm font-medium">Manage global availability of third-party tools for your brands.</p>
+        </div>
+        <div class="flex space-x-3">
+            <div class="relative w-full md:w-64">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                </div>
+                <input type="text" x-model="searchTerm" class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl leading-5 bg-white shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors" placeholder="Search integrations...">
+            </div>
+            <a href="{% url 'admin:platformintegration_add' %}" class="inline-flex items-center justify-center px-4 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                <i class="fa-solid fa-plus mr-2"></i> Add Integration
+            </a>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="flex space-x-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+        <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">All</button>
+        <button @click="activeTab = 'PAYMENT'" :class="activeTab === 'PAYMENT' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Payments</button>
+        <button @click="activeTab = 'SHIPPING'" :class="activeTab === 'SHIPPING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Shipping</button>
+        <button @click="activeTab = 'MARKETING'" :class="activeTab === 'MARKETING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Marketing</button>
+        <button @click="activeTab = 'OTHER'" :class="activeTab === 'OTHER' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Other</button>
+    </div>
+
+    <!-- Add-ons Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in objects %}
+        <div x-show="(activeTab === 'all' || activeTab === '{{ item.category }}') && (searchTerm === '' || '{{ item.name|lower }}'.includes(searchTerm.toLowerCase()) || '{{ item.description|lower|truncatewords:20 }}'.includes(searchTerm.toLowerCase()))" x-transition class="addon-card bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all group flex flex-col h-full" data-category="{{ item.category }}">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 overflow-hidden">
+                    {% if item.logo %}
+                        <img src="{{ item.logo.url }}" alt="{{ item.name }} logo" class="w-full h-full object-contain p-2">
+                    {% else %}
+                        <i class="fa-solid fa-puzzle-piece text-slate-300 text-xl"></i>
+                    {% endif %}
+                </div>
+                
+                {% if item.is_active_globally %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    <i class="fa-solid fa-check mr-1"></i> Active Globally
+                </span>
+                {% else %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                    Disabled
+                </span>
+                {% endif %}
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">{{ item.name }}</h3>
+            <p class="text-xs font-mono text-slate-400 mb-2">{{ item.provider_code }}</p>
+            <p class="text-sm font-medium text-slate-500 flex-1 mb-6">{{ item.description }}</p>
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ item.get_category_display }}</span>
+                
+                <a href="{% url 'admin:platformintegration_edit' item.pk %}" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
+                    Edit Config <i class="fa-solid fa-arrow-right ml-1 text-xs"></i>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-3xl bg-slate-50/50">
+            <i class="fa-solid fa-puzzle-piece text-4xl text-slate-300 mb-4"></i>
+            <h3 class="text-lg font-bold text-slate-900">No Integrations Configured</h3>
+            <p class="text-sm text-slate-500 mt-1">Add your first platform integration to allow brands to connect external tools.</p>
+            <a href="{% url 'admin:platformintegration_add' %}" class="mt-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700">
+                Create First Integration
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "storefront/theme_athletic/base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-[85vh] flex items-center clip-path-angled bg-tech-dark">
+<!-- Background Image -->
+<div class="absolute inset-0 z-0">
+        {% if brand.banner %}
+            <img alt="Performance" class="w-full h-full object-cover opacity-50 mix-blend-luminosity" src="{{ brand.banner.url }}"/>
+        {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-tech-darker to-tech-dark"></div>
+        {% endif %}
+        <!-- Tech grid overlay -->
+<div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(#0ea5e9 1px, transparent 1px), linear-gradient(90deg, #0ea5e9 1px, transparent 1px); background-size: 50px 50px;"></div>
+</div>
+<!-- Content -->
+<div class="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center">
+<div class="w-full md:w-2/3">
+<h1 class="font-display font-bold text-7xl md:text-9xl uppercase italic tracking-wider leading-[0.8] mb-6 skew-x-custom drop-shadow-[0_0_15px_rgba(14,165,233,0.5)]">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}Defy <br/>Gravity.{% endif %}</h1>
+<p class="font-sans font-semibold text-xl md:text-2xl text-gray-300 max-w-lg mb-10 border-l-4 border-tech-accent pl-4">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Experience the next generation of lightweight, breathable activewear engineered for elite athletes.{% endif %}</p>
+<div class="flex gap-4">
+<a class="bg-tech-accent hover:bg-tech-neon text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors" href="{{ brand.banner_cta_link|default:'#gear' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}<span class="inline-block unskew-x-custom">Shop Collection</span>{% endif %}</a>
+<a class="bg-white/10 hover:bg-white/20 text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors backdrop-blur-sm border border-white/20" href="#">
+{% if brand.banner_secondary_cta_text %}
+<a href="{{ brand.banner_secondary_cta_link|default:'#' }}" class="inline-block unskew-x-custom">{{ brand.banner_secondary_cta_text }}</a>
+{% endif %}
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Grid -->
+<section class="py-24 max-w-7xl mx-auto px-6" id="gear">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12">
+<div>
+<span class="font-sans font-bold text-tech-accent uppercase tracking-widest text-lg block mb-1">New Arrivals</span>
+<h2 class="font-display font-bold text-5xl uppercase italic tracking-wider">High Performance Gear</h2>
+</div>
+<a class="font-sans font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-colors border-b-2 border-transparent hover:border-tech-accent" href="{% url 'storefront_shop' brand.slug %}">View All</a>
+</div>
+
+    {% if products %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in products|slice:":4" %}
+                <div class="group bg-tech-dark border border-white/10 overflow-hidden relative hover:border-tech-accent transition-colors duration-300">
+<a class="block aspect-[4/5] bg-black relative overflow-hidden" href="{% url 'store_product_detail' brand.slug product.id %}">
+                        {% if product.images.first %}
+                                <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
+                            {% elif product.variants.first.image %}
+                            <img alt="{{ product.name }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-700">
+<i class="fa-solid fa-person-running text-6xl"></i>
+</div>
+                        {% endif %}
+                        
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-tech-darker to-transparent opacity-80 pointer-events-none"></div>
+</a>
+<div class="p-5 relative z-10 bg-tech-darker border-t border-white/5">
+<h3 class="font-display font-bold text-2xl uppercase italic tracking-wide truncate mb-1"><a class="hover:text-tech-accent transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a></h3>
+<div class="flex justify-between items-center">
+<p class="font-sans font-bold text-xl text-tech-accent">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+<button class="text-white hover:text-tech-neon font-sans font-bold text-sm uppercase tracking-widest transition-colors flex items-center">
+                                Add <i class="fa-solid fa-arrow-right ml-2"></i>
+</button>
+</div>
+</div>
+</div>
+            {% endfor %}
+        </div>
+        <div class="mt-12 text-center w-full flex justify-center">
+            <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+                View All Products
+            </a>
+        </div>
+
+    {% else %}
+        <div class="text-center py-20 bg-tech-dark border border-white/10">
+<i class="fa-solid fa-dumbbell text-5xl text-gray-600 mb-4"></i>
+<h3 class="font-display font-bold text-4xl uppercase italic text-gray-400">Restocking Soon</h3>
+</div>
+    {% endif %}
+</section>
+<!-- Collections Section -->
+<section class="py-16 max-w-7xl mx-auto px-6 bg-black/5">
+<div class="mb-10 text-center">
+<h2 class="font-display font-bold text-5xl uppercase italic tracking-wider">Curated Collections</h2>
+</div>
+    {% if collections %}
+        <div class="flex flex-col space-y-12">
+            {% for collection in collections %}
+                <div class="flex flex-col md:flex-row gap-8 items-center {% if forloop.counter|divisibleby:2 %}md:flex-row-reverse{% endif %}">
+<div class="flex-1 w-full aspect-video relative overflow-hidden border border-gray-200/20">
+                        {% if collection.image %}
+                            <img alt="{{ collection.name }}" class="w-full h-full object-cover" src="{{ collection.image.url }}"/>
+                        {% else %}
+                            <div class="w-full h-full bg-gray-200"></div>
+                        {% endif %}
+                    </div>
+<div class="flex-1 text-center md:text-left px-6">
+<h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
+<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
+</div>
+</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+<!-- Categories Section -->
+<section class="py-16 max-w-7xl mx-auto px-6">
+<div class="mb-10 text-center">
+<h2 class="font-display font-bold text-5xl uppercase italic tracking-wider">Shop by Category</h2>
+</div>
+    {% if categories %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for category in categories %}
+                <a class="group block relative overflow-hidden aspect-square border border-gray-200/20" href="{% url 'storefront_shop' brand.slug %}?category={{ category.id }}">
+                    {% if category.image %}
+                        <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
+                    {% else %}
+                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+<i class="fa-solid fa-tags text-4xl text-gray-300"></i>
+</div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<h3 class="text-white font-bold text-2xl uppercase tracking-wider">{{ category.name }}</h3>
+</div>
+</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}

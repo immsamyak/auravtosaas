@@ -1,0 +1,247 @@
+{% extends theme_base %}
+
+{% block content %}
+<div class="min-h-screen text-current pb-24">
+    
+    <!-- Top Navigation / Breadcrumb -->
+    <div class="border-b border-neutral-500/20 sticky top-0 z-50 bg-neutral-500/10 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+            <a href="{% url 'store_product_detail' variant.product.brand.slug variant.product.id %}" class="group text-xs font-bold tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity flex items-center">
+                <i class="fa-solid fa-arrow-left mr-3 group-hover:-translate-x-1 transition-transform"></i> Exit Studio
+            </a>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-wand-magic-sparkles opacity-50"></i>
+                <span class="text-xs font-black uppercase tracking-widest">Aura AI Studio</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24 relative">
+        
+        <div class="absolute top-0 right-0 w-64 h-64 bg-current opacity-5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="text-center mb-16 relative z-10">
+            <h1 class="text-3xl lg:text-5xl font-black tracking-tighter uppercase mb-4">Your Fit Passport</h1>
+            <p class="text-sm opacity-70 uppercase tracking-widest">Set up your AI profile for perfect styling.</p>
+        </div>
+
+        <form id="uploadForm" action="{% url 'guest_photo_upload' brand.slug variant.id %}" method="POST" enctype="multipart/form-data" class="bg-neutral-500/5 backdrop-blur-xl shadow-2xl rounded-[2rem] border border-neutral-500/20 overflow-hidden relative z-10">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 items-stretch">
+                
+                <!-- Left Side: Product -->
+                <div class="bg-neutral-500/5 p-8 lg:p-12 border-b md:border-b-0 md:border-r border-neutral-500/20 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-8">
+                            <span class="text-xs font-bold opacity-50 uppercase tracking-widest">Selected Item</span>
+                            <span class="px-3 py-1 bg-neutral-500/10 border border-neutral-500/20 text-[10px] font-bold uppercase tracking-widest rounded-full">VTO Ready</span>
+                        </div>
+                        <div class="w-full aspect-[4/5] bg-neutral-500/10 border border-neutral-500/20 rounded-2xl flex items-center justify-center p-6 relative mb-8 shadow-inner overflow-hidden">
+                            {% if variant.image %}
+                                <img src="{{ variant.image.url }}" alt="{{ variant.product.name }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <i class="fa-solid fa-shirt text-6xl opacity-30"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-black uppercase tracking-wide">{{ variant.product.name }}</h2>
+                        <div class="flex items-center justify-between mt-4 border-t border-neutral-500/20 pt-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 rounded-full border border-neutral-500/30 shadow-inner" style="background-color: {{ variant.color.hex_code }};"></div>
+                                <span class="text-xs font-bold opacity-70 uppercase tracking-widest">{{ variant.color.name }}</span>
+                            </div>
+                            <span class="text-xs font-bold bg-neutral-500/10 border border-neutral-500/20 px-2 py-1 rounded">Size {{ variant.size.code }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Upload & Coach -->
+                <div class="p-8 lg:p-12 flex flex-col relative">
+                    
+                    <div class="mb-8 border-b border-neutral-500/20 pb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold uppercase tracking-widest">Fit Passport Details</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold opacity-60 uppercase tracking-widest mb-2">Height (cm)</label>
+                                <input type="number" name="height_cm" class="w-full bg-neutral-500/10 border border-neutral-500/30 text-current placeholder-current placeholder-opacity-50 rounded-xl p-3 text-sm focus:border-current focus:ring-1 focus:ring-current transition-all" placeholder="e.g. 175" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold opacity-60 uppercase tracking-widest mb-2">Weight (kg)</label>
+                                <input type="number" name="weight_kg" class="w-full bg-neutral-500/10 border border-neutral-500/30 text-current placeholder-current placeholder-opacity-50 rounded-xl p-3 text-sm focus:border-current focus:ring-1 focus:ring-current transition-all" placeholder="e.g. 70" required>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <label class="block text-[10px] font-bold opacity-60 uppercase tracking-widest mb-2">Fit Preference</label>
+                            <select name="fit_preference" class="w-full bg-neutral-500/10 border border-neutral-500/30 text-current rounded-xl p-3 text-sm focus:border-current focus:ring-1 focus:ring-current transition-all" required>
+                                <option value="REGULAR" class="text-black">Regular Fit</option>
+                                <option value="TIGHT" class="text-black">Tight Fit</option>
+                                <option value="LOOSE" class="text-black">Loose/Oversized Fit</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    {% if avatars %}
+                    <div class="mb-8 border-b border-neutral-500/20 pb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold uppercase tracking-widest">Select AI Model</span>
+                            <span class="text-[10px] opacity-60 uppercase tracking-widest">Or upload your own</span>
+                        </div>
+                        <div class="flex space-x-4 overflow-x-auto pb-4 snap-x custom-scrollbar">
+                            {% for avatar in avatars %}
+                            <div class="flex-none snap-start relative group cursor-pointer" onclick="selectAvatar('{{ avatar.id }}')">
+                                <img src="{{ avatar.image.url }}" class="w-16 h-16 rounded-full object-cover border-2 border-transparent hover:border-current transition-colors shadow-sm" id="avatar-img-{{ avatar.id }}">
+                                <div class="absolute inset-0 bg-current opacity-0 group-hover:opacity-20 rounded-full transition-opacity"></div>
+                            </div>
+                            {% endfor %}
+                            <input type="hidden" name="selected_avatar" id="selected_avatar" value="">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if user_photos %}
+                    <div class="mb-8 border-b border-neutral-500/20 pb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold uppercase tracking-widest">Select Existing Photo</span>
+                            <span class="text-[10px] opacity-60 uppercase tracking-widest">Your previously uploaded photos</span>
+                        </div>
+                        <div class="flex space-x-4 overflow-x-auto pb-4 snap-x custom-scrollbar">
+                            {% for photo in user_photos %}
+                            <div class="flex-none snap-start relative group cursor-pointer" onclick="selectUserPhoto('{{ photo.id }}')">
+                                <img src="{{ photo.image.url }}" class="w-16 h-24 rounded-lg object-cover border-2 border-transparent hover:border-current transition-colors shadow-sm" id="user-photo-img-{{ photo.id }}">
+                                <div class="absolute inset-0 bg-current opacity-0 group-hover:opacity-20 rounded-lg transition-opacity"></div>
+                                {% if photo.is_default %}
+                                <div class="absolute -top-2 -right-2 bg-current text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]"><i class="fa-solid fa-check"></i></div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            <input type="hidden" name="selected_user_photo_id" id="selected_user_photo_id" value="">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="flex-1 flex flex-col">
+                        <span class="text-xs font-bold uppercase tracking-widest mb-4">Upload Full Body Photo</span>
+                        
+                        <div class="flex-1 border-2 border-dashed border-neutral-500/40 rounded-2xl bg-neutral-500/5 hover:bg-neutral-500/10 hover:border-current transition-all flex flex-col items-center justify-center p-8 cursor-pointer relative group" onclick="document.getElementById('fileInput').click()">
+                            
+                            <input type="file" name="base_photo" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(this)">
+                            
+                            <div id="uploadPlaceholder" class="text-center transition-opacity duration-300">
+                                <div class="w-16 h-16 rounded-full bg-neutral-500/10 flex items-center justify-center mx-auto mb-4 border border-neutral-500/20 shadow-sm group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-camera text-2xl opacity-70"></i>
+                                </div>
+                                <h3 class="text-sm font-bold uppercase tracking-widest mb-2">Tap to Upload</h3>
+                                <p class="text-[10px] opacity-60 uppercase tracking-widest max-w-[200px] mx-auto leading-relaxed">Ensure full body is visible with good lighting.</p>
+                            </div>
+
+                            <div id="imagePreviewContainer" class="absolute inset-0 w-full h-full p-2 hidden">
+                                <div class="w-full h-full relative rounded-xl overflow-hidden bg-black/10">
+                                    <img id="imagePreview" class="w-full h-full object-contain">
+                                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-[10px] font-bold uppercase tracking-widest flex items-center hover:bg-black/80 transition-colors">
+                                        <i class="fa-solid fa-pen mr-2"></i> Change
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-neutral-500/20">
+                        <button type="submit" class="w-full flex justify-center items-center px-6 py-4 border border-current rounded-xl shadow-lg text-sm font-extrabold uppercase tracking-widest bg-current text-white hover:opacity-90 focus:outline-none transition-all transform hover:-translate-y-1 relative overflow-hidden group" style="color: var(--tw-prose-body);">
+                            <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                            <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Enter Fitting Room</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function selectUserPhoto(id) {
+        // Deselect all user photos
+        document.querySelectorAll('[id^="user-photo-img-"]').forEach(el => {
+            el.classList.remove('border-current', 'scale-105', 'shadow-lg');
+            el.classList.add('border-transparent');
+        });
+        
+        // Select clicked user photo
+        const img = document.getElementById(`user-photo-img-${id}`);
+        if(img) {
+            img.classList.remove('border-transparent');
+            img.classList.add('border-current', 'scale-105', 'shadow-lg');
+        }
+        
+        document.getElementById('selected_user_photo_id').value = id;
+        
+        // Clear other inputs
+        if(document.getElementById('selected_avatar')) document.getElementById('selected_avatar').value = "";
+        document.querySelectorAll('[id^="avatar-img-"]').forEach(el => {
+            el.classList.remove('border-current', 'scale-110', 'shadow-lg');
+            el.classList.add('border-transparent');
+        });
+        document.getElementById('fileInput').value = "";
+        document.getElementById('uploadPlaceholder').classList.remove('hidden');
+        document.getElementById('imagePreviewContainer').classList.add('hidden');
+    }
+
+    function selectAvatar(id) {
+        // Deselect all avatars
+        document.querySelectorAll('[id^="avatar-img-"]').forEach(el => {
+            el.classList.remove('border-current', 'scale-110', 'shadow-lg');
+            el.classList.add('border-transparent');
+        });
+        
+        // Select clicked
+        const img = document.getElementById(`avatar-img-${id}`);
+        if(img) {
+            img.classList.remove('border-transparent');
+            img.classList.add('border-current', 'scale-110', 'shadow-lg');
+        }
+        
+        document.getElementById('selected_avatar').value = id;
+        
+        // Clear other inputs
+        if(document.getElementById('selected_user_photo_id')) document.getElementById('selected_user_photo_id').value = "";
+        document.querySelectorAll('[id^="user-photo-img-"]').forEach(el => {
+            el.classList.remove('border-current', 'scale-105', 'shadow-lg');
+            el.classList.add('border-transparent');
+        });
+        document.getElementById('fileInput').value = "";
+        document.getElementById('uploadPlaceholder').classList.remove('hidden');
+        document.getElementById('imagePreviewContainer').classList.add('hidden');
+    }
+
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('uploadPlaceholder').classList.add('hidden');
+                document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                
+                // Clear avatar selection
+                if(document.getElementById('selected_avatar')) document.getElementById('selected_avatar').value = "";
+                document.querySelectorAll('[id^="avatar-img-"]').forEach(el => {
+                    el.classList.remove('border-current', 'scale-110', 'shadow-lg');
+                    el.classList.add('border-transparent');
+                });
+                
+                // Clear user photo selection
+                if(document.getElementById('selected_user_photo_id')) document.getElementById('selected_user_photo_id').value = "";
+                document.querySelectorAll('[id^="user-photo-img-"]').forEach(el => {
+                    el.classList.remove('border-current', 'scale-105', 'shadow-lg');
+                    el.classList.add('border-transparent');
+                });
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{% endblock %}

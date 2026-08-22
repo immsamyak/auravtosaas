@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA Superadmin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 flex min-h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
+    
+    <!-- Mobile Sidebar Overlay -->
+    <div x-show="sidebarOpen" 
+         x-transition:enter="transition-opacity ease-linear duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-linear duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="sidebarOpen = false" 
+         class="fixed inset-0 bg-slate-900/50 z-40 md:hidden" style="display: none;"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+           class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white flex flex-col h-screen overflow-y-auto border-r border-slate-800 shrink-0 custom-scrollbar transform md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm px-6 py-8 z-10 border-b border-slate-800/50 flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-extrabold tracking-tighter flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+                    AURA<span class="font-light text-slate-400">Admin</span>
+                </h2>
+                <p class="text-xs text-slate-500 font-medium mt-1">Superuser Console v2.0</p>
+            </div>
+            <!-- Close Sidebar Button (Mobile Only) -->
+            <button @click="sidebarOpen = false" class="md:hidden text-slate-400 hover:text-white transition focus:outline-none">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-8" id="sidebar-nav">
+            <!-- Dashboard -->
+            <div>
+                <a href="{% url 'admin:dashboard' %}" class="sidebar-link flex items-center px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 hover:text-white transition-colors">
+                    <i class="fa-solid fa-chart-pie w-6 text-slate-400"></i> Overview Dashboard
+                </a>
+            </div>
+
+            <!-- Store Network -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Store Network</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:brand_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-store w-6 text-slate-400"></i> Brands & Tenants</a>
+                    <a href="{% url 'admin:storetheme_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-palette w-6 text-slate-400"></i> Store Themes</a>
+                    <a href="{% url 'admin:brandintegration_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-puzzle-piece w-6 text-slate-400"></i> Integrations</a>
+                    <a href="{% url 'admin:brandsetting_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-sliders w-6 text-slate-400"></i> Brand Settings</a>
+                </div>
+            </div>
+
+            <!-- CMS & Content -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">CMS & Content</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:page_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-file-lines w-6 text-slate-400"></i> Custom Pages</a>
+                    <a href="{% url 'admin:landingpageconfig_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-rocket w-6 text-slate-400"></i> Landing Pages</a>
+                    <a href="{% url 'admin:testimonial_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-star w-6 text-slate-400"></i> Testimonials</a>
+                    <a href="{% url 'admin:footersection_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-shoe-prints w-6 text-slate-400"></i> Footer Sections</a>
+                </div>
+            </div>
+
+            <!-- Catalog Management -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Catalog</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:product_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-box w-6 text-slate-400"></i> Products</a>
+                    <a href="{% url 'admin:productvariant_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-tags w-6 text-slate-400"></i> Variants</a>
+                    <a href="{% url 'admin:category_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-layer-group w-6 text-slate-400"></i> Categories</a>
+                    <a href="{% url 'admin:producttype_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-shirt w-6 text-slate-400"></i> Product Types</a>
+                    <a href="{% url 'admin:productaiprofile_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-brain w-6 text-slate-400"></i> Product AI Profiles</a>
+                    <a href="{% url 'admin:color_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-palette w-6 text-slate-400"></i> Colors</a>
+                    <a href="{% url 'admin:size_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-ruler w-6 text-slate-400"></i> Sizes</a>
+                    <a href="{% url 'admin:sizechart_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-table w-6 text-slate-400"></i> Size Charts</a>
+                    <a href="{% url 'admin:styletag_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-hashtag w-6 text-slate-400"></i> Style Tags</a>
+                </div>
+            </div>
+            
+            <!-- Inventory & Logistics -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Inventory & Logistics</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:stocklevel_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-cubes-stacked w-6 text-slate-400"></i> Stock Levels</a>
+                    <a href="{% url 'admin:location_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-warehouse w-6 text-slate-400"></i> Locations</a>
+                    <a href="{% url 'admin:shippingzone_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-truck-fast w-6 text-slate-400"></i> Shipping Zones</a>
+                </div>
+            </div>
+
+            <!-- Virtual Try-On (AI) -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Virtual Try-On Engine</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:virtualtryon_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-microchip w-6 text-slate-400"></i> VTO Jobs</a>
+                    <a href="{% url 'admin:vto_queue' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-layer-group w-6 text-slate-400"></i> VTO Queue Dashboard</a>
+                    <a href="{% url 'admin:vtosession_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-clock-rotate-left w-6 text-slate-400"></i> VTO Sessions</a>
+                    <a href="{% url 'admin:fitpassport_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-id-card w-6 text-slate-400"></i> Fit Passports</a>
+                    <a href="{% url 'admin:virtualwardrobelook_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-person-dress w-6 text-slate-400"></i> Wardrobe Looks</a>
+                    <a href="{% url 'admin:vtoproduct_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-shirt w-6 text-slate-400"></i> VTO Products</a>
+                    <a href="{% url 'admin:vtoproductassets_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-images w-6 text-slate-400"></i> VTO Assets</a>
+                    <a href="{% url 'admin:vtophotovault_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-vault w-6 text-slate-400"></i> Photo Vault</a>
+                    <a href="{% url 'admin:sizerecommendation_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-ruler-combined w-6 text-slate-400"></i> Size Recs</a>
+                </div>
+            </div>
+
+            <!-- Global Orders -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Commerce</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:order_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-cart-shopping w-6 text-slate-400"></i> Global Orders</a>
+                    <a href="{% url 'admin:cart_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-bag-shopping w-6 text-slate-400"></i> Active Carts</a>
+                </div>
+            </div>
+
+            <!-- Users & Auth -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Access Control</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:user_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-users-gear w-6 text-slate-400"></i> Admin Users</a>
+                    <a href="{% url 'admin:group_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-shield-halved w-6 text-slate-400"></i> Roles & Groups</a>
+                    <a href="{% url 'admin:consumerprofile_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-users w-6 text-slate-400"></i> Consumers</a>
+                    <a href="{% url 'admin:userphotoprofile_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-camera-retro w-6 text-slate-400"></i> User Photo Profiles</a>
+                </div>
+            </div>
+
+            <!-- Platform Config -->
+            <div>
+                <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Platform Settings</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:globalsettings_edit' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-sliders w-6 text-slate-400"></i> Global Config</a>
+                    <a href="{% url 'admin:systemsetting_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-server w-6 text-slate-400"></i> System Settings</a>
+                    <a href="{% url 'admin:featureflag_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-toggle-on w-6 text-slate-400"></i> Feature Flags</a>
+                    <a href="{% url 'admin:platformintegration_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-puzzle-piece w-6 text-slate-400"></i> Addons / Integrations</a>
+                    <a href="{% url 'admin:brandsubscription_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-money-check-dollar w-6 text-slate-400"></i> Active Subscriptions</a>
+                    <a href="{% url 'admin:subscriptionplan_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-tags w-6 text-slate-400"></i> Subscription Plans</a>
+                    <a href="{% url 'admin:audit_log_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-clock-rotate-left w-6 text-slate-400"></i> Security Audit Logs</a>
+                </div>
+            </div>
+            
+            <div class="h-10"></div>
+        </nav>
+        
+        <script>
+            // Highlight the active sidebar link based on current URL
+            (function() {
+                const currentPath = window.location.pathname;
+                const links = document.querySelectorAll('.sidebar-link');
+                let bestMatch = null;
+                
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (!href) return;
+                    
+                    // Exact match for dashboard to prevent it from matching everything
+                    if (href === '/admin/' && currentPath === '/admin/') {
+                        bestMatch = link;
+                    } 
+                    // Prefix match for all other models (e.g. /admin/page/ matches /admin/page/add/)
+                    else if (href !== '/admin/' && currentPath.startsWith(href)) {
+                        // If we find a longer prefix, it's a better match
+                        if (!bestMatch || href.length > bestMatch.getAttribute('href').length) {
+                            bestMatch = link;
+                        }
+                    }
+                });
+                
+                if (bestMatch) {
+                    // Remove inactive classes
+                    bestMatch.classList.remove('hover:bg-slate-800', 'text-slate-300', 'hover:text-white', 'font-medium');
+                    // Add active classes
+                    bestMatch.classList.add('bg-indigo-600', 'text-white', 'font-bold', 'shadow-lg', 'shadow-indigo-900/20');
+                    
+                    // Highlight the icon
+                    const icon = bestMatch.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('text-slate-400');
+                        icon.classList.add('text-indigo-200');
+                    }
+                    
+                    // Auto-scroll sidebar to show the active link
+                    setTimeout(() => {
+                        bestMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
+            })();
+        </script>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden w-full relative">
+        <!-- Top Nav -->
+        <header class="bg-white border-b border-slate-200 h-16 shrink-0 flex items-center justify-between px-4 md:px-8 z-10 w-full">
+            <div class="flex items-center gap-3">
+                <button @click="sidebarOpen = true" class="md:hidden text-slate-500 hover:text-indigo-600 transition p-2 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div class="text-xs md:text-sm font-semibold text-slate-500 uppercase tracking-wider hidden sm:block">AURA Cloud Architecture</div>
+            </div>
+            <div class="flex items-center gap-4 md:gap-6">
+                <!-- Notification Bell (Alpine.js) -->
+                {% load audit_tags %}
+                {% get_recent_audit_logs 5 as recent_logs %}
+                {% get_unread_audit_count as unread_count %}
+                
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" @click.away="open = false" class="relative text-slate-400 hover:text-indigo-600 transition focus:outline-none">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                        {% if unread_count > 0 %}
+                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+                        </span>
+                        {% endif %}
+                    </button>
+                    
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-100"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50" style="display: none;">
+                        
+                        <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                            <h3 class="text-sm font-extrabold text-slate-900">System Activity</h3>
+                            {% if unread_count > 0 %}
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">{{ unread_count }} Today</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="max-h-80 overflow-y-auto">
+                            {% for log in recent_logs %}
+                            <a href="{% url 'admin:audit_log_list' %}" class="block px-5 py-4 border-b border-slate-50 hover:bg-slate-50 transition-colors relative">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 {% if log.action == 'CREATE' %}bg-emerald-500{% elif log.action == 'UPDATE' %}bg-amber-500{% elif log.action == 'DELETE' %}bg-rose-500{% else %}bg-indigo-500{% endif %}"></div>
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded-full {% if log.action == 'CREATE' %}bg-emerald-100 text-emerald-600{% elif log.action == 'UPDATE' %}bg-amber-100 text-amber-600{% elif log.action == 'DELETE' %}bg-rose-100 text-rose-600{% else %}bg-indigo-100 text-indigo-600{% endif %} flex items-center justify-center shrink-0 mt-0.5">
+                                        {% if log.action == 'CREATE' %}<i class="fa-solid fa-plus text-xs"></i>
+                                        {% elif log.action == 'UPDATE' %}<i class="fa-solid fa-pen text-xs"></i>
+                                        {% elif log.action == 'DELETE' %}<i class="fa-solid fa-trash text-xs"></i>
+                                        {% else %}<i class="fa-solid fa-shield-halved text-xs"></i>{% endif %}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900">{{ log.action }} {{ log.model_name|title }}</p>
+                                        <p class="text-xs text-slate-500 mt-0.5 line-clamp-2">{% if log.actor %}{{ log.actor.username }}{% else %}System{% endif %} performed action from {{ log.ip_address }}</p>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">{{ log.created_at|timesince }} ago</p>
+                                    </div>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <div class="px-5 py-6 text-center text-slate-500 text-sm">
+                                No recent system activity.
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <a href="{% url 'admin:audit_log_list' %}" class="block px-5 py-3 text-center text-xs font-bold text-indigo-600 bg-slate-50 hover:bg-slate-100 transition-colors border-t border-slate-100">
+                            View All Activity Logs
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Profile Dropdown (Alpine.js) -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 focus:outline-none">
+                        <div class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-transparent hover:ring-indigo-200 transition">
+                            {% if user.is_authenticated %}{{ user.username|make_list|first|upper }}{% else %}A{% endif %}
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+                    </button>
+                    
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-100"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden z-50" style="display: none;">
+                        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
+                            <p class="text-sm text-slate-900 font-bold">{% if user.is_authenticated %}{{ user.username }}{% else %}Admin{% endif %}</p>
+                            <p class="text-xs text-slate-500 font-medium truncate">{% if user.is_authenticated %}{{ user.email }}{% else %}superuser@aura.com{% endif %}</p>
+                        </div>
+                        <div class="py-1">
+                            <a href="{% url 'admin:user_list' %}" class="block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition"><i class="fa-solid fa-user-shield w-5 text-slate-400"></i> Admin Profile</a>
+                            <a href="{% url 'admin:globalsettings_edit' %}" class="block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition"><i class="fa-solid fa-gear w-5 text-slate-400"></i> Settings</a>
+                        </div>
+                        <div class="py-1 border-t border-slate-100">
+                            <form method="post" action="{% url 'admin:logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="w-full text-left block px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50 transition">
+                                    <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Secure Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Page Content -->
+        <div class="flex-1 overflow-y-auto p-8 relative">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+    {% include "components/toast.html" %}
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

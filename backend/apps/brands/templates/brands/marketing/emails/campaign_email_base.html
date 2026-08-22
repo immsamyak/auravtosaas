@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #0f172a;
+        line-height: 1.6;
+    }
+    .wrapper {
+        width: 100%;
+        table-layout: fixed;
+        background-color: #f8fafc;
+        padding-bottom: 60px;
+    }
+    .main {
+        background-color: #ffffff;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 600px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+    .header {
+        background-color: #0f172a;
+        padding: 30px;
+        text-align: center;
+    }
+    .header img {
+        max-width: 150px;
+        height: auto;
+    }
+    .header h1 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .content-area {
+        padding: 40px 30px;
+    }
+    .footer {
+        background-color: #f1f5f9;
+        padding: 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #64748b;
+        border-top: 1px solid #e2e8f0;
+    }
+    .footer p {
+        margin: 5px 0;
+    }
+    .footer a {
+        color: #64748b;
+        text-decoration: underline;
+    }
+    
+    /* Utility classes for users to use in html_content */
+    .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #4f46e5;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+        margin: 20px 0;
+    }
+</style>
+</head>
+<body>
+    <center class="wrapper">
+        <div style="padding: 40px 0;">
+            <table class="main" width="100%">
+                <!-- Header -->
+                <tr>
+                    <td class="header">
+                        {% if brand.logo %}
+                            <img src="{{ request.scheme }}://{{ request.get_host }}{{ brand.logo.url }}" alt="{{ brand.name }}">
+                        {% else %}
+                            <h1>{{ brand.name }}</h1>
+                        {% endif %}
+                    </td>
+                </tr>
+                
+                <!-- Body -->
+                <tr>
+                    <td class="content-area">
+                        {{ content|safe }}
+                    </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                    <td class="footer">
+                        <p>&copy; {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
+                        <p>You received this email because you are subscribed to our newsletter or have shopped with us.</p>
+                        {% if brand.email %}<p>Contact us: <a href="mailto:{{ brand.email }}">{{ brand.email }}</a></p>{% endif %}
+                        <p style="margin-top: 15px;"><a href="{{ request.scheme }}://{{ request.get_host }}/store/{{ brand.slug }}/">Visit Store</a></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </center>
+</body>
+</html>

@@ -1,0 +1,101 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
+                    <span class="text-sm font-bold text-slate-800">Store</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-slate-500">Returns & Exchanges</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Returns &amp; <span class="text-indigo-600 font-light">Exchanges</span></h1>
+        <p class="text-slate-500 mt-2 text-sm font-medium">Manage RMA requests and process refunds.</p>
+    </div>
+
+    <!-- Returns List -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-800">RMA Requests</h3>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500 font-bold">
+                        <th class="px-6 py-4">RMA ID</th>
+                        <th class="px-6 py-4">Order</th>
+                        <th class="px-6 py-4">Customer</th>
+                        <th class="px-6 py-4">Reason</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for ret in returns %}
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="px-6 py-4">
+                            <span class="text-sm font-bold text-slate-900">RMA-{{ ret.id }}</span>
+                            <div class="text-xs text-slate-500 mt-1">{{ ret.created_at|date:"M d, Y" }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="#" class="text-sm font-bold text-indigo-600 hover:text-indigo-800">#{{ ret.order.id|truncatechars:8 }}</a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm font-bold text-slate-800">{{ ret.order.customer_name|default:"Guest" }}</div>
+                            <div class="text-xs text-slate-500">{{ ret.customer_email|default:ret.order.customer_phone }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-slate-600 max-w-xs truncate" title="{{ ret.reason }}">{{ ret.reason }}</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            {% if ret.status == 'PENDING' %}
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">{{ ret.get_status_display }}</span>
+                            {% elif ret.status == 'APPROVED' %}
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">{{ ret.get_status_display }}</span>
+                            {% elif ret.status == 'RECEIVED' %}
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">{{ ret.get_status_display }}</span>
+                            {% elif ret.status == 'REFUNDED' %}
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">{{ ret.get_status_display }}</span>
+                            {% elif ret.status == 'REJECTED' %}
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200">{{ ret.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4">
+                            <form action="{% url 'returns_list' %}" method="POST" class="flex items-center space-x-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="return_id" value="{{ ret.id }}">
+                                <select name="status" class="border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-slate-700">
+                                    {% for status_val, status_name in status_choices %}
+                                        <option value="{{ status_val }}" {% if ret.status == status_val %}selected{% endif %}>{{ status_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white p-1.5 rounded-lg transition" title="Update Status">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center text-slate-500">
+                            <i class="fa-solid fa-box-open text-4xl mb-3 text-slate-300"></i>
+                            <p class="text-sm font-medium">No return requests found.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

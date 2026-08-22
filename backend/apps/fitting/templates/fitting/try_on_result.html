@@ -1,0 +1,364 @@
+{% extends theme_base %}
+
+{% block content %}
+<div class="min-h-screen text-current pb-24">
+    
+    <!-- Studio Navigation (Adaptive) -->
+    <div class="border-b border-neutral-500/20 sticky top-0 z-50 bg-neutral-500/10 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+            <a href="{% url 'storefront' variant.product.brand.slug %}" class="group text-xs font-bold tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity flex items-center">
+                <i class="fa-solid fa-arrow-left mr-3 group-hover:-translate-x-1 transition-transform"></i> Exit Studio
+            </a>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-wand-magic-sparkles opacity-50"></i>
+                <span class="text-xs font-black uppercase tracking-widest">Aura AI Studio</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="{% url 'virtual_wardrobe' variant.product.brand.slug %}" class="text-xs font-bold tracking-widest uppercase hover:opacity-70 transition-opacity flex items-center">
+                    <i class="fa-solid fa-shirt mr-2"></i> Wardrobe
+                </a>
+                <a href="{% url 'guest_photo_upload' variant.product.brand.slug variant.id %}" class="text-xs font-bold opacity-60 tracking-widest uppercase hover:opacity-100 transition-opacity">
+                    <i class="fa-solid fa-camera mr-2"></i> Retake
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 relative">
+        
+        <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-start relative z-10">
+            
+            <!-- Left Side: Result Stage -->
+            <div class="lg:col-span-7 flex flex-col mb-12 lg:mb-0 relative group">
+                <div class="w-full bg-neutral-500/5 backdrop-blur-xl rounded-[2rem] border border-neutral-500/20 p-2 sm:p-4 flex flex-col items-center justify-center min-h-[600px] lg:min-h-[800px] relative overflow-hidden shadow-2xl">
+                    
+                    <div class="absolute -top-32 -left-32 w-64 h-64 bg-current opacity-5 rounded-full blur-3xl pointer-events-none"></div>
+
+                    {% if try_on.status == 'COMPLETED' %}
+                        <!-- Comparison Slider Container -->
+                        <div class="relative w-full flex-1 max-w-2xl mx-auto rounded-xl overflow-hidden shadow-inner min-h-[400px] lg:min-h-[600px] border border-neutral-500/20 bg-neutral-500/5">
+                            <img src="{{ try_on.generated_image.url }}" alt="VTO Result" class="absolute inset-0 w-full h-full object-contain">
+                        </div>
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-8 left-8 flex space-x-2 z-10">
+                            <span class="bg-neutral-500/10 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm flex items-center border border-neutral-500/20">
+                                <span class="w-1.5 h-1.5 rounded-full bg-current opacity-80 mr-2 animate-pulse"></span> Authentic Fit
+                            </span>
+                        </div>
+                        
+                        {% if try_on.ai_confidence_score %}
+                        <div class="absolute bottom-8 right-8 z-10 hidden lg:block">
+                            <span class="bg-current text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg border border-current" style="color: var(--tw-prose-body);">
+                                <span class="mix-blend-difference filter invert">AI Confidence: {{ try_on.ai_confidence_score }}</span>
+                            </span>
+                        </div>
+                        {% endif %}
+
+                    {% elif try_on.status == 'PROCESSING' or try_on.status == 'PENDING' or try_on.status == 'VALIDATING' %}
+                    <!-- Realtime Polling -->
+                    <script>
+                        function checkStatus() {
+                            fetch("{% url 'check_vto_status' variant.product.brand.slug try_on.id %}")
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 'COMPLETED' || data.status === 'FAILED') {
+                                        window.location.reload();
+                                    } else {
+                                        if (data.progress_percent !== undefined) {
+                                            const progressBar = document.getElementById('vto-progress-bar');
+                                            const progressText = document.getElementById('vto-progress-text');
+                                            if (progressBar) progressBar.style.width = data.progress_percent + '%';
+                                            if (progressText) progressText.innerText = data.progress_percent + '%';
+                                        }
+                                        setTimeout(checkStatus, 1500);
+                                    }
+                                })
+                                .catch(err => {
+                                    setTimeout(checkStatus, 3000);
+                                });
+                        }
+                        setTimeout(checkStatus, 1500);
+                    </script>
+                    <div class="flex flex-col items-center text-center max-w-sm relative z-10 w-full px-8">
+                        
+                        <!-- Pulsing Thumbnail -->
+                        <div class="relative w-32 h-32 mb-8">
+                            <div class="absolute inset-0 bg-current rounded-2xl animate-pulse opacity-10"></div>
+                            <div class="absolute inset-0 flex items-center justify-center bg-neutral-500/10 rounded-2xl border border-neutral-500/20 overflow-hidden">
+                                <img src="{{ try_on.base_photo.image.url }}" class="w-full h-full object-cover opacity-50 mix-blend-overlay">
+                            </div>
+                            <div class="absolute inset-0 border-4 border-current opacity-30 rounded-2xl animate-[spin_4s_linear_infinite] shadow-[0_0_15px_rgba(0,0,0,0.1)]"></div>
+                        </div>
+
+                        <h2 class="text-3xl font-black tracking-tight mb-2">Synthesizing Fit</h2>
+                        <p class="text-sm opacity-70 mb-8 max-w-xs leading-relaxed">
+                            Generating AI fit on your passport body shape...
+                        </p>
+                        
+                        <!-- Progress Bar -->
+                        <div class="w-full max-w-xs mx-auto">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-widest opacity-80">Progress</span>
+                                <span id="vto-progress-text" class="text-[10px] font-bold">0%</span>
+                            </div>
+                            <div class="h-1 w-full bg-neutral-500/20 rounded-full overflow-hidden">
+                                <div id="vto-progress-bar" class="h-full bg-current rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif try_on.status == 'FAILED' %}
+                    <div class="text-center p-8 relative z-10">
+                        <div class="w-20 h-20 bg-neutral-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-neutral-500/20">
+                            <i class="fa-solid fa-triangle-exclamation text-3xl opacity-70"></i>
+                        </div>
+                        <h2 class="text-2xl font-black tracking-tight mb-3">Generation Failed</h2>
+                        <p class="text-sm opacity-70 mb-8 max-w-sm mx-auto leading-relaxed">
+                            {{ try_on.error_message|default:"Our AI engine encountered an error fitting this garment. The image might not be clear enough." }}
+                        </p>
+                        <form method="POST" action="{% url 'try_on' variant.product.brand.slug variant.id %}" class="w-full">
+                            {% csrf_token %}
+                            <button type="submit" class="inline-flex justify-center items-center px-6 py-3 border border-current shadow-md text-sm font-extrabold rounded-xl bg-current text-white hover:opacity-90 transition-transform hover:-translate-y-0.5" style="color: var(--tw-prose-body);">
+                                <span class="bg-clip-text text-transparent mix-blend-difference filter invert flex items-center">
+                                    <i class="fa-solid fa-rotate-right mr-2"></i> Retry Generation
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Right Side: Controls & Outfit Builder -->
+            <div class="lg:col-span-5 flex flex-col h-full lg:pl-4 relative">
+                
+                <div class="mb-8">
+                    <h1 class="text-2xl font-black tracking-tight uppercase mb-1">{{ variant.product.name }}</h1>
+                    <p class="text-lg font-bold opacity-70">{{ brand.get_currency_symbol }}{{ variant.product.price }}</p>
+                </div>
+                
+                <!-- Size Intelligence Module -->
+                <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-2xl p-6 mb-8 shadow-inner relative overflow-hidden">
+                    <div class="flex items-start justify-between mb-4 relative z-10">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest flex items-center mb-1 opacity-70">
+                                <i class="fa-solid fa-ruler-combined mr-2 opacity-50"></i> Size Intelligence
+                            </span>
+                            <span class="text-xl font-bold">
+                                {% if recommended_size %}
+                                    Size {{ recommended_size.code }}
+                                {% else %}
+                                    Size {{ variant.size.code }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <span class="bg-current text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded" style="color: var(--tw-prose-body);"><span class="mix-blend-difference filter invert">AI Recommended</span></span>
+                    </div>
+                    <div class="relative z-10">
+                    {% if recommended_size and recommended_size.code == variant.size.code %}
+                        <p class="text-xs font-bold mb-1 opacity-90"><i class="fa-solid fa-check-circle mr-1"></i> Perfect Fit Match</p>
+                        <p class="text-xs opacity-70 leading-relaxed">Based on your Fit Passport ({{ passport.get_fit_preference_display|default:"Regular" }} preference) and this product's actual measurements, you have selected the ideal size.</p>
+                    {% elif recommended_size %}
+                        <p class="text-xs font-bold mb-1 opacity-90"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Sub-optimal Fit Detected</p>
+                        <p class="text-xs opacity-70 leading-relaxed">You are viewing size <b>{{ variant.size.code }}</b>, but based on your Fit Passport and {{ passport.get_fit_preference_display|default:"Regular" }} preference, we recommend <b>Size {{ recommended_size.code }}</b> for the best fit.</p>
+                    {% else %}
+                        <p class="text-xs opacity-70 leading-relaxed">We could not determine a size recommendation. Please update your Fit Passport measurements.</p>
+                    {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Color Controls -->
+                <div class="mb-6">
+                    <span class="text-[10px] font-black uppercase tracking-widest block mb-3 opacity-90">Selected Color: <span class="opacity-70">{{ variant.color.name }}</span></span>
+                    <div class="flex space-x-3">
+                        {% regroup variant.product.variants.all by color as color_list %}
+                        {% for color_group in color_list %}
+                            {% with first_var=color_group.list|first %}
+                            <a href="{% url 'try_on' variant.product.brand.slug first_var.id %}" class="w-10 h-10 rounded-full {% if color_group.grouper == variant.color %}border-2 border-current p-0.5 scale-110{% else %}border border-neutral-500/30 hover:scale-110 opacity-70 hover:opacity-100{% endif %} transition-all cursor-pointer block">
+                                <div class="w-full h-full rounded-full shadow-inner" style="background-color: {{ color_group.grouper.hex_code }}; border: 1px solid rgba(0,0,0,0.1);"></div>
+                            </a>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Size Controls -->
+                <div class="mb-8">
+                    <span class="text-[10px] font-black uppercase tracking-widest block mb-3 opacity-90">Select Size:</span>
+                    <div class="flex flex-wrap gap-2">
+                        {% for v in variant.product.variants.all %}
+                            {% if v.color == variant.color %}
+                                <a href="{% url 'try_on' variant.product.brand.slug v.id %}" class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg border transition-all shadow-sm {% if v.size == variant.size %}bg-current text-white border-current scale-105{% else %}bg-neutral-500/5 border-neutral-500/20 hover:border-current hover:bg-neutral-500/10{% endif %}" {% if v.size == variant.size %}style="color: var(--tw-prose-body);"{% endif %}>
+                                    {% if v.size == variant.size %}
+                                        <span class="mix-blend-difference filter invert">{{ v.size.code }}</span>
+                                    {% else %}
+                                        {{ v.size.code }}
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Outfit Builder -->
+                <div class="mb-10 pt-8 border-t border-neutral-500/20 relative z-20">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest opacity-90">Outfit Builder</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">{{ outfit_items|length }}/4 Items</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-2 mb-4">
+                        {% for item in outfit_items %}
+                            <div class="aspect-square bg-neutral-500/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-neutral-500/20 overflow-hidden relative group shadow-inner">
+                                {% if item.product_variant.image %}
+                                    <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <i class="fa-solid fa-shirt opacity-30"></i>
+                                {% endif %}
+                                <div class="absolute bottom-0 left-0 right-0 bg-current/80 backdrop-blur-sm text-white text-[8px] font-black uppercase text-center py-1 opacity-0 group-hover:opacity-100 transition-opacity" style="color: var(--tw-prose-body);">
+                                    <span class="mix-blend-difference filter invert">{{ item.get_product_type_display }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        {% if outfit_items|length < 4 %}
+                            {% for i in "x"|ljust:4 %}
+                                {% if forloop.counter > outfit_items|length %}
+                                <div onclick="document.getElementById('outfitSelector').classList.toggle('hidden')" class="aspect-square bg-neutral-500/5 backdrop-blur-sm rounded-xl flex items-center justify-center border border-dashed border-neutral-500/30 cursor-pointer hover:bg-neutral-500/10 transition-all opacity-60 hover:opacity-100">
+                                    <i class="fa-solid fa-plus text-xl"></i>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Product Selector Dropdown -->
+                    <div id="outfitSelector" class="hidden absolute top-full left-0 right-0 z-30 mt-2 bg-neutral-500/10 backdrop-blur-xl border border-neutral-500/20 rounded-xl shadow-2xl p-4 max-h-[300px] flex flex-col">
+                        <h4 class="text-[10px] font-black uppercase tracking-widest mb-3 opacity-90">Add to Outfit</h4>
+                        <div class="overflow-y-auto space-y-2 flex-1 custom-scrollbar pr-2">
+                            {% for prod in store_products %}
+                                {% if prod != variant.product %}
+                                <div class="flex items-center justify-between p-2 hover:bg-neutral-500/10 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-neutral-500/20" onclick="addToOutfit({{ try_on.id }}, {{ prod.id }}, 'BOTTOM')">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-neutral-500/20 rounded flex items-center justify-center overflow-hidden border border-neutral-500/10">
+                                            {% if prod.variants.first.image %}
+                                                <img src="{{ prod.variants.first.image.url }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                                <i class="fa-solid fa-shirt opacity-30 text-xs"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold opacity-90">{{ prod.name }}</p>
+                                            <p class="text-[9px] uppercase opacity-60">{{ prod.category.name }}</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-plus opacity-40 hover:opacity-100 transition-opacity p-2"></i>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Footer -->
+                <div class="mt-auto pt-6 border-t border-neutral-500/20 space-y-3 relative z-10" x-data>
+                    <div class="flex space-x-3 mb-4">
+                        {% if try_on.status == 'COMPLETED' %}
+                        <button type="button" id="saveLookBtn" onclick="saveLook()" class="flex-1 bg-neutral-500/10 backdrop-blur-sm border border-neutral-500/30 text-current text-[10px] font-black uppercase tracking-widest py-4 rounded-xl hover:bg-neutral-500/20 transition-all flex items-center justify-center shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-bookmark mr-2 opacity-70"></i> Save to Wardrobe
+                        </button>
+                        {% endif %}
+                        <a href="{% url 'virtual_wardrobe' variant.product.brand.slug %}" class="flex-1 bg-neutral-500/5 backdrop-blur-sm border border-neutral-500/20 text-[10px] font-black uppercase tracking-widest py-4 rounded-xl hover:bg-neutral-500/10 transition-all flex items-center justify-center shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-layer-group mr-2 opacity-60"></i> View Wardrobe
+                        </a>
+                    </div>
+                    
+                    <button type="button" @click="$store.cart.add({id: '{{variant.id}}', name: '{{variant.product.name|escapejs}}', price: {{variant.product.price}}, variant_name: '{{variant.color.name}} / {{variant.size.code}}', image: '{{variant.image.url|default:""}}'}); isCartOpen = true;" class="w-full bg-current text-white text-xs font-bold uppercase tracking-widest py-4 rounded-xl shadow-lg hover:opacity-90 transition-all flex items-center justify-center transform hover:-translate-y-1" style="color: var(--tw-prose-body);">
+                        <span class="mix-blend-difference filter invert flex items-center"><i class="fa-solid fa-bag-shopping mr-3"></i> Add to Cart</span>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function saveLook() {
+        const btn = document.getElementById('saveLookBtn');
+        if (!btn) return;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving...';
+        btn.disabled = true;
+
+        fetch("{% url 'save_look_api' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                try_on_id: {{ try_on.id|default:"null" }},
+                notes: ""
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success') {
+                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Saved to Wardrobe';
+                btn.classList.add('bg-current', 'text-white');
+                btn.style.color = 'var(--tw-prose-body)';
+                btn.innerHTML = '<span class="mix-blend-difference filter invert flex items-center"><i class="fa-solid fa-check mr-2"></i> Saved to Wardrobe</span>';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> Error';
+                btn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> Error';
+            btn.disabled = false;
+        });
+    }
+    function addToOutfit(tryOnId, productId, productType) {
+        fetch("{% url 'add_to_outfit_api' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                try_on_id: tryOnId,
+                product_id: productId,
+                product_type: productType
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success') {
+                window.location.reload(); 
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error adding to outfit.');
+        });
+    }
+</script>
+{% endblock %}

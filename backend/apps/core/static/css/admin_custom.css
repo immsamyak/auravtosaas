@@ -1,0 +1,20 @@
+/* Custom Unfold Admin Logo Styling */
+#logo span {
+    color: transparent;
+    position: relative;
+}
+
+#logo span::before {
+    content: "AURA";
+    color: #111827; /* Tailwind gray-900 or whatever primary is */
+    position: absolute;
+    left: 0;
+}
+
+/* Add the red dot */
+#logo span::after {
+    content: ".";
+    color: #F43F5E; /* Tailwind rose-500 */
+    position: absolute;
+    left: 45px; /* Adjust based on font size */
+}

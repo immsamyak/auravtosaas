@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Generative AI Virtual Fitting Room</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'js/tailwind.config.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <!-- Framer Motion for React-like animations in vanilla JS -->
+    <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
+    <!-- AlpineJS for interactive components -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans for premium SaaS look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth;
+        }
+        ::selection {
+            background-color: #e0e7ff; /* indigo-100 */
+            color: #312e81; /* indigo-900 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col relative selection:bg-indigo-100 selection:text-indigo-900">
+    
+    <!-- Floating, Rounded Sticky Navigation -->
+    {% block navbar %}
+    <div class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+        <nav class="pointer-events-auto bg-white/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 border border-white/80 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
+            <!-- Brand -->
+            <a href="{% url 'index' %}" class="flex items-center space-x-2 group">
+                <span class="text-2xl font-extrabold tracking-tighter text-slate-900 group-hover:text-indigo-600 transition-colors">AURA<span class="text-indigo-500">.</span></span>
+            </a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center space-x-8">
+                {% if not request.resolver_match.url_name == 'store' and not request.resolver_match.url_name == 'store_product_detail' %}
+                    <a href="{% url 'index' %}#how-it-works" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">How it Works</a>
+                    <a href="{% url 'index' %}#demo" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Live Demo</a>
+                    <a href="{% url 'index' %}#pricing" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Pricing</a>
+                    <a href="{% url 'index' %}#brands" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Explore Brands</a>
+                {% endif %}
+            </div>
+            
+            <!-- Auth & Actions -->
+            <div class="flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin:dashboard' %}" class="hidden lg:flex text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors mr-2"><i class="fa-solid fa-shield mr-1.5"></i> Admin</a>
+                    {% endif %}
+                    {% if user.owned_brand %}
+                        <a href="{% url 'dashboard' %}" class="text-sm font-bold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'profile' %}" class="text-sm font-bold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Try-On History</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="hidden sm:block text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors">Log in</a>
+                    <a href="{% url 'signup' %}" class="text-sm font-bold bg-indigo-600 text-white px-5 py-2.5 rounded-full hover:bg-slate-900 transition-all shadow-md shadow-indigo-500/25 transform hover:-translate-y-0.5">
+                        Start Free Trial
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+    {% endblock %}
+
+    <!-- Main Content -->
+    <main class="flex-grow relative">
+        <!-- Toast Notifications -->
+        {% if messages %}
+        <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+            {% for message in messages %}
+            <div class="pointer-events-auto bg-white rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        {% if message.tags == 'error' %}
+                        <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
+                        {% elif message.tags == 'success' %}
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                        {% else %}
+                        <i class="fa-solid fa-circle-info text-indigo-500"></i>
+                        {% endif %}
+                    </div>
+                    <div class="ml-3 w-0 flex-1 pt-0.5">
+                        <p class="text-sm font-medium text-slate-900">{{ message }}</p>
+                    </div>
+                    <div class="ml-4 flex-shrink-0 flex">
+                        <button class="inline-flex text-slate-400 hover:text-slate-500 focus:outline-none" onclick="document.getElementById('toast-{{ forloop.counter }}').style.display='none'">
+                            <span class="sr-only">Close</span>
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                setTimeout(() => {
+                    const toast = document.getElementById('toast-{{ forloop.counter }}');
+                    if (toast) {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(100%)';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, 5000);
+            </script>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Professional Enterprise SaaS Footer -->
+    {% block footer %}
+    <footer class="bg-slate-900 border-t border-slate-800 pt-20 pb-10 mt-auto text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+                <!-- Brand Info -->
+                <div class="lg:col-span-2">
+                    <a href="{% url 'index' %}" class="flex items-center space-x-2 mb-6">
+                        <span class="text-3xl font-extrabold tracking-tighter text-white">AURA<span class="text-indigo-500">.</span></span>
+                    </a>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-sm mb-8">
+                        The world's most advanced Generative AI virtual try-on API. Increase conversions and decimate return rates by letting shoppers see exactly how clothes fit them.
+                    </p>
+                    <div class="flex space-x-5">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-twitter text-lg"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-github text-lg"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-linkedin-in text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Dynamic CMS Footer Links -->
+                {% for section in footer_sections %}
+                <div>
+                    <h4 class="text-white font-bold text-sm tracking-widest uppercase mb-6">{{ section.title }}</h4>
+                    <ul class="space-y-4 text-sm">
+                        {% for link in section.links.all %}
+                        <li>
+                            <a href="{% if link.page %}{% url 'page_detail' link.page.slug %}{% else %}{{ link.external_url|default:'#' }}{% endif %}" class="hover:text-indigo-400 transition-colors flex items-center">
+                                {{ link.title }}
+                                {% if link.show_new_badge %}
+                                <span class="ml-2 bg-indigo-500/20 text-indigo-300 text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Newsletter Row -->
+            <div class="border-t border-slate-800 pt-8 pb-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="max-w-md">
+                    <h4 class="text-white font-bold text-lg mb-2">Subscribe to our newsletter</h4>
+                    <p class="text-sm text-slate-400">Get the latest news on AI fashion tech, product updates, and industry insights.</p>
+                </div>
+                <form class="flex w-full md:w-auto gap-2">
+                    <input type="email" placeholder="Enter your email" class="bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full md:w-64 transition-all">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-indigo-500/25">Subscribe</button>
+                </form>
+            </div>
+
+            <!-- Bottom Copyright Row -->
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-slate-500">
+                    {{ cms.footer_text|default:"© 2026 Aura Virtual Try-On. All rights reserved." }}
+                </p>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0 text-sm text-slate-500">
+                    <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span> All systems operational</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    
+    <!-- Global App Script -->
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

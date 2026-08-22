@@ -1,0 +1,127 @@
+{% extends "storefront/theme_goth/base.html" %}
+
+{% block content %}
+<!-- Hero -->
+<section class="min-h-[85vh] flex items-center relative overflow-hidden vignette">
+    {% if brand.banner %}
+        <img alt="Dark Collection" class="absolute inset-0 w-full h-full object-cover opacity-30 filter grayscale" src="{{ brand.banner.url }}"/>
+    {% else %}
+        <div class="absolute inset-0 bg-gradient-to-b from-goth-crimson/10 via-goth-bg to-goth-bg"></div>
+    {% endif %}
+
+    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+<div class="w-px h-20 bg-goth-blood/40 mx-auto mb-8"></div>
+<span class="font-display text-xs tracking-[0.4em] uppercase text-goth-blood block mb-4">Autumn / Winter MMXXVI</span>
+<h1 class="font-display font-black text-6xl md:text-8xl tracking-wider uppercase leading-[0.85] mb-8 text-goth-bone blood-glow">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}Eternal <br/>Noir{% endif %}</h1>
+<p class="font-serif italic text-xl text-goth-bone/50 max-w-lg mx-auto mb-12">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Where shadow meets silhouette. An exploration of darkness in textile form.{% endif %}</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+<a class="inline-block border border-goth-blood text-goth-blood font-display text-sm tracking-[0.2em] uppercase px-10 py-4 hover:bg-goth-blood hover:text-white transition-all duration-500" href="{{ brand.banner_cta_link|default:'#collection' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Enter the Collection{% endif %}</a>
+
+            {% if brand.banner_secondary_cta_text %}
+            <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+                {{ brand.banner_secondary_cta_text }}
+            </a>
+            {% endif %}
+            
+</div>
+</div>
+</section>
+<!-- Products -->
+<section class="py-24 max-w-7xl mx-auto px-6" id="collection">
+<div class="text-center mb-16">
+<span class="font-display text-xs tracking-[0.3em] uppercase text-goth-blood">— Pieces —</span>
+<h2 class="font-display font-bold text-4xl tracking-wider uppercase text-goth-bone mt-3">The Dark Archive</h2>
+</div>
+
+    {% if products %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
+            {% for product in products|slice:":4" %}
+                <div class="group relative overflow-hidden bg-goth-surface border border-white/5 hover:border-goth-blood/30 transition-all duration-500">
+<a class="block aspect-[2/3] overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.id %}">
+                        {% if product.images.first %}
+                                <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
+                            {% elif product.variants.first.image %}
+                            <img alt="{{ product.name }}" class="w-full h-full object-cover filter brightness-75 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center bg-goth-smoke">
+<i class="fa-solid fa-cross text-5xl text-goth-bone/10"></i>
+</div>
+                        {% endif %}
+                        <div class="absolute inset-0 bg-gradient-to-t from-goth-bg via-transparent to-transparent"></div>
+</a>
+<div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+<h3 class="font-display font-bold text-lg tracking-widest uppercase mb-1 truncate">
+<a class="text-goth-bone hover:text-goth-blood transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a>
+</h3>
+<div class="flex justify-between items-center">
+<span class="font-serif italic text-goth-blood text-lg">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+<span class="font-display text-[10px] tracking-widest uppercase text-goth-bone/30 opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
+</div>
+</div>
+</div>
+            {% endfor %}
+        </div>
+        <div class="mt-12 text-center w-full flex justify-center">
+            <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+                View All Products
+            </a>
+        </div>
+
+    {% else %}
+        <div class="text-center py-20 border border-white/5">
+<p class="font-serif italic text-2xl text-goth-bone/30">The archive is being prepared...</p>
+</div>
+    {% endif %}
+</section>
+<!-- Collections Section -->
+<section class="py-16 max-w-7xl mx-auto px-6 bg-black/5">
+<div class="mb-10 text-center">
+<h2 class="font-display font-bold text-4xl tracking-wider uppercase text-goth-bone mt-3">Curated Collections</h2>
+</div>
+    {% if collections %}
+        <div class="flex flex-col space-y-12">
+            {% for collection in collections %}
+                <div class="flex flex-col md:flex-row gap-8 items-center {% if forloop.counter|divisibleby:2 %}md:flex-row-reverse{% endif %}">
+<div class="flex-1 w-full aspect-video relative overflow-hidden border border-gray-200/20">
+                        {% if collection.image %}
+                            <img alt="{{ collection.name }}" class="w-full h-full object-cover" src="{{ collection.image.url }}"/>
+                        {% else %}
+                            <div class="w-full h-full bg-gray-200"></div>
+                        {% endif %}
+                    </div>
+<div class="flex-1 text-center md:text-left px-6">
+<h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
+<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
+</div>
+</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+<!-- Categories Section -->
+<section class="py-16 max-w-7xl mx-auto px-6">
+<div class="mb-10 text-center">
+<h2 class="font-display font-bold text-4xl tracking-wider uppercase text-goth-bone mt-3">Shop by Category</h2>
+</div>
+    {% if categories %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
+            {% for category in categories %}
+                <a class="group block relative overflow-hidden aspect-square border border-gray-200/20" href="{% url 'storefront_shop' brand.slug %}?category={{ category.id }}">
+                    {% if category.image %}
+                        <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
+                    {% else %}
+                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+<i class="fa-solid fa-tags text-4xl text-gray-300"></i>
+</div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<h3 class="text-white font-bold text-2xl uppercase tracking-wider">{{ category.name }}</h3>
+</div>
+</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}

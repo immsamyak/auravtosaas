@@ -1,0 +1,215 @@
+{% extends "admin/admin_base.html" %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    {% include "components/breadcrumb.html" with current="Overview Dashboard" %}
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Overview <span class="text-indigo-600 font-light">Dashboard</span></h1>
+            <p class="text-slate-500 mt-2 text-sm font-medium">Real-time global metrics for the AURA Multi-Tenant Platform.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="px-4 py-2 bg-white border border-slate-200 text-sm font-bold text-slate-700 rounded-xl hover:bg-slate-50 shadow-sm transition"><i class="fa-solid fa-download mr-2"></i> Export Report</button>
+            <button class="px-4 py-2 bg-indigo-600 text-sm font-bold text-white rounded-xl hover:bg-indigo-700 shadow-sm transition"><i class="fa-solid fa-rotate mr-2"></i> Refresh</button>
+        </div>
+    </div>
+
+    <!-- Tier 1: Main KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {% include "components/stat_card.html" with title="Active Brands" value=total_brands icon="store" trend="up" trend_value="3 New" %}
+        {% include "components/stat_card.html" with title="Total VTO Jobs" value=total_vto_jobs icon="wand-magic-sparkles" trend="up" trend_value="8.4%" %}
+        {% include "components/stat_card.html" with title="Gross Merchandise (GMV)" value=total_gmv icon="sack-dollar" %}
+        {% include "components/stat_card.html" with title="Platform MRR" value=mrr icon="money-check-dollar" %}
+    </div>
+
+    <!-- Tier 2: Analytic Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Main Growth Chart -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-6">Platform Revenue & VTO Growth (30 Days)</h3>
+            <div class="relative h-72 w-full">
+                <canvas id="growthChart"></canvas>
+            </div>
+        </div>
+
+        <!-- VTO Usage Chart -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-6">VTO Job Distribution</h3>
+            <div class="relative h-56 w-full flex justify-center">
+                <canvas id="vtoChart"></canvas>
+            </div>
+            <div class="mt-6 space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="flex items-center gap-2 text-slate-600 font-medium"><div class="w-3 h-3 rounded-full bg-emerald-500"></div> Completed</span>
+                    <span class="font-bold text-slate-900">{{ vto_completed }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="flex items-center gap-2 text-slate-600 font-medium"><div class="w-3 h-3 rounded-full bg-amber-500"></div> Processing</span>
+                    <span class="font-bold text-slate-900">{{ vto_processing }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="flex items-center gap-2 text-slate-600 font-medium"><div class="w-3 h-3 rounded-full bg-rose-500"></div> Failed</span>
+                    <span class="font-bold text-slate-900">{{ vto_failed }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tier 3: System Health -->
+    <div class="bg-slate-900 rounded-3xl shadow-xl p-8 mb-8 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 20px 20px;"></div>
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6 border-b border-slate-800 pb-6">
+            <div>
+                <h2 class="text-2xl font-extrabold flex items-center gap-3">
+                    <i class="fa-solid fa-server text-indigo-400"></i> Infrastructure Health
+                </h2>
+                <p class="text-slate-400 mt-1 text-sm">Real-time status of compute resources and microservices.</p>
+            </div>
+            <div class="flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl border border-emerald-500/20 text-sm font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                All Systems Operational
+            </div>
+        </div>
+
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- GPU Load -->
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">A100 GPU Cluster Load</span>
+                    <span class="text-lg font-bold text-indigo-400">72%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 shadow-inner">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]" style="width: 72%"></div>
+                </div>
+                <p class="text-xs text-slate-500">Peak load expected in 2 hours.</p>
+            </div>
+
+            <!-- Memory -->
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">VTO API Queue</span>
+                    <span class="text-lg font-bold text-emerald-400">14 Jobs</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 shadow-inner">
+                    <div class="bg-emerald-500 h-3 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" style="width: 15%"></div>
+                </div>
+                <p class="text-xs text-slate-500">Healthy queue depth. Max capacity 100.</p>
+            </div>
+
+            <!-- DB Latency -->
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">DB Read Latency</span>
+                    <span class="text-lg font-bold text-blue-400">12ms</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 shadow-inner">
+                    <div class="bg-blue-500 h-3 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" style="width: 12%"></div>
+                </div>
+                <p class="text-xs text-slate-500">PostgreSQL running optimally.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tier 4: Dense Micro-Stats Grid -->
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 mb-8">
+        <h2 class="text-lg font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4">Global Network Statistics</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            
+            {% include "components/stat_card.html" with title="Products" value=total_products icon="box" %}
+            {% include "components/stat_card.html" with title="Variants" value=total_variants icon="tags" %}
+            {% include "components/stat_card.html" with title="Total Orders" value=total_orders icon="cart-shopping" trend="up" trend_value="12%" %}
+            {% include "components/stat_card.html" with title="Active Carts" value=active_carts icon="bag-shopping" %}
+            {% include "components/stat_card.html" with title="Consumers" value=total_consumers icon="users" trend="up" trend_value="5.2%" %}
+            {% include "components/stat_card.html" with title="Avg Order Value" value="$42.50" icon="money-bill" %}
+            
+            <!-- Additional Detailed Stats -->
+            {% include "components/stat_card.html" with title="Cart Abandonment" value="68.2%" icon="person-running" trend="down" trend_value="2.1%" %}
+            {% include "components/stat_card.html" with title="Conversion Rate" value="3.4%" icon="filter" trend="up" trend_value="0.5%" %}
+            {% include "components/stat_card.html" with title="Refund Rate" value="1.2%" icon="arrow-rotate-left" %}
+            {% include "components/stat_card.html" with title="Storage Used" value="428 GB" icon="hard-drive" %}
+            {% include "components/stat_card.html" with title="Top Size" value="Medium (M)" icon="ruler" %}
+            {% include "components/stat_card.html" with title="Top Color" value="Black" icon="palette" %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Chart Defaults
+    Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+    Chart.defaults.color = '#64748b'; // slate-500
+    
+    // 1. Growth Line Chart
+    const growthCtx = document.getElementById('growthChart').getContext('2d');
+    new Chart(growthCtx, {
+        type: 'line',
+        data: {
+            labels: ['1', '5', '10', '15', '20', '25', '30'],
+            datasets: [{
+                label: 'Platform Revenue ($)',
+                data: [12000, 19000, 15000, 22000, 24000, 28000, 32000],
+                borderColor: '#4f46e5', // indigo-600
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                yAxisID: 'y'
+            }, {
+                label: 'VTO Jobs Run',
+                data: [400, 500, 450, 700, 650, 900, 1100],
+                borderColor: '#10b981', // emerald-500
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 2,
+                tension: 0.4,
+                borderDash: [5, 5],
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                tooltip: { backgroundColor: '#1e293b', padding: 12, titleFont: { size: 14, weight: 'bold' } }
+            },
+            scales: {
+                x: { grid: { display: false } },
+                y: { type: 'linear', display: true, position: 'left', grid: { color: '#f1f5f9' } },
+                y1: { type: 'linear', display: true, position: 'right', grid: { display: false } }
+            }
+        }
+    });
+
+    // 2. VTO Status Doughnut Chart
+    const vtoCtx = document.getElementById('vtoChart').getContext('2d');
+    new Chart(vtoCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Processing', 'Failed'],
+            datasets: [{
+                data: [{{ vto_completed }}, {{ vto_processing }}, {{ vto_failed }}],
+                backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { backgroundColor: '#1e293b', padding: 12 }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

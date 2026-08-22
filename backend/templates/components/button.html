@@ -1,0 +1,38 @@
+{% comment %}
+Usage:
+{% include 'components/button.html' with text="Save" type="primary" icon="check" url="/path/" %}
+Types: primary, secondary, danger, outline
+{% endcomment %}
+
+{% if url %}
+<a href="{{ url }}" 
+{% else %}
+<button {% if id %}id="{{ id }}"{% endif %} {% if form %}form="{{ form }}"{% endif %} {% if type_attr %}type="{{ type_attr }}"{% else %}type="button"{% endif %}
+{% endif %}
+    class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed
+    {% if type == 'primary' or not type %}
+        bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-600/30 focus:ring-indigo-600
+    {% elif type == 'secondary' %}
+        bg-slate-800 hover:bg-slate-900 text-white shadow-sm shadow-slate-900/30 focus:ring-slate-900
+    {% elif type == 'danger' %}
+        bg-rose-600 hover:bg-rose-700 text-white shadow-sm shadow-rose-600/30 focus:ring-rose-600
+    {% elif type == 'outline' %}
+        bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-sm focus:ring-slate-200
+    {% elif type == 'ghost' %}
+        bg-transparent hover:bg-slate-100 text-slate-600 focus:ring-slate-200
+    {% endif %}
+    {% if classes %}{{ classes }}{% endif %}"
+    {% if extra_attrs %}{{ extra_attrs }}{% endif %}>
+    
+    {% if icon %}
+        <i class="fa-solid fa-{{ icon }} {% if text %}mr-2{% endif %} text-sm"></i>
+    {% endif %}
+    {% if text %}
+        <span>{{ text }}</span>
+    {% endif %}
+
+{% if url %}
+</a>
+{% else %}
+</button>
+{% endif %}

@@ -1,0 +1,25 @@
+from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from apps.fitting.models import VTOSession
+
+class VTOSessionListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+    model = VTOSession
+    template_name = 'admin/fitting/vtosession/list.html'
+    context_object_name = 'objects'
+    paginate_by = 15
+    search_fields = ['status']
+    filter_fields = ['passport']
+
+class VTOSessionCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+    model = VTOSession
+    template_name = 'admin/fitting/vtosession/form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('admin:vtosession_list')
+
+class VTOSessionUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+    model = VTOSession
+    template_name = 'admin/fitting/vtosession/form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('admin:vtosession_list')

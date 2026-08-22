@@ -1,0 +1,467 @@
+{% extends "dashboard_base.html" %}
+{% load dropdown_tags %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12" x-data="{ openOrderId: null }">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
+                    <span class="text-sm font-bold text-slate-800">Store</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-slate-500">Orders</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Manage <span class="text-indigo-600 font-light">Orders</span></h1>
+            <p class="text-slate-500 mt-2 text-sm font-medium">View and track customer purchases for your brand.</p>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <a href="{% url 'manage_orders' %}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-center gap-3 hover:border-indigo-300 transition {% if not filter_status %}ring-2 ring-indigo-500{% endif %}">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total</p>
+                <p class="text-xl font-extrabold text-slate-900">{{ total_count }}</p>
+            </div>
+        </a>
+        <a href="?status=PENDING&q={{ filter_search }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-center gap-3 hover:border-amber-300 transition {% if filter_status == 'PENDING' %}ring-2 ring-amber-500{% endif %}">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Pending</p>
+                <p class="text-xl font-extrabold text-amber-600">{{ pending_count }}</p>
+            </div>
+        </a>
+        <a href="?status=PAID&q={{ filter_search }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-center gap-3 hover:border-emerald-300 transition {% if filter_status == 'PAID' %}ring-2 ring-emerald-500{% endif %}">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Paid</p>
+                <p class="text-xl font-extrabold text-emerald-600">{{ paid_count }}</p>
+            </div>
+        </a>
+        <a href="?status=SHIPPED&q={{ filter_search }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-center gap-3 hover:border-blue-300 transition {% if filter_status == 'SHIPPED' %}ring-2 ring-blue-500{% endif %}">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Shipped</p>
+                <p class="text-xl font-extrabold text-blue-600">{{ shipped_count }}</p>
+            </div>
+        </a>
+        <a href="?status=DELIVERED&q={{ filter_search }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-center gap-3 hover:border-slate-300 transition {% if filter_status == 'DELIVERED' %}ring-2 ring-slate-500{% endif %}">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Delivered</p>
+                <p class="text-xl font-extrabold text-slate-700">{{ delivered_count }}</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Search Bar -->
+    <form method="GET" class="mb-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-end gap-4">
+        {% if filter_status %}<input type="hidden" name="status" value="{{ filter_status }}">{% endif %}
+        <div class="flex-1">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                </div>
+                <input type="text" name="q" value="{{ filter_search }}" placeholder="Search by customer name, phone, or order ID..." class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+        </div>
+        <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
+            <i class="fa-solid fa-search mr-2"></i> Search
+        </button>
+        {% if filter_search or filter_status %}
+        <a href="{% url 'manage_orders' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+            <i class="fa-solid fa-xmark mr-1"></i> Clear
+        </a>
+        {% endif %}
+    </form>
+
+    <!-- Orders List -->
+    <div class="bg-white shadow-sm sm:rounded-3xl border border-slate-200 overflow-visible">
+        <ul class="divide-y divide-slate-100">
+            {% for order in orders %}
+            <li class="group hover:bg-slate-50 transition-colors duration-200 cursor-pointer" @click="$dispatch('open-order', '{{ order.id }}')">
+                <div class="px-6 py-5 sm:px-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <p class="text-lg font-bold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors flex items-center gap-2">
+                                Order #{{ order.id|stringformat:"s"|slice:":8" }}
+                                {% if order.payment_provider in 'CASH,CARD,QR,CUSTOM_MANUAL,DRAFT' %}
+                                    <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-sm"><i class="fa-solid fa-cash-register mr-1"></i> POS</span>
+                                {% endif %}
+                            </p>
+                            <p class="text-sm font-medium text-slate-500 flex items-center gap-2 flex-wrap">
+                                <span class="text-slate-700 font-bold"><i class="fa-regular fa-user mr-1 text-slate-400"></i> {% if order.customer_name %}{{ order.customer_name }}{% elif order.user %}{{ order.user.username }}{% else %}Guest{% endif %}</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md text-xs">{{ request.user.owned_brand.get_currency_symbol }}{{ order.grand_total }}</span>
+                                {% if order.payment_provider and order.payment_provider != 'NONE' %}
+                                    <span class="text-slate-300">•</span>
+                                    <span class="text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                                        <i class="fa-solid fa-wallet mr-1 text-slate-400"></i>
+                                        {% if order.payment_provider == 'CUSTOM_MANUAL' %}
+                                            COD / Bank / QR
+                                        {% else %}
+                                            {{ order.payment_provider|title }}
+                                        {% endif %}
+                                    </span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="ml-2 flex-shrink-0 flex space-x-2">
+                            {% if order.status == 'PENDING' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-amber-50 text-amber-600 border border-amber-100"><i class="fa-solid fa-clock mr-1.5 mt-0.5"></i> Pending</span>
+                            {% elif order.status == 'PAID' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100"><i class="fa-solid fa-check-circle mr-1.5 mt-0.5"></i> Paid</span>
+                            {% elif order.status == 'PROCESSING' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-blue-50 text-blue-600 border border-blue-100"><i class="fa-solid fa-gear mr-1.5 mt-0.5"></i> Processing</span>
+                            {% elif order.status == 'SENT_TO_COURIER' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100"><i class="fa-solid fa-truck mr-1.5 mt-0.5"></i> Sent</span>
+                            {% elif order.status == 'COURIER_PROCESSING' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-purple-50 text-purple-600 border border-purple-100"><i class="fa-solid fa-route mr-1.5 mt-0.5"></i> Transit</span>
+                            {% elif order.status == 'DELIVERED' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200"><i class="fa-solid fa-box-open mr-1.5 mt-0.5"></i> Delivered</span>
+                            {% elif order.status == 'COMPLETED' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200"><i class="fa-solid fa-check-double mr-1.5 mt-0.5"></i> Completed</span>
+                            {% elif order.status == 'DRAFT' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100"><i class="fa-solid fa-file-signature mr-1.5 mt-0.5"></i> Draft</span>
+                            {% elif order.status == 'CANCELLED' %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-rose-50 text-rose-600 border border-rose-100"><i class="fa-solid fa-xmark mr-1.5 mt-0.5"></i> Cancelled</span>
+                            {% else %}
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-slate-500 border border-slate-200">{{ order.status }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Dropdown Action -->
+                        <div class="ml-4">
+                            {% dropdown %}
+                                <button @click="$dispatch('open-order', '{{ order.id }}'); open = false" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center">
+                                    <i class="fa-solid fa-eye w-4 mr-2 text-slate-400"></i> View Details
+                                </button>
+                                
+                                {% if order.status == 'PENDING' %}
+                                <form method="POST" action="{% url 'manage_orders' %}" class="block w-full">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="verify_payment">
+                                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center">
+                                        <i class="fa-solid fa-check w-4 mr-2 text-emerald-500"></i> Verify Payment
+                                    </button>
+                                </form>
+                                {% endif %}
+                                
+                                {% if order.status == 'PENDING' or order.status == 'PAID' %}
+                                <div class="border-t border-slate-100 my-1"></div>
+                                <form method="POST" action="{% url 'manage_orders' %}" onsubmit="confirmAction(event, 'Are you sure you want to cancel this order?');" class="block w-full">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="cancel_order">
+                                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 font-medium flex items-center">
+                                        <i class="fa-solid fa-ban w-4 mr-2 text-rose-500"></i> Cancel Order
+                                    </button>
+                                </form>
+                                {% endif %}
+                            {% enddropdown %}
+                        </div>
+                    </div>
+                    <div class="mt-4 sm:flex sm:justify-between items-center">
+                        <div class="sm:flex text-sm text-slate-500">
+                            <p class="flex items-center text-sm font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm">
+                                <i class="fa-solid fa-box mr-2 text-indigo-500"></i>
+                                {{ order.items.count }} Item(s)
+                            </p>
+                        </div>
+                        <div class="mt-4 flex items-center space-x-3 sm:mt-0">
+                            <p class="text-xs font-medium text-slate-400">
+                                Placed on <time datetime="{{ order.created_at|date:'Y-m-d' }}">{{ order.created_at|date:"M d, Y h:i A" }}</time>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="px-6 py-16 sm:px-8 text-center">
+                <div class="mx-auto h-24 w-24 bg-slate-50 border-2 border-dashed border-slate-200 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-cart-arrow-down text-3xl text-slate-400"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">No orders found</h3>
+                <p class="mt-2 text-sm text-slate-500 max-w-sm mx-auto">
+                    {% if filter_search or filter_status %}
+                        Try adjusting your search or filters.
+                    {% else %}
+                        When customers purchase your products, their orders will appear here.
+                    {% endif %}
+                </p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Pagination -->
+    {% include "components/pagination.html" %}
+
+</div>
+{% endblock %}
+
+{% block extra_modals %}
+<div x-data="{ openOrderId: null }" @open-order.window="openOrderId = $event.detail">
+    {% for order in orders %}
+    <div x-show="openOrderId === '{{ order.id }}'" style="display: none;" class="fixed inset-0 z-[9998]" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <!-- Background backdrop -->
+        <div x-show="openOrderId === '{{ order.id }}'" 
+             x-transition:enter="ease-in-out duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" 
+             x-transition:leave="ease-in-out duration-500" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" @click="openOrderId = null"></div>
+
+        <div class="fixed inset-0 overflow-hidden cursor-default" @click.stop>
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                    <!-- Slide-over panel -->
+                    <div x-show="openOrderId === '{{ order.id }}'"
+                         x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" 
+                         x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" 
+                         class="pointer-events-auto w-screen max-w-xl">
+                        <div class="flex h-full flex-col overflow-y-auto bg-white shadow-2xl">
+                            
+                            <!-- Modal Header -->
+                            <div class="bg-indigo-600 px-4 py-6 sm:px-6 relative overflow-hidden">
+                                <div class="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+                                <div class="flex items-center justify-between relative z-10">
+                                    <h2 class="text-xl font-bold text-white" id="slide-over-title">Order Details</h2>
+                                    <div class="ml-3 flex h-7 items-center">
+                                        <button type="button" class="relative rounded-md text-indigo-200 hover:text-white focus:outline-none" @click="openOrderId = null">
+                                            <span class="absolute -inset-2.5"></span>
+                                            <span class="sr-only">Close panel</span>
+                                            <i class="fa-solid fa-xmark text-xl"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mt-1 relative z-10">
+                                    <p class="text-indigo-100 text-sm">Order #{{ order.id }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Modal Body -->
+                            <div class="px-4 sm:px-6 py-6 space-y-6 flex-1">
+                                <!-- Customer Info -->
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Customer Information</h3>
+                                    <div class="bg-slate-50 rounded-xl p-4 space-y-2 border border-slate-100">
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Name</span>
+                                            <span class="text-sm font-bold text-slate-900">{{ order.customer_name|default:"N/A" }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Phone</span>
+                                            <span class="text-sm font-bold text-slate-900">{{ order.customer_phone|default:"N/A" }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Address</span>
+                                            <div class="text-right max-w-[200px]">
+                                                <span class="block text-sm font-bold text-slate-900">{{ order.shipping_address|default:"N/A" }}</span>
+                                                {% if order.delivery_city %}
+                                                <span class="block text-xs font-medium text-slate-500 mt-1">{{ order.delivery_city.name }}, {{ order.delivery_city.district.name }}, {{ order.delivery_city.district.province.name }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Order Items -->
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Order Items</h3>
+                                    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden divide-y divide-slate-100">
+                                        {% for item in order.items.all %}
+                                        <div class="p-3 sm:p-4 flex gap-4">
+                                            <div class="h-16 w-16 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0 overflow-hidden">
+                                                {% if item.product_variant.image %}
+                                                <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" class="h-full w-full object-cover">
+                                                {% else %}
+                                                <div class="h-full w-full flex items-center justify-center"><i class="fa-solid fa-box text-slate-300"></i></div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-sm font-bold text-slate-900 truncate">{{ item.product_variant.product.name }}</h4>
+                                                <p class="text-xs font-medium text-slate-500 mt-0.5">{{ item.product_variant.color.name }} • Size {{ item.product_variant.size.code }}</p>
+                                                <div class="mt-1 flex items-center justify-between">
+                                                    <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">Qty: {{ item.quantity }}</span>
+                                                    <span class="text-sm font-bold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ item.product_variant.product.price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <div class="p-4 text-center text-sm text-slate-500">No items found for this order.</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <!-- Order Summary -->
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Order Summary</h3>
+                                    <div class="bg-slate-50 rounded-xl p-4 space-y-2 border border-slate-100">
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Items Total</span>
+                                            <span class="text-sm font-medium text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ order.total_amount }}</span>
+                                        </div>
+                                        {% if order.discount_amount > 0 %}
+                                        <div class="flex items-center justify-between bg-emerald-50 p-2 rounded-lg -mx-2">
+                                            <div class="flex items-center">
+                                                <i class="fa-solid fa-tags text-emerald-600 mr-2 text-xs"></i>
+                                                <span class="text-sm text-emerald-700 font-medium">Discount {% if order.coupon %}<span class="font-bold font-mono ml-1 px-1.5 py-0.5 bg-emerald-100 rounded text-xs border border-emerald-200">{{ order.coupon.code }}</span>{% endif %}</span>
+                                            </div>
+                                            <span class="text-sm font-black text-emerald-700">-{{ request.user.owned_brand.get_currency_symbol }}{{ order.discount_amount }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if order.shipping_cost %}
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Shipping</span>
+                                            <span class="text-sm font-medium text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ order.shipping_cost }}</span>
+                                        </div>
+                                        {% endif %}
+                                        <div class="flex justify-between border-t border-slate-200 pt-2 mt-2">
+                                            <span class="text-sm font-bold text-slate-900">Grand Total</span>
+                                            <span class="text-lg font-extrabold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ order.grand_total }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Payment Method</span>
+                                            <span class="text-sm font-bold text-slate-900">
+                                                {% if order.payment_provider == 'CUSTOM_MANUAL' %}
+                                                    COD / Bank / QR
+                                                {% else %}
+                                                    {{ order.payment_provider|default:"N/A"|title }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-slate-500">Status</span>
+                                            {% if order.status == 'PENDING' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-50 text-amber-600 border border-amber-100">Pending</span>
+                                            {% elif order.status == 'PAID' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100">Paid</span>
+                                            {% elif order.status == 'PROCESSING' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-blue-50 text-blue-600 border border-blue-100">Processing</span>
+                                            {% elif order.status == 'SENT_TO_COURIER' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">Sent to Courier</span>
+                                            {% elif order.status == 'COURIER_PROCESSING' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-50 text-purple-600 border border-purple-100">Courier Processing</span>
+                                            {% elif order.status == 'DELIVERED' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">Delivered</span>
+                                            {% elif order.status == 'COMPLETED' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">Completed</span>
+                                            {% elif order.status == 'DRAFT' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">Draft</span>
+                                            {% elif order.status == 'CANCELLED' %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-rose-50 text-rose-600 border border-rose-100">Cancelled</span>
+                                            {% else %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-500 border border-slate-200">{{ order.status }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-slate-500">Date</span>
+                                            <span class="text-sm font-bold text-slate-900">{{ order.created_at|date:"M d, Y h:i A" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Proof -->
+                                {% if order.payment_proof %}
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Payment Proof</h3>
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                        <img src="{{ order.payment_proof.url }}" alt="Payment proof" class="rounded-lg w-full max-h-60 object-contain">
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Actions -->
+                                {% if order.status != 'DELIVERED' and order.status != 'CANCELLED' %}
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Update Status</h3>
+                                    <form method="POST" action="{% url 'manage_orders' %}" class="space-y-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <input type="hidden" name="action" value="update_status">
+                                        <div class="flex gap-2">
+                                            <select name="new_status" class="block w-full rounded-xl border-slate-300 py-2.5 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                                <option value="PENDING" {% if order.status == 'PENDING' %}selected{% endif %}>Pending</option>
+                                                <option value="PAID" {% if order.status == 'PAID' %}selected{% endif %}>Paid</option>
+                                                <option value="PROCESSING" {% if order.status == 'PROCESSING' %}selected{% endif %}>Processing</option>
+                                                <option value="SENT_TO_COURIER" {% if order.status == 'SENT_TO_COURIER' %}selected{% endif %}>Sent to Courier</option>
+                                                <option value="COURIER_PROCESSING" {% if order.status == 'COURIER_PROCESSING' %}selected{% endif %}>Courier Processing</option>
+                                                <option value="DELIVERED" {% if order.status == 'DELIVERED' %}selected{% endif %}>Delivered</option>
+                                                <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
+                                            </select>
+                                            <button type="submit" class="inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                {% endif %}
+
+                                {% if order.status == 'PAID' or order.status == 'PROCESSING' and active_shipping_methods %}
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Dispatch Order</h3>
+                                    <form method="POST" action="{% url 'manage_orders' %}" class="space-y-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <input type="hidden" name="action" value="dispatch_order">
+                                        <select name="shipping_provider" required class="block w-full rounded-xl border-slate-300 py-2.5 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            <option value="">Select shipping partner...</option>
+                                            {% for sm in active_shipping_methods %}
+                                            <option value="{{ sm.integration.provider_code }}">{{ sm.integration.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition">
+                                            <i class="fa-solid fa-truck-fast mr-2"></i> Dispatch Order
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
+
+                                <!-- Shipping Info -->
+                                {% if order.status == 'SENT_TO_COURIER' or order.status == 'COURIER_PROCESSING' or order.status == 'DELIVERED' %}
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Shipping Details</h3>
+                                    <div class="bg-blue-50 rounded-xl p-4 space-y-2 border border-blue-100">
+                                        <div class="flex justify-between">
+                                            <span class="text-blue-500 text-xs font-medium uppercase tracking-wider">Partner</span>
+                                            <span class="text-blue-900 font-bold text-sm">{{ order.shipping_provider|default:"N/A" }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-blue-500 text-xs font-medium uppercase tracking-wider">Tracking ID</span>
+                                            <span class="text-blue-900 font-mono font-bold text-sm">{{ order.tracking_number|default:"N/A" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

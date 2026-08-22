@@ -1,0 +1,106 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Warehouse: {{ location.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-store text-slate-400 mr-2"></i>
+                    <a href="{% url 'manage_warehouses' %}" class="text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Warehouses</a>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                    <span class="text-sm font-bold text-slate-800">{{ location.name }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center space-x-4">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm {% if location.location_type == 'STORE' %}bg-blue-50 text-blue-600 border border-blue-100{% elif location.location_type == 'WAREHOUSE' %}bg-indigo-50 text-indigo-600 border border-indigo-100{% else %}bg-purple-50 text-purple-600 border border-purple-100{% endif %}">
+                <i class="fa-solid text-2xl {% if location.location_type == 'STORE' %}fa-store{% elif location.location_type == 'WAREHOUSE' %}fa-warehouse{% else %}fa-globe{% endif %}"></i>
+            </div>
+            <div>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">{{ location.name }}</h1>
+                <p class="text-slate-500 mt-1 text-sm font-medium flex items-center">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mr-2 {% if location.is_active %}bg-green-100 text-green-800{% else %}bg-slate-100 text-slate-800{% endif %}">
+                        {{ location.get_location_type_display }}
+                    </span>
+                    <i class="fa-solid fa-location-dot text-slate-300 mr-1.5 ml-1"></i>
+                    {% if location.address %}{{ location.address }}{% else %}No address provided{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-200 bg-slate-50/50 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-900">Current Stock</h3>
+        </div>
+        
+        {% if stock_levels %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider font-bold text-slate-500">
+                        <th class="px-6 py-4">Product Variant</th>
+                        <th class="px-6 py-4">SKU</th>
+                        <th class="px-6 py-4 text-right">Quantity</th>
+                        <th class="px-6 py-4">Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for stock in stock_levels %}
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-200">
+                                    {% if stock.product_variant.image %}
+                                    <img src="{{ stock.product_variant.image.url }}" alt="{{ stock.product_variant.product.name }}" class="w-full h-full object-cover">
+                                    {% else %}
+                                    <i class="fa-solid fa-shirt text-slate-300"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-bold text-slate-900">{{ stock.product_variant.product.name }}</p>
+                                    <p class="text-xs text-slate-500 font-medium mt-0.5">
+                                        Size: {{ stock.product_variant.size.name }} 
+                                        {% if stock.product_variant.color %} &bull; {{ stock.product_variant.color.name }} <span style="display:inline-block; width:10px; height:10px; background-color:{{ stock.product_variant.color.hex_code }}; border-radius:50%; border:1px solid #ccc; vertical-align:middle; margin-left:4px;"></span>{% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex font-mono text-xs text-slate-600 bg-slate-100 px-2 py-1 rounded">VAR-{{ stock.product_variant.id|stringformat:"04d" }}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-sm font-bold {% if stock.quantity <= 5 %}text-rose-600{% else %}text-slate-900{% endif %}">
+                                {{ stock.quantity }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-500">
+                            {{ stock.last_updated|date:"M d, Y H:i" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="py-12 text-center">
+            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <i class="fa-solid fa-box-open text-slate-300 text-2xl"></i>
+            </div>
+            <p class="text-sm font-bold text-slate-900">No inventory in this location yet.</p>
+            <p class="text-xs text-slate-500 mt-1">Stock levels will appear here once allocated.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

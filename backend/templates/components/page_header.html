@@ -1,0 +1,41 @@
+<div class="mb-8">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <a href="{% url 'dashboard' %}" class="text-slate-400 hover:text-indigo-600 transition-colors">
+                        <i class="fa-solid fa-gauge mr-2 text-sm"></i>
+                    </a>
+                    {% if app_label %}
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                        <span class="text-sm font-medium text-slate-500">{{ app_label|title }}</span>
+                    {% endif %}
+                    {% if title %}
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                        <span class="text-sm font-bold text-slate-800">{{ title }}</span>
+                    {% endif %}
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight dark:text-white">
+                {% if title_prefix %}{{ title_prefix }} <span class="text-indigo-600 font-light">{{ title }}</span>{% else %}{{ title }}{% endif %}
+            </h1>
+            {% if description %}
+                <p class="text-slate-500 mt-2 text-sm font-medium dark:text-slate-400">{{ description }}</p>
+            {% endif %}
+        </div>
+        
+        <!-- Actions / Object Tools -->
+        {% if object_tools %}
+        <div class="flex items-center gap-3">
+            {{ object_tools }}
+        </div>
+        {% endif %}
+    </div>
+</div>

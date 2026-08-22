@@ -1,0 +1,114 @@
+{% extends "dashboard_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li>
+                <div class="flex items-center">
+                    <i class="fa-solid fa-users text-slate-400 mr-2"></i>
+                    <a href="{% url 'manage_customers' %}" class="text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors">Customers</a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-slate-500">{{ customer.get_full_name|default:customer.username }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header & Stats -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm mb-8 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-indigo-50 opacity-50 pointer-events-none"></div>
+        
+        <div class="flex flex-col md:flex-row gap-8 items-start md:items-center relative z-10">
+            <div class="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-4xl shadow-inner flex-shrink-0">
+                {{ customer.get_full_name|default:customer.username|make_list|first|upper }}
+            </div>
+            
+            <div class="flex-1">
+                <h1 class="text-3xl font-extrabold text-slate-900 mb-2">{{ customer.get_full_name|default:customer.username }}</h1>
+                <div class="flex flex-wrap gap-4 text-sm text-slate-500 font-medium">
+                    <span class="flex items-center bg-slate-100 px-3 py-1 rounded-full"><i class="fa-regular fa-envelope mr-2 text-slate-400"></i> {{ customer.email }}</span>
+                    {% if phone %}
+                    <span class="flex items-center bg-slate-100 px-3 py-1 rounded-full"><i class="fa-solid fa-phone mr-2 text-slate-400"></i> {{ phone }}</span>
+                    {% endif %}
+                    <span class="flex items-center bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full"><i class="fa-solid fa-id-card mr-2 text-indigo-400"></i> Aura Global ID: #{{ customer.id }}</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-6 mt-6 md:mt-0 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Spent</p>
+                    <p class="text-3xl font-black text-emerald-600">{{ brand.get_currency_symbol }}{{ total_spend|floatformat:2 }}</p>
+                </div>
+                <div class="w-px bg-slate-200"></div>
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Orders</p>
+                    <p class="text-3xl font-black text-slate-700">{{ order_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order History -->
+    <h3 class="text-xl font-bold text-slate-800 mb-4">Order History</h3>
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Order ID</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Amount</th>
+                        <th scope="col" class="px-6 py-4 relative"><span class="sr-only">View</span></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-100">
+                    {% for order in orders %}
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-indigo-600">
+                            #{{ order.id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                            {{ order.created_at|date:"M d, Y h:i A" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            {% if order.payment_provider in 'CASH,CARD,QR' %}
+                                <span class="text-indigo-600 bg-indigo-50 px-2 py-1 rounded border border-indigo-100"><i class="fa-solid fa-store w-4 text-center mr-1"></i> In-Store (POS)</span>
+                            {% else %}
+                                <span class="text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100"><i class="fa-solid fa-globe w-4 text-center mr-1"></i> Online</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full 
+                                {% if order.status == 'COMPLETED' or order.status == 'DELIVERED' %}bg-emerald-100 text-emerald-800
+                                {% elif order.status == 'PENDING' %}bg-amber-100 text-amber-800
+                                {% elif order.status == 'CANCELLED' %}bg-rose-100 text-rose-800
+                                {% else %}bg-slate-100 text-slate-800{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-black text-slate-800">
+                            {{ brand.get_currency_symbol }}{{ order.total_amount|floatformat:2 }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <span class="text-slate-300" title="View details in Orders tab">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

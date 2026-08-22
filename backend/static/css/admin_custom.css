@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+html, body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* Make headers more bold and tighter like Aura */
+h1, h2, h3, h4, h5, h6, .font-semibold, .font-medium {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    letter-spacing: -0.025em !important;
+}
+
+/* Aura Logo Styling */
+#branding h1 {
+    font-weight: 800 !important;
+    letter-spacing: -0.05em !important;
+    font-size: 1.5rem !important;
+}
+
+

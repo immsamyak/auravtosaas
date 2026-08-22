@@ -1,0 +1,24 @@
+---5<div
+    class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col {% if classes %}{{ classes }}{% endif %}">
+    {% if title or subtitle %}
+    <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <div>
+            {% if title %}<h3 class="text-base font-bold text-slate-900">{{ title }}</h3>{% endif %}
+            {% if subtitle %}<p class="text-sm font-medium text-slate-500 mt-0.5">{{ subtitle }}</p>{% endif %}
+        </div>
+        {% if actions %}
+        <div class="flex items-center space-x-3">
+            {{ actions }}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="flex-1 p-6">
+        {{ content }}
+    </div>
+    {% if footer %}
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 text-sm">
+        {{ footer }}
+    </div>
+    {% endif %}
+</div>

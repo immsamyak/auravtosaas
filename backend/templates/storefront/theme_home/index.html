@@ -1,0 +1,71 @@
+{% extends "storefront/theme_home/base.html" %}
+
+{% block content %}
+<!-- Lifestyle Hero -->
+<section class="bg-hab-white relative min-h-[50vh]">
+    <div class="absolute inset-0 w-full h-full">
+        {% if brand.banner %}
+            <img src="{{ brand.banner.url }}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover">
+        {% else %}
+            <div class="w-full h-full bg-[#e5e0d8] flex items-center justify-center">
+                <span class="text-hab-wood font-serif text-3xl">{{ brand.name }}</span>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Product Grid -->
+<section id="shop" class="py-24 bg-hab-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+            <h2 class="text-4xl font-serif text-hab-wood">Shop Collection</h2>
+        </div>
+
+        {% if products %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+                {% for product in products|slice:":4" %}
+                    <div class="group">
+                        <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block relative aspect-square bg-[#f5f2eb] mb-6 overflow-hidden">
+                            {% if product.variants.first.image %}
+                                <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                            {% else %}
+                                <div class="w-full h-full flex flex-col items-center justify-center text-hab-stone">
+                                    <i class="fa-solid fa-chair text-4xl mb-4 opacity-50"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button class="w-full bg-white text-hab-wood font-medium py-3 hover:bg-hab-wood hover:text-white transition-colors shadow-lg">
+                                    Quick View
+                                </button>
+                            </div>
+                        </a>
+                        
+                        <div>
+                            <h3 class="text-lg font-medium text-hab-wood mb-2 line-clamp-1"><a href="{% url 'store_product_detail' brand.slug product.id %}" class="hover:text-hab-stone transition-colors">{{ product.name }}</a></h3>
+                            <div class="flex justify-between items-center">
+                                <p class="text-hab-stone font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+                                <button class="w-8 h-8 rounded-full border border-hab-stone/30 flex items-center justify-center text-hab-stone hover:bg-hab-wood hover:text-white hover:border-hab-wood transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        <div class="mt-12 text-center w-full flex justify-center">
+            <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+                View All Products
+            </a>
+        </div>
+
+        {% else %}
+            <div class="bg-hab-sand py-20 text-center border border-[#e5e0d8]">
+                <i class="fa-solid fa-chair text-4xl text-hab-stone/40 mb-4"></i>
+                <h3 class="text-2xl font-serif text-hab-wood mb-2">Our Collection is Growing</h3>
+                <p class="text-hab-stone">We are currently curating new pieces for this space.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    {% include "components/breadcrumb.html" with current="Landingpageconfig Management" %}
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Landingpageconfig <span class="text-indigo-600 font-light">Management</span></h1>
+            <p class="text-slate-500 mt-1">Manage all LandingPageConfig records.</p>
+        </div>
+        <a href="{% url 'admin:landingpageconfig_add' %}" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">
+            + New LandingPageConfig
+        </a>
+    </div>
+    
+    
+    
+
+    
+    <!-- Real-Time Async Filter UI -->
+    <div x-data="{
+        search: '',
+        filters: {},
+        loading: false,
+        
+        updateTable() {
+            this.loading = true;
+            let params = new URLSearchParams();
+            if (this.search) params.append('q', this.search);
+            for (let [k, v] of Object.entries(this.filters)) {
+                if (v) params.append(k, v);
+            }
+            
+            fetch(window.location.pathname + '?' + params.toString(), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.text())
+            .then(html => {
+                let doc = new DOMParser().parseFromString(html, 'text/html');
+                let newTable = doc.querySelector('#table-container').innerHTML;
+                document.querySelector('#table-container').innerHTML = newTable;
+                this.loading = false;
+            });
+        }
+    }">
+        <div class="mb-6 flex flex-wrap gap-4 items-center">
+            <div class="relative flex-1 min-w-[250px]">
+                <input type="text" x-model="search" @input.debounce.300ms="updateTable()" placeholder="Type to search landingpageconfigs in real-time..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-slate-800 placeholder-slate-400">
+                <svg class="w-5 h-5 absolute left-4 top-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            
+        <select x-model="filters.is_active" @change="updateTable()" class="px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium text-slate-700 bg-white shadow-sm cursor-pointer min-w-[140px]">
+            <option value="">Any Is Active</option>
+            <option value="True">Yes</option>
+            <option value="False">No</option>
+        </select>
+
+            <div x-show="loading" class="text-indigo-600 ml-2" x-cloak>
+                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </div>
+        </div>
+        
+        <div id="table-container" class="relative">
+            <!-- Table Container -->
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto min-h-[300px]"><table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-16">SN</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Record</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">hero headline</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">hero primary cta</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">hero secondary cta</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">demo title</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objects %}
+                <tr x-data="{ open: false }" class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
+                    <td class="p-4 text-sm font-bold text-slate-400">{{ forloop.counter }}</td>
+                    <td class="p-4 text-sm font-bold text-slate-900">{{ obj }}</td>
+                    <td class="p-4 text-sm text-slate-600">{{ obj.hero_headline }}</td>
+                    <td class="p-4 text-sm text-slate-600">{{ obj.hero_primary_cta }}</td>
+                    <td class="p-4 text-sm text-slate-600">{{ obj.hero_secondary_cta }}</td>
+                    <td class="p-4 text-sm text-slate-600">{{ obj.demo_title }}</td>
+                    <td class="p-4 text-sm text-right space-x-3">
+                        <button @click="open = true" class="text-slate-600 font-bold hover:text-indigo-600 transition">View</button>
+                        <a href="{% url 'admin:landingpageconfig_edit' obj.pk %}" class="text-indigo-600 font-bold hover:text-indigo-800 transition">Edit</a>
+                        <button class="text-rose-600 font-bold hover:text-rose-800 transition" onclick="alert('Delete view not yet configured for landingpageconfig.')">Delete</button>
+                        
+                    <!-- Alpine Modal -->
+                    <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" x-cloak>
+                        <!-- Backdrop -->
+                        <div x-show="open" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="open = false"></div>
+                        
+                        <!-- Modal Panel -->
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto m-4 z-10 relative flex flex-col text-left">
+                            
+                            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur z-10">
+                                <div>
+                                    <h3 class="text-2xl font-extrabold text-slate-900">{{ obj }}</h3>
+                                    <p class="text-slate-500 text-sm mt-1">Landingpageconfig</p>
+                                </div>
+                                <button @click="open = false" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full w-8 h-8 flex items-center justify-center transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <div class="px-8 py-6 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+                                        <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">hero headline</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.hero_headline|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">hero subheadline</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.hero_subheadline|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">hero primary cta</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.hero_primary_cta|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">hero secondary cta</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.hero_secondary_cta|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">demo title</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.demo_title|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">demo subtitle</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.demo_subtitle|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">footer text</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.footer_text|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">is active</span>
+                                    {% if obj.is_active %}
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">Active</span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 shadow-sm">Inactive</span>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">created at</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.created_at|default:"-" }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">updated at</span>
+                                    <span class="text-sm font-medium text-slate-800 break-words">{{ obj.updated_at|default:"-" }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="px-8 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 rounded-b-2xl sticky bottom-0">
+                                <button @click="open = false" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm">Close</button>
+                                <a href="{% url 'admin:landingpageconfig_edit' obj.pk %}" class="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-md">Edit Record</a>
+                            </div>
+                        </div>
+                    </div>
+        
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table></div>
+        {% include "components/pagination.html" %}
+    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
