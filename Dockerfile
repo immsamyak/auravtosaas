@@ -33,8 +33,8 @@ COPY backend/ /app/
 # Collect static files for production
 RUN python manage.py collectstatic --noinput
 
-# Expose port (Matches Coolify Traefik routing)
-EXPOSE 8080
+# Expose both ports (Traefik fallback)
+EXPOSE 80 8080
 
 # Start Gunicorn WSGI server
-CMD ["/bin/bash", "-c", "python fix_db.py && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 1 --access-logfile -"]
+CMD ["/bin/bash", "-c", "python fix_db.py && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:80 --bind 0.0.0.0:8080 --workers 1 --access-logfile -"]
