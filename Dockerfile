@@ -17,14 +17,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # Copy ML requirements first to leverage Docker layer caching
 COPY backend/requirements-ml.txt /app/
-# Use Docker BuildKit cache to drastically speed up pip installs across rebuilds
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --default-timeout=100 -r requirements-ml.txt
+# Use --no-cache-dir to prevent pip from storing massive ML wheels on the server disk
+RUN pip install --no-cache-dir --default-timeout=100 -r requirements-ml.txt
 
 # Copy standard requirements
 COPY backend/requirements.txt /app/
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
 COPY backend/ /app/
