@@ -4,6 +4,8 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DJANGO_ENV production
+ENV HF_HOME /app/models
+ENV TORCH_HOME /app/models
 
 # Set work directory
 WORKDIR /app
