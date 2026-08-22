@@ -211,6 +211,11 @@ class GlobalSettingsForm(forms.ModelForm):
             'currency': UnfoldAdminTextInputWidget(),
             'currency_symbol': UnfoldAdminTextInputWidget(),
             
+            'vto_engine': forms.Select(attrs={'class': 'border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2'}),
+            'replicate_api_key': UnfoldAdminPasswordWidget(),
+            'replicate_model_version': UnfoldAdminTextInputWidget(),
+            
+            
             'smtp_host': UnfoldAdminTextInputWidget(),
             'smtp_username': UnfoldAdminTextInputWidget(),
             'stripe_environment': forms.Select(attrs={'class': 'border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2'}),
@@ -235,6 +240,11 @@ class GlobalSettingsAdmin(ModelAdmin):
             'fields': (('site_name', 'support_email'), ('site_logo', 'site_favicon'), ('primary_color', 'secondary_color'), ('currency', 'currency_symbol')),
             'classes': ('tab',),
             'description': 'Configure the core identity and appearance of the Aura platform globally.'
+        }),
+        ('Virtual Try-On (VTO) AI Engine', {
+            'fields': ('vto_engine', 'replicate_api_key', 'replicate_model_version'),
+            'classes': ('tab',),
+            'description': 'Configure which AI Model engine powers the Virtual Try-On feature across all brands. Using Replicate is highly recommended for production servers to prevent memory crashes.'
         }),
         ('Payment Gateway', {
             'fields': ('stripe_environment', ('stripe_test_public_key', 'stripe_live_public_key'), ('stripe_test_secret_key', 'stripe_live_secret_key'), ('stripe_test_webhook_secret', 'stripe_live_webhook_secret')),

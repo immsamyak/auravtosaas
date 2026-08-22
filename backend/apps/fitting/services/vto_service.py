@@ -15,12 +15,22 @@ class VirtualTryOnService:
     
     @staticmethod
     def get_engine():
-        engine_type = getattr(settings, 'VTO_ENGINE', 'tryon_diffusion')
+        from apps.core.models import GlobalSettings
+        engine_type = GlobalSettings.get_settings().vto_engine
+        
         if engine_type == 'mock':
             return MockVTOEngine()
-        elif engine_type == 'tryon_diffusion':
+        elif engine_type == 'replicate':
+            from apps.fitting.engines.replicate_vton import ReplicateVTONEngine
+            return ReplicateVTONEngine()
+        elif engine_type == 'mobile_vton':
+            from apps.fitting.engines.mobile_vton import MobileVTONEngine
+            return MobileVTONEngine()
+        elif engine_type == 'cat_vton':
+            from apps.fitting.engines.tryon_diffusion import TryOnDiffusionEngine
             return TryOnDiffusionEngine()
-        return LocalVTOEngine()
+        
+        return MockVTOEngine()
         
     @staticmethod
     def process_try_on(session, base_photo, variant, selected_size=None):
@@ -43,14 +53,14 @@ class VirtualTryOnService:
             status__in=['PENDING', 'VALIDATING', 'PROCESSING']
         ).update(status='CANCELLED')
 
-        # 4. Initialize Record
+        from apps.core.models import GlobalSettings
         try_on = VirtualTryOn.objects.create(
             session=session,
             base_photo=base_photo,
             product_variant=variant,
             selected_size=selected_size,
             status='VALIDATING',
-            provider=getattr(settings, 'VTO_ENGINE', 'tryon_diffusion').upper(),
+            provider=GlobalSettings.get_settings().vto_engine.upper(),
             processing_started_at=timezone.now()
         )
         

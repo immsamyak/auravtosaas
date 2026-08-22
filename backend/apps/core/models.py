@@ -145,6 +145,22 @@ class GlobalSettings(models.Model):
     currency = models.CharField(max_length=10, default='USD')
     currency_symbol = models.CharField(max_length=10, default='$')
     
+    # Virtual Try-On (VTO)
+    vto_engine = models.CharField(
+        max_length=50, 
+        choices=[
+            ('replicate', 'Cloud API: Replicate (Recommended)'),
+            ('mobile_vton', 'Local: MobileVTON (Requires GPU)'), 
+            ('cat_vton', 'Local: CatVTON (Requires GPU)'), 
+            ('mock', 'Mock Engine (Testing Only)')
+        ], 
+        default='replicate',
+        help_text="Select which AI engine to use for Virtual Try-On."
+    )
+    replicate_api_key = models.CharField(max_length=255, blank=True, null=True, help_text="Required if using Replicate API")
+    replicate_model_version = models.CharField(max_length=255, default='cuiaxi/kolors-virtual-try-on', help_text="e.g. cuiaxi/kolors-virtual-try-on")
+    
+    
     # SMTP
     smtp_host = models.CharField(max_length=255, blank=True)
     smtp_port = models.IntegerField(default=587)
