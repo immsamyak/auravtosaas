@@ -115,8 +115,21 @@ def render_brand_analytics(brand):
     # Check for Tawk.to
     tawk_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='TAWK_TO', is_active=True).first()
     if tawk_integration:
-        property_id = tawk_integration.credentials.get('property_id')
+        property_id_raw = tawk_integration.credentials.get('property_id', '')
+        # Robustly parse property_id in case user pasted the full script or full URL
+        import re
+        # Look for the Tawk.to ID pattern (24 alphanumeric characters optionally followed by /widget_id)
+        match = re.search(r'embed\.tawk\.to/([a-zA-Z0-9]{24}(?:/[a-zA-Z0-9_-]+)?)', property_id_raw)
+        if match:
+            property_id = match.group(1)
+        else:
+            # Maybe they just pasted the ID itself
+            match_id = re.search(r'^([a-zA-Z0-9]{24}(?:/[a-zA-Z0-9_-]+)?)$', property_id_raw.strip())
+            property_id = match_id.group(1) if match_id else None
+            
         if property_id:
+            # If it already includes the widget ID (like /default or /123), we don't append /default
+            append_default = "" if "/" in property_id else "/default"
             scripts.append(f"""
             <!--Start of Tawk.to Script-->
             <script type="text/javascript">
@@ -124,7 +137,7 @@ def render_brand_analytics(brand):
             (function(){{
             var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
             s1.async=true;
-            s1.src='https://embed.tawk.to/{property_id}/default';
+            s1.src='https://embed.tawk.to/{property_id}{append_default}';
             s1.charset='UTF-8';
             s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);
