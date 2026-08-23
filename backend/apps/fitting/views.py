@@ -72,6 +72,9 @@ def try_on_view(request, slug, variant_id):
         # Increment quota usage
         subscription.try_ons_used += 1
         subscription.save()
+        
+        # PRG Pattern: Redirect to the same view as a GET request to prevent form resubmission on reload
+        return redirect('try_on', slug=slug, variant_id=variant_id)
     
     brand = variant.product.brand
     theme_base = f"storefront/{brand.theme.template_folder}/base.html" if brand.theme and brand.theme.is_active else "brands/store_base.html"
