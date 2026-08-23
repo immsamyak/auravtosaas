@@ -17,7 +17,7 @@
                 <a href="{% url 'virtual_wardrobe' variant.product.brand.slug %}" class="text-xs font-bold tracking-widest uppercase hover:opacity-70 transition-opacity flex items-center">
                     <i class="fa-solid fa-shirt mr-2"></i> Wardrobe
                 </a>
-                <a href="{% url 'guest_photo_upload' variant.product.brand.slug variant.id %}" class="text-xs font-bold opacity-60 tracking-widest uppercase hover:opacity-100 transition-opacity">
+                <a href="{% url 'guest_photo_upload' variant.product.brand.slug variant.slug %}" class="text-xs font-bold opacity-60 tracking-widest uppercase hover:opacity-100 transition-opacity">
                     <i class="fa-solid fa-camera mr-2"></i> Retake
                 </a>
             </div>

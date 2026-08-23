@@ -241,7 +241,7 @@
             },
             get tryOnUrl() {
                 if(!this.currentVariant) return '#';
-                return `{% url 'try_on' brand.slug 0 %}`.replace('/0/', `/${this.currentVariant.id}/`);
+                return `{% url 'try_on' brand.slug 'slug-placeholder' %}`.replace('slug-placeholder', this.currentVariant.slug);
             }
         }
     }
