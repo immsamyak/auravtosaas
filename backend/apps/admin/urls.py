@@ -33,12 +33,12 @@ from .stock_levels import StockLevelListView, StockLevelCreateView, StockLevelUp
 from .global_orders import OrderListView, OrderCreateView, OrderUpdateView
 from .carts import CartListView, CartCreateView, CartUpdateView
 from .shipping_zones import ShippingZoneListView, ShippingZoneCreateView, ShippingZoneUpdateView
-from .virtual_try_on_jobs import VirtualTryOnListView, VirtualTryOnCreateView, VirtualTryOnUpdateView
+from .virtual_try_on_jobs import VirtualTryOnListView, VirtualTryOnCreateView, VirtualTryOnDetailView
 from .fit_passports import FitPassportListView, FitPassportCreateView, FitPassportUpdateView
 from .vto_products import VTOProductListView, VTOProductCreateView, VTOProductUpdateView
 from .vto_product_assets import VTOProductAssetsListView, VTOProductAssetsCreateView, VTOProductAssetsUpdateView
 from .virtual_wardrobe_looks import VirtualWardrobeLookListView, VirtualWardrobeLookCreateView, VirtualWardrobeLookUpdateView
-from .vto_sessions import VTOSessionListView, VTOSessionCreateView, VTOSessionUpdateView
+from .vto_sessions import VTOSessionListView, VTOSessionCreateView, VTOSessionDetailView
 from .vto_photo_vaults import VTOPhotoVaultListView, VTOPhotoVaultCreateView, VTOPhotoVaultUpdateView
 from .size_recommendations import SizeRecommendationListView, SizeRecommendationCreateView, SizeRecommendationUpdateView
 from .subscriptions import BrandSubscriptionListView, BrandSubscriptionCreateView, BrandSubscriptionUpdateView
@@ -145,7 +145,8 @@ urlpatterns = [
     path('shippingzone/<str:pk>/', ShippingZoneUpdateView.as_view(), name='shippingzone_edit'),
     path('virtualtryon/', VirtualTryOnListView.as_view(), name='virtualtryon_list'),
     path('virtualtryon/add/', VirtualTryOnCreateView.as_view(), name='virtualtryon_add'),
-    path('virtualtryon/<str:pk>/', VirtualTryOnUpdateView.as_view(), name='virtualtryon_edit'),
+    path('virtualtryon/<str:pk>/', VirtualTryOnDetailView.as_view(), name='virtualtryon_detail'),
+    path('virtualtryon/<str:pk>/edit/', VirtualTryOnDetailView.as_view(), name='virtualtryon_edit'), # Alias for old link
     path('fitpassport/', FitPassportListView.as_view(), name='fitpassport_list'),
     path('fitpassport/add/', FitPassportCreateView.as_view(), name='fitpassport_add'),
     path('fitpassport/<str:pk>/', FitPassportUpdateView.as_view(), name='fitpassport_edit'),
@@ -160,7 +161,8 @@ urlpatterns = [
     path('virtualwardrobelook/<str:pk>/', VirtualWardrobeLookUpdateView.as_view(), name='virtualwardrobelook_edit'),
     path('vtosession/', VTOSessionListView.as_view(), name='vtosession_list'),
     path('vtosession/add/', VTOSessionCreateView.as_view(), name='vtosession_add'),
-    path('vtosession/<str:pk>/', VTOSessionUpdateView.as_view(), name='vtosession_edit'),
+    path('vtosession/<str:pk>/', VTOSessionDetailView.as_view(), name='vtosession_detail'),
+    path('vtosession/<str:pk>/edit/', VTOSessionDetailView.as_view(), name='vtosession_edit'), # Alias for old link
     path('vtophotovault/', VTOPhotoVaultListView.as_view(), name='vtophotovault_list'),
     path('vtophotovault/add/', VTOPhotoVaultCreateView.as_view(), name='vtophotovault_add'),
     path('vtophotovault/<str:pk>/', VTOPhotoVaultUpdateView.as_view(), name='vtophotovault_edit'),

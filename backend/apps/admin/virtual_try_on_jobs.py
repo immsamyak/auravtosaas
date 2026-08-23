@@ -1,6 +1,6 @@
 from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from apps.fitting.models import VirtualTryOn
 
@@ -18,8 +18,7 @@ class VirtualTryOnCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, Crea
     fields = '__all__'
     success_url = reverse_lazy('admin:virtualtryon_list')
 
-class VirtualTryOnUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class VirtualTryOnDetailView(SuperUserRequiredMixin, DetailView):
     model = VirtualTryOn
-    template_name = 'admin/fitting/virtualtryon/form.html'
-    fields = '__all__'
-    success_url = reverse_lazy('admin:virtualtryon_list')
+    template_name = 'admin/fitting/virtualtryon/detail.html'
+    context_object_name = 'job'

@@ -60,13 +60,16 @@
                         <td class="p-4">
                             <div class="text-sm font-mono text-slate-600">{{ job.id|stringformat:"s"|slice:":8" }}...</div>
                         </td>
-                        <td class="p-4 text-sm font-medium text-slate-900">{{ job.brand.name }}</td>
-                        <td class="p-4 text-sm text-slate-600">{{ job.consumer.user.email|default:"Anonymous" }}</td>
+                        <td class="p-4 text-sm font-medium text-slate-900">{{ job.product_variant.product.brand.name|default:"Unknown Brand" }}</td>
+                        <td class="p-4 text-sm text-slate-600">{{ job.session.passport.user.email|default:"Anonymous Guest" }}</td>
                         <td class="p-4">
                             {% if job.status == 'COMPLETED' %}
                                 <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 flex inline-flex items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> Completed</span>
                             {% elif job.status == 'PROCESSING' %}
                                 <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200 flex inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing</span>
+                                <div class="mt-2 w-full bg-slate-200 rounded-full h-1.5">
+                                    <div class="bg-indigo-600 h-1.5 rounded-full" style="width: {{ job.progress_percent }}%"></div>
+                                </div>
                             {% elif job.status == 'FAILED' %}
                                 <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200 flex inline-flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> Failed</span>
                             {% else %}
@@ -75,7 +78,7 @@
                         </td>
                         <td class="p-4 text-sm text-slate-500">{{ job.created_at|date:"M d, Y H:i" }}</td>
                         <td class="p-4 text-right">
-                            <a href="{% url 'admin:virtualtryon_edit' job.pk %}" class="text-indigo-600 hover:text-indigo-900 font-medium text-sm">Details</a>
+                            <a href="{% url 'admin:virtualtryon_detail' job.pk %}" class="text-indigo-600 hover:text-indigo-900 font-medium text-sm">Details</a>
                         </td>
                     </tr>
                     {% empty %}

@@ -1,6 +1,6 @@
 from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from apps.fitting.models import VTOSession
 
@@ -18,8 +18,7 @@ class VTOSessionCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, Create
     fields = '__all__'
     success_url = reverse_lazy('admin:vtosession_list')
 
-class VTOSessionUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class VTOSessionDetailView(SuperUserRequiredMixin, DetailView):
     model = VTOSession
-    template_name = 'admin/fitting/vtosession/form.html'
-    fields = '__all__'
-    success_url = reverse_lazy('admin:vtosession_list')
+    template_name = 'admin/fitting/vtosession/detail.html'
+    context_object_name = 'session'
