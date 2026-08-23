@@ -17,7 +17,8 @@ class VirtualTryOnService:
     def get_engine():
         from apps.core.models import GlobalSettings
         global_settings = GlobalSettings.get_settings()
-        engine_type = global_settings.vto_engine
+        # Temporarily hardcode to Replicate to bypass any DB save issues
+        engine_type = 'replicate'
         
         if engine_type == 'replicate':
             from apps.fitting.engines.replicate_vton import ReplicateVTONEngine
