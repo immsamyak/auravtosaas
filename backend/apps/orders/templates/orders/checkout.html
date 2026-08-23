@@ -164,6 +164,18 @@
                                 </div>
                                 
                                 <!-- Custom Payment Instructions (Expanded details) -->
+                                {% if pm.integration.provider_code == 'STRIPE' %}
+                                <div x-show="selectedPayment === 'STRIPE'" x-collapse class="mt-5 pt-5 border-t border-neutral-500/20">
+                                    <div class="flex items-start space-x-3">
+                                        <i class="fa-solid fa-lock text-emerald-500 mt-1"></i>
+                                        <div>
+                                            <p class="font-bold text-sm">Secure Payment via Stripe</p>
+                                            <p class="text-xs opacity-80 mt-1 leading-relaxed">After clicking "Complete Order", you will be securely redirected to Stripe's encrypted payment gateway to safely enter your credit card details. We do not store your card information.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
                                 {% if pm.integration.provider_code == 'CUSTOM_MANUAL' %}
                                 <div x-show="selectedPayment === 'CUSTOM_MANUAL'" x-collapse class="mt-5 pt-5 border-t border-neutral-500/20">
                                     {% if pm.credentials.custom_payment_type == 'BANK_TRANSFER' %}
