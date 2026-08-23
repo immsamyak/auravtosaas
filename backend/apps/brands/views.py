@@ -457,7 +457,7 @@ def store_product_detail_view(request, slug, product_slug):
     elif brand.status == 'INACTIVE':
         return render(request, 'brands/store_inactive.html', {'brand': brand})
         
-    product = get_object_or_404(Product, slug=product_slug, brand=brand, is_vto_ready=True)
+    product = get_object_or_404(Product, slug=product_slug, brand=brand, is_active=True)
     
     # We will pass the variants as a list of dicts so AlpineJS can easily filter them
     variants = product.variants.all().select_related('color', 'size')

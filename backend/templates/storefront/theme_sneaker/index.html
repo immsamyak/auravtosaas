@@ -57,7 +57,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for product in products|slice:":4" %}
                 <div class="group bg-snkr-card rounded-2xl overflow-hidden border border-white/5 hover:border-snkr-red/30 transition-all duration-300">
-<a class="block aspect-square bg-snkr-surface overflow-hidden relative p-8" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block aspect-square bg-snkr-surface overflow-hidden relative p-8" href="{% url 'store_product_detail' brand.slug product.slug %}">
                         {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -70,7 +70,7 @@
                     </a>
 <div class="p-6">
 <div class="flex justify-between items-start mb-3">
-<h3 class="font-sans font-bold text-lg leading-tight"><a class="hover:text-snkr-red transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a></h3>
+<h3 class="font-sans font-bold text-lg leading-tight"><a class="hover:text-snkr-red transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
 <span class="bg-snkr-red/10 text-snkr-red font-sans font-bold text-xs px-2 py-1 rounded shrink-0 ml-2">NEW</span>
 </div>
 <div class="flex justify-between items-center">

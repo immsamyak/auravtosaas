@@ -44,7 +44,7 @@
             {% for product in products|slice:":4" %}
                 <div class="group cursor-pointer">
 <div class="aspect-[2/3] overflow-hidden bg-gray-100 mb-6 relative">
-<a class="block w-full h-full" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block w-full h-full" href="{% url 'store_product_detail' brand.slug product.slug %}">
                             {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -61,7 +61,7 @@
 </div>
 </div>
 <div class="text-center">
-<h3 class="font-serif text-lg mb-1"><a class="hover:text-[#c5a059] transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a></h3>
+<h3 class="font-serif text-lg mb-1"><a class="hover:text-[#c5a059] transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
 <p class="text-sm font-light text-gray-600">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
 </div>
 </div>

@@ -50,7 +50,7 @@
                 <div class="group bg-cyber-surface border border-white/5 hover:border-cyber-cyan/40 transition-all duration-300 relative overflow-hidden">
 <!-- Scan line effect on hover -->
 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none scanline z-20"></div>
-<a class="block aspect-square relative overflow-hidden" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block aspect-square relative overflow-hidden" href="{% url 'store_product_detail' brand.slug product.slug %}">
                         {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -64,7 +64,7 @@
 </a>
 <div class="p-4 relative z-10">
 <h3 class="font-display font-bold text-lg uppercase tracking-wider truncate mb-1">
-<a class="hover:text-cyber-cyan transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a>
+<a class="hover:text-cyber-cyan transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
 </h3>
 <div class="flex justify-between items-center">
 <span class="font-mono text-cyber-cyan text-lg">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>

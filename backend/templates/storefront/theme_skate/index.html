@@ -50,7 +50,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {% for product in products|slice:":4" %}
                     <div class="group bg-skate-concrete skate-border hover:border-skate-lime transition-colors duration-200 overflow-hidden">
-<a class="block aspect-square overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block aspect-square overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
                             {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -63,7 +63,7 @@
                         </a>
 <div class="p-4">
 <h3 class="font-sans font-bold text-sm uppercase truncate mb-1">
-<a class="hover:text-skate-lime transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a>
+<a class="hover:text-skate-lime transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
 </h3>
 <div class="flex justify-between items-center">
 <span class="font-display text-xl text-skate-orange">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>

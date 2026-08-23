@@ -25,7 +25,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
                 {% for product in products|slice:":4" %}
                     <div class="group">
-                        <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block relative aspect-square bg-[#f5f2eb] mb-6 overflow-hidden">
+                        <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-square bg-[#f5f2eb] mb-6 overflow-hidden">
                             {% if product.variants.first.image %}
                                 <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                             {% else %}
@@ -42,7 +42,7 @@
                         </a>
                         
                         <div>
-                            <h3 class="text-lg font-medium text-hab-wood mb-2 line-clamp-1"><a href="{% url 'store_product_detail' brand.slug product.id %}" class="hover:text-hab-stone transition-colors">{{ product.name }}</a></h3>
+                            <h3 class="text-lg font-medium text-hab-wood mb-2 line-clamp-1"><a href="{% url 'store_product_detail' brand.slug product.slug %}" class="hover:text-hab-stone transition-colors">{{ product.name }}</a></h3>
                             <div class="flex justify-between items-center">
                                 <p class="text-hab-stone font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
                                 <button class="w-8 h-8 rounded-full border border-hab-stone/30 flex items-center justify-center text-hab-stone hover:bg-hab-wood hover:text-white hover:border-hab-wood transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >

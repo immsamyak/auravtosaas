@@ -51,7 +51,7 @@
                 {% else %}
                     <div class="md:col-span-5 group">
                 {% endif %}
-                    <a class="block overflow-hidden relative {% if forloop.counter|divisibleby:3 %}aspect-[16/9]{% else %}aspect-[3/4]{% endif %} bg-gray-100" href="{% url 'store_product_detail' brand.slug product.id %}">
+                    <a class="block overflow-hidden relative {% if forloop.counter|divisibleby:3 %}aspect-[16/9]{% else %}aspect-[3/4]{% endif %} bg-gray-100" href="{% url 'store_product_detail' brand.slug product.slug %}">
                         {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}

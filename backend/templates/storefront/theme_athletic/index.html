@@ -43,7 +43,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for product in products|slice:":4" %}
                 <div class="group bg-tech-dark border border-white/10 overflow-hidden relative hover:border-tech-accent transition-colors duration-300">
-<a class="block aspect-[4/5] bg-black relative overflow-hidden" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block aspect-[4/5] bg-black relative overflow-hidden" href="{% url 'store_product_detail' brand.slug product.slug %}">
                         {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -57,7 +57,7 @@
                         <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-tech-darker to-transparent opacity-80 pointer-events-none"></div>
 </a>
 <div class="p-5 relative z-10 bg-tech-darker border-t border-white/5">
-<h3 class="font-display font-bold text-2xl uppercase italic tracking-wide truncate mb-1"><a class="hover:text-tech-accent transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a></h3>
+<h3 class="font-display font-bold text-2xl uppercase italic tracking-wide truncate mb-1"><a class="hover:text-tech-accent transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
 <div class="flex justify-between items-center">
 <p class="font-sans font-bold text-xl text-tech-accent">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
 <button class="text-white hover:text-tech-neon font-sans font-bold text-sm uppercase tracking-widest transition-colors flex items-center">

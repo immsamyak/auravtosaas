@@ -48,7 +48,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for product in products|slice:":4" %}
                 <div class="group glass glass-hover rounded-2xl overflow-hidden transition-all duration-300">
-<a class="block aspect-[3/4] overflow-hidden relative bg-white/5" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block aspect-[3/4] overflow-hidden relative bg-white/5" href="{% url 'store_product_detail' brand.slug product.slug %}">
                         {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -61,7 +61,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-transparent to-transparent opacity-60"></div>
 </a>
 <div class="p-5">
-<h3 class="font-semibold text-white truncate mb-1"><a class="hover:text-indigo-400 transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a></h3>
+<h3 class="font-semibold text-white truncate mb-1"><a class="hover:text-indigo-400 transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
 <div class="flex justify-between items-center">
 <span class="text-sm font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
 <button class="text-white/40 hover:text-white text-sm transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" ><i class="fa-solid fa-plus"></i></button>

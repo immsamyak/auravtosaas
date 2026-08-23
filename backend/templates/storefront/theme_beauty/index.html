@@ -25,7 +25,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {% for product in products|slice:":4" %}
                     <div class="organic-card rounded-3xl p-6 group border border-[#efede5]">
-                        <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block relative aspect-square bg-[#fcfcfb] rounded-2xl overflow-hidden mb-6 img-zoom flex items-center justify-center border border-[#efede5]">
+                        <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-square bg-[#fcfcfb] rounded-2xl overflow-hidden mb-6 img-zoom flex items-center justify-center border border-[#efede5]">
                             {% if product.variants.first.image %}
                                 <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
                             {% else %}
@@ -43,7 +43,7 @@
                         </a>
                         
                         <div class="text-center">
-                            <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block text-lg font-serif text-glow-charcoal hover:text-glow-clay transition-colors mb-2">{{ product.name }}</a>
+                            <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block text-lg font-serif text-glow-charcoal hover:text-glow-clay transition-colors mb-2">{{ product.name }}</a>
                             <p class="text-gray-500 font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
                         </div>
                     </div>

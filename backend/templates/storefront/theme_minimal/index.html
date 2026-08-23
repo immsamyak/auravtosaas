@@ -27,7 +27,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
             {% for product in products|slice:":4" %}
                 <div class="group">
-<a class="block aspect-[3/4] bg-stone-100 mb-6 overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.id %}">
+<a class="block aspect-[3/4] bg-stone-100 mb-6 overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
                         {% if product.images.first %}
                                 <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
                             {% elif product.variants.first.image %}
@@ -39,7 +39,7 @@
                         {% endif %}
                     </a>
 <div class="flex justify-between items-center">
-<a class="text-lg font-light hover:text-stone-500 transition-colors" href="{% url 'store_product_detail' brand.slug product.id %}">{{ product.name }}</a>
+<a class="text-lg font-light hover:text-stone-500 transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
 <span class="text-sm font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
 </div>
 </div>
