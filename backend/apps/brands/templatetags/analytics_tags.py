@@ -134,9 +134,15 @@ def render_brand_analytics(brand):
             """)
 
     # Check for WhatsApp Widget
-    wa_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='WHATSAPP_WIDGET', is_active=True).first()
+    from django.db.models import Q
+    wa_integration = BrandIntegration.objects.filter(
+        Q(integration__provider_code='WHATSAPP_WIDGET') | Q(integration__provider_code='WHATSAPP'),
+        brand=brand, 
+        is_active=True
+    ).first()
+    
     if wa_integration:
-        phone = wa_integration.credentials.get('phone_number')
+        phone = wa_integration.credentials.get('phone_number') or wa_integration.credentials.get('whatsapp_number')
         if phone:
             scripts.append(f"""
             <a href="https://wa.me/{phone}" target="_blank" style="position: fixed; bottom: 24px; right: 24px; background-color: #25D366; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); z-index: 50; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
