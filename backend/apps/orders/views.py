@@ -428,6 +428,22 @@ def storefront_checkout_view(request, brand_slug):
                 return redirect(response.get('payment_url'))
             else:
                 return HttpResponse(f"Stripe Error: {response.get('error')}", status=400)
+        elif payment_method == 'PAYPAL':
+            paypal_bi = next((bi for bi in payment_methods if bi.integration.provider_code == 'PAYPAL'), None)
+            from apps.orders.services.payment_gateways import PayPalService
+            response = PayPalService.initiate_payment(order, paypal_bi, request)
+            if response.get('success'):
+                return redirect(response.get('payment_url'))
+            else:
+                return HttpResponse(f"PayPal Error: {response.get('error')}", status=400)
+        elif payment_method == 'RAZORPAY':
+            razorpay_bi = next((bi for bi in payment_methods if bi.integration.provider_code == 'RAZORPAY'), None)
+            from apps.orders.services.payment_gateways import RazorpayService
+            response = RazorpayService.initiate_payment(order, razorpay_bi, request)
+            if response.get('success'):
+                return redirect(response.get('payment_url'))
+            else:
+                return HttpResponse(f"Razorpay Error: {response.get('error')}", status=400)
         else:
             # Custom/Manual or unknown
             return redirect('order_success', order_id=order.id)
@@ -973,3 +989,45 @@ def stripe_webhook(request, brand_slug):
                 pass
 
     return HttpResponse(status=200)
+
+def checkout_paypal_verify(request):
+    token = request.GET.get('token')
+    order_id = request.GET.get('order_id')
+    if not token or not order_id: return HttpResponse("Missing token", status=400)
+    
+    order = get_object_or_404(Order, id=order_id)
+    brand_integration = BrandIntegration.objects.filter(brand=order.brand, integration__provider_code='PAYPAL').first()
+    
+    from apps.orders.services.payment_gateways import PayPalService
+    verification = PayPalService.verify_payment(token, brand_integration)
+    
+    if verification.get('success'):
+        order.status = 'PAID'
+        order.payment_provider = 'PAYPAL'
+        order.payment_reference_id = verification.get('transaction_id')
+        order.save()
+        from apps.orders.models import Cart
+        Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        return redirect('order_success', order_id=order.id)
+    return HttpResponse(f"PayPal Verification Failed", status=400)
+
+def checkout_razorpay_verify(request):
+    payment_id = request.GET.get('payment_id')
+    order_id = request.GET.get('order_id')
+    if not payment_id or not order_id: return HttpResponse("Missing payment_id", status=400)
+    
+    order = get_object_or_404(Order, id=order_id)
+    brand_integration = BrandIntegration.objects.filter(brand=order.brand, integration__provider_code='RAZORPAY').first()
+    
+    from apps.orders.services.payment_gateways import RazorpayService
+    verification = RazorpayService.verify_payment(payment_id, brand_integration)
+    
+    if verification.get('success'):
+        order.status = 'PAID'
+        order.payment_provider = 'RAZORPAY'
+        order.payment_reference_id = verification.get('transaction_id')
+        order.save()
+        from apps.orders.models import Cart
+        Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        return redirect('order_success', order_id=order.id)
+    return HttpResponse(f"Razorpay Verification Failed", status=400)

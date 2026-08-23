@@ -242,3 +242,67 @@ class StripeService:
             return {"success": False, "error": str(e)}
         except Exception as e:
             return {"success": False, "error": str(e)}
+
+class PayPalService:
+    """
+    PayPal Checkout Integration (Simulated for Demo)
+    Documentation: https://developer.paypal.com/docs/checkout/
+    """
+    
+    @classmethod
+    def initiate_payment(cls, order, brand_integration, request):
+        client_id = brand_integration.credentials.get('api_key')
+        client_secret = brand_integration.credentials.get('api_secret')
+        
+        if not client_id or not client_secret:
+            return {"success": False, "error": "PayPal credentials missing."}
+            
+        success_url = request.build_absolute_uri(reverse('checkout_paypal_verify')) + f"?token=PAYPAL_{order.id}&order_id={order.id}"
+        
+        # In a real implementation, we would call the PayPal Orders API to create an order
+        # and get the approval URL. Here we simulate it.
+        approval_url = success_url # Simulating approval redirect
+        
+        return {
+            "success": True,
+            "payment_url": approval_url,
+        }
+
+    @classmethod
+    def verify_payment(cls, token, brand_integration):
+        # In a real implementation, we would call PayPal API to capture the order using the token
+        return {
+            "success": True,
+            "transaction_id": f"PP_TXN_{token}",
+            "purchase_order_id": token.replace("PAYPAL_", "")
+        }
+
+class RazorpayService:
+    """
+    Razorpay Checkout Integration (Simulated for Demo)
+    Documentation: https://razorpay.com/docs/payments/payment-gateway/
+    """
+    
+    @classmethod
+    def initiate_payment(cls, order, brand_integration, request):
+        key_id = brand_integration.credentials.get('api_key')
+        key_secret = brand_integration.credentials.get('api_secret')
+        
+        if not key_id or not key_secret:
+            return {"success": False, "error": "Razorpay credentials missing."}
+            
+        # In Razorpay, we typically create an order via API, then pass order_id to frontend JS.
+        # Since we are doing a redirect model for simplicity in this demo:
+        success_url = request.build_absolute_uri(reverse('checkout_razorpay_verify')) + f"?payment_id=RZP_{order.id}&order_id={order.id}"
+        
+        return {
+            "success": True,
+            "payment_url": success_url,
+        }
+
+    @classmethod
+    def verify_payment(cls, payment_id, brand_integration):
+        return {
+            "success": True,
+            "transaction_id": payment_id,
+        }

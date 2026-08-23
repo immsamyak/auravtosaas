@@ -66,4 +66,82 @@ def render_brand_analytics(brand):
             <!-- End Meta Pixel Code -->
             """)
             
+    # Check for TikTok Pixel
+    tiktok_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='TIKTOK_PIXEL', is_active=True).first()
+    if tiktok_integration:
+        pixel_id = tiktok_integration.credentials.get('api_key')
+        if pixel_id:
+            scripts.append(f"""
+            <!-- TikTok Pixel Code -->
+            <script>
+            !function (w, d, t) {{
+              w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];ttq.setAndDefer=function(t,e){{t[e]=function(){{t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){{for(var e=ttq._sq[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e}};ttq.load=function(e,n){{var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{{}},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{{}},ttq._t[e]=+new Date,ttq._o=ttq._o||{{}},ttq._o[e]=n||{{}};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)}};
+              ttq.load('{pixel_id}');
+              ttq.page();
+            }}(window, document, 'ttq');
+            </script>
+            <!-- End TikTok Pixel Code -->
+            """)
+
+    # Check for Klaviyo
+    klaviyo_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='KLAVIYO', is_active=True).first()
+    if klaviyo_integration:
+        public_key = klaviyo_integration.credentials.get('api_key')
+        if public_key:
+            scripts.append(f"""
+            <!-- Klaviyo Onsite Tracking -->
+            <script type="text/javascript" async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id={public_key}"></script>
+            """)
+
+    # Check for Hotjar
+    hotjar_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='HOTJAR', is_active=True).first()
+    if hotjar_integration:
+        site_id = hotjar_integration.credentials.get('api_key')
+        if site_id:
+            scripts.append(f"""
+            <!-- Hotjar Tracking Code -->
+            <script>
+                (function(h,o,t,j,a,r){{
+                    h.hj=h.hj||function(){{(h.hj.q=h.hj.q||[]).push(arguments)}};
+                    h._hjSettings={{hjid:{site_id},hjsv:6}};
+                    a=o.getElementsByTagName('head')[0];
+                    r=o.createElement('script');r.async=1;
+                    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                    a.appendChild(r);
+                }})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            </script>
+            """)
+
+    # Check for Tawk.to
+    tawk_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='TAWK_TO', is_active=True).first()
+    if tawk_integration:
+        property_id = tawk_integration.credentials.get('api_key')
+        if property_id:
+            scripts.append(f"""
+            <!--Start of Tawk.to Script-->
+            <script type="text/javascript">
+            var Tawk_API=Tawk_API||{{}}, Tawk_LoadStart=new Date();
+            (function(){{
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/{property_id}/default';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+            }})();
+            </script>
+            <!--End of Tawk.to Script-->
+            """)
+
+    # Check for WhatsApp Widget
+    wa_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='WHATSAPP_WIDGET', is_active=True).first()
+    if wa_integration:
+        phone = wa_integration.credentials.get('merchant_id') # We mapped phone to merchant_id
+        if phone:
+            scripts.append(f"""
+            <a href="https://wa.me/{phone}" target="_blank" style="position: fixed; bottom: 24px; right: 24px; background-color: #25D366; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); z-index: 50; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+                <i class="fa-brands fa-whatsapp" style="font-size: 30px;"></i>
+            </a>
+            """)
+            
     return mark_safe("\n".join(scripts))

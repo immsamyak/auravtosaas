@@ -148,6 +148,10 @@
                                         <img src="{% static 'images/khalti-icon.png' %}" alt="Khalti" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
                                         {% elif pm.integration.provider_code == 'STRIPE' %}
                                         <i class="fa-brands fa-stripe text-3xl opacity-80 text-[#635BFF]"></i>
+                                        {% elif pm.integration.provider_code == 'PAYPAL' %}
+                                        <i class="fa-brands fa-paypal text-2xl opacity-80 text-[#003087]"></i>
+                                        {% elif pm.integration.provider_code == 'RAZORPAY' %}
+                                        <div class="font-bold text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-md">Razorpay</div>
                                         {% else %}
                                         <i class="fa-solid fa-money-bill-wave text-xl opacity-80"></i>
                                         {% endif %}
@@ -171,6 +175,30 @@
                                         <div>
                                             <p class="font-bold text-sm">Secure Payment via Stripe</p>
                                             <p class="text-xs opacity-80 mt-1 leading-relaxed">After clicking "Complete Order", you will be securely redirected to Stripe's encrypted payment gateway to safely enter your credit card details. We do not store your card information.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if pm.integration.provider_code == 'PAYPAL' %}
+                                <div x-show="selectedPayment === 'PAYPAL'" x-collapse class="mt-5 pt-5 border-t border-neutral-500/20">
+                                    <div class="flex items-start space-x-3">
+                                        <i class="fa-solid fa-shield-halved text-blue-600 mt-1"></i>
+                                        <div>
+                                            <p class="font-bold text-sm">Pay with PayPal</p>
+                                            <p class="text-xs opacity-80 mt-1 leading-relaxed">You will be redirected to PayPal to complete your purchase securely.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if pm.integration.provider_code == 'RAZORPAY' %}
+                                <div x-show="selectedPayment === 'RAZORPAY'" x-collapse class="mt-5 pt-5 border-t border-neutral-500/20">
+                                    <div class="flex items-start space-x-3">
+                                        <i class="fa-solid fa-credit-card text-blue-500 mt-1"></i>
+                                        <div>
+                                            <p class="font-bold text-sm">Secure Indian Payments</p>
+                                            <p class="text-xs opacity-80 mt-1 leading-relaxed">Pay easily via UPI, Credit/Debit Cards, or Netbanking securely powered by Razorpay.</p>
                                         </div>
                                     </div>
                                 </div>

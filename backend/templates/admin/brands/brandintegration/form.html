@@ -1,10 +1,10 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto" x-data="brandIntegrationForm()">
-    {% include "components/breadcrumb.html" with current="Brandintegration Details" %}
+    {% include "components/breadcrumb.html" with current="Brand Integration Details" %}
     <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Brandintegration <span class="text-indigo-600 font-light">Details</span></h1>
-        <p class="text-slate-500 mt-1">Fill out the fields below.</p>
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Brand Integration <span class="text-indigo-600 font-light">Details</span></h1>
+        <p class="text-slate-500 mt-1">Configure your third-party platform integration below.</p>
     </div>
     
     <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
@@ -13,14 +13,12 @@
             {% csrf_token %}
             <div x-data="{ activeTab: 'general' }">
                 
-                <!-- Tab Navigation -->
                 <div class="flex border-b border-slate-200 mb-8 space-x-8">
                     <button type="button" @click="activeTab = 'general'" 
                             :class="activeTab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'" 
                             class="pb-3 border-b-2 font-bold px-2 transition-colors">
                         General Information
                     </button>
-                    
                     {% if form.visible_fields|length > 6 %}
                     <button type="button" @click="activeTab = 'advanced'" 
                             :class="activeTab === 'advanced' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'" 
@@ -43,55 +41,101 @@
                             <div @change="checkIntegrationType($event)">
                                 {{ field }}
                             </div>
-                            {% if field.help_text %}
-                                <p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>
-                            {% endif %}
                         </div>
+                        
                         {% elif field.name == 'credentials' %}
-                        <!-- Hidden raw credentials, managed by Alpine -->
-                        <div x-show="!isStripe" class="col-span-1 md:col-span-2">
-                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                            </label>
+                        <!-- Hidden raw credentials -->
+                        <div x-show="currentProvider === 'UNKNOWN'" class="col-span-1 md:col-span-2">
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Raw JSON Credentials</label>
                             <div class="credentials-wrapper">
                                 {{ field }}
                             </div>
-                            <p class="text-xs text-slate-500 mt-2 font-medium">For non-Stripe integrations, enter JSON here.</p>
                         </div>
                         
-                        <!-- Stripe Custom Fields -->
-                        <div x-show="isStripe" x-cloak class="col-span-1 md:col-span-2 space-y-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-                            <h3 class="font-bold text-slate-800 text-lg border-b border-slate-200 pb-3">Stripe Configuration</h3>
+                        <!-- Custom Dynamic Fields Wrapper -->
+                        <div x-show="currentProvider !== 'UNKNOWN'" x-cloak class="col-span-1 md:col-span-2 space-y-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">Publishable Key (pk)</label>
-                                    <input type="text" x-model="stripePk" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="pk_live_...">
-                                    <p class="text-xs text-slate-500 mt-1">Found in Stripe Dashboard -> Developers -> API Keys</p>
+                            <h3 class="font-bold text-slate-800 text-lg border-b border-slate-200 pb-3" x-text="providerName + ' Configuration'"></h3>
+
+                            <!-- Stripe -->
+                            <template x-if="currentProvider === 'STRIPE'">
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div><label class="block text-sm font-bold text-slate-700 mb-1">Publishable Key (pk)</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                        <div><label class="block text-sm font-bold text-slate-700 mb-1">Secret Key (sk)</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    </div>
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Webhook Secret</label><input type="text" x-model="creds.webhook_secret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    
+                                    <div class="mt-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                                        <label class="block text-sm font-bold text-indigo-900 mb-2">Your Webhook URL</label>
+                                        <input type="text" readonly :value="webhookUrl" class="block w-full rounded-lg border-indigo-200 bg-white text-indigo-800 font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">Secret Key (sk)</label>
-                                    <input type="text" x-model="stripeSk" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="sk_live_...">
-                                    <p class="text-xs text-slate-500 mt-1">Found in Stripe Dashboard -> Developers -> API Keys</p>
-                                </div>
-                            </div>
+                            </template>
                             
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">Webhook Secret</label>
-                                <input type="text" x-model="stripeWebhookSecret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="whsec_...">
-                                <p class="text-xs text-slate-500 mt-1">Found in Stripe Dashboard -> Developers -> Webhooks</p>
-                            </div>
-                            
-                            <div class="mt-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-                                <label class="block text-sm font-bold text-indigo-900 mb-2">Your Webhook URL (Paste this in Stripe)</label>
-                                <div class="flex items-center space-x-3">
-                                    <input type="text" readonly :value="webhookUrl" class="block w-full rounded-lg border-indigo-200 bg-white text-indigo-800 font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <button type="button" @click="navigator.clipboard.writeText(webhookUrl); $event.target.innerText = 'Copied!'; setTimeout(() => $event.target.innerText = 'Copy', 2000)" class="px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition shadow-sm">
-                                        Copy
-                                    </button>
+                            <!-- PayPal -->
+                            <template x-if="currentProvider === 'PAYPAL'">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Client ID</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Client Secret</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
                                 </div>
-                                <p class="text-xs text-indigo-700 mt-2">Create a webhook in Stripe pointing to this URL, and select the <strong>checkout.session.completed</strong> event.</p>
-                            </div>
+                            </template>
+                            
+                            <!-- Razorpay -->
+                            <template x-if="currentProvider === 'RAZORPAY'">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Key ID</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Key Secret</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                </div>
+                            </template>
+
+                            <!-- TikTok Pixel -->
+                            <template x-if="currentProvider === 'TIKTOK_PIXEL'">
+                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Pixel ID</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                            </template>
+
+                            <!-- Hotjar -->
+                            <template x-if="currentProvider === 'HOTJAR'">
+                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Site ID</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                            </template>
+
+                            <!-- Klaviyo -->
+                            <template x-if="currentProvider === 'KLAVIYO'">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Public API Key</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">Private API Key</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                </div>
+                            </template>
+
+                            <!-- Tawk.to -->
+                            <template x-if="currentProvider === 'TAWK_TO'">
+                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Property ID</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Found in your embed code"></div>
+                            </template>
+
+                            <!-- WhatsApp -->
+                            <template x-if="currentProvider === 'WHATSAPP'">
+                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Phone Number (with Country Code)</label><input type="text" x-model="creds.merchant_id" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g. 14155552671"></div>
+                            </template>
+                            
+                            <!-- Shiprocket -->
+                            <template x-if="currentProvider === 'SHIPROCKET'">
+                                <div><label class="block text-sm font-bold text-slate-700 mb-1">API Token</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                            </template>
+                            
+                            <!-- DHL -->
+                            <template x-if="currentProvider === 'DHL'">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">API Key</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    <div><label class="block text-sm font-bold text-slate-700 mb-1">API Secret</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                    <div class="md:col-span-2"><label class="block text-sm font-bold text-slate-700 mb-1">Account Number</label><input type="text" x-model="creds.merchant_id" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                                </div>
+                            </template>
+                            
+                            <!-- GA4 & META (Legacy) -->
+                            <template x-if="currentProvider === 'GA4' || currentProvider === 'META_PIXEL'">
+                                <div><label class="block text-sm font-bold text-slate-700 mb-1">Measurement/Pixel ID</label><input type="text" x-model="creds.merchant_id" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+                            </template>
+
                         </div>
                         
                         {% else %}
@@ -100,15 +144,6 @@
                                 {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
                             </label>
                             {{ field }}
-                            {% if field.help_text %}
-                                <p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>
-                            {% endif %}
-                            {% for error in field.errors %}
-                                <p class="text-xs text-rose-500 mt-2 font-bold flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
                         </div>
                         {% endif %}
                         
@@ -136,7 +171,7 @@
 
             <div class="pt-6 border-t border-slate-100 flex justify-end gap-4">
                 <a href="{% url 'admin:brandintegration_list' %}" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Cancel</a>
-                <button type="submit" class="px-5 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">Save BrandIntegration</button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">Save Integration</button>
             </div>
         </form>
     </div>
@@ -145,51 +180,34 @@
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('brandIntegrationForm', () => ({
-        isStripe: false,
-        stripePk: '',
-        stripeSk: '',
-        stripeWebhookSecret: '',
+        currentProvider: 'UNKNOWN',
+        providerName: 'Custom',
+        creds: {
+            api_key: '',
+            api_secret: '',
+            webhook_secret: '',
+            merchant_id: ''
+        },
         brandSlug: '{{ form.instance.brand.slug|default:"your-brand-slug" }}',
         
         get webhookUrl() {
-            // Reconstruct the base URL
-            const protocol = window.location.protocol;
-            const host = window.location.host;
-            return `${protocol}//${host}/checkout/stripe/webhook/${this.brandSlug}/`;
+            return `${window.location.protocol}//${window.location.host}/checkout/stripe/webhook/${this.brandSlug}/`;
         },
         
         init() {
-            // Parse existing credentials
+            // Load existing creds
             const credInput = document.querySelector('.credentials-wrapper textarea, .credentials-wrapper input');
             if (credInput && credInput.value) {
                 try {
                     const data = JSON.parse(credInput.value);
-                    if (data.api_key) this.stripePk = data.api_key;
-                    if (data.api_secret) this.stripeSk = data.api_secret;
-                    if (data.webhook_secret) this.stripeWebhookSecret = data.webhook_secret;
+                    this.creds = { ...this.creds, ...data };
                 } catch(e) {}
             }
             
-            // Check initial integration select value
             setTimeout(() => {
                 const select = document.querySelector('select[name="integration"]');
-                if (select) {
-                    const option = select.options[select.selectedIndex];
-                    if (option && option.text.toLowerCase().includes('stripe')) {
-                        this.isStripe = true;
-                    }
-                }
-            }, 100);
-            
-            // Also watch brand select to update webhook URL dynamically if creating new
-            setTimeout(() => {
-                const brandSelect = document.querySelector('select[name="brand"]');
-                if (brandSelect) {
-                    brandSelect.addEventListener('change', (e) => {
-                        // The value is the ID, not the slug, so we can't perfectly get the slug here
-                        // unless we add it as a data attribute, but for existing objects it's fine.
-                        // We'll leave it as a visual hint.
-                    });
+                if (select && select.selectedIndex >= 0) {
+                    this.updateProviderFromOption(select.options[select.selectedIndex].text);
                 }
             }, 100);
         },
@@ -197,23 +215,37 @@ document.addEventListener('alpine:init', () => {
         checkIntegrationType(e) {
             const select = e.target;
             const option = select.options[select.selectedIndex];
-            if (option && option.text.toLowerCase().includes('stripe')) {
-                this.isStripe = true;
-            } else {
-                this.isStripe = false;
+            if (option) {
+                this.updateProviderFromOption(option.text);
             }
         },
         
+        updateProviderFromOption(text) {
+            const t = text.toLowerCase();
+            this.providerName = text.split(' (')[0];
+            
+            if (t.includes('stripe')) this.currentProvider = 'STRIPE';
+            else if (t.includes('paypal')) this.currentProvider = 'PAYPAL';
+            else if (t.includes('razorpay')) this.currentProvider = 'RAZORPAY';
+            else if (t.includes('tiktok')) this.currentProvider = 'TIKTOK_PIXEL';
+            else if (t.includes('hotjar')) this.currentProvider = 'HOTJAR';
+            else if (t.includes('klaviyo')) this.currentProvider = 'KLAVIYO';
+            else if (t.includes('tawk')) this.currentProvider = 'TAWK_TO';
+            else if (t.includes('whatsapp')) this.currentProvider = 'WHATSAPP';
+            else if (t.includes('shiprocket')) this.currentProvider = 'SHIPROCKET';
+            else if (t.includes('dhl')) this.currentProvider = 'DHL';
+            else if (t.includes('ga4') || t.includes('google analytics')) this.currentProvider = 'GA4';
+            else if (t.includes('meta pixel') || t.includes('facebook')) this.currentProvider = 'META_PIXEL';
+            else this.currentProvider = 'UNKNOWN';
+        },
+        
         syncCredentials() {
-            if (this.isStripe) {
+            if (this.currentProvider !== 'UNKNOWN') {
                 const credInput = document.querySelector('.credentials-wrapper textarea, .credentials-wrapper input');
                 if (credInput) {
-                    const data = {
-                        api_key: this.stripePk,
-                        api_secret: this.stripeSk,
-                        webhook_secret: this.stripeWebhookSecret
-                    };
-                    credInput.value = JSON.stringify(data, null, 2);
+                    // Filter out empty creds to keep JSON clean
+                    const cleanCreds = Object.fromEntries(Object.entries(this.creds).filter(([_, v]) => v !== ''));
+                    credInput.value = JSON.stringify(cleanCreds, null, 2);
                 }
             }
         }
