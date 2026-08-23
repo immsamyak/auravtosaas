@@ -157,3 +157,88 @@ class KhaltiService:
             return {"success": False, "error": f"Payment not completed. Status: {data.get('status')}"}
         except Exception as e:
             return {"success": False, "error": str(e)}
+
+import stripe
+
+class StripeService:
+    """
+    Stripe Checkout Session Integration for Storefront
+    Documentation: https://stripe.com/docs/checkout
+    """
+    
+    @classmethod
+    def initiate_payment(cls, order, brand_integration, request):
+        """
+        Creates a Stripe Checkout Session and returns the checkout URL.
+        """
+        # The integration should have the Secret Key in api_secret, or api_key.
+        # Typically requires_api_secret is True for Secret Key.
+        stripe.api_key = brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
+        
+        if not stripe.api_key:
+            return {"success": False, "error": "Stripe API key is not configured for this brand."}
+            
+        success_url = request.build_absolute_uri(reverse('checkout_stripe_verify')) + f"?session_id={{CHECKOUT_SESSION_ID}}&order_id={order.id}"
+        cancel_url = request.build_absolute_uri(reverse('store_product_detail', kwargs={'slug': order.brand.slug, 'product_id': order.items.first().product_variant.product.id}))
+
+        # Convert to smallest currency unit (cents). Assuming brand currency requires * 100 for Stripe.
+        # Stripe does not support NPR. If brand currency is NPR, it might fail unless converted to USD.
+        # We will pass the brand's currency code or default to USD if not set/supported.
+        # For this implementation, we use 'usd' as default fallback.
+        currency = getattr(order.brand, 'currency', 'USD').lower()
+        if currency == 'npr':
+            currency = 'usd' # Fallback since NPR isn't supported by Stripe natively without conversion
+            amount_cents = int(float(order.total_amount) * 100 / 130) # Rough USD conversion if they force it
+        else:
+            amount_cents = int(float(order.total_amount) * 100)
+
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': currency,
+                            'unit_amount': amount_cents,
+                            'product_data': {
+                                'name': f"Order #{order.id} at {order.brand.name}",
+                            },
+                        },
+                        'quantity': 1,
+                    },
+                ],
+                mode='payment',
+                success_url=success_url,
+                cancel_url=cancel_url,
+                client_reference_id=str(order.id),
+                customer_email=order.user.email if order.user else "guest@example.com",
+            )
+            return {
+                "success": True,
+                "payment_url": checkout_session.url,
+            }
+        except stripe.error.StripeError as e:
+            return {"success": False, "error": str(e)}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @classmethod
+    def verify_payment(cls, session_id, brand_integration):
+        """
+        Retrieves the checkout session to verify payment status.
+        """
+        stripe.api_key = brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
+        
+        try:
+            session = stripe.checkout.Session.retrieve(session_id)
+            if session.payment_status == 'paid':
+                return {
+                    "success": True,
+                    "transaction_id": session.payment_intent,
+                    "purchase_order_id": session.client_reference_id
+                }
+            return {"success": False, "error": f"Payment status: {session.payment_status}"}
+        except stripe.error.StripeError as e:
+            return {"success": False, "error": str(e)}
+        except Exception as e:
+            return {"success": False, "error": str(e)}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('order/success/<uuid:order_id>/', views.order_success_view, name='order_success'),
     path('checkout/esewa/verify/', views.checkout_esewa_verify, name='checkout_esewa_verify'),
     path('checkout/khalti/verify/', views.checkout_khalti_verify, name='checkout_khalti_verify'),
+    path('checkout/stripe/verify/', views.checkout_stripe_verify, name='checkout_stripe_verify'),
     
     # POS Routes
     path('dashboard/pos/', views_pos.pos_terminal_view, name='pos_terminal'),

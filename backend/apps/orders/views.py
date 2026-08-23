@@ -420,6 +420,14 @@ def storefront_checkout_view(request, brand_slug):
                 return redirect(response.get('payment_url'))
             else:
                 return HttpResponse(f"Khalti Error: {response.get('error')}", status=400)
+        elif payment_method == 'STRIPE':
+            stripe_bi = next((bi for bi in payment_methods if bi.integration.provider_code == 'STRIPE'), None)
+            from apps.orders.services.payment_gateways import StripeService
+            response = StripeService.initiate_payment(order, stripe_bi, request)
+            if response.get('success'):
+                return redirect(response.get('payment_url'))
+            else:
+                return HttpResponse(f"Stripe Error: {response.get('error')}", status=400)
         else:
             # Custom/Manual or unknown
             return redirect('order_success', order_id=order.id)
@@ -537,7 +545,6 @@ def checkout_khalti_verify(request):
     Callback URL for Khalti success.
     """
     pidx = request.GET.get('pidx')
-    transaction_id = request.GET.get('transaction_id')
     purchase_order_id = request.GET.get('purchase_order_id')
     
     if not pidx or not purchase_order_id:
@@ -553,9 +560,47 @@ def checkout_khalti_verify(request):
         order.payment_provider = 'KHALTI'
         order.payment_reference_id = verification.get('transaction_id')
         order.save()
+        
+        # Clear cart for the user
+        from apps.orders.models import Cart
+        Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        
         return redirect('order_success', order_id=order.id)
     else:
-        return HttpResponse(f"Payment verification failed: {verification.get('error')}", status=400)
+        return HttpResponse(f"Khalti Verification Failed: {verification.get('error')}", status=400)
+
+def checkout_stripe_verify(request):
+    """
+    Callback URL for Stripe success.
+    """
+    session_id = request.GET.get('session_id')
+    order_id = request.GET.get('order_id')
+    
+    if not session_id or not order_id:
+        return HttpResponse("Missing Stripe session or order data.", status=400)
+        
+    order = get_object_or_404(Order, id=order_id)
+    brand_integration = BrandIntegration.objects.filter(brand=order.brand, integration__provider_code='STRIPE').first()
+    
+    if not brand_integration:
+        return HttpResponse("Stripe integration not found for this brand.", status=400)
+        
+    from apps.orders.services.payment_gateways import StripeService
+    verification = StripeService.verify_payment(session_id, brand_integration)
+    
+    if verification.get('success'):
+        order.status = 'PAID'
+        order.payment_provider = 'STRIPE'
+        order.payment_reference_id = verification.get('transaction_id')
+        order.save()
+        
+        # Clear cart for the user
+        from apps.orders.models import Cart
+        Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        
+        return redirect('order_success', order_id=order.id)
+    else:
+        return HttpResponse(f"Stripe Verification Failed: {verification.get('error')}", status=400)
 
 @login_required(login_url='/login/')
 def shipping_settings_view(request):

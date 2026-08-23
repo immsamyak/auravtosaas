@@ -146,6 +146,8 @@
                                         <img src="{% static 'images/esewa-icon.png' %}" alt="eSewa" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
                                         {% elif pm.integration.provider_code == 'KHALTI' %}
                                         <img src="{% static 'images/khalti-icon.png' %}" alt="Khalti" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
+                                        {% elif pm.integration.provider_code == 'STRIPE' %}
+                                        <i class="fa-brands fa-stripe text-3xl opacity-80 text-[#635BFF]"></i>
                                         {% else %}
                                         <i class="fa-solid fa-money-bill-wave text-xl opacity-80"></i>
                                         {% endif %}
