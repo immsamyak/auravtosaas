@@ -14,6 +14,7 @@ urlpatterns = [
     path('checkout/esewa/verify/', views.checkout_esewa_verify, name='checkout_esewa_verify'),
     path('checkout/khalti/verify/', views.checkout_khalti_verify, name='checkout_khalti_verify'),
     path('checkout/stripe/verify/', views.checkout_stripe_verify, name='checkout_stripe_verify'),
+    path('checkout/stripe/webhook/<slug:brand_slug>/', views.stripe_webhook, name='stripe_webhook'),
     
     # POS Routes
     path('dashboard/pos/', views_pos.pos_terminal_view, name='pos_terminal'),

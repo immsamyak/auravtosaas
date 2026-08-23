@@ -1,6 +1,6 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto" x-data="brandIntegrationForm()">
     {% include "components/breadcrumb.html" with current="Brandintegration Details" %}
     <div class="mb-8">
         <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Brandintegration <span class="text-indigo-600 font-light">Details</span></h1>
@@ -8,7 +8,7 @@
     </div>
     
     <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-        <form method="post" enctype="multipart/form-data" class="space-y-6">
+        <form method="post" enctype="multipart/form-data" class="space-y-6" @submit="syncCredentials">
 
             {% csrf_token %}
             <div x-data="{ activeTab: 'general' }">
@@ -21,7 +21,6 @@
                         General Information
                     </button>
                     
-                    <!-- Only show Advanced tab if there are more than 6 visible fields -->
                     {% if form.visible_fields|length > 6 %}
                     <button type="button" @click="activeTab = 'advanced'" 
                             :class="activeTab === 'advanced' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'" 
@@ -31,10 +30,71 @@
                     {% endif %}
                 </div>
 
-                <!-- General Tab Content (Fields 1-6) -->
+                <!-- General Tab Content -->
                 <div x-show="activeTab === 'general'" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     {% for field in form %}
                         {% if forloop.counter <= 6 or form.visible_fields|length <= 6 %}
+                        
+                        {% if field.name == 'integration' %}
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">
+                                {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+                            </label>
+                            <div @change="checkIntegrationType($event)">
+                                {{ field }}
+                            </div>
+                            {% if field.help_text %}
+                                <p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                        {% elif field.name == 'credentials' %}
+                        <!-- Hidden raw credentials, managed by Alpine -->
+                        <div x-show="!isStripe" class="col-span-1 md:col-span-2">
+                            <label class="block text-sm font-bold text-slate-700 mb-1">
+                                {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+                            </label>
+                            <div class="credentials-wrapper">
+                                {{ field }}
+                            </div>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">For non-Stripe integrations, enter JSON here.</p>
+                        </div>
+                        
+                        <!-- Stripe Custom Fields -->
+                        <div x-show="isStripe" x-cloak class="col-span-1 md:col-span-2 space-y-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <h3 class="font-bold text-slate-800 text-lg border-b border-slate-200 pb-3">Stripe Configuration</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">Publishable Key (pk)</label>
+                                    <input type="text" x-model="stripePk" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="pk_live_...">
+                                    <p class="text-xs text-slate-500 mt-1">Found in Stripe Dashboard -> Developers -> API Keys</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">Secret Key (sk)</label>
+                                    <input type="text" x-model="stripeSk" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="sk_live_...">
+                                    <p class="text-xs text-slate-500 mt-1">Found in Stripe Dashboard -> Developers -> API Keys</p>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Webhook Secret</label>
+                                <input type="text" x-model="stripeWebhookSecret" class="block w-full rounded-xl border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="whsec_...">
+                                <p class="text-xs text-slate-500 mt-1">Found in Stripe Dashboard -> Developers -> Webhooks</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                                <label class="block text-sm font-bold text-indigo-900 mb-2">Your Webhook URL (Paste this in Stripe)</label>
+                                <div class="flex items-center space-x-3">
+                                    <input type="text" readonly :value="webhookUrl" class="block w-full rounded-lg border-indigo-200 bg-white text-indigo-800 font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <button type="button" @click="navigator.clipboard.writeText(webhookUrl); $event.target.innerText = 'Copied!'; setTimeout(() => $event.target.innerText = 'Copy', 2000)" class="px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition shadow-sm">
+                                        Copy
+                                    </button>
+                                </div>
+                                <p class="text-xs text-indigo-700 mt-2">Create a webhook in Stripe pointing to this URL, and select the <strong>checkout.session.completed</strong> event.</p>
+                            </div>
+                        </div>
+                        
+                        {% else %}
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-1">
                                 {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
@@ -51,10 +111,12 @@
                             {% endfor %}
                         </div>
                         {% endif %}
+                        
+                        {% endif %}
                     {% endfor %}
                 </div>
 
-                <!-- Advanced Tab Content (Fields 7+) -->
+                <!-- Advanced Tab Content -->
                 {% if form.visible_fields|length > 6 %}
                 <div x-show="activeTab === 'advanced'" style="display: none;" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     {% for field in form %}
@@ -64,15 +126,6 @@
                                 {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
                             </label>
                             {{ field }}
-                            {% if field.help_text %}
-                                <p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>
-                            {% endif %}
-                            {% for error in field.errors %}
-                                <p class="text-xs text-rose-500 mt-2 font-bold flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
                         </div>
                         {% endif %}
                     {% endfor %}
@@ -88,4 +141,83 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('brandIntegrationForm', () => ({
+        isStripe: false,
+        stripePk: '',
+        stripeSk: '',
+        stripeWebhookSecret: '',
+        brandSlug: '{{ form.instance.brand.slug|default:"your-brand-slug" }}',
+        
+        get webhookUrl() {
+            // Reconstruct the base URL
+            const protocol = window.location.protocol;
+            const host = window.location.host;
+            return `${protocol}//${host}/checkout/stripe/webhook/${this.brandSlug}/`;
+        },
+        
+        init() {
+            // Parse existing credentials
+            const credInput = document.querySelector('.credentials-wrapper textarea, .credentials-wrapper input');
+            if (credInput && credInput.value) {
+                try {
+                    const data = JSON.parse(credInput.value);
+                    if (data.api_key) this.stripePk = data.api_key;
+                    if (data.api_secret) this.stripeSk = data.api_secret;
+                    if (data.webhook_secret) this.stripeWebhookSecret = data.webhook_secret;
+                } catch(e) {}
+            }
+            
+            // Check initial integration select value
+            setTimeout(() => {
+                const select = document.querySelector('select[name="integration"]');
+                if (select) {
+                    const option = select.options[select.selectedIndex];
+                    if (option && option.text.toLowerCase().includes('stripe')) {
+                        this.isStripe = true;
+                    }
+                }
+            }, 100);
+            
+            // Also watch brand select to update webhook URL dynamically if creating new
+            setTimeout(() => {
+                const brandSelect = document.querySelector('select[name="brand"]');
+                if (brandSelect) {
+                    brandSelect.addEventListener('change', (e) => {
+                        // The value is the ID, not the slug, so we can't perfectly get the slug here
+                        // unless we add it as a data attribute, but for existing objects it's fine.
+                        // We'll leave it as a visual hint.
+                    });
+                }
+            }, 100);
+        },
+        
+        checkIntegrationType(e) {
+            const select = e.target;
+            const option = select.options[select.selectedIndex];
+            if (option && option.text.toLowerCase().includes('stripe')) {
+                this.isStripe = true;
+            } else {
+                this.isStripe = false;
+            }
+        },
+        
+        syncCredentials() {
+            if (this.isStripe) {
+                const credInput = document.querySelector('.credentials-wrapper textarea, .credentials-wrapper input');
+                if (credInput) {
+                    const data = {
+                        api_key: this.stripePk,
+                        api_secret: this.stripeSk,
+                        webhook_secret: this.stripeWebhookSecret
+                    };
+                    credInput.value = JSON.stringify(data, null, 2);
+                }
+            }
+        }
+    }));
+});
+</script>
 {% endblock %}

@@ -912,3 +912,64 @@ def request_return_view(request, order_id):
         return redirect(f"{reverse('track_order', args=[order.brand.slug])}?order_id={order.id}")
         
     return redirect('index')
+
+from django.views.decorators.csrf import csrf_exempt
+import stripe
+
+@csrf_exempt
+def stripe_webhook(request, brand_slug):
+    """
+    Webhook endpoint for Stripe to notify us about asynchronous events (e.g., successful payment).
+    """
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+
+    if not sig_header:
+        return HttpResponse("Missing Stripe signature.", status=400)
+
+    brand = get_object_or_404(Brand, slug=brand_slug)
+    brand_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='STRIPE').first()
+
+    if not brand_integration:
+        return HttpResponse("Stripe integration not found for this brand.", status=400)
+
+    webhook_secret = brand_integration.credentials.get('webhook_secret')
+    
+    if not webhook_secret:
+        return HttpResponse("Webhook secret is not configured for this brand.", status=400)
+
+    stripe.api_key = brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, webhook_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse("Invalid payload", status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse("Invalid signature", status=400)
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        
+        # Fulfill the purchase...
+        order_id = session.get('client_reference_id')
+        if order_id:
+            try:
+                order = Order.objects.get(id=order_id)
+                if order.status != 'PAID':
+                    order.status = 'PAID'
+                    order.payment_provider = 'STRIPE'
+                    order.payment_reference_id = session.get('payment_intent')
+                    order.save()
+                    
+                    # Clear cart for the user
+                    from apps.orders.models import Cart
+                    Cart.objects.filter(user=order.user, brand=order.brand).delete()
+            except Order.DoesNotExist:
+                pass
+
+    return HttpResponse(status=200)
