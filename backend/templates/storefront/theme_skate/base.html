@@ -1,4 +1,5 @@
 {% load static %}
+{% load analytics_tags %}
 {% load marketing_tags %}
 <!DOCTYPE html>
 
@@ -383,5 +384,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+    {% render_brand_analytics brand %}
 </body>
 </html>
