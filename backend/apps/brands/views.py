@@ -760,7 +760,19 @@ def addons_view(request):
             # Save dynamic credentials based on what was submitted
             credentials = brand_int.credentials or {}
             
-            for field in ['merchant_id', 'api_key', 'client_id', 'client_secret', 'username', 'password', 'instructions', 'custom_payment_type', 'whatsapp_number']:
+            # The full list of supported integration credential keys across all platforms
+            supported_keys = [
+                'merchant_id', 'api_key', 'api_secret', 'api_token',
+                'client_id', 'client_secret', 'username', 'password', 
+                'instructions', 'custom_payment_type', 'phone_number',
+                'publishable_key', 'secret_key', 'webhook_secret',
+                'key_id', 'key_secret', 'pixel_id', 'site_id',
+                'public_api_key', 'private_api_key', 'property_id',
+                'account_sid', 'auth_token', 'from_phone', 'webhook_url',
+                'account_number', 'store_id', 'measurement_id'
+            ]
+            
+            for field in supported_keys:
                 val = request.POST.get(field)
                 if val:
                     credentials[field] = val

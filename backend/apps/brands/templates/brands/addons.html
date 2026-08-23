@@ -40,6 +40,7 @@
         <button @click="activeTab = 'PAYMENT'" :class="activeTab === 'PAYMENT' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Payments</button>
         <button @click="activeTab = 'SHIPPING'" :class="activeTab === 'SHIPPING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Shipping</button>
         <button @click="activeTab = 'MARKETING'" :class="activeTab === 'MARKETING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Marketing & Analytics</button>
+        <button @click="activeTab = 'OTHER'" :class="activeTab === 'OTHER' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-slate-200'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Other</button>
     </div>
 
     <!-- Add-ons Grid -->
@@ -112,62 +113,30 @@
                                 <input type="hidden" name="integration_id" id="modal-integration-id">
                                 
                                 <div id="dynamic-fields" class="space-y-4">
-                                    <div id="field-merchant-id" class="hidden">
-                                        <label id="label-merchant-id" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Merchant ID</label>
-                                        <input type="text" id="input-merchant-id" name="merchant_id" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
+                                    <!-- A dynamic container for JS to inject fields -->
+                                    <div id="js-fields-container" class="space-y-4"></div>
                                     
-                                    <div id="field-whatsapp-number" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">WhatsApp Number</label>
-                                        <input type="text" id="input-whatsapp-number" name="whatsapp_number" placeholder="e.g. +1234567890" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
-                                    
-                                    <div id="field-api-key" class="hidden">
-                                        <label id="label-api-key" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">API Key</label>
-                                        <input type="text" id="input-api-key" name="api_key" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
-
-                                    <div id="field-client-id" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Client ID</label>
-                                        <input type="text" id="input-client-id" name="client_id" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
-
-                                    <div id="field-client-secret" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Client Secret</label>
-                                        <input type="text" id="input-client-secret" name="client_secret" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
-
-                                    <div id="field-username" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Username</label>
-                                        <input type="text" id="input-username" name="username" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
-
-                                    <div id="field-password" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Password</label>
-                                        <input type="password" id="input-password" name="password" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                    </div>
-
-                                    <!-- Custom Payment Fields -->
-                                    <div id="field-custom-type" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Payment Type</label>
-                                        <select id="input-custom-type" name="custom_payment_type" onchange="toggleCustomFields()" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                            <option value="BANK_TRANSFER">Direct Bank Transfer</option>
-                                            <option value="QR_CODE">QR Code (Fonepay, etc.)</option>
-                                            <option value="COD">Cash on Delivery</option>
-                                        </select>
-                                    </div>
-
-                                    <div id="field-instructions" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Instructions / Details</label>
-                                        <textarea id="input-instructions" name="instructions" rows="3" placeholder="e.g. Bank Name: Nabil Bank&#10;Account Name: Acme Corp&#10;Account No: 123456789" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"></textarea>
-                                    </div>
-
-                                    <div id="field-qr-image" class="hidden">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">QR Code Image</label>
-                                        <div class="mt-1 flex items-center">
-                                            <input type="file" id="input-qr-image" name="qr_code_image" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                    <!-- Custom Payment Fields (Still needed statically for toggle logic, though we can manage via JS) -->
+                                    <div id="field-custom-type" class="hidden space-y-4 mt-2">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Payment Type</label>
+                                            <select id="input-custom-type" name="custom_payment_type" onchange="toggleCustomFields()" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                                                <option value="BANK_TRANSFER">Direct Bank Transfer</option>
+                                                <option value="QR_CODE">QR Code (Fonepay, etc.)</option>
+                                                <option value="COD">Cash on Delivery</option>
+                                            </select>
                                         </div>
-                                        <p id="qr-current-status" class="mt-2 text-xs text-green-600 hidden"><i class="fa-solid fa-check-circle"></i> QR Code already uploaded.</p>
+                                        <div id="field-instructions" class="hidden">
+                                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Instructions / Details</label>
+                                            <textarea id="input-instructions" name="instructions" rows="3" placeholder="e.g. Bank Name: Nabil Bank&#10;Account Name: Acme Corp&#10;Account No: 123456789" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"></textarea>
+                                        </div>
+                                        <div id="field-qr-image" class="hidden">
+                                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">QR Code Image</label>
+                                            <div class="mt-1 flex items-center">
+                                                <input type="file" id="input-qr-image" name="qr_code_image" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                            </div>
+                                            <p id="qr-current-status" class="mt-2 text-xs text-green-600 hidden"><i class="fa-solid fa-check-circle"></i> QR Code already uploaded.</p>
+                                        </div>
                                     </div>
                                     
                                     <p class="text-xs text-slate-500 mt-2 font-medium"><i class="fa-solid fa-lock text-slate-400 mr-1"></i> Your credentials are securely encrypted and stored.</p>
@@ -199,6 +168,96 @@
 </div>
 
 <script>
+// Define configuration schemas for every integration
+const INTEGRATION_SCHEMAS = {
+    'STRIPE': [
+        { key: 'publishable_key', label: 'Publishable Key (pk)', type: 'text', required: true },
+        { key: 'secret_key', label: 'Secret Key (sk)', type: 'text', required: true },
+        { key: 'webhook_secret', label: 'Webhook Secret', type: 'text', required: true }
+    ],
+    'PAYPAL': [
+        { key: 'client_id', label: 'Client ID', type: 'text', required: true },
+        { key: 'client_secret', label: 'Client Secret', type: 'text', required: true }
+    ],
+    'RAZORPAY': [
+        { key: 'key_id', label: 'Key ID', type: 'text', required: true },
+        { key: 'key_secret', label: 'Key Secret', type: 'text', required: true }
+    ],
+    'KLARNA': [
+        { key: 'username', label: 'Username (UID)', type: 'text', required: true },
+        { key: 'password', label: 'Password', type: 'text', required: true }
+    ],
+    'AFTERPAY': [
+        { key: 'merchant_id', label: 'Merchant ID', type: 'text', required: true },
+        { key: 'secret_key', label: 'Secret Key', type: 'text', required: true }
+    ],
+    'ESEWA': [
+        { key: 'merchant_id', label: 'Merchant Code', type: 'text', required: true },
+        { key: 'api_key', label: 'Secret Key', type: 'text', required: true }
+    ],
+    'KHALTI': [
+        { key: 'api_key', label: 'Secret Key', type: 'text', required: true }
+    ],
+    'TIKTOK_PIXEL': [
+        { key: 'pixel_id', label: 'Pixel ID', type: 'text', required: true }
+    ],
+    'HOTJAR': [
+        { key: 'site_id', label: 'Site ID', type: 'text', required: true }
+    ],
+    'KLAVIYO': [
+        { key: 'public_api_key', label: 'Public API Key', type: 'text', required: true },
+        { key: 'private_api_key', label: 'Private API Key', type: 'text', required: true }
+    ],
+    'TAWK_TO': [
+        { key: 'property_id', label: 'Property ID (from embed code)', type: 'text', required: true }
+    ],
+    'WHATSAPP_WIDGET': [
+        { key: 'phone_number', label: 'WhatsApp Phone Number (with Country Code)', type: 'text', required: true },
+        { key: 'instructions', label: 'Default Welcome Message (Optional)', type: 'text', required: false }
+    ],
+    'WHATSAPP': [
+        { key: 'phone_number', label: 'WhatsApp Phone Number', type: 'text', required: true }
+    ],
+    'TWILIO': [
+        { key: 'account_sid', label: 'Account SID', type: 'text', required: true },
+        { key: 'auth_token', label: 'Auth Token', type: 'text', required: true },
+        { key: 'from_phone', label: 'From Phone Number', type: 'text', required: true }
+    ],
+    'SENDGRID': [
+        { key: 'api_key', label: 'API Key', type: 'text', required: true }
+    ],
+    'ZAPIER': [
+        { key: 'webhook_url', label: 'Webhook Target URL', type: 'text', required: true }
+    ],
+    'SHIPROCKET': [
+        { key: 'api_token', label: 'API Token', type: 'text', required: true }
+    ],
+    'DHL': [
+        { key: 'api_key', label: 'API Key', type: 'text', required: true },
+        { key: 'api_secret', label: 'API Secret', type: 'text', required: true },
+        { key: 'account_number', label: 'Account Number', type: 'text', required: true }
+    ],
+    'PATHAO_PARCEL': [
+        { key: 'client_id', label: 'Client ID', type: 'text', required: true },
+        { key: 'client_secret', label: 'Client Secret', type: 'text', required: true },
+        { key: 'username', label: 'Username', type: 'text', required: true },
+        { key: 'password', label: 'Password', type: 'password', required: true },
+        { key: 'store_id', label: 'Store ID', type: 'text', required: true }
+    ],
+    'NCM': [
+        { key: 'api_key', label: 'API Token', type: 'text', required: true }
+    ],
+    'UPAYA': [
+        { key: 'api_key', label: 'API Token', type: 'text', required: true }
+    ],
+    'GA4': [
+        { key: 'measurement_id', label: 'Measurement ID (e.g. G-XXXX)', type: 'text', required: true }
+    ],
+    'META_PIXEL': [
+        { key: 'measurement_id', label: 'Pixel ID', type: 'text', required: true }
+    ]
+};
+
 function openAddonModal(id, name, providerCode, isActive, credentialsJson) {
     document.getElementById('modal-integration-id').value = id;
     document.getElementById('disable-integration-id').value = id;
@@ -209,78 +268,55 @@ function openAddonModal(id, name, providerCode, isActive, credentialsJson) {
         creds = credentialsJson ? JSON.parse(credentialsJson) : {};
     } catch(e) {}
     
-    // Reset and hide all fields
-    const fields = ['merchant-id', 'whatsapp-number', 'api-key', 'client-id', 'client-secret', 'username', 'password', 'custom-type', 'instructions', 'qr-image'];
-    const dbFields = ['merchant_id', 'whatsapp_number', 'api_key', 'client_id', 'client_secret', 'username', 'password', 'custom_payment_type', 'instructions', ''];
+    const container = document.getElementById('js-fields-container');
+    container.innerHTML = ''; // Clear previous fields
     
-    fields.forEach((f, idx) => {
-        document.getElementById('field-' + f).classList.add('hidden');
-        if (f !== 'qr-image') {
-            document.getElementById('input-' + f).value = creds[dbFields[idx]] || '';
-            document.getElementById('input-' + f).removeAttribute('required');
-        }
-    });
+    // Hide custom fields by default
+    document.getElementById('field-custom-type').classList.add('hidden');
+    document.getElementById('field-instructions').classList.add('hidden');
+    document.getElementById('field-qr-image').classList.add('hidden');
     
-    document.getElementById('qr-current-status').classList.add('hidden');
-    if (creds['qr_code_url']) {
-        document.getElementById('qr-current-status').classList.remove('hidden');
-    }
-    
-    // Default custom type if empty
-    if (!document.getElementById('input-custom-type').value) {
-        document.getElementById('input-custom-type').value = 'BANK_TRANSFER';
-    }
-    
-    // Show specific fields based on provider and set required
-    if (providerCode === 'WHATSAPP') {
-        document.getElementById('field-whatsapp-number').classList.remove('hidden');
-        document.getElementById('input-whatsapp-number').setAttribute('required', 'true');
-        
-        document.getElementById('field-instructions').classList.remove('hidden');
-        document.getElementById('input-instructions').placeholder = 'Default welcome message (optional)';
-    } else if (providerCode === 'ESEWA') {
-        document.getElementById('field-merchant-id').classList.remove('hidden');
-        document.getElementById('label-merchant-id').textContent = 'Merchant Code';
-        document.getElementById('input-merchant-id').setAttribute('required', 'true');
-        
-        document.getElementById('field-api-key').classList.remove('hidden');
-        document.getElementById('label-api-key').textContent = 'Secret Key';
-        document.getElementById('input-api-key').setAttribute('required', 'true');
-    } else if (providerCode === 'KHALTI') {
-        document.getElementById('field-api-key').classList.remove('hidden');
-        document.getElementById('label-api-key').textContent = 'Secret Key';
-        document.getElementById('input-api-key').setAttribute('required', 'true');
-    } else if (providerCode === 'PATHAO_PARCEL') {
-        document.getElementById('field-merchant-id').classList.remove('hidden');
-        document.getElementById('label-merchant-id').textContent = 'Store ID';
-        document.getElementById('input-merchant-id').setAttribute('required', 'true');
-        
-        document.getElementById('field-client-id').classList.remove('hidden');
-        document.getElementById('input-client-id').setAttribute('required', 'true');
-        
-        document.getElementById('field-client-secret').classList.remove('hidden');
-        document.getElementById('input-client-secret').setAttribute('required', 'true');
-        
-        document.getElementById('field-username').classList.remove('hidden');
-        document.getElementById('input-username').setAttribute('required', 'true');
-        
-        document.getElementById('field-password').classList.remove('hidden');
-        document.getElementById('input-password').setAttribute('required', 'true');
-    } else if (providerCode === 'NCM' || providerCode === 'UPAYA') {
-        document.getElementById('field-api-key').classList.remove('hidden');
-        document.getElementById('label-api-key').textContent = 'API Token';
-        document.getElementById('input-api-key').setAttribute('required', 'true');
-    } else if (providerCode === 'GA4') {
-        document.getElementById('field-merchant-id').classList.remove('hidden');
-        document.getElementById('label-merchant-id').textContent = 'Measurement ID (e.g. G-XXXX)';
-        document.getElementById('input-merchant-id').setAttribute('required', 'true');
-    } else if (providerCode === 'META_PIXEL') {
-        document.getElementById('field-merchant-id').classList.remove('hidden');
-        document.getElementById('label-merchant-id').textContent = 'Pixel ID';
-        document.getElementById('input-merchant-id').setAttribute('required', 'true');
-    } else if (providerCode === 'CUSTOM_MANUAL') {
+    if (providerCode === 'CUSTOM_MANUAL') {
         document.getElementById('field-custom-type').classList.remove('hidden');
+        if (creds['custom_payment_type']) {
+            document.getElementById('input-custom-type').value = creds['custom_payment_type'];
+        } else {
+            document.getElementById('input-custom-type').value = 'BANK_TRANSFER';
+        }
+        document.getElementById('input-instructions').value = creds['instructions'] || '';
+        
+        document.getElementById('qr-current-status').classList.add('hidden');
+        if (creds['qr_code_url']) {
+            document.getElementById('qr-current-status').classList.remove('hidden');
+        }
         toggleCustomFields();
+    } else {
+        // Build dynamic fields based on schema
+        const schema = INTEGRATION_SCHEMAS[providerCode] || [];
+        
+        schema.forEach(field => {
+            const val = creds[field.key] || '';
+            const req = field.required ? 'required' : '';
+            const ast = field.required ? '<span class="text-rose-500">*</span>' : '';
+            
+            const html = `
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">${field.label} ${ast}</label>
+                    <input type="${field.type}" name="${field.key}" value="${val}" ${req} class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                </div>
+            `;
+            container.innerHTML += html;
+        });
+        
+        // If schema is empty and not custom, maybe it's completely generic fallback
+        if (schema.length === 0) {
+            container.innerHTML = `
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">API Key / Token</label>
+                    <input type="text" name="api_key" value="${creds['api_key'] || ''}" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                </div>
+            `;
+        }
     }
     
     // Show disable button if already active
@@ -312,7 +348,5 @@ function toggleCustomFields() {
 function closeAddonModal() {
     document.getElementById('addon-modal').classList.add('hidden');
 }
-
-// Search and filtering is now handled by Alpine.js x-show directives
 </script>
 {% endblock %}
