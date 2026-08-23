@@ -121,47 +121,24 @@
                                 <div x-data="{
                                     search: '',
                                     open: false,
-                                    countries: [
-                                        {name: 'United States', code: 'USD', symbol: '$', flag: '🇺🇸'},
-                                        {name: 'Nepal', code: 'NPR', symbol: 'Rs', flag: '🇳🇵'},
-                                        {name: 'India', code: 'INR', symbol: '₹', flag: '🇮🇳'},
-                                        {name: 'United Kingdom', code: 'GBP', symbol: '£', flag: '🇬🇧'},
-                                        {name: 'Eurozone (EU)', code: 'EUR', symbol: '€', flag: '🇪🇺'},
-                                        {name: 'Australia', code: 'AUD', symbol: 'A$', flag: '🇦🇺'},
-                                        {name: 'Canada', code: 'CAD', symbol: 'C$', flag: '🇨🇦'},
-                                        {name: 'Japan', code: 'JPY', symbol: '¥', flag: '🇯🇵'},
-                                        {name: 'China', code: 'CNY', symbol: '¥', flag: '🇨🇳'},
-                                        {name: 'Singapore', code: 'SGD', symbol: 'S$', flag: '🇸🇬'},
-                                        {name: 'United Arab Emirates', code: 'AED', symbol: 'د.إ', flag: '🇦🇪'},
-                                        {name: 'Saudi Arabia', code: 'SAR', symbol: '﷼', flag: '🇸🇦'},
-                                        {name: 'Switzerland', code: 'CHF', symbol: 'CHF', flag: '🇨🇭'},
-                                        {name: 'South Korea', code: 'KRW', symbol: '₩', flag: '🇰🇷'},
-                                        {name: 'Brazil', code: 'BRL', symbol: 'R$', flag: '🇧🇷'},
-                                        {name: 'South Africa', code: 'ZAR', symbol: 'R', flag: '🇿🇦'},
-                                        {name: 'Mexico', code: 'MXN', symbol: '$', flag: '🇲🇽'},
-                                        {name: 'New Zealand', code: 'NZD', symbol: '$', flag: '🇳🇿'},
-                                        {name: 'Malaysia', code: 'MYR', symbol: 'RM', flag: '🇲🇾'},
-                                        {name: 'Thailand', code: 'THB', symbol: '฿', flag: '🇹🇭'},
-                                        {name: 'Indonesia', code: 'IDR', symbol: 'Rp', flag: '🇮🇩'},
-                                        {name: 'Philippines', code: 'PHP', symbol: '₱', flag: '🇵🇭'},
-                                        {name: 'Vietnam', code: 'VND', symbol: '₫', flag: '🇻🇳'},
-                                        {name: 'Bangladesh', code: 'BDT', symbol: '৳', flag: '🇧🇩'},
-                                        {name: 'Pakistan', code: 'PKR', symbol: 'Rs', flag: '🇵🇰'},
-                                        {name: 'Sri Lanka', code: 'LKR', symbol: 'Rs', flag: '🇱🇰'},
-                                        {name: 'Maldives', code: 'MVR', symbol: 'Rf', flag: '🇲🇻'},
-                                        {name: 'Bhutan', code: 'BTN', symbol: 'Nu.', flag: '🇧🇹'}
-                                    ].sort((a,b) => a.name.localeCompare(b.name)),
+                                    countries: [],
                                     filteredCountries: [],
                                     init() {
-                                        this.filteredCountries = this.countries;
+                                        fetch('/static/data/countries.json')
+                                            .then(res => res.json())
+                                            .then(data => {
+                                                this.countries = data;
+                                                this.filteredCountries = data;
+                                            })
+                                            .catch(err => console.error('Failed to load countries', err));
                                     },
                                     filter() {
-                                        this.filteredCountries = this.countries.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.code.toLowerCase().includes(this.search.toLowerCase()));
+                                        this.filteredCountries = this.countries.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || (c.code && c.code.toLowerCase().includes(this.search.toLowerCase())));
                                     },
                                     selectCountry(c) {
-                                        document.getElementById('id_currency').value = c.code;
-                                        document.getElementById('id_currency_symbol').value = c.symbol;
-                                        this.search = c.name + ' (' + c.code + ')';
+                                        document.getElementById('id_currency').value = c.code || '';
+                                        document.getElementById('id_currency_symbol').value = c.symbol || '';
+                                        this.search = c.name + (c.code ? ' (' + c.code + ')' : '');
                                         this.open = false;
                                     }
                                 }" class="mb-6 relative">
