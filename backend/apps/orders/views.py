@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from apps.orders.services.notifications import NotificationDispatcher
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
@@ -549,6 +550,7 @@ def checkout_esewa_verify(request):
             order.payment_provider = 'ESEWA'
             order.payment_reference_id = verification.get('transaction_code')
             order.save()
+            NotificationDispatcher.dispatch_order_success(order)
             return redirect('order_success', order_id=order.id)
         else:
             return HttpResponse(f"Payment verification failed: {verification.get('error')}", status=400)
@@ -581,6 +583,7 @@ def checkout_khalti_verify(request):
         from apps.orders.models import Cart
         Cart.objects.filter(user=order.user, brand=order.brand).delete()
         
+        NotificationDispatcher.dispatch_order_success(order)
         return redirect('order_success', order_id=order.id)
     else:
         return HttpResponse(f"Khalti Verification Failed: {verification.get('error')}", status=400)
@@ -614,6 +617,7 @@ def checkout_stripe_verify(request):
         from apps.orders.models import Cart
         Cart.objects.filter(user=order.user, brand=order.brand).delete()
         
+        NotificationDispatcher.dispatch_order_success(order)
         return redirect('order_success', order_id=order.id)
     else:
         return HttpResponse(f"Stripe Verification Failed: {verification.get('error')}", status=400)
@@ -1008,6 +1012,7 @@ def checkout_paypal_verify(request):
         order.save()
         from apps.orders.models import Cart
         Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        NotificationDispatcher.dispatch_order_success(order)
         return redirect('order_success', order_id=order.id)
     return HttpResponse(f"PayPal Verification Failed", status=400)
 
@@ -1029,5 +1034,49 @@ def checkout_razorpay_verify(request):
         order.save()
         from apps.orders.models import Cart
         Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        NotificationDispatcher.dispatch_order_success(order)
         return redirect('order_success', order_id=order.id)
     return HttpResponse(f"Razorpay Verification Failed", status=400)
+
+
+def checkout_klarna_verify(request):
+    order_id = request.GET.get('order_id')
+    if not order_id: return HttpResponse("Missing order_id", status=400)
+    
+    order = get_object_or_404(Order, id=order_id)
+    brand_integration = BrandIntegration.objects.filter(brand=order.brand, integration__provider_code='KLARNA').first()
+    
+    from apps.orders.services.payment_gateways import KlarnaService
+    verification = KlarnaService.verify_payment(order_id, brand_integration)
+    
+    if verification.get('success'):
+        order.status = 'PAID'
+        order.payment_provider = 'KLARNA'
+        order.payment_reference_id = verification.get('transaction_id')
+        order.save()
+        from apps.orders.models import Cart
+        Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        NotificationDispatcher.dispatch_order_success(order)
+        return redirect('order_success', order_id=order.id)
+    return HttpResponse(f"Klarna Verification Failed", status=400)
+
+def checkout_afterpay_verify(request):
+    order_id = request.GET.get('order_id')
+    if not order_id: return HttpResponse("Missing order_id", status=400)
+    
+    order = get_object_or_404(Order, id=order_id)
+    brand_integration = BrandIntegration.objects.filter(brand=order.brand, integration__provider_code='AFTERPAY').first()
+    
+    from apps.orders.services.payment_gateways import AfterpayService
+    verification = AfterpayService.verify_payment(order_id, brand_integration)
+    
+    if verification.get('success'):
+        order.status = 'PAID'
+        order.payment_provider = 'AFTERPAY'
+        order.payment_reference_id = verification.get('transaction_id')
+        order.save()
+        from apps.orders.models import Cart
+        Cart.objects.filter(user=order.user, brand=order.brand).delete()
+        NotificationDispatcher.dispatch_order_success(order)
+        return redirect('order_success', order_id=order.id)
+    return HttpResponse(f"Afterpay Verification Failed", status=400)

@@ -16,6 +16,8 @@ urlpatterns = [
     path('checkout/stripe/verify/', views.checkout_stripe_verify, name='checkout_stripe_verify'),
     path('checkout/paypal/verify/', views.checkout_paypal_verify, name='checkout_paypal_verify'),
     path('checkout/razorpay/verify/', views.checkout_razorpay_verify, name='checkout_razorpay_verify'),
+    path('checkout/klarna/verify/', views.checkout_klarna_verify, name='checkout_klarna_verify'),
+    path('checkout/afterpay/verify/', views.checkout_afterpay_verify, name='checkout_afterpay_verify'),
     path('checkout/stripe/webhook/<slug:brand_slug>/', views.stripe_webhook, name='stripe_webhook'),
     
     # POS Routes
