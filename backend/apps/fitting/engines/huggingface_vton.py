@@ -86,10 +86,16 @@ class HuggingFaceVTONEngine:
         except Exception as e:
             logger.error(f"Hugging Face API failed: {str(e)}", exc_info=True)
             
+            error_msg = str(e)
+            if "Expecting value: line 1 column 1 (char 0)" in error_msg or "JSON" in error_msg:
+                friendly_error = "Hugging Face is blocking your server's IP address (Cloudflare challenge). You MUST add a free Hugging Face API Token to your Global Settings in the Admin Panel to bypass this block."
+            else:
+                friendly_error = f"Failed to connect to Hugging Face Space: {error_msg}"
+                
             if client is None:
                 return {
                     'status': 'FAILED',
-                    'error_message': f"Failed to connect to Hugging Face Space: {str(e)}"
+                    'error_message': friendly_error
                 }
                 
             # Try fallback without kwargs if the user is using a custom/unlabeled space
