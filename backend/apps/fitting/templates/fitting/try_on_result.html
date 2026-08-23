@@ -116,7 +116,7 @@
                         <p class="text-sm opacity-70 mb-8 max-w-sm mx-auto leading-relaxed">
                             {{ try_on.error_message|default:"Our AI engine encountered an error fitting this garment. The image might not be clear enough." }}
                         </p>
-                        <form method="POST" action="{% url 'try_on' variant.product.brand.slug variant.id %}" class="w-full">
+                        <form method="POST" action="{% url 'try_on' variant.product.brand.slug variant.slug %}" class="w-full">
                             {% csrf_token %}
                             <button type="submit" class="inline-flex justify-center items-center px-6 py-3 border border-current shadow-md text-sm font-extrabold rounded-xl bg-current text-white hover:opacity-90 transition-transform hover:-translate-y-0.5" style="color: var(--tw-prose-body);">
                                 <span class="bg-clip-text text-transparent mix-blend-difference filter invert flex items-center">
@@ -174,7 +174,7 @@
                         {% regroup variant.product.variants.all by color as color_list %}
                         {% for color_group in color_list %}
                             {% with first_var=color_group.list|first %}
-                            <a href="{% url 'try_on' variant.product.brand.slug first_var.id %}" class="w-10 h-10 rounded-full {% if color_group.grouper == variant.color %}border-2 border-current p-0.5 scale-110{% else %}border border-neutral-500/30 hover:scale-110 opacity-70 hover:opacity-100{% endif %} transition-all cursor-pointer block">
+                            <a href="{% url 'try_on' variant.product.brand.slug first_var.slug %}" class="w-10 h-10 rounded-full {% if color_group.grouper == variant.color %}border-2 border-current p-0.5 scale-110{% else %}border border-neutral-500/30 hover:scale-110 opacity-70 hover:opacity-100{% endif %} transition-all cursor-pointer block">
                                 <div class="w-full h-full rounded-full shadow-inner" style="background-color: {{ color_group.grouper.hex_code }}; border: 1px solid rgba(0,0,0,0.1);"></div>
                             </a>
                             {% endwith %}
@@ -188,7 +188,7 @@
                     <div class="flex flex-wrap gap-2">
                         {% for v in variant.product.variants.all %}
                             {% if v.color == variant.color %}
-                                <a href="{% url 'try_on' variant.product.brand.slug v.id %}" class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg border transition-all shadow-sm {% if v.size == variant.size %}bg-current text-white border-current scale-105{% else %}bg-neutral-500/5 border-neutral-500/20 hover:border-current hover:bg-neutral-500/10{% endif %}" {% if v.size == variant.size %}style="color: var(--tw-prose-body);"{% endif %}>
+                                <a href="{% url 'try_on' variant.product.brand.slug v.slug %}" class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg border transition-all shadow-sm {% if v.size == variant.size %}bg-current text-white border-current scale-105{% else %}bg-neutral-500/5 border-neutral-500/20 hover:border-current hover:bg-neutral-500/10{% endif %}" {% if v.size == variant.size %}style="color: var(--tw-prose-body);"{% endif %}>
                                     {% if v.size == variant.size %}
                                         <span class="mix-blend-difference filter invert">{{ v.size.code }}</span>
                                     {% else %}

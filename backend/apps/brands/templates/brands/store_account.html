@@ -115,7 +115,7 @@
                             <!-- Product Details -->
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-base font-extrabold leading-tight truncate mb-1">
-                                    <a href="{% url 'store_product_detail' brand.slug item.product_variant.product.id %}" class="hover:underline">{{ item.product_variant.product.name }}</a>
+                                    <a href="{% url 'store_product_detail' brand.slug item.product_variant.product.slug %}" class="hover:underline">{{ item.product_variant.product.name }}</a>
                                 </h3>
                                 <p class="text-sm font-medium opacity-70 mb-2">{{ item.product_variant.color.name }} &bull; Size {{ item.product_variant.size.code }}</p>
                                 <p class="text-sm opacity-60">Price: {{ brand.currency_symbol|default:"$" }}{{ item.price_at_purchase }} each</p>
@@ -126,7 +126,7 @@
                                 <div class="font-black text-lg">
                                     {{ brand.currency_symbol|default:"$" }}{% widthratio item.price_at_purchase 1 item.quantity %}
                                 </div>
-                                <a href="{% url 'store_product_detail' brand.slug item.product_variant.product.id %}" class="mt-2 text-xs font-bold uppercase tracking-wider opacity-70 hover:opacity-100 transition-opacity flex items-center">
+                                <a href="{% url 'store_product_detail' brand.slug item.product_variant.product.slug %}" class="mt-2 text-xs font-bold uppercase tracking-wider opacity-70 hover:opacity-100 transition-opacity flex items-center">
                                     Buy Again <i class="fa-solid fa-chevron-right ml-1"></i>
                                 </a>
                             </div>
@@ -162,7 +162,7 @@
                             <p class="text-white/70 text-xs mb-4">{{ look.saved_at|date:"M d, Y" }}</p>
                             <div class="flex space-x-3">
                                 <a href="{{ look.try_on.generated_image.url }}" download class="flex-1 bg-white text-black py-2.5 rounded-xl font-bold text-center hover:bg-gray-200 transition-colors text-sm shadow-md"><i class="fa-solid fa-download mr-1"></i> Save</a>
-                                <a href="{% url 'store_product_detail' brand.slug look.try_on.product_variant.product.id %}" class="flex-1 bg-transparent border border-white text-white py-2.5 rounded-xl font-bold text-center hover:bg-white/20 transition-colors text-sm shadow-md">Shop</a>
+                                <a href="{% url 'store_product_detail' brand.slug look.try_on.product_variant.product.slug %}" class="flex-1 bg-transparent border border-white text-white py-2.5 rounded-xl font-bold text-center hover:bg-white/20 transition-colors text-sm shadow-md">Shop</a>
                             </div>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {% for product in ai_recommendations %}
                 <div class="bg-neutral-500/5 group rounded-2xl overflow-hidden border border-neutral-500/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <a href="{% url 'store_product_detail' brand.slug product.id %}" class="block relative aspect-[4/5] bg-neutral-500/10 overflow-hidden">
+                    <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-[4/5] bg-neutral-500/10 overflow-hidden">
                         {% if product.variants.first and product.variants.first.image %}
                             <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         {% else %}
@@ -219,7 +219,7 @@
                         <p class="opacity-70 text-sm mb-3 line-clamp-1">{{ product.description }}</p>
                         <div class="flex justify-between items-center">
                             <span class="font-black text-lg">{{ brand.currency_symbol|default:"$" }}{{ product.price }}</span>
-                            <a href="{% url 'store_product_detail' brand.slug product.id %}" class="text-xs font-bold uppercase tracking-wider hover:opacity-70 transition-opacity">View <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                            <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="text-xs font-bold uppercase tracking-wider hover:opacity-70 transition-opacity">View <i class="fa-solid fa-arrow-right ml-1"></i></a>
                         </div>
                     </div>
                 </div>

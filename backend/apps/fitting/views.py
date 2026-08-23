@@ -7,8 +7,8 @@ from apps.fitting.models import VirtualTryOn, FitPassport, VTOPhotoVault, VTOSes
 from django.utils import timezone
 
 @xframe_options_sameorigin
-def try_on_view(request, slug, variant_id):
-    variant = get_object_or_404(ProductVariant, id=variant_id)
+def try_on_view(request, slug, variant_slug):
+    variant = get_object_or_404(ProductVariant, slug=variant_slug)
     
     # Identify user or session
     user = request.user if request.user.is_authenticated else None
@@ -31,7 +31,7 @@ def try_on_view(request, slug, variant_id):
     photo_profile = VTOPhotoVault.objects.filter(passport=passport, is_default=True).order_by('-created_at').first()
     
     if not photo_profile:
-        return redirect('guest_photo_upload', slug=slug, variant_id=variant_id)
+        return redirect('guest_photo_upload', slug=slug, variant_slug=variant_slug)
         
     from apps.fitting.services.vto_service import VirtualTryOnService
     
@@ -74,7 +74,7 @@ def try_on_view(request, slug, variant_id):
         subscription.save()
         
         # PRG Pattern: Redirect to the same view as a GET request to prevent form resubmission on reload
-        return redirect('try_on', slug=slug, variant_id=variant_id)
+        return redirect('try_on', slug=slug, variant_slug=variant_slug)
     
     brand = variant.product.brand
     theme_base = f"storefront/{brand.theme.template_folder}/base.html" if brand.theme and brand.theme.is_active else "brands/store_base.html"
@@ -113,8 +113,8 @@ def try_on_view(request, slug, variant_id):
         'store_products': store_products,
     })
 
-def guest_photo_upload_view(request, slug, variant_id):
-    variant = get_object_or_404(ProductVariant, id=variant_id)
+def guest_photo_upload_view(request, slug, variant_slug):
+    variant = get_object_or_404(ProductVariant, slug=variant_slug)
     
     if request.method == 'POST':
         if not request.session.session_key:

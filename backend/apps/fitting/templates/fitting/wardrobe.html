@@ -58,7 +58,7 @@
                         <a href="{% url 'storefront_checkout' try_on.product_variant.product.brand.slug try_on.product_variant.id %}" class="flex-1 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-800 transition-all text-center flex items-center justify-center">
                             <i class="fa-solid fa-bag-shopping mr-2"></i> Buy
                         </a>
-                        <a href="{% url 'try_on' try_on.product_variant.product.brand.slug try_on.product_variant.id %}" class="flex-1 bg-white border border-gray-200 text-gray-900 text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-50 transition-all text-center flex items-center justify-center shadow-sm">
+                        <a href="{% url 'try_on' try_on.product_variant.product.brand.slug try_on.product_variant.slug %}" class="flex-1 bg-white border border-gray-200 text-gray-900 text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-50 transition-all text-center flex items-center justify-center shadow-sm">
                             <i class="fa-solid fa-wand-magic-sparkles mr-2 text-gray-400"></i> Retry
                         </a>
                     </div>

@@ -69,7 +69,7 @@
                         
                         <!-- Minimal Action Overlay -->
                         <div class="absolute inset-0 bg-black bg-opacity-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                            <a href="{% url 'store_product_detail' brand.slug product.id %}" class="bg-black text-white text-xs font-bold uppercase tracking-widest py-3 px-8 hover:bg-gray-800 transition-colors">
+                            <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="bg-black text-white text-xs font-bold uppercase tracking-widest py-3 px-8 hover:bg-gray-800 transition-colors">
                                 View Details
                             </a>
                         </div>
@@ -79,7 +79,7 @@
                     <div class="flex flex-col">
                         <div class="flex justify-between items-start">
                             <h3 class="text-base font-semibold text-gray-900 tracking-wide uppercase">
-                                <a href="{% url 'store_product_detail' brand.slug product.id %}">
+                                <a href="{% url 'store_product_detail' brand.slug product.slug %}">
                                     <span aria-hidden="true" class="absolute inset-0"></span>
                                     {{ product.name }}
                                 </a>

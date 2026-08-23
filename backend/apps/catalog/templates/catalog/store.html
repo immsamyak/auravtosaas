@@ -13,7 +13,7 @@
     <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
         {% for product in products %}
             {% for variant in product.variants.all %}
-            <a href="{% url 'try_on' variant.product.brand.slug variant.id %}" class="group relative bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <a href="{% url 'try_on' variant.product.brand.slug variant.slug %}" class="group relative bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="aspect-[4/5] w-full bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-96">
                     {% if variant.image %}
                     <img src="{{ variant.image.url }}" alt="{{ product.name }}" class="w-full h-full object-center object-cover sm:w-full sm:h-full">

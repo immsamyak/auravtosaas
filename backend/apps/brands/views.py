@@ -445,7 +445,7 @@ def theme_gallery_view(request):
         'themes': themes,
         'current_theme': brand.theme
     })
-def store_product_detail_view(request, slug, product_id):
+def store_product_detail_view(request, slug, product_slug):
     """
     Public product detail page for a specific brand's product.
     Allows shoppers to select variants (color/size) before trying on.
@@ -457,7 +457,7 @@ def store_product_detail_view(request, slug, product_id):
     elif brand.status == 'INACTIVE':
         return render(request, 'brands/store_inactive.html', {'brand': brand})
         
-    product = get_object_or_404(Product, id=product_id, brand=brand, is_vto_ready=True)
+    product = get_object_or_404(Product, slug=product_slug, brand=brand, is_vto_ready=True)
     
     # We will pass the variants as a list of dicts so AlpineJS can easily filter them
     variants = product.variants.all().select_related('color', 'size')
@@ -481,6 +481,7 @@ def store_product_detail_view(request, slug, product_id):
             
         variants_json.append({
             'id': v.id,
+            'slug': v.slug,
             'color_id': v.color.id,
             'color_name': v.color.name,
             'size_id': v.size.id,
