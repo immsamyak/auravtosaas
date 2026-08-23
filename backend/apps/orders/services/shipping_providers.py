@@ -195,7 +195,7 @@ class LogisticsService:
         """
         Shiprocket API Integration (Simulated for Demo)
         """
-        api_token = brand_integration.credentials.get('api_key')
+        api_token = brand_integration.credentials.get('api_token') or brand_integration.credentials.get('api_key')
         
         if not api_token:
             return {"success": False, "error": "Missing Shiprocket API Token."}
@@ -216,7 +216,7 @@ class LogisticsService:
         """
         api_key = brand_integration.credentials.get('api_key')
         api_secret = brand_integration.credentials.get('api_secret')
-        account_number = brand_integration.credentials.get('merchant_id')
+        account_number = brand_integration.credentials.get('account_number') or brand_integration.credentials.get('merchant_id')
         
         if not api_key or not api_secret or not account_number:
             return {"success": False, "error": "Missing DHL credentials."}

@@ -141,8 +141,10 @@
                                 <input type="radio" name="payment_method" value="{{ pm.integration.provider_code }}" x-model="selectedPayment" required class="sr-only">
                                 
                                 <div class="flex w-full items-center">
-                                    <div class="h-12 w-12 flex-shrink-0 bg-neutral-500/10 border border-neutral-500/20 rounded-xl flex items-center justify-center mr-4">
-                                        {% if pm.integration.provider_code == 'ESEWA' %}
+                                    <div class="h-12 w-12 flex-shrink-0 bg-neutral-500/10 border border-neutral-500/20 rounded-xl flex items-center justify-center mr-4 overflow-hidden p-1.5">
+                                        {% if pm.integration.logo %}
+                                        <img src="{{ pm.integration.logo.url }}" alt="{{ pm.integration.name }}" class="h-full w-full object-contain">
+                                        {% elif pm.integration.provider_code == 'ESEWA' %}
                                         <img src="{% static 'images/esewa-icon.png' %}" alt="eSewa" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
                                         {% elif pm.integration.provider_code == 'KHALTI' %}
                                         <img src="{% static 'images/khalti-icon.png' %}" alt="Khalti" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
@@ -151,7 +153,7 @@
                                         {% elif pm.integration.provider_code == 'PAYPAL' %}
                                         <i class="fa-brands fa-paypal text-2xl opacity-80 text-[#003087]"></i>
                                         {% elif pm.integration.provider_code == 'RAZORPAY' %}
-                                        <div class="font-bold text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-md">Razorpay</div>
+                                        <div class="font-bold text-[10px] uppercase bg-blue-50 text-blue-600 px-1 py-1 rounded w-full text-center tracking-tighter">Razorpay</div>
                                         {% else %}
                                         <i class="fa-solid fa-money-bill-wave text-xl opacity-80"></i>
                                         {% endif %}

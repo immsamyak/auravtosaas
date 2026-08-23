@@ -69,7 +69,7 @@ def render_brand_analytics(brand):
     # Check for TikTok Pixel
     tiktok_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='TIKTOK_PIXEL', is_active=True).first()
     if tiktok_integration:
-        pixel_id = tiktok_integration.credentials.get('api_key')
+        pixel_id = tiktok_integration.credentials.get('pixel_id')
         if pixel_id:
             scripts.append(f"""
             <!-- TikTok Pixel Code -->
@@ -86,7 +86,7 @@ def render_brand_analytics(brand):
     # Check for Klaviyo
     klaviyo_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='KLAVIYO', is_active=True).first()
     if klaviyo_integration:
-        public_key = klaviyo_integration.credentials.get('api_key')
+        public_key = klaviyo_integration.credentials.get('public_api_key')
         if public_key:
             scripts.append(f"""
             <!-- Klaviyo Onsite Tracking -->
@@ -96,7 +96,7 @@ def render_brand_analytics(brand):
     # Check for Hotjar
     hotjar_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='HOTJAR', is_active=True).first()
     if hotjar_integration:
-        site_id = hotjar_integration.credentials.get('api_key')
+        site_id = hotjar_integration.credentials.get('site_id')
         if site_id:
             scripts.append(f"""
             <!-- Hotjar Tracking Code -->
@@ -115,7 +115,7 @@ def render_brand_analytics(brand):
     # Check for Tawk.to
     tawk_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='TAWK_TO', is_active=True).first()
     if tawk_integration:
-        property_id = tawk_integration.credentials.get('api_key')
+        property_id = tawk_integration.credentials.get('property_id')
         if property_id:
             scripts.append(f"""
             <!--Start of Tawk.to Script-->
@@ -136,7 +136,7 @@ def render_brand_analytics(brand):
     # Check for WhatsApp Widget
     wa_integration = BrandIntegration.objects.filter(brand=brand, integration__provider_code='WHATSAPP_WIDGET', is_active=True).first()
     if wa_integration:
-        phone = wa_integration.credentials.get('merchant_id') # We mapped phone to merchant_id
+        phone = wa_integration.credentials.get('phone_number')
         if phone:
             scripts.append(f"""
             <a href="https://wa.me/{phone}" target="_blank" style="position: fixed; bottom: 24px; right: 24px; background-color: #25D366; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); z-index: 50; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">

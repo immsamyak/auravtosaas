@@ -171,9 +171,8 @@ class StripeService:
         """
         Creates a Stripe Checkout Session and returns the checkout URL.
         """
-        # The integration should have the Secret Key in api_secret, or api_key.
-        # Typically requires_api_secret is True for Secret Key.
-        stripe.api_key = brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
+        # 1. Setup Stripe
+        stripe.api_key = brand_integration.credentials.get('secret_key') or brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
         
         if not stripe.api_key:
             return {"success": False, "error": "Stripe API key is not configured for this brand."}
@@ -227,7 +226,7 @@ class StripeService:
         """
         Retrieves the checkout session to verify payment status.
         """
-        stripe.api_key = brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
+        stripe.api_key = brand_integration.credentials.get('secret_key') or brand_integration.credentials.get('api_secret') or brand_integration.credentials.get('api_key')
         
         try:
             session = stripe.checkout.Session.retrieve(session_id)
@@ -251,8 +250,8 @@ class PayPalService:
     
     @classmethod
     def initiate_payment(cls, order, brand_integration, request):
-        client_id = brand_integration.credentials.get('api_key')
-        client_secret = brand_integration.credentials.get('api_secret')
+        client_id = brand_integration.credentials.get('client_id') or brand_integration.credentials.get('api_key')
+        client_secret = brand_integration.credentials.get('client_secret') or brand_integration.credentials.get('api_secret')
         
         if not client_id or not client_secret:
             return {"success": False, "error": "PayPal credentials missing."}
@@ -285,8 +284,8 @@ class RazorpayService:
     
     @classmethod
     def initiate_payment(cls, order, brand_integration, request):
-        key_id = brand_integration.credentials.get('api_key')
-        key_secret = brand_integration.credentials.get('api_secret')
+        key_id = brand_integration.credentials.get('key_id') or brand_integration.credentials.get('api_key')
+        key_secret = brand_integration.credentials.get('key_secret') or brand_integration.credentials.get('api_secret')
         
         if not key_id or not key_secret:
             return {"success": False, "error": "Razorpay credentials missing."}
