@@ -88,23 +88,91 @@
                             <input type="text" name="footer_copyright_text" id="footer_copyright_text" value="{{ brand.footer_copyright_text|default_if_none:"" }}" placeholder="e.g. &copy; 2026 Aura. All rights reserved." class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                         </div>
                         
-                        <div class="border-t border-slate-100 pt-6">
+                        <div class="border-t border-slate-100 pt-6 mt-6">
                             <h4 class="text-sm font-bold text-slate-900 mb-4">Currency Settings</h4>
+                            
+                            <!-- Custom Country / Currency Selector -->
+                            <div x-data="{
+                                search: '',
+                                open: false,
+                                countries: [
+                                    {name: 'United States', code: 'USD', symbol: '$', flag: '🇺🇸'},
+                                    {name: 'Nepal', code: 'NPR', symbol: 'Rs', flag: '🇳🇵'},
+                                    {name: 'India', code: 'INR', symbol: '₹', flag: '🇮🇳'},
+                                    {name: 'United Kingdom', code: 'GBP', symbol: '£', flag: '🇬🇧'},
+                                    {name: 'Eurozone (EU)', code: 'EUR', symbol: '€', flag: '🇪🇺'},
+                                    {name: 'Australia', code: 'AUD', symbol: 'A$', flag: '🇦🇺'},
+                                    {name: 'Canada', code: 'CAD', symbol: 'C$', flag: '🇨🇦'},
+                                    {name: 'Japan', code: 'JPY', symbol: '¥', flag: '🇯🇵'},
+                                    {name: 'China', code: 'CNY', symbol: '¥', flag: '🇨🇳'},
+                                    {name: 'Singapore', code: 'SGD', symbol: 'S$', flag: '🇸🇬'},
+                                    {name: 'United Arab Emirates', code: 'AED', symbol: 'د.إ', flag: '🇦🇪'},
+                                    {name: 'Saudi Arabia', code: 'SAR', symbol: '﷼', flag: '🇸🇦'},
+                                    {name: 'Switzerland', code: 'CHF', symbol: 'CHF', flag: '🇨🇭'},
+                                    {name: 'South Korea', code: 'KRW', symbol: '₩', flag: '🇰🇷'},
+                                    {name: 'Brazil', code: 'BRL', symbol: 'R$', flag: '🇧🇷'},
+                                    {name: 'South Africa', code: 'ZAR', symbol: 'R', flag: '🇿🇦'},
+                                    {name: 'Mexico', code: 'MXN', symbol: '$', flag: '🇲🇽'},
+                                    {name: 'New Zealand', code: 'NZD', symbol: '$', flag: '🇳🇿'},
+                                    {name: 'Malaysia', code: 'MYR', symbol: 'RM', flag: '🇲🇾'},
+                                    {name: 'Thailand', code: 'THB', symbol: '฿', flag: '🇹🇭'},
+                                    {name: 'Indonesia', code: 'IDR', symbol: 'Rp', flag: '🇮🇩'},
+                                    {name: 'Philippines', code: 'PHP', symbol: '₱', flag: '🇵🇭'},
+                                    {name: 'Vietnam', code: 'VND', symbol: '₫', flag: '🇻🇳'},
+                                    {name: 'Bangladesh', code: 'BDT', symbol: '৳', flag: '🇧🇩'},
+                                    {name: 'Pakistan', code: 'PKR', symbol: 'Rs', flag: '🇵🇰'},
+                                    {name: 'Sri Lanka', code: 'LKR', symbol: 'Rs', flag: '🇱🇰'},
+                                    {name: 'Maldives', code: 'MVR', symbol: 'Rf', flag: '🇲🇻'},
+                                    {name: 'Bhutan', code: 'BTN', symbol: 'Nu.', flag: '🇧🇹'}
+                                ].sort((a,b) => a.name.localeCompare(b.name)),
+                                filteredCountries: [],
+                                init() {
+                                    this.filteredCountries = this.countries;
+                                },
+                                filter() {
+                                    this.filteredCountries = this.countries.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.code.toLowerCase().includes(this.search.toLowerCase()));
+                                },
+                                selectCountry(c) {
+                                    document.getElementById('currency_code').value = c.code;
+                                    document.getElementById('currency_symbol').value = c.symbol;
+                                    this.search = c.name + ' (' + c.code + ')';
+                                    this.open = false;
+                                }
+                            }" class="mb-6 relative">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Select Country to Auto-fill Currency</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fa-solid fa-globe text-slate-400"></i>
+                                    </div>
+                                    <input type="text" x-model="search" @input="filter(); open = true" @focus="open = true" @click.away="open = false" placeholder="Search countries... (e.g. Nepal, USA, UK)" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-slate-800 bg-slate-50">
+                                </div>
+                                
+                                <!-- Dropdown list -->
+                                <div x-show="open && filteredCountries.length > 0" class="absolute z-50 mt-2 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto" x-cloak>
+                                    <template x-for="c in filteredCountries" :key="c.name">
+                                        <button type="button" @click="selectCountry(c)" class="w-full text-left px-4 py-3 hover:bg-slate-50 flex items-center justify-between border-b border-slate-100 last:border-0 transition-colors">
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-xl" x-text="c.flag"></span>
+                                                <span class="text-sm font-bold text-slate-700" x-text="c.name"></span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-xs font-mono">
+                                                <span class="text-slate-500 bg-slate-100 px-2 py-1 rounded" x-text="c.code"></span>
+                                                <span class="text-indigo-600 font-bold bg-indigo-50 px-2 py-1 rounded" x-text="c.symbol"></span>
+                                            </div>
+                                        </button>
+                                    </template>
+                                    <div x-show="filteredCountries.length === 0" class="p-4 text-center text-sm text-slate-500">No countries found.</div>
+                                </div>
+                            </div>
+                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="currency_code" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Currency Code</label>
-                                    <select name="currency_code" id="currency_code" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                        <option value="" {% if not brand.currency_code %}selected{% endif %}>Use Global Default</option>
-                                        <option value="NPR" {% if brand.currency_code == 'NPR' %}selected{% endif %}>Nepalese Rupee (NPR)</option>
-                                        <option value="USD" {% if brand.currency_code == 'USD' %}selected{% endif %}>US Dollar (USD)</option>
-                                        <option value="INR" {% if brand.currency_code == 'INR' %}selected{% endif %}>Indian Rupee (INR)</option>
-                                        <option value="EUR" {% if brand.currency_code == 'EUR' %}selected{% endif %}>Euro (EUR)</option>
-                                        <option value="GBP" {% if brand.currency_code == 'GBP' %}selected{% endif %}>British Pound (GBP)</option>
-                                    </select>
+                                    <input type="text" name="currency_code" id="currency_code" value="{{ brand.currency_code|default_if_none:'' }}" placeholder="e.g. NPR, USD" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                                 </div>
                                 <div>
                                     <label for="currency_symbol" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Currency Symbol</label>
-                                    <input type="text" name="currency_symbol" id="currency_symbol" value="{{ brand.currency_symbol|default_if_none:"" }}" placeholder="e.g. Rs., $, ₹" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                                    <input type="text" name="currency_symbol" id="currency_symbol" value="{{ brand.currency_symbol|default_if_none:'' }}" placeholder="e.g. Rs., $, ₹" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                                 </div>
                             </div>
                         </div>
