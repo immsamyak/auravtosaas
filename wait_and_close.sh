@@ -1,4 +1,16 @@
 #!/bin/bash
+echo "Waiting for loaddata to start (timeout 60s)..."
+count=0
+while ! ps aux | grep -v grep | grep "loaddata local_backup.json" > /dev/null; do
+    sleep 2
+    count=$((count+1))
+    if [ $count -ge 30 ]; then
+        echo "Timeout waiting for loaddata to start! Assuming it finished instantly or failed."
+        break
+    fi
+done
+
+echo "loaddata detected! Waiting for it to finish..."
 while ps aux | grep -v grep | grep "loaddata local_backup.json" > /dev/null; do
     sleep 5
 done

@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.utils.text import slugify
 from django.db.models import Q
+from django.db import transaction
 from apps.brands.models import Brand
 from apps.catalog.models import Product, ProductVariant, Category, ProductType, Color, Size, Collection
 
@@ -118,8 +119,8 @@ def create_product_view(request):
         return redirect('index')
         
     if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
+        name = request.POST.get('name', '').strip()
+        description = request.POST.get('description', '').strip()
         category_id = request.POST.get('category')
         product_type_id = request.POST.get('product_type')
         price = request.POST.get('price')
@@ -128,37 +129,81 @@ def create_product_view(request):
         size_id = request.POST.get('size')
         stock = request.POST.get('stock')
         image = request.FILES.get('image')
-        
-        product = Product.objects.create(
-            brand=brand, 
-            name=name, 
-            description=description, 
-            category_id=category_id, 
-            product_type_id=product_type_id,
-            price=price,
-            seo_title=request.POST.get('seo_title', ''),
-            seo_description=request.POST.get('seo_description', ''),
-            seo_keywords=request.POST.get('seo_keywords', ''),
-            is_vto_ready=(request.POST.get('is_vto_ready') == 'on')
-        )
-        if 'seo_og_image' in request.FILES:
-            product.seo_og_image = request.FILES['seo_og_image']
-            product.save()
-        
-        variant = ProductVariant.objects.create(
-            product=product, 
-            color_id=color_id, 
-            size_id=size_id, 
-            image=image
-        )
+
+        # Validation
+        errors = []
+        if not name: errors.append("Product name is required.")
+        if name and ('<' in name or '>' in name): errors.append("Invalid characters in product name.")
+        description_check = request.POST.get('description', '')
+        if description_check and ('<' in description_check or '>' in description_check): errors.append("Invalid characters in description.")
+        if not category_id: errors.append("Category is required.")
+        if not product_type_id: errors.append("Product type is required.")
+        if not color_id: errors.append("Color is required.")
+        if not size_id: errors.append("Size is required.")
+        if not price: 
+            errors.append("Price is required.")
+        else:
+            try:
+                price_val = float(price)
+                if price_val < 0: errors.append("Price cannot be negative.")
+            except ValueError:
+                errors.append("Invalid price format.")
         
         if stock:
-            from apps.inventory.models import Location, StockLevel
-            location, _ = Location.objects.get_or_create(brand=brand, name="Primary Store", defaults={'location_type': 'STORE'})
-            StockLevel.objects.create(location=location, product_variant=variant, quantity=int(stock))
-            
-        messages.success(request, f'Product "{product.name}" created successfully.')
-        return redirect('manage_products')
+            try:
+                stock_val = int(stock)
+                if stock_val < 0: errors.append("Stock cannot be negative.")
+            except ValueError:
+                errors.append("Invalid stock format.")
+
+        if errors:
+            for e in errors:
+                messages.error(request, e)
+            categories, product_types, colors, sizes = _get_brand_attrs(brand)
+            return render(request, 'catalog/create_product.html', {
+                'brand': brand, 'categories': categories, 'product_types': product_types, 
+                'sizes': sizes, 'colors': colors, 'error_state': True
+            })
+
+        try:
+            with transaction.atomic():
+                product = Product.objects.create(
+                    brand=brand, 
+                    name=name, 
+                    description=description, 
+                    category_id=category_id, 
+                    product_type_id=product_type_id,
+                    price=price,
+                    seo_title=request.POST.get('seo_title', ''),
+                    seo_description=request.POST.get('seo_description', ''),
+                    seo_keywords=request.POST.get('seo_keywords', ''),
+                    is_vto_ready=(request.POST.get('is_vto_ready') == 'on')
+                )
+                if 'seo_og_image' in request.FILES:
+                    product.seo_og_image = request.FILES['seo_og_image']
+                    product.save()
+                
+                variant = ProductVariant.objects.create(
+                    product=product, 
+                    color_id=color_id, 
+                    size_id=size_id, 
+                    image=image
+                )
+                
+                if stock:
+                    from apps.inventory.models import Location, StockLevel
+                    location, _ = Location.objects.get_or_create(brand=brand, name="Primary Store", defaults={'location_type': 'STORE'})
+                    StockLevel.objects.create(location=location, product_variant=variant, quantity=int(stock))
+                    
+                messages.success(request, f'Product "{product.name}" created successfully.')
+                return redirect('manage_products')
+        except Exception as e:
+            messages.error(request, f"An error occurred while creating the product: {str(e)}")
+            categories, product_types, colors, sizes = _get_brand_attrs(brand)
+            return render(request, 'catalog/create_product.html', {
+                'brand': brand, 'categories': categories, 'product_types': product_types, 
+                'sizes': sizes, 'colors': colors
+            })
         
     categories, product_types, colors, sizes = _get_brand_attrs(brand)
     
@@ -194,17 +239,32 @@ def product_detail_view(request, product_id):
         stock = request.POST.get('stock')
         image = request.FILES.get('image')
         
-        if color_id and size_id and image:
-            variant = ProductVariant.objects.create(
-                product=product, color_id=color_id, size_id=size_id, image=image
-            )
-            if stock:
-                from apps.inventory.models import Location, StockLevel
-                location, _ = Location.objects.get_or_create(brand=brand, name="Primary Store", defaults={'location_type': 'STORE'})
-                StockLevel.objects.create(location=location, product_variant=variant, quantity=int(stock))
-            
-            messages.success(request, 'New variant added successfully.')
-            return redirect('product_detail', product_id=product.id)
+        errors = []
+        if not color_id: errors.append("Color is required.")
+        if not size_id: errors.append("Size is required.")
+        if stock:
+            try:
+                stock_val = int(stock)
+                if stock_val < 0: errors.append("Stock cannot be negative.")
+            except ValueError:
+                errors.append("Invalid stock format.")
+
+        if errors:
+            for e in errors: messages.error(request, e)
+        else:
+            try:
+                with transaction.atomic():
+                    variant = ProductVariant.objects.create(
+                        product=product, color_id=color_id, size_id=size_id, image=image
+                    )
+                    if stock:
+                        from apps.inventory.models import Location, StockLevel
+                        location, _ = Location.objects.get_or_create(brand=brand, name="Primary Store", defaults={'location_type': 'STORE'})
+                        StockLevel.objects.create(location=location, product_variant=variant, quantity=int(stock))
+                    messages.success(request, 'New variant added successfully.')
+                    return redirect('product_detail', product_id=product.id)
+            except Exception as e:
+                messages.error(request, f"Error creating variant: {str(e)}")
             
     _, _, colors, sizes = _get_brand_attrs(brand)
     return render(request, 'catalog/product_detail.html', {'brand': brand, 'product': product, 'sizes': sizes, 'colors': colors})
@@ -227,23 +287,50 @@ def edit_product_view(request, product_id):
     product = get_object_or_404(Product, id=product_id, brand=brand)
     
     if request.method == 'POST':
-        product.name = request.POST.get('name')
-        product.description = request.POST.get('description')
-        product.category_id = request.POST.get('category')
-        product.product_type_id = request.POST.get('product_type')
-        product.price = request.POST.get('price')
-        product.is_vto_ready = request.POST.get('is_vto_ready') == 'on'
-        
-        # SEO Settings
-        product.seo_title = request.POST.get('seo_title', product.seo_title)
-        product.seo_description = request.POST.get('seo_description', product.seo_description)
-        product.seo_keywords = request.POST.get('seo_keywords', product.seo_keywords)
-        if 'seo_og_image' in request.FILES:
-            product.seo_og_image = request.FILES['seo_og_image']
-            
-        product.save()
-        messages.success(request, f'Product "{product.name}" updated successfully.')
-        return redirect('manage_products')
+        name = request.POST.get('name', '').strip()
+        price = request.POST.get('price')
+        category_id = request.POST.get('category')
+        product_type_id = request.POST.get('product_type')
+
+        errors = []
+        if not name: errors.append("Product name is required.")
+        if name and ('<' in name or '>' in name): errors.append("Invalid characters in product name.")
+        description_check = request.POST.get('description', '')
+        if description_check and ('<' in description_check or '>' in description_check): errors.append("Invalid characters in description.")
+        if not category_id: errors.append("Category is required.")
+        if not product_type_id: errors.append("Product type is required.")
+        if not price: 
+            errors.append("Price is required.")
+        else:
+            try:
+                price_val = float(price)
+                if price_val < 0: errors.append("Price cannot be negative.")
+            except ValueError:
+                errors.append("Invalid price format.")
+
+        if errors:
+            for e in errors: messages.error(request, e)
+        else:
+            try:
+                product.name = name
+                product.description = request.POST.get('description', '').strip()
+                product.category_id = category_id
+                product.product_type_id = product_type_id
+                product.price = price
+                product.is_vto_ready = request.POST.get('is_vto_ready') == 'on'
+                
+                # SEO Settings
+                product.seo_title = request.POST.get('seo_title', product.seo_title)
+                product.seo_description = request.POST.get('seo_description', product.seo_description)
+                product.seo_keywords = request.POST.get('seo_keywords', product.seo_keywords)
+                if 'seo_og_image' in request.FILES:
+                    product.seo_og_image = request.FILES['seo_og_image']
+                    
+                product.save()
+                messages.success(request, f'Product "{product.name}" updated successfully.')
+                return redirect('manage_products')
+            except Exception as e:
+                messages.error(request, f"Error updating product: {str(e)}")
         
     categories, product_types, colors, sizes = _get_brand_attrs(brand)
     return render(request, 'catalog/edit_product.html', {
