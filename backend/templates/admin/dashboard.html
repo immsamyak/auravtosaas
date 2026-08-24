@@ -61,57 +61,95 @@
         </div>
     </div>
 
-    <!-- Tier 3: System Health -->
-    <div class="bg-slate-900 rounded-3xl shadow-xl p-8 mb-8 text-white relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 20px 20px;"></div>
-        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6 border-b border-slate-800 pb-6">
+    <!-- Tier 3: System Health & Infrastructure -->
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-slate-100 pb-4">
             <div>
-                <h2 class="text-2xl font-extrabold flex items-center gap-3">
-                    <i class="fa-solid fa-server text-indigo-400"></i> Infrastructure Health
+                <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-3">
+                    <i class="fa-solid fa-server text-indigo-600"></i> Infrastructure Health
                 </h2>
-                <p class="text-slate-400 mt-1 text-sm">Real-time status of compute resources and microservices.</p>
+                <p class="text-slate-500 mt-1 text-sm font-medium">Real-time telemetry for compute clusters, databases, and memory.</p>
             </div>
-            <div class="flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl border border-emerald-500/20 text-sm font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl border border-emerald-100 text-sm font-bold mt-4 md:mt-0 shadow-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 All Systems Operational
             </div>
         </div>
 
-        <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- GPU Load -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8">
+            <!-- CPU Load -->
             <div>
                 <div class="flex justify-between items-end mb-2">
-                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">A100 GPU Cluster Load</span>
-                    <span class="text-lg font-bold text-indigo-400">72%</span>
+                    <span class="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-microchip"></i> CPU Usage</span>
+                    <span class="text-lg font-black {% if sys_cpu > 80 %}text-rose-600{% elif sys_cpu > 50 %}text-amber-500{% else %}text-slate-900{% endif %}">{{ sys_cpu }}%</span>
                 </div>
-                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 shadow-inner">
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]" style="width: 72%"></div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                    <div class="h-2 rounded-full {% if sys_cpu > 80 %}bg-rose-500{% elif sys_cpu > 50 %}bg-amber-400{% else %}bg-indigo-600{% endif %} transition-all duration-1000" style="width: {{ sys_cpu }}%"></div>
                 </div>
-                <p class="text-xs text-slate-500">Peak load expected in 2 hours.</p>
+                <p class="text-[11px] font-bold text-slate-400 uppercase">Core i9 Cluster</p>
             </div>
 
-            <!-- Memory -->
+            <!-- Memory Load -->
             <div>
                 <div class="flex justify-between items-end mb-2">
-                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">VTO API Queue</span>
-                    <span class="text-lg font-bold text-emerald-400">14 Jobs</span>
+                    <span class="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-memory"></i> RAM Usage</span>
+                    <span class="text-lg font-black {% if sys_mem > 80 %}text-rose-600{% elif sys_mem > 50 %}text-amber-500{% else %}text-slate-900{% endif %}">{{ sys_mem }}%</span>
                 </div>
-                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 shadow-inner">
-                    <div class="bg-emerald-500 h-3 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" style="width: 15%"></div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                    <div class="h-2 rounded-full {% if sys_mem > 80 %}bg-rose-500{% elif sys_mem > 50 %}bg-amber-400{% else %}bg-indigo-600{% endif %} transition-all duration-1000" style="width: {{ sys_mem }}%"></div>
                 </div>
-                <p class="text-xs text-slate-500">Healthy queue depth. Max capacity 100.</p>
+                <p class="text-[11px] font-bold text-slate-400 uppercase">128GB Total Configured</p>
             </div>
 
-            <!-- DB Latency -->
+            <!-- Disk Usage -->
             <div>
                 <div class="flex justify-between items-end mb-2">
-                    <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">DB Read Latency</span>
-                    <span class="text-lg font-bold text-blue-400">12ms</span>
+                    <span class="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-hard-drive"></i> Disk I/O</span>
+                    <span class="text-lg font-black {% if sys_disk > 80 %}text-rose-600{% elif sys_disk > 50 %}text-amber-500{% else %}text-slate-900{% endif %}">{{ sys_disk }}%</span>
                 </div>
-                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 shadow-inner">
-                    <div class="bg-blue-500 h-3 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" style="width: 12%"></div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                    <div class="h-2 rounded-full {% if sys_disk > 80 %}bg-rose-500{% elif sys_disk > 50 %}bg-amber-400{% else %}bg-indigo-600{% endif %} transition-all duration-1000" style="width: {{ sys_disk }}%"></div>
                 </div>
-                <p class="text-xs text-slate-500">PostgreSQL running optimally.</p>
+                <p class="text-[11px] font-bold text-slate-400 uppercase">NVMe SSD Array</p>
+            </div>
+
+            <!-- Database Latency -->
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-database"></i> DB Latency</span>
+                    <span class="text-lg font-black {% if sys_db_latency > 50 %}text-rose-600{% elif sys_db_latency > 20 %}text-amber-500{% else %}text-slate-900{% endif %}">{{ sys_db_latency }}ms</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                    <div class="h-2 rounded-full {% if sys_db_latency > 50 %}bg-rose-500{% elif sys_db_latency > 20 %}bg-amber-400{% else %}bg-indigo-600{% endif %} transition-all duration-1000" style="width: {% if sys_db_latency > 100 %}100{% else %}{{ sys_db_latency }}{% endif %}%"></div>
+                </div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase">PostgreSQL 15 Read/Write</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 pt-6 border-t border-slate-100">
+            <!-- Advanced Info Cards -->
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Server Uptime</p>
+                    <p class="text-xl font-extrabold text-slate-900">{{ sys_uptime }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            </div>
+            
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Queue Depth</p>
+                    <p class="text-xl font-extrabold text-slate-900">{{ sys_queue_depth }} <span class="text-sm text-slate-500 font-medium">jobs pending</span></p>
+                </div>
+                <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-list-check"></i></div>
+            </div>
+            
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Redis Cache Hit</p>
+                    <p class="text-xl font-extrabold text-slate-900">{{ sys_cache_hit_rate }}%</p>
+                </div>
+                <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-bolt"></i></div>
             </div>
         </div>
     </div>

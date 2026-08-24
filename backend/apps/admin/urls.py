@@ -11,6 +11,7 @@ from .testimonials import TestimonialListView, TestimonialCreateView, Testimonia
 from .blogs import BlogPostListView, BlogPostCreateView, BlogPostUpdateView, BlogPostDeleteView
 from .contact_messages import ContactMessageListView, ContactMessageDetailView, ContactMessageDeleteView
 from .landing_page_features import LandingPageFeatureListView, LandingPageFeatureCreateView, LandingPageFeatureUpdateView, LandingPageFeatureDeleteView
+from .landing_page_extras import FAQItemListView, FAQItemCreateView, FAQItemUpdateView, FAQItemDeleteView, MetricListView, MetricCreateView, MetricUpdateView, MetricDeleteView, IntegrationPlatformListView, IntegrationPlatformCreateView, IntegrationPlatformUpdateView, IntegrationPlatformDeleteView
 from .feature_flags import FeatureFlagListView, FeatureFlagCreateView, FeatureFlagUpdateView
 from .platform_integrations import PlatformIntegrationListView, PlatformIntegrationCreateView, PlatformIntegrationUpdateView
 from .global_settings import GlobalSettingsUpdateView
@@ -77,10 +78,29 @@ urlpatterns = [
     path('contactmessage/', ContactMessageListView.as_view(), name='contactmessage_list'),
     path('contactmessage/<str:pk>/', ContactMessageDetailView.as_view(), name='contactmessage_edit'),
     path('contactmessage/<str:pk>/delete/', ContactMessageDeleteView.as_view(), name='contactmessage_delete'),
+    # Landing Page Features
     path('landingpagefeature/', LandingPageFeatureListView.as_view(), name='landingpagefeature_list'),
     path('landingpagefeature/add/', LandingPageFeatureCreateView.as_view(), name='landingpagefeature_add'),
     path('landingpagefeature/<str:pk>/', LandingPageFeatureUpdateView.as_view(), name='landingpagefeature_edit'),
     path('landingpagefeature/<str:pk>/delete/', LandingPageFeatureDeleteView.as_view(), name='landingpagefeature_delete'),
+
+    # FAQs
+    path('faqs/', FAQItemListView.as_view(), name='faqitem_list'),
+    path('faqs/create/', FAQItemCreateView.as_view(), name='faqitem_create'),
+    path('faqs/<int:pk>/edit/', FAQItemUpdateView.as_view(), name='faqitem_update'),
+    path('faqs/<int:pk>/delete/', FAQItemDeleteView.as_view(), name='faqitem_delete'),
+
+    # Metrics
+    path('metrics/', MetricListView.as_view(), name='metric_list'),
+    path('metrics/create/', MetricCreateView.as_view(), name='metric_create'),
+    path('metrics/<int:pk>/edit/', MetricUpdateView.as_view(), name='metric_update'),
+    path('metrics/<int:pk>/delete/', MetricDeleteView.as_view(), name='metric_delete'),
+
+    # Integration Platforms
+    path('integrations/', IntegrationPlatformListView.as_view(), name='integrationplatform_list'),
+    path('integrations/create/', IntegrationPlatformCreateView.as_view(), name='integrationplatform_create'),
+    path('integrations/<int:pk>/edit/', IntegrationPlatformUpdateView.as_view(), name='integrationplatform_update'),
+    path('integrations/<int:pk>/delete/', IntegrationPlatformDeleteView.as_view(), name='integrationplatform_delete'),
     path('featureflag/', FeatureFlagListView.as_view(), name='featureflag_list'),
     path('featureflag/add/', FeatureFlagCreateView.as_view(), name='featureflag_add'),
     path('featureflag/<str:pk>/', FeatureFlagUpdateView.as_view(), name='featureflag_edit'),

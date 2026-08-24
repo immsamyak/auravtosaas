@@ -1,0 +1,16 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto text-center py-12">
+    <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-4">Delete Integration Platform?</h1>
+    <p class="text-slate-600 text-lg mb-8">Are you sure you want to delete <strong>{{ object }}</strong>? This action cannot be undone.</p>
+    
+    <form method="post" class="flex justify-center space-x-4">
+        {% csrf_token %}
+        <a href="{% url 'admin:integrationplatform_list' %}" class="px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition">Cancel</a>
+        <button type="submit" class="bg-rose-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-rose-700 transition">Yes, Delete</button>
+    </form>
+</div>
+{% endblock %}

@@ -12,9 +12,11 @@
     <!-- Framer Motion for React-like animations in vanilla JS -->
     <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
     <!-- AlpineJS for interactive components -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google Fonts: Plus Jakarta Sans for premium SaaS look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,10 +46,12 @@
             <!-- Desktop Links -->
             <div class="hidden md:flex items-center space-x-8">
                 {% if not request.resolver_match.url_name == 'store' and not request.resolver_match.url_name == 'store_product_detail' %}
-                    <a href="{% url 'index' %}#how-it-works" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">How it Works</a>
+                    <a href="{% url 'index' %}#benefits" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Features</a>
                     <a href="{% url 'index' %}#demo" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Live Demo</a>
+                    <a href="{% url 'index' %}#integrations" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Integrations</a>
                     <a href="{% url 'index' %}#pricing" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Pricing</a>
-                    <a href="{% url 'index' %}#brands" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Explore Brands</a>
+                    <a href="{% url 'index' %}#faq" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">FAQ</a>
+                    <a href="{% url 'index' %}#brands" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Brands</a>
                 {% endif %}
             </div>
             
@@ -196,5 +200,15 @@
     
     <!-- Global App Script -->
     <script src="{% static 'js/app.js' %}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100,
+            });
+        });
+    </script>
 </body>
 </html>

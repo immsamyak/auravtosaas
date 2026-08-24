@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.brands.models import Brand, BrandStaff, MediaAsset, APIKey, WebhookEndpoint
 from apps.analytics.services import DashboardAnalyticsService
-from apps.core.models import LandingPageConfig, LandingPageFeature, Testimonial, BlogPost, ContactMessage, FAQItem
+from apps.core.models import LandingPageConfig, LandingPageFeature, Testimonial, BlogPost, ContactMessage, FAQItem, Metric, IntegrationPlatform
 from apps.catalog.models import Product
 from apps.billing.models import SubscriptionPlan
 
@@ -26,6 +26,8 @@ def index_view(request):
     testimonials = Testimonial.objects.filter(is_active=True).order_by('display_order', '-created_at')
     latest_blogs = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:3]
     faqs = FAQItem.objects.filter(is_active=True).order_by('display_order')
+    metrics = Metric.objects.filter(is_active=True).order_by('display_order')
+    integrations = IntegrationPlatform.objects.filter(is_active=True).order_by('display_order')
     
     plans = SubscriptionPlan.objects.all().order_by('monthly_price')
 
@@ -37,6 +39,9 @@ def index_view(request):
         'testimonials': testimonials,
         'latest_blogs': latest_blogs,
         'plans': plans,
+        'faqs': faqs,
+        'metrics': metrics,
+        'integrations': integrations,
     })
 
 @login_required(login_url='/login/')

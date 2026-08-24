@@ -12,19 +12,19 @@
         <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-200/40 rounded-full mix-blend-multiply filter blur-[120px] opacity-60"></div>
     </div>
     
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10" data-aos="zoom-y-out">
         
-        <h1 class="text-6xl md:text-8xl font-extrabold text-slate-900 tracking-tighter mb-8 leading-[1.1]">
+        <h1 class="text-6xl md:text-8xl font-extrabold text-slate-900 tracking-tighter mb-8 leading-[1.1]" data-aos="zoom-y-out" data-aos-delay="150">
             {% if cms.hero_headline %}
                 {{ cms.hero_headline|highlight:"AI fitting room" }}
             {% else %}
                 The <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 italic pr-2" style="font-family: 'Playfair Display', serif; font-weight: 600;">Generative AI</span> <br class="hidden md:block"/> Fitting Room.
             {% endif %}
         </h1>
-        <p class="mt-4 max-w-2xl text-xl text-slate-600 mx-auto mb-12 font-medium">
+        <p class="mt-4 max-w-2xl text-xl text-slate-600 mx-auto mb-12 font-medium" data-aos="zoom-y-out" data-aos-delay="300">
             {{ cms.hero_subheadline|default:"Instantly map your catalog onto any shopper's body. Drastically increase conversions and eliminate size-related returns." }}
         </p>
-        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4" data-aos="zoom-y-out" data-aos-delay="450">
             <a href="{% url 'signup' %}" class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white text-lg font-bold rounded-2xl hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/30 transform hover:-translate-y-1 flex items-center justify-center">
                 {{ cms.hero_primary_cta|default:"Start building for free" }} <i class="fa-solid fa-arrow-right ml-2"></i>
             </a>
@@ -32,12 +32,31 @@
                 <i class="fa-solid fa-play text-indigo-600 mr-2 group-hover:scale-110 transition-transform"></i> {{ cms.hero_secondary_cta|default:"View Interactive Demo" }}
             </a>
         </div>
-        <p class="text-xs font-semibold text-slate-400 mt-6 uppercase tracking-widest">No credit card required • 14-day free trial</p>
+        <p class="text-xs font-semibold text-slate-400 mt-6 uppercase tracking-widest" data-aos="zoom-y-out" data-aos-delay="600">No credit card required • 14-day free trial</p>
+    </div>
+
+</div>
+
+<!-- Modern Floating Metrics Banner -->
+<div class="relative z-30 -mt-16 max-w-5xl mx-auto px-4" data-aos="fade-up" data-aos-delay="800">
+    <div class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden relative">
+        <!-- Subtle glow effect inside the banner -->
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-rose-500/10 mix-blend-overlay"></div>
+        
+        <!-- Fix grid and borders for mobile wrap -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 text-center relative z-10">
+            {% for metric in metrics %}
+            <div class="flex flex-col items-center justify-center group px-4 {% if not forloop.last %}md:border-r border-white/10{% endif %} {% if forloop.counter == 2 %}border-l md:border-l-0 border-white/10{% endif %} {% if forloop.counter > 2 %}pt-8 md:pt-0 border-t md:border-t-0 border-white/10{% endif %} {% if forloop.counter == 4 %}border-l md:border-l-0 border-white/10{% endif %}">
+                <p class="text-3xl md:text-4xl font-extrabold {% if forloop.counter <= 2 %}text-white{% elif forloop.counter == 3 %}text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400{% else %}text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400{% endif %} mb-2 group-hover:scale-110 transition-transform duration-300">{{ metric.value }}</p>
+                <p class="text-xs font-bold text-indigo-300 uppercase tracking-widest">{{ metric.label }}</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 
 <!-- Extra Interactive Demo / How It Works Section -->
-<section id="demo" class="py-32 bg-white relative border-y border-slate-100" x-data="{ 
+<section id="demo" class="pt-40 pb-32 bg-white relative border-y border-slate-100" x-data="{ 
     activeStep: 1, 
     init() { 
         setInterval(() => { 
@@ -227,8 +246,27 @@
     }
 </style>
 
+<!-- Integrations Section -->
+<section id="integrations" class="py-32 bg-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">Seamless Integrations</h2>
+            <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Works with your tech stack</h3>
+            <p class="text-slate-500 mt-4 max-w-2xl mx-auto text-lg">Connect Aura to your existing e-commerce platform in minutes with our one-click plugins and robust API.</p>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-8 items-center" data-aos="zoom-in" data-aos-delay="200">
+            {% for integration in integrations %}
+            <div class="w-24 h-24 bg-white rounded-2xl shadow-md border border-slate-100 flex items-center justify-center group hover:scale-110 transition-transform">
+                <i class="{{ integration.icon_class }} text-4xl {{ integration.icon_color }} {{ integration.hover_color }}"></i>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 <!-- Advanced Bento Box Benefits Section -->
-<section id="benefits" class="py-32 bg-slate-50 relative">
+<section id="benefits" class="py-32 bg-slate-50 relative" data-aos="fade-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-20">
@@ -305,7 +343,7 @@
 </section>
 
 <!-- Trusted Brands / Showcase -->
-<section id="brands" class="py-32 bg-white border-t border-slate-100">
+<section id="brands" class="py-32 bg-white border-t border-slate-100" data-aos="fade-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-20">
             <h2 class="text-sm font-bold text-indigo-600 tracking-widest uppercase mb-3">
@@ -348,7 +386,7 @@
 
 <!-- Custom CSS for Scanning Animation -->
     <!-- Pricing Section -->
-    <section id="pricing" class="py-24 bg-slate-50 border-t border-slate-200">
+    <section id="pricing" class="py-24 bg-slate-50 border-t border-slate-200" data-aos="fade-up">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16 max-w-3xl mx-auto">
                 <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">Simple Pricing</span>
@@ -390,7 +428,7 @@
     </section>
     <!-- Testimonials Section -->
     {% if testimonials %}
-    <section id="testimonials" class="py-24 bg-white border-t border-slate-200">
+    <section id="testimonials" class="py-24 bg-white border-t border-slate-200" data-aos="fade-up">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16 max-w-3xl mx-auto">
                 <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.testimonials_subtitle|default:"What our clients say" }}</span>
@@ -426,9 +464,37 @@
     </section>
     {% endif %}
 
+    <!-- FAQ Section -->
+    {% if faqs %}
+    <section id="faq" class="py-24 bg-white border-t border-slate-200" data-aos="fade-up">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.faq_subtitle }}</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">{{ cms.faq_title }}</h2>
+            </div>
+            
+            <div class="space-y-4" x-data="{ active: null }">
+                {% for faq in faqs %}
+                <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all duration-300" :class="active === {{ faq.id }} ? 'bg-indigo-50/50 border-indigo-200 ring-4 ring-indigo-50' : 'bg-white hover:border-slate-300'">
+                    <button @click="active = (active === {{ faq.id }} ? null : {{ faq.id }})" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-slate-900 text-lg focus:outline-none">
+                        <span>{{ faq.question }}</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-indigo-500" :class="active === {{ faq.id }} ? 'rotate-180' : ''"></i>
+                    </button>
+                    <div x-show="active === {{ faq.id }}" x-collapse x-cloak>
+                        <div class="px-6 pb-6 text-slate-600 text-lg leading-relaxed">
+                            {{ faq.answer }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
     <!-- Latest Blog Section -->
     {% if latest_blogs %}
-    <section id="blog" class="py-24 bg-slate-50 border-t border-slate-200">
+    <section id="blog" class="py-24 bg-slate-50 border-t border-slate-200" data-aos="fade-up">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16 max-w-3xl mx-auto">
                 <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.blog_subtitle|default:"News, tips, and insights" }}</span>
@@ -473,8 +539,23 @@
     </section>
     {% endif %}
 
+    <!-- Final CTA Banner -->
+    <section class="py-20 bg-indigo-600 relative overflow-hidden" data-aos="zoom-in">
+        <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6">{{ cms.cta_title }}</h2>
+            <p class="text-xl text-indigo-100 mb-10">{{ cms.cta_subtitle }}</p>
+            <a href="{% url 'signup' %}" class="inline-block bg-white text-indigo-600 hover:bg-indigo-50 font-bold px-10 py-5 rounded-full shadow-xl transition transform hover:-translate-y-1 text-lg">
+                {{ cms.cta_button_text }}
+            </a>
+        </div>
+    </section>
+
     <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-white border-t border-slate-200 relative overflow-hidden">
+    <section id="contact" class="py-24 bg-white border-t border-slate-200 relative overflow-hidden" data-aos="fade-up">
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div class="bg-slate-900 rounded-[3rem] p-10 md:p-16 lg:p-20 shadow-2xl overflow-hidden relative">

@@ -165,5 +165,27 @@ def seed_cms():
         
     print("Seeded 4 FAQ Items.")
 
+    from apps.core.models import Metric, IntegrationPlatform
+    
+    metric_data = [
+        {'value': '99.9%', 'label': 'Uptime SLA', 'display_order': 1},
+        {'value': '50M+', 'label': 'Try-Ons Generated', 'display_order': 2},
+        {'value': '40%', 'label': 'Avg. Conversion Lift', 'display_order': 3},
+        {'value': '-30%', 'label': 'Return Rate Reduction', 'display_order': 4},
+    ]
+    for data in metric_data:
+        Metric.objects.update_or_create(value=data['value'], label=data['label'], defaults=data)
+    print("Seeded 4 Metrics.")
+
+    integration_data = [
+        {'name': 'Shopify', 'icon_class': 'fa-brands fa-shopify', 'icon_color': 'text-[#95bf47]', 'hover_color': 'group-hover:text-emerald-500', 'display_order': 1},
+        {'name': 'WordPress', 'icon_class': 'fa-brands fa-wordpress', 'icon_color': 'text-[#21759b]', 'hover_color': 'group-hover:text-blue-500', 'display_order': 2},
+        {'name': 'Stripe', 'icon_class': 'fa-brands fa-stripe', 'icon_color': 'text-[#635bff]', 'hover_color': 'group-hover:text-indigo-500', 'display_order': 3},
+        {'name': 'API', 'icon_class': 'fa-solid fa-code', 'icon_color': 'text-slate-800', 'hover_color': 'group-hover:text-slate-900', 'display_order': 4},
+    ]
+    for data in integration_data:
+        IntegrationPlatform.objects.update_or_create(name=data['name'], defaults=data)
+    print("Seeded 4 Integrations.")
+
 if __name__ == '__main__':
     seed_cms()

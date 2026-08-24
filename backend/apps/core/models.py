@@ -127,6 +127,33 @@ class FAQItem(models.Model):
     def __str__(self):
         return self.question
 
+class Metric(models.Model):
+    value = models.CharField(max_length=50, help_text="e.g. 99.9%, 50M+")
+    label = models.CharField(max_length=100, help_text="e.g. Uptime SLA, Try-Ons Generated")
+    description = models.CharField(max_length=100, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['display_order']
+
+    def __str__(self):
+        return f"{self.value} {self.label}"
+
+class IntegrationPlatform(models.Model):
+    name = models.CharField(max_length=100)
+    icon_class = models.CharField(max_length=100, help_text="e.g. fa-brands fa-shopify")
+    icon_color = models.CharField(max_length=50, help_text="e.g. text-[#95bf47] or text-indigo-500", default="text-slate-800")
+    hover_color = models.CharField(max_length=50, help_text="e.g. group-hover:text-emerald-500", default="group-hover:text-slate-900")
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['display_order']
+
+    def __str__(self):
+        return self.name
+
 class LandingPageFeature(models.Model):
     AUDIENCE_CHOICES = [
         ('BRAND', 'Brand Owners'),
