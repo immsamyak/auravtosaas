@@ -232,8 +232,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-20">
-            <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">Enterprise Grade</h2>
-            <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Built for modern commerce.</h3>
+            <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">{{ cms.features_subtitle|default:"Enterprise Grade" }}</h2>
+            <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">{{ cms.features_title|default:"Built for modern commerce." }}</h3>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -388,8 +388,173 @@
             </div>
         </div>
     </section>
+    <!-- Testimonials Section -->
+    {% if testimonials %}
+    <section id="testimonials" class="py-24 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 max-w-3xl mx-auto">
+                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.testimonials_subtitle|default:"What our clients say" }}</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{{ cms.testimonials_title|default:"Trusted by leading fashion brands worldwide." }}</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for testimonial in testimonials %}
+                <div class="bg-slate-50 rounded-[2rem] p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
+                    <div class="flex items-center gap-4 mb-6">
+                        {% if testimonial.avatar %}
+                        <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="w-16 h-16 rounded-full object-cover shadow-sm">
+                        {% else %}
+                        <div class="w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xl">
+                            {{ testimonial.name|slice:":1" }}
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-lg">{{ testimonial.name }}</h4>
+                            <p class="text-slate-500 text-sm font-medium">{{ testimonial.role }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-4 text-amber-400 text-sm">
+                        {% for i in "12345" %}
+                        <i class="fa-{% if forloop.counter <= testimonial.rating %}solid{% else %}regular{% endif %} fa-star"></i>
+                        {% endfor %}
+                    </div>
+                    <p class="text-slate-700 italic leading-relaxed text-lg">"{{ testimonial.content }}"</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Latest Blog Section -->
+    {% if latest_blogs %}
+    <section id="blog" class="py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 max-w-3xl mx-auto">
+                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.blog_subtitle|default:"News, tips, and insights" }}</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{{ cms.blog_title|default:"Latest from our blog" }}</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for post in latest_blogs %}
+                <a href="{% url 'landing_blog_detail' post.slug %}" class="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group flex flex-col">
+                    {% if post.featured_image %}
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
+                    </div>
+                    {% else %}
+                    <div class="h-48 bg-slate-100 flex items-center justify-center relative overflow-hidden">
+                        <i class="fa-solid fa-newspaper text-5xl text-slate-300"></i>
+                    </div>
+                    {% endif %}
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="flex items-center gap-3 text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+                            <span>{{ post.published_at|date:"M d, Y" }}</span>
+                            <span>•</span>
+                            <span>{{ post.author_name }}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">{{ post.title }}</h3>
+                        <p class="text-slate-500 font-medium line-clamp-3 mb-6">{{ post.excerpt|default:post.content|striptags|truncatewords:20 }}</p>
+                        <div class="mt-auto font-bold text-indigo-600 text-sm flex items-center">
+                            Read Article <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="{% url 'landing_blog_list' %}" class="inline-flex items-center px-6 py-3 rounded-xl font-bold text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 transition-colors shadow-sm">
+                    View All Articles
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-white border-t border-slate-200 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div class="bg-slate-900 rounded-[3rem] p-10 md:p-16 lg:p-20 shadow-2xl overflow-hidden relative">
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
+                
+                <div class="flex flex-col lg:flex-row gap-12 lg:gap-24 relative z-10">
+                    <div class="flex-1">
+                        <span class="text-indigo-400 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.contact_subtitle|default:"We'd love to hear from you." }}</span>
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-8">{{ cms.contact_title|default:"Get in touch" }}</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-1">Email</p>
+                                    <a href="mailto:{{ cms.contact_email }}" class="text-white font-medium text-lg hover:text-indigo-400 transition-colors">{{ cms.contact_email|default:"contact@auravto.com" }}</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-1">Phone</p>
+                                    <a href="tel:{{ cms.contact_phone }}" class="text-white font-medium text-lg hover:text-indigo-400 transition-colors">{{ cms.contact_phone|default:"+1 (555) 123-4567" }}</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-1">Address</p>
+                                    <p class="text-white font-medium text-lg">{{ cms.contact_address|default:"123 Fashion Ave, NY 10001" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 bg-white/5 backdrop-blur-xl rounded-[2rem] p-8 border border-white/10">
+                        <form method="POST" action="{% url 'index' %}#contact" class="space-y-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="contact_form" value="1">
+                            <div>
+                                <label class="block text-slate-300 text-sm font-bold mb-2">Name</label>
+                                <input type="text" name="name" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-indigo-500" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 text-sm font-bold mb-2">Email</label>
+                                <input type="email" name="email" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-indigo-500" placeholder="john@example.com">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 text-sm font-bold mb-2">Message</label>
+                                <textarea name="message" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 h-32 resize-none" placeholder="How can we help?"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-indigo-500/30">
+                                Send Message
+                            </button>
+                            
+                            {% if messages %}
+                            <div class="mt-4">
+                                {% for message in messages %}
+                                <div class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-xl text-sm font-bold">
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 <style>
-    @keyframes scan {
         0% { transform: translateY(-100%); }
         100% { transform: translateY(100%); }
     }

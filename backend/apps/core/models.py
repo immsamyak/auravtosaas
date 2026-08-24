@@ -67,6 +67,40 @@ class LandingPageConfig(models.Model):
     # Footer Section
     footer_text = models.CharField(max_length=255, default="© 2026 Aura Virtual Try-On. All rights reserved.")
     
+    # Features Section
+    features_title = models.CharField(max_length=255, default="Why choose Aura")
+    features_subtitle = models.CharField(max_length=255, default="Everything you need to run a successful virtual fitting room.")
+    
+    # Testimonials Section
+    testimonials_title = models.CharField(max_length=255, default="What our clients say")
+    testimonials_subtitle = models.CharField(max_length=255, default="Trusted by leading fashion brands worldwide.")
+    
+    # Blog Section
+    blog_title = models.CharField(max_length=255, default="Latest from our blog")
+    blog_subtitle = models.CharField(max_length=255, default="News, tips, and insights about fashion tech.")
+    
+    # Contact Section
+    contact_title = models.CharField(max_length=255, default="Get in touch")
+    contact_subtitle = models.CharField(max_length=255, default="We'd love to hear from you.")
+    contact_email = models.EmailField(default="contact@auravto.com")
+    contact_phone = models.CharField(max_length=50, default="+1 (555) 123-4567")
+    contact_address = models.CharField(max_length=255, default="123 Fashion Ave, NY 10001")
+    
+    # Social Links
+    social_twitter = models.URLField(blank=True, null=True, help_text="X/Twitter Profile URL")
+    social_instagram = models.URLField(blank=True, null=True, help_text="Instagram Profile URL")
+    social_linkedin = models.URLField(blank=True, null=True, help_text="LinkedIn Page URL")
+    social_facebook = models.URLField(blank=True, null=True, help_text="Facebook Page URL")
+    
+    # FAQ Section
+    faq_title = models.CharField(max_length=255, default="Frequently Asked Questions")
+    faq_subtitle = models.CharField(max_length=255, default="Everything you need to know about Aura.")
+    
+    # Final CTA Section
+    cta_title = models.CharField(max_length=255, default="Ready to transform your store?")
+    cta_subtitle = models.CharField(max_length=255, default="Join the top fashion brands using Aura to reduce returns and increase conversion.")
+    cta_button_text = models.CharField(max_length=50, default="Start your free trial")
+    
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -77,6 +111,21 @@ class LandingPageConfig(models.Model):
 
     def __str__(self):
         return "Active SaaS Landing Page Configuration"
+
+class FAQItem(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['display_order', '-created_at']
+        verbose_name = "FAQ Item"
+        verbose_name_plural = "FAQ Items"
+
+    def __str__(self):
+        return self.question
 
 class LandingPageFeature(models.Model):
     AUDIENCE_CHOICES = [
@@ -218,20 +267,38 @@ class GlobalSettings(models.Model):
         return "Global Platform Settings"
 
 class Testimonial(models.Model):
-    quote = models.TextField()
-    author_name = models.CharField(max_length=100)
-    author_title = models.CharField(max_length=100, blank=True)
-    author_image = models.ImageField(validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp', 'svg'])], upload_to='testimonials/', blank=True, null=True)
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100, default='Customer', help_text="e.g., CEO at Fashion Brand")
+    content = models.TextField()
+    avatar = models.ImageField(upload_to='testimonials/', blank=True, null=True, validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])])
+    rating = models.IntegerField(default=5, help_text="1 to 5 stars")
     is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Testimonial"
-        verbose_name_plural = "Testimonials"
-        ordering = ['-created_at']
+        ordering = ['display_order', '-created_at']
 
     def __str__(self):
-        return f"{self.author_name} - {self.author_title}"
+        return f"{self.name} - {self.role}"
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, max_length=255)
+    content = models.TextField()
+    excerpt = models.TextField(blank=True, help_text="Short description for the blog listing page")
+    featured_image = models.ImageField(upload_to='blog/', blank=True, null=True, validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])])
+    author_name = models.CharField(max_length=100, default="Aura Team")
+    is_published = models.BooleanField(default=False)
+    published_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-published_at', '-created_at']
+
+    def __str__(self):
+        return self.title
 
 class PlatformIntegration(models.Model):
     CATEGORY_CHOICES = [
@@ -309,3 +376,16 @@ class SystemAuditLog(models.Model):
     def __str__(self):
         actor_name = self.actor.username if self.actor else "System/Anonymous"
         return f"[{self.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {actor_name} {self.action} {self.model_name} ({self.object_id})"
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Message from {self.name} ({self.email})"

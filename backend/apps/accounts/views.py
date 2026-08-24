@@ -40,25 +40,48 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
+from apps.fitting.models import FitPassport, VTOPhotoVault, VirtualTryOn
+
 @login_required(login_url='/login/')
 def profile_view(request):
     user = request.user
     profile, created = ConsumerProfile.objects.get_or_create(user=user)
+    passport, created_passport = FitPassport.objects.get_or_create(user=user)
     
     if request.method == 'POST' and request.FILES.get('base_photo'):
-        profile.base_photo = request.FILES['base_photo']
-        profile.save()
+        uploaded_file = request.FILES['base_photo']
+        
+        # Create a new VTOPhotoVault entry
+        vault_entry = VTOPhotoVault.objects.create(
+            passport=passport,
+            image=uploaded_file,
+            is_default=True
+        )
         
         # Trigger Python Computer Vision script
-        measurements = analyze_body_proportions(profile.base_photo.path)
-        profile.shoulder_width_cm = measurements['shoulder_width_cm']
-        profile.waist_cm = measurements['waist_cm']
-        profile.skin_tone_category = measurements['skin_tone_category']
+        measurements = analyze_body_proportions(vault_entry.image.path)
+        passport.shoulder_width_cm = measurements.get('shoulder_width_cm')
+        passport.waist_cm = measurements.get('waist_cm')
+        passport.save()
+        
+        profile.skin_tone_category = measurements.get('skin_tone_category')
         profile.save()
         
         return redirect('profile')
         
-    return render(request, 'accounts/profile.html', {'profile': profile})
+    # Get all Try-Ons linked to the user's sessions
+    try_ons = VirtualTryOn.objects.filter(session__passport=passport).order_by('-created_at')
+    
+    # Get the default photo vault
+    default_photo = passport.photos.filter(is_default=True).first()
+        
+    context = {
+        'profile': profile,
+        'passport': passport,
+        'default_photo': default_photo,
+        'try_ons': try_ons,
+    }
+    return render(request, 'accounts/profile.html', context)
 
 from django.contrib.auth.models import User
 from django.contrib import messages

@@ -176,7 +176,18 @@
                     {{ cms.footer_text|default:"© 2026 Aura Virtual Try-On. All rights reserved." }}
                 </p>
                 <div class="flex items-center space-x-4 mt-4 md:mt-0 text-sm text-slate-500">
-                    <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span> All systems operational</div>
+                    {% if cms.social_twitter %}
+                        <a href="{{ cms.social_twitter }}" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition transform hover:scale-110"><i class="fa-brands fa-x-twitter text-lg"></i></a>
+                    {% endif %}
+                    {% if cms.social_instagram %}
+                        <a href="{{ cms.social_instagram }}" target="_blank" rel="noopener noreferrer" class="hover:text-rose-500 transition transform hover:scale-110"><i class="fa-brands fa-instagram text-lg"></i></a>
+                    {% endif %}
+                    {% if cms.social_linkedin %}
+                        <a href="{{ cms.social_linkedin }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 transition transform hover:scale-110"><i class="fa-brands fa-linkedin text-lg"></i></a>
+                    {% endif %}
+                    {% if cms.social_facebook %}
+                        <a href="{{ cms.social_facebook }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition transform hover:scale-110"><i class="fa-brands fa-facebook text-lg"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>

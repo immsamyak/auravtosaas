@@ -8,6 +8,9 @@ from .landing_page import LandingPageConfigUpdateView
 from .pages_footer import PageListView, PageCreateView, PageUpdateView
 from .footer_sections import FooterSectionListView, FooterSectionCreateView, FooterSectionUpdateView
 from .testimonials import TestimonialListView, TestimonialCreateView, TestimonialUpdateView
+from .blogs import BlogPostListView, BlogPostCreateView, BlogPostUpdateView, BlogPostDeleteView
+from .contact_messages import ContactMessageListView, ContactMessageDetailView, ContactMessageDeleteView
+from .landing_page_features import LandingPageFeatureListView, LandingPageFeatureCreateView, LandingPageFeatureUpdateView, LandingPageFeatureDeleteView
 from .feature_flags import FeatureFlagListView, FeatureFlagCreateView, FeatureFlagUpdateView
 from .platform_integrations import PlatformIntegrationListView, PlatformIntegrationCreateView, PlatformIntegrationUpdateView
 from .global_settings import GlobalSettingsUpdateView
@@ -67,6 +70,17 @@ urlpatterns = [
     path('testimonial/', TestimonialListView.as_view(), name='testimonial_list'),
     path('testimonial/add/', TestimonialCreateView.as_view(), name='testimonial_add'),
     path('testimonial/<str:pk>/', TestimonialUpdateView.as_view(), name='testimonial_edit'),
+    path('blogpost/', BlogPostListView.as_view(), name='blogpost_list'),
+    path('blogpost/add/', BlogPostCreateView.as_view(), name='blogpost_add'),
+    path('blogpost/<str:pk>/', BlogPostUpdateView.as_view(), name='blogpost_edit'),
+    path('blogpost/<str:pk>/delete/', BlogPostDeleteView.as_view(), name='blogpost_delete'),
+    path('contactmessage/', ContactMessageListView.as_view(), name='contactmessage_list'),
+    path('contactmessage/<str:pk>/', ContactMessageDetailView.as_view(), name='contactmessage_edit'),
+    path('contactmessage/<str:pk>/delete/', ContactMessageDeleteView.as_view(), name='contactmessage_delete'),
+    path('landingpagefeature/', LandingPageFeatureListView.as_view(), name='landingpagefeature_list'),
+    path('landingpagefeature/add/', LandingPageFeatureCreateView.as_view(), name='landingpagefeature_add'),
+    path('landingpagefeature/<str:pk>/', LandingPageFeatureUpdateView.as_view(), name='landingpagefeature_edit'),
+    path('landingpagefeature/<str:pk>/delete/', LandingPageFeatureDeleteView.as_view(), name='landingpagefeature_delete'),
     path('featureflag/', FeatureFlagListView.as_view(), name='featureflag_list'),
     path('featureflag/add/', FeatureFlagCreateView.as_view(), name='featureflag_add'),
     path('featureflag/<str:pk>/', FeatureFlagUpdateView.as_view(), name='featureflag_edit'),

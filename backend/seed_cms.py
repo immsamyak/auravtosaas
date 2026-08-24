@@ -1,96 +1,169 @@
 import os
 import django
-import sys
+from datetime import timedelta
+from django.utils import timezone
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from apps.core.models import LandingPageConfig, LandingPageFeature
+from apps.core.models import BlogPost, Testimonial, LandingPageFeature, LandingPageConfig
 
 def seed_cms():
-    print("Seeding CMS data...")
-    
-    # Create config
-    config, created = LandingPageConfig.objects.get_or_create(
-        is_active=True,
-        defaults={
-            'hero_headline': 'The ultimate AI fitting room for modern fashion brands',
-            'hero_subheadline': 'Stop dealing with returns due to poor sizing. Aura uses state-of-the-art Generative AI and Computer Vision to let your customers try on your entire catalog virtually.',
-            'hero_primary_cta': 'Start your Store',
-            'hero_secondary_cta': 'Brand Login',
-            'demo_title': 'Experience it live',
-            'demo_subtitle': 'Trusted Brands',
-            'footer_text': '© 2026 Aura Virtual Try-On. All rights reserved.'
-        }
-    )
-    
-    if created:
-        print("Created default LandingPageConfig.")
-    else:
-        print("LandingPageConfig already exists. Adding features if they are missing.")
-        
-    # Create Features
-    features = [
+    # Ensure config exists
+    config = LandingPageConfig.objects.first()
+    if not config:
+        config = LandingPageConfig.objects.create()
+
+    # Create Landing Page Features
+    features_data = [
         # Brand Features
-        {
-            'audience': 'BRAND',
-            'title': 'Reduce Return Rates',
-            'description': 'Customers who can visualize the fit are 40% less likely to return items due to sizing issues, saving you thousands in reverse logistics.',
-            'icon_class': 'fa-solid fa-arrow-right-arrow-left',
-            'display_order': 1,
-        },
-        {
-            'audience': 'BRAND',
-            'title': 'Boost Conversion',
-            'description': 'Increase buyer confidence. Shoppers who use virtual try-on are 3x more likely to complete their purchase.',
-            'icon_class': 'fa-solid fa-chart-line',
-            'display_order': 2,
-        },
-        {
-            'audience': 'BRAND',
-            'title': 'Plug & Play Storefront',
-            'description': 'Launch your own virtual storefront in minutes without writing a single line of code. Simply upload your catalog and go.',
-            'icon_class': 'fa-solid fa-store',
-            'display_order': 3,
-        },
+        {'config': config, 'audience': 'BRAND', 'icon_class': 'fa-solid fa-chart-line', 'title': 'Increase Conversions', 'description': 'Watch your sales skyrocket as users buy with confidence.', 'display_order': 1},
+        {'config': config, 'audience': 'BRAND', 'icon_class': 'fa-solid fa-arrow-turn-down', 'title': 'Reduce Returns', 'description': 'Cut down return rates by up to 40% with accurate sizing visualization.', 'display_order': 2},
+        {'config': config, 'audience': 'BRAND', 'icon_class': 'fa-solid fa-users', 'title': 'Boost Engagement', 'description': 'Shoppers spend 3x more time on sites with virtual try-on.', 'display_order': 3},
+        {'config': config, 'audience': 'BRAND', 'icon_class': 'fa-solid fa-bolt', 'title': 'Easy Integration', 'description': 'Add our widget to your store in minutes, no coding required.', 'display_order': 4},
         
         # Shopper Features
+        {'config': config, 'audience': 'SHOPPER', 'icon_class': 'fa-solid fa-shirt', 'title': 'Try Before You Buy', 'description': 'See exactly how the garment looks and fits on your body.', 'display_order': 1},
+        {'config': config, 'audience': 'SHOPPER', 'icon_class': 'fa-solid fa-mobile-screen', 'title': 'Works Anywhere', 'description': 'Access your virtual wardrobe from any device, anytime.', 'display_order': 2},
+        {'config': config, 'audience': 'SHOPPER', 'icon_class': 'fa-solid fa-wand-magic-sparkles', 'title': 'AI Powered', 'description': 'Our advanced AI preserves lighting, wrinkles, and fabric details.', 'display_order': 3},
+        {'config': config, 'audience': 'SHOPPER', 'icon_class': 'fa-solid fa-leaf', 'title': 'Eco Friendly', 'description': 'Help reduce carbon emissions by returning fewer items.', 'display_order': 4},
+    ]
+    
+    for f_data in features_data:
+        LandingPageFeature.objects.update_or_create(
+            config=config, 
+            title=f_data['title'],
+            audience=f_data['audience'],
+            defaults=f_data
+        )
+    print("Seeded Landing Page Features.")
+
+    # Create 5 Blog Posts
+    blogs_data = [
         {
-            'audience': 'SHOPPER',
-            'title': 'Frictionless Guest Mode',
-            'description': 'No account required. Upload a photo and see yourself in any outfit instantly. Your privacy is protected.',
-            'icon_class': 'fa-solid fa-bolt',
+            'title': 'The Future of AI in Fashion Retail',
+            'slug': 'future-of-ai-fashion-retail',
+            'excerpt': 'Discover how Generative AI and Computer Vision are reshaping the way we shop for clothes online.',
+            'content': '<h2>Introduction</h2><p>The fashion industry is undergoing a massive transformation powered by artificial intelligence...</p><p>With virtual try-ons, brands are seeing a massive reduction in return rates.</p>',
+            'author_name': 'Sarah Jenkins',
+            'is_published': True,
+            'published_at': timezone.now() - timedelta(days=2),
+        },
+        {
+            'title': 'Reducing E-commerce Return Rates',
+            'slug': 'reducing-ecommerce-return-rates',
+            'excerpt': 'High return rates eat into profit margins. Learn actionable strategies to reduce them today.',
+            'content': '<h2>The Problem of Returns</h2><p>In the world of fashion e-commerce, returns are the silent killer of profitability. One of the primary reasons is poor fit.</p><p>Aura solves this by letting users visualize garments on themselves before purchasing.</p>',
+            'author_name': 'David Chen',
+            'is_published': True,
+            'published_at': timezone.now() - timedelta(days=5),
+        },
+        {
+            'title': 'Virtual Try-On: A Must Have for 2026',
+            'slug': 'virtual-try-on-must-have-2026',
+            'excerpt': 'Why brands not adopting VTO technology are falling behind the competition.',
+            'content': '<h2>Why Now?</h2><p>Consumers expect more than just static images. They want interactive, personalized experiences.</p><h3>The Solution</h3><p>Integrating a virtual try-on widget is easier than ever with platforms like Aura.</p>',
+            'author_name': 'Emily Rose',
+            'is_published': True,
+            'published_at': timezone.now() - timedelta(days=10),
+        },
+        {
+            'title': 'Sustainable Fashion Through Better Fit',
+            'slug': 'sustainable-fashion-through-better-fit',
+            'excerpt': 'How improving sizing accuracy contributes to a greener planet.',
+            'content': '<h2>Sustainability in Tech</h2><p>Fewer returns mean fewer shipping emissions and less packaging waste. By ensuring customers get the right size the first time, we can significantly reduce the carbon footprint of fashion retail.</p>',
+            'author_name': 'Michael Green',
+            'is_published': True,
+            'published_at': timezone.now() - timedelta(days=15),
+        },
+        {
+            'title': 'Getting Started with Aura Integration',
+            'slug': 'getting-started-with-aura-integration',
+            'excerpt': 'A technical guide to adding the Aura VTO widget to your Shopify or WooCommerce store.',
+            'content': '<h2>Integration is Simple</h2><p>You do not need an entire engineering team to integrate Aura. Simply copy the JavaScript snippet from your dashboard and paste it into your site\'s head tag.</p><p>We support Shopify, WooCommerce, and custom builds.</p>',
+            'author_name': 'Alex Carter',
+            'is_published': True,
+            'published_at': timezone.now() - timedelta(days=20),
+        }
+    ]
+
+    for data in blogs_data:
+        BlogPost.objects.update_or_create(slug=data['slug'], defaults=data)
+    
+    print("Seeded 5 Blog Posts.")
+
+    # Create 5 Testimonials
+    testimonials_data = [
+        {
+            'content': "Aura completely revolutionized our online store. Our return rate dropped by 40% in just two months.",
+            'name': 'Jessica Smith',
+            'role': 'Founder, Urban Style',
+            'is_active': True,
             'display_order': 1,
         },
         {
-            'audience': 'SHOPPER',
-            'title': 'Personalized Fit',
-            'description': 'Our AI analyzes your body proportions to recommend the absolute perfect size for your unique body type.',
-            'icon_class': 'fa-solid fa-ruler',
+            'content': "The integration was seamless and the AI generation is incredibly realistic. Our customers love it.",
+            'name': 'Marcus Johnson',
+            'role': 'CTO, Modern Thread',
+            'is_active': True,
             'display_order': 2,
         },
         {
-            'audience': 'SHOPPER',
-            'title': 'Hyper-Realistic AI',
-            'description': 'We use state of the art diffusion models to ensure the lighting, drape, and texture of the clothes look real.',
-            'icon_class': 'fa-solid fa-wand-magic-sparkles',
+            'content': "Since implementing Aura's virtual try-on, our conversion rates have doubled. It's a game-changer.",
+            'name': 'Linda Williams',
+            'role': 'E-commerce Director, Chic Boutique',
+            'is_active': True,
             'display_order': 3,
+        },
+        {
+            'content': "We used to struggle with sizing charts. Now, the AI does the heavy lifting, and shoppers buy with confidence.",
+            'name': 'Thomas Brown',
+            'role': 'CEO, Everyday Wear',
+            'is_active': True,
+            'display_order': 4,
+        },
+        {
+            'content': "The support team at Aura is fantastic, and the technology speaks for itself. Highly recommended.",
+            'name': 'Chloe Davis',
+            'role': 'Marketing Head, Couture GenZ',
+            'is_active': True,
+            'display_order': 5,
+        }
+    ]
+
+    for data in testimonials_data:
+        Testimonial.objects.update_or_create(name=data['name'], defaults=data)
+
+    print("Seeded 5 Testimonials.")
+    
+    from apps.core.models import FAQItem
+    faq_data = [
+        {
+            'question': 'How long does it take to integrate Aura into my store?',
+            'answer': 'Most brands integrate our Virtual Try-On widget within 24 hours. If you use Shopify or WooCommerce, our plugin makes it a one-click process.',
+            'display_order': 1,
+        },
+        {
+            'question': 'Do I need a special camera to upload clothing?',
+            'answer': 'No! You can use standard flat-lay photos or ghost mannequin shots. Our AI automatically extracts the garment and understands its physical properties.',
+            'display_order': 2,
+        },
+        {
+            'question': 'How much does it cost?',
+            'answer': 'We offer flexible pricing starting at $99/mo for emerging brands, and enterprise plans that scale with your usage. You only pay for the compute you use.',
+            'display_order': 3,
+        },
+        {
+            'question': 'Is shopper data secure?',
+            'answer': 'Yes. We are SOC2 compliant and never sell or share shopper photos. All uploaded identities are securely vaulted and used solely for synthesis.',
+            'display_order': 4,
         }
     ]
     
-    for feat in features:
-        LandingPageFeature.objects.get_or_create(
-            config=config,
-            title=feat['title'],
-            defaults={
-                'audience': feat['audience'],
-                'description': feat['description'],
-                'icon_class': feat['icon_class'],
-                'display_order': feat['display_order']
-            }
-        )
+    for data in faq_data:
+        FAQItem.objects.update_or_create(question=data['question'], defaults=data)
         
-    print("Seed complete.")
+    print("Seeded 4 FAQ Items.")
 
 if __name__ == '__main__':
     seed_cms()

@@ -1,0 +1,100 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    {% include "components/breadcrumb.html" with current="Landing Page Feature Management" %}
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Landing Page Feature <span class="text-indigo-600 font-light">Management</span></h1>
+            <p class="text-slate-500 mt-1">Manage all Landing Page Feature records.</p>
+        </div>
+        <a href="{% url 'admin:landingpagefeature_add' %}" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">
+            + New Feature
+        </a>
+    </div>
+    
+    <!-- Real-Time Async Filter UI -->
+    <div x-data="{
+        search: '',
+        filters: {},
+        loading: false,
+        
+        updateTable() {
+            this.loading = true;
+            let params = new URLSearchParams();
+            if (this.search) params.append('q', this.search);
+            for (let [k, v] of Object.entries(this.filters)) {
+                if (v) params.append(k, v);
+            }
+            
+            fetch(window.location.pathname + '?' + params.toString(), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.text())
+            .then(html => {
+                let doc = new DOMParser().parseFromString(html, 'text/html');
+                let newTable = doc.querySelector('#table-container').innerHTML;
+                document.querySelector('#table-container').innerHTML = newTable;
+                this.loading = false;
+            });
+        }
+    }">
+        <div class="mb-6 flex flex-wrap gap-4 items-center">
+            <div class="relative flex-1 min-w-[250px]">
+                <input type="text" x-model="search" @input.debounce.300ms="updateTable()" placeholder="Type to search features..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-slate-800 placeholder-slate-400">
+                <svg class="w-5 h-5 absolute left-4 top-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            
+        <select x-model="filters.audience" @change="updateTable()" class="px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium text-slate-700 bg-white shadow-sm cursor-pointer min-w-[140px]">
+            <option value="">Any Audience</option>
+            <option value="BRAND">Brand Owners</option>
+            <option value="SHOPPER">Shoppers / End Users</option>
+        </select>
+
+            <div x-show="loading" class="text-indigo-600 ml-2" x-cloak>
+                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </div>
+        </div>
+        
+        <div id="table-container" class="relative">
+            <!-- Table Container -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto min-h-[300px]"><table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-16">Icon</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Title</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Audience</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Order</th>
+                    <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objects %}
+                <tr class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
+                    <td class="p-4 text-lg text-indigo-500"><i class="{{ obj.icon_class }}"></i></td>
+                    <td class="p-4 text-sm font-bold text-slate-900">{{ obj.title }}</td>
+                    <td class="p-4 text-sm text-slate-600">
+                        {% if obj.audience == 'BRAND' %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 shadow-sm">Brand Owners</span>
+                        {% else %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">Shoppers</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4 text-sm text-slate-600">{{ obj.display_order }}</td>
+                    <td class="p-4 text-sm text-right space-x-3">
+                        <a href="{% url 'admin:landingpagefeature_edit' obj.pk %}" class="text-indigo-600 font-bold hover:text-indigo-800 transition">Edit</a>
+                        <form method="POST" action="{% url 'admin:landingpagefeature_delete' obj.pk %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-rose-600 font-bold hover:text-rose-800 transition" onclick="return confirm('Delete this feature?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table></div>
+        {% include "components/pagination.html" %}
+    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

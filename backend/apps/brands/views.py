@@ -3,16 +3,29 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.brands.models import Brand, BrandStaff, MediaAsset, APIKey, WebhookEndpoint
 from apps.analytics.services import DashboardAnalyticsService
-from apps.core.models import LandingPageConfig, LandingPageFeature
+from apps.core.models import LandingPageConfig, LandingPageFeature, Testimonial, BlogPost, ContactMessage, FAQItem
 from apps.catalog.models import Product
 from apps.billing.models import SubscriptionPlan
 
 def index_view(request):
     """Platform homepage showing all brands and SaaS landing content"""
+    if request.method == 'POST' and 'contact_form' in request.POST:
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        if name and email and message:
+            ContactMessage.objects.create(name=name, email=email, message=message)
+            messages.success(request, "Your message has been sent. We'll get back to you soon!")
+            return redirect('index')
+
     config = LandingPageConfig.objects.filter(is_active=True).first()
     brand_features = LandingPageFeature.objects.filter(config=config, audience='BRAND').order_by('display_order')
     shopper_features = LandingPageFeature.objects.filter(config=config, audience='SHOPPER').order_by('display_order')
     brands = Brand.objects.filter(status='ACTIVE')[:6]
+    
+    testimonials = Testimonial.objects.filter(is_active=True).order_by('display_order', '-created_at')
+    latest_blogs = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:3]
+    faqs = FAQItem.objects.filter(is_active=True).order_by('display_order')
     
     plans = SubscriptionPlan.objects.all().order_by('monthly_price')
 
@@ -21,6 +34,8 @@ def index_view(request):
         'brand_features': brand_features,
         'shopper_features': shopper_features,
         'brands': brands,
+        'testimonials': testimonials,
+        'latest_blogs': latest_blogs,
         'plans': plans,
     })
 
