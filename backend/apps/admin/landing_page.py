@@ -1,4 +1,4 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -6,7 +6,7 @@ from apps.core.models import LandingPageConfig
 
 from django.contrib import messages
 
-class LandingPageConfigUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class LandingPageConfigUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = LandingPageConfig
     template_name = 'admin/core/landingpageconfig/form.html'
     fields = '__all__'

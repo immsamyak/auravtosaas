@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.brands.models import StoreTheme
 
-class StoreThemeListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class StoreThemeListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = StoreTheme
     template_name = 'admin/brands/storetheme/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class StoreThemeListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
     search_fields = ['name', 'business_type', 'description', 'template_folder']
     filter_fields = ['is_active']
 
-class StoreThemeCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class StoreThemeCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = StoreTheme
     template_name = 'admin/brands/storetheme/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:storetheme_list')
 
-class StoreThemeUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class StoreThemeUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = StoreTheme
     template_name = 'admin/brands/storetheme/form.html'
     fields = '__all__'

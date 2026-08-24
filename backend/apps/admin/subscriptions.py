@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.billing.models import BrandSubscription
 
-class BrandSubscriptionListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class BrandSubscriptionListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = BrandSubscription
     template_name = 'admin/billing/brandsubscription/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class BrandSubscriptionListView(SuperUserRequiredMixin, SearchFilterMixin, ListV
     search_fields = ['status', 'stripe_customer_id', 'stripe_subscription_id']
     filter_fields = ['brand', 'plan', 'status']
 
-class BrandSubscriptionCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class BrandSubscriptionCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = BrandSubscription
     template_name = 'admin/billing/brandsubscription/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:brandsubscription_list')
 
-class BrandSubscriptionUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class BrandSubscriptionUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = BrandSubscription
     template_name = 'admin/billing/brandsubscription/form.html'
     fields = '__all__'

@@ -1,9 +1,9 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 from django.views.generic import ListView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from apps.core.models import ContactMessage
 
-class ContactMessageListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class ContactMessageListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = ContactMessage
     template_name = 'admin/core/contactmessage/list.html'
     context_object_name = 'objects'
@@ -11,7 +11,7 @@ class ContactMessageListView(SuperUserRequiredMixin, SearchFilterMixin, ListView
     search_fields = ['name', 'email', 'message']
     filter_fields = ['is_read']
 
-class ContactMessageDetailView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class ContactMessageDetailView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = ContactMessage
     template_name = 'admin/core/contactmessage/form.html'
     fields = ['is_read']
@@ -25,7 +25,7 @@ class ContactMessageDetailView(SuperUserRequiredMixin, TailwindFormViewMixin, Up
             self.object.save()
         return context
 
-class ContactMessageDeleteView(SuperUserRequiredMixin, DeleteView):
+class ContactMessageDeleteView(PlatformAdminRequiredMixin, DeleteView):
     model = ContactMessage
     template_name = 'admin/core/contactmessage/delete.html'
     success_url = reverse_lazy('admin:contactmessage_list')

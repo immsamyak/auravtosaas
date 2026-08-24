@@ -1,8 +1,8 @@
 from django.views.generic import ListView
-from apps.admin.mixins import SuperUserRequiredMixin
+from apps.admin.mixins import PlatformAdminRequiredMixin
 from apps.fitting.models import VirtualTryOn
 
-class VTOQueueDashboardView(SuperUserRequiredMixin, ListView):
+class VTOQueueDashboardView(PlatformAdminRequiredMixin, ListView):
     model = VirtualTryOn
     template_name = 'admin/vto_queue.html'
     context_object_name = 'jobs'
@@ -24,7 +24,7 @@ class VTOQueueDashboardView(SuperUserRequiredMixin, ListView):
         
         return context
 
-class QAModerationView(SuperUserRequiredMixin, ListView):
+class QAModerationView(PlatformAdminRequiredMixin, ListView):
     model = VirtualTryOn
     template_name = 'admin/qa_moderation.html'
     context_object_name = 'jobs'
@@ -47,7 +47,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.utils import timezone
 
-class QAModerationActionView(SuperUserRequiredMixin, View):
+class QAModerationActionView(PlatformAdminRequiredMixin, View):
     def post(self, request, pk, action):
         job = get_object_or_404(VirtualTryOn, pk=pk)
         if action == 'approve':

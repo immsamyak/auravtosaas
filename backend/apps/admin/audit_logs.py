@@ -1,8 +1,8 @@
 from django.views.generic import ListView
 from apps.core.models import SystemAuditLog
-from .mixins import SuperUserRequiredMixin
+from .mixins import PlatformAdminRequiredMixin
 
-class AuditLogListView(SuperUserRequiredMixin, ListView):
+class AuditLogListView(PlatformAdminRequiredMixin, ListView):
     model = SystemAuditLog
     template_name = 'admin/audit/list.html'
     context_object_name = 'logs'

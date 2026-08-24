@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.orders.models import ShippingZone
 
-class ShippingZoneListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class ShippingZoneListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = ShippingZone
     template_name = 'admin/orders/shippingzone/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class ShippingZoneListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
     search_fields = ['name', 'estimated_days']
     filter_fields = ['brand', 'is_active']
 
-class ShippingZoneCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class ShippingZoneCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = ShippingZone
     template_name = 'admin/orders/shippingzone/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:shippingzone_list')
 
-class ShippingZoneUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class ShippingZoneUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = ShippingZone
     template_name = 'admin/orders/shippingzone/form.html'
     fields = '__all__'

@@ -110,12 +110,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Cache Configuration
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://:bx2Ee2Q8grqKcWfawRwCVoz8YKyQsqciijqsSmUIe1PDZIOnbbYj9liWJ2c6jQDp@64.227.167.223:6379/1',
+if os.environ.get('USE_REDIS', 'False').lower() == 'true':
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+            'OPTIONS': {
+                'socket_connect_timeout': 2,
+                'socket_timeout': 2,
+            }
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'aura-local-cache',
+        }
+    }
 
 
 # Database

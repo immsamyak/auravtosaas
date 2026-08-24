@@ -1,4 +1,4 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import TemplateView
 from apps.brands.models import Brand
@@ -14,7 +14,7 @@ from django.db import connection
 import platform
 import subprocess
 
-class DashboardView(SuperUserRequiredMixin, TemplateView):
+class DashboardView(PlatformAdminRequiredMixin, TemplateView):
     template_name = 'admin/dashboard.html'
 
     def get_context_data(self, **kwargs):
@@ -137,21 +137,32 @@ class DashboardView(SuperUserRequiredMixin, TemplateView):
         context['sys_uptime'] = f"{int(days)}d {int(hours)}h {int(minutes)}m"
         context['sys_db_latency'] = db_latency
         
-        # Redis Cache Hit Rate (Real-time from Coolify server)
+        # Redis Cache Hit Rate (Real-time from server)
         try:
             import redis
-            r = redis.Redis(
-                host='64.227.167.223',
-                port=6379,
-                db=1,
-                password='bx2Ee2Q8grqKcWfawRwCVoz8YKyQsqciijqsSmUIe1PDZIOnbbYj9liWJ2c6jQDp',
-                decode_responses=True
-            )
-            info = r.info('stats')
-            hits = info.get('keyspace_hits', 0)
-            misses = info.get('keyspace_misses', 0)
-            total = hits + misses
-            context['sys_cache_hit_rate'] = round((hits / total * 100), 1) if total > 0 else 0.0
+            import os
+            from urllib.parse import urlparse
+            
+            if os.environ.get('USE_REDIS', 'False').lower() == 'true':
+                redis_url = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1')
+                parsed_url = urlparse(redis_url)
+                
+                r = redis.Redis(
+                    host=parsed_url.hostname or '127.0.0.1',
+                    port=parsed_url.port or 6379,
+                    db=int(parsed_url.path.lstrip('/')) if parsed_url.path and parsed_url.path != '/' else 1,
+                    password=parsed_url.password,
+                    decode_responses=True,
+                    socket_connect_timeout=2,
+                    socket_timeout=2
+                )
+                info = r.info('stats')
+                hits = info.get('keyspace_hits', 0)
+                misses = info.get('keyspace_misses', 0)
+                total = hits + misses
+                context['sys_cache_hit_rate'] = round((hits / total * 100), 1) if total > 0 else 0.0
+            else:
+                context['sys_cache_hit_rate'] = "Disabled"
         except Exception:
             context['sys_cache_hit_rate'] = "Offline"
             

@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.accounts.models import UserPhotoProfile
 
-class UserPhotoProfileListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class UserPhotoProfileListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = UserPhotoProfile
     template_name = 'admin/accounts/userphotoprofile/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class UserPhotoProfileListView(SuperUserRequiredMixin, SearchFilterMixin, ListVi
     search_fields = ['session_key', 'processing_status']
     filter_fields = ['user', 'processing_status', 'is_default']
 
-class UserPhotoProfileCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class UserPhotoProfileCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = UserPhotoProfile
     template_name = 'admin/accounts/userphotoprofile/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:userphotoprofile_list')
 
-class UserPhotoProfileUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class UserPhotoProfileUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = UserPhotoProfile
     template_name = 'admin/accounts/userphotoprofile/form.html'
     fields = '__all__'

@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.recommendations.models import SizeRecommendation
 
-class SizeRecommendationListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class SizeRecommendationListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = SizeRecommendation
     template_name = 'admin/recommendations/sizerecommendation/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class SizeRecommendationListView(SuperUserRequiredMixin, SearchFilterMixin, List
     search_fields = ['recommended_size', 'fit_type']
     filter_fields = ['user', 'product']
 
-class SizeRecommendationCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class SizeRecommendationCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = SizeRecommendation
     template_name = 'admin/recommendations/sizerecommendation/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:sizerecommendation_list')
 
-class SizeRecommendationUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class SizeRecommendationUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = SizeRecommendation
     template_name = 'admin/recommendations/sizerecommendation/form.html'
     fields = '__all__'

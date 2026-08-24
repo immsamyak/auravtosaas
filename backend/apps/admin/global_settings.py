@@ -1,11 +1,11 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin
 
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from apps.core.models import GlobalSettings
 
-class GlobalSettingsUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class GlobalSettingsUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = GlobalSettings
     template_name = 'admin/core/globalsettings/form.html'
     fields = '__all__'

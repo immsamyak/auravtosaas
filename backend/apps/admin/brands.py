@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.brands.models import Brand
 
-class BrandListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class BrandListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = Brand
     template_name = 'admin/brands/brand/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class BrandListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
     search_fields = ['name', 'slug', 'contact_email', 'status', 'description', 'support_email', 'support_phone', 'address', 'instagram_url', 'facebook_url', 'tiktok_url', 'twitter_url', 'pinterest_url', 'currency_code', 'currency_symbol']
     filter_fields = ['owner', 'theme', 'status']
 
-class BrandCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class BrandCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = Brand
     template_name = 'admin/brands/brand/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:brand_list')
 
-class BrandUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class BrandUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = Brand
     template_name = 'admin/brands/brand/form.html'
     fields = '__all__'
@@ -30,7 +30,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.models import User
 
-class ImpersonateBrandView(SuperUserRequiredMixin, View):
+class ImpersonateBrandView(PlatformAdminRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         brand = get_object_or_404(Brand, pk=pk)
         if brand.owner:

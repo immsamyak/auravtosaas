@@ -1,4 +1,4 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 from apps.core.models import SystemSetting, FeatureFlag, BrandSetting

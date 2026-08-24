@@ -122,6 +122,9 @@ class MediaAsset(models.Model):
     def __str__(self):
         return self.name
 
+    def get_team(self):
+        return self.staff_members.all()
+
 class APIKey(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='api_keys')
     name = models.CharField(max_length=100)

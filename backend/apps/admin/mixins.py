@@ -5,14 +5,33 @@ from .widgets import TailwindImageWidget
 from django.contrib import messages
 
 class SuperUserRequiredMixin(UserPassesTestMixin):
-    """
-    Restricts view access exclusively to active superusers.
-    Redirects unauthenticated or unauthorized users to the admin login page.
-    """
+    """Restricts access exclusively to active superusers (Owner/Sysadmin)."""
     login_url = reverse_lazy('admin:login')
-
     def test_func(self):
         return self.request.user.is_active and self.request.user.is_superuser
+
+class PlatformAdminRequiredMixin(UserPassesTestMixin):
+    """Restricts access to Superusers and Platform Admins (SaaS operations)."""
+    login_url = reverse_lazy('admin:login')
+    def test_func(self):
+        user = self.request.user
+        if not user.is_active:
+            return False
+        if user.is_superuser:
+            return True
+        return user.groups.filter(name='Platform Admin').exists()
+
+class PlatformSupportRequiredMixin(UserPassesTestMixin):
+    """Restricts access to Superusers, Admins, and Support staff."""
+    login_url = reverse_lazy('admin:login')
+    def test_func(self):
+        user = self.request.user
+        if not user.is_active:
+            return False
+        if user.is_superuser:
+            return True
+        return user.groups.filter(name__in=['Platform Admin', 'Platform Support']).exists()
+
 
 
 class TailwindFormViewMixin:

@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.catalog.models import ProductAIProfile
 
-class ProductAIProfileListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class ProductAIProfileListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = ProductAIProfile
     template_name = 'admin/catalog/productaiprofile/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class ProductAIProfileListView(SuperUserRequiredMixin, SearchFilterMixin, ListVi
     search_fields = ['item_type', 'fit_type', 'material', 'processing_status']
     filter_fields = ['product_variant', 'processing_status']
 
-class ProductAIProfileCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class ProductAIProfileCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = ProductAIProfile
     template_name = 'admin/catalog/productaiprofile/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:productaiprofile_list')
 
-class ProductAIProfileUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class ProductAIProfileUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = ProductAIProfile
     template_name = 'admin/catalog/productaiprofile/form.html'
     fields = '__all__'

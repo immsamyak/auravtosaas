@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.orders.models import Order
 
-class OrderListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class OrderListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = Order
     template_name = 'admin/orders/order/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class OrderListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
     search_fields = ['status', 'payment_provider', 'payment_reference_id', 'shipping_provider', 'tracking_number', 'customer_name', 'customer_phone', 'shipping_address']
     filter_fields = ['user', 'brand', 'status', 'shipping_zone']
 
-class OrderCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class OrderCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = Order
     template_name = 'admin/orders/order/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:order_list')
 
-class OrderUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class OrderUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = Order
     template_name = 'admin/orders/order/form.html'
     fields = '__all__'

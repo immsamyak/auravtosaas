@@ -1,10 +1,10 @@
-from .mixins import SuperUserRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
+from .mixins import PlatformAdminRequiredMixin, TailwindFormViewMixin, SearchFilterMixin
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from apps.brands.models import BrandIntegration
 
-class BrandIntegrationListView(SuperUserRequiredMixin, SearchFilterMixin, ListView):
+class BrandIntegrationListView(PlatformAdminRequiredMixin, SearchFilterMixin, ListView):
     model = BrandIntegration
     template_name = 'admin/brands/brandintegration/list.html'
     context_object_name = 'objects'
@@ -12,13 +12,13 @@ class BrandIntegrationListView(SuperUserRequiredMixin, SearchFilterMixin, ListVi
     search_fields = []
     filter_fields = ['brand', 'integration', 'is_active']
 
-class BrandIntegrationCreateView(SuperUserRequiredMixin, TailwindFormViewMixin, CreateView):
+class BrandIntegrationCreateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, CreateView):
     model = BrandIntegration
     template_name = 'admin/brands/brandintegration/form.html'
     fields = '__all__'
     success_url = reverse_lazy('admin:brandintegration_list')
 
-class BrandIntegrationUpdateView(SuperUserRequiredMixin, TailwindFormViewMixin, UpdateView):
+class BrandIntegrationUpdateView(PlatformAdminRequiredMixin, TailwindFormViewMixin, UpdateView):
     model = BrandIntegration
     template_name = 'admin/brands/brandintegration/form.html'
     fields = '__all__'
