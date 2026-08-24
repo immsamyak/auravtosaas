@@ -18,7 +18,7 @@ class NotificationManager:
             subject=campaign.subject,
             template_name='emails/custom_campaign.html',
             context=context,
-            recipient_list=[user.email]
+            to_emails=[user.email]
         )
 
     @staticmethod

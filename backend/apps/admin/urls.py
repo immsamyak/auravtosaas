@@ -73,6 +73,9 @@ urlpatterns = [
         path('', __import__('apps.admin.views.notifications', fromlist=['']).NotificationCampaignListView.as_view(), name='notification_list'),
         path('create/', __import__('apps.admin.views.notifications', fromlist=['']).NotificationCampaignCreateView.as_view(), name='notification_create'),
         path('test/', __import__('apps.admin.views.notifications', fromlist=['']).test_email_api, name='notification_test'),
+        path('templates/', __import__('apps.admin.views.notifications', fromlist=['']).SystemEmailTemplateListView.as_view(), name='notification_template_list'),
+        path('templates/<int:pk>/edit/', __import__('apps.admin.views.notifications', fromlist=['']).SystemEmailTemplateUpdateView.as_view(), name='notification_template_edit'),
+
     ])),
 
     # Auto-scaffolded

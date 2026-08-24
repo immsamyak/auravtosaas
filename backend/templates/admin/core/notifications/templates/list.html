@@ -1,0 +1,64 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-6">
+    {% include "components/breadcrumb.html" with current="System Templates" parent="Notification Manager" parent_url="admin:notification_list" %}
+    
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">System <span class="text-indigo-600 font-light">Templates</span></h1>
+            <p class="text-sm text-slate-500 mt-2">Manage the HTML templates for automatic transactional emails.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="bg-slate-100 p-1 rounded-xl flex shadow-inner">
+                <a href="{% url 'admin:notification_list' %}" class="px-4 py-2 text-sm font-bold text-slate-500 rounded-lg hover:text-slate-900 transition">Custom Campaigns</a>
+                <a href="{% url 'admin:notification_template_list' %}" class="px-4 py-2 text-sm font-bold bg-white text-indigo-600 shadow-sm rounded-lg">System Templates</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-sm font-bold text-slate-600 uppercase tracking-wider">
+                        <th class="px-6 py-4">Event Type</th>
+                        <th class="px-6 py-4">Subject</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for template in templates %}
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 font-bold text-slate-900">
+                            {{ template.get_event_type_display }}
+                            <div class="text-xs text-slate-500 font-normal mt-1">{{ template.event_type }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-600 font-medium">{{ template.subject }}</td>
+                        <td class="px-6 py-4">
+                            {% if template.is_active %}
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-200">Active</span>
+                            {% else %}
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">System Default</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'admin:notification_template_edit' template.pk %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition">
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-12 text-center text-slate-500">
+                            <p class="font-bold text-slate-900">No templates found</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

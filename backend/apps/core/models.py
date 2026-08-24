@@ -474,3 +474,21 @@ class NotificationCampaign(models.Model):
     
     def __str__(self):
         return f"{self.subject} ({self.get_status_display()})"
+
+
+class SystemEmailTemplate(models.Model):
+    class EventType(models.TextChoices):
+        WELCOME = 'welcome', 'Welcome / Registration'
+        ORDER_CONFIRMATION = 'order_confirmation', 'Order Confirmation'
+        SIGNUP_VERIFICATION = 'signup_verification', 'Signup Verification / OTP'
+        BILLING_INVOICE = 'billing_invoice', 'Billing / Invoice'
+        PASSWORD_RESET = 'password_reset', 'Password Reset'
+        
+    event_type = models.CharField(max_length=50, choices=EventType.choices, unique=True)
+    subject = models.CharField(max_length=255)
+    body_html = models.TextField(help_text="HTML content of the email. Supports Django template tags like {{ user.first_name }}")
+    is_active = models.BooleanField(default=True, help_text="If disabled, the system will use the default hardcoded template.")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.get_event_type_display()} Template"

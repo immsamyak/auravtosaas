@@ -1,18 +1,21 @@
 {% extends "admin/admin_base.html" %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto space-y-6">
-    <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-        <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Compose Campaign</h1>
-            <p class="text-sm text-slate-500 mt-1">Create and schedule a new custom notification.</p>
-        </div>
-        <a href="{% url 'admin:notification_list' %}" class="text-slate-500 hover:text-slate-900 font-bold text-sm transition">
-            <i class="fa-solid fa-arrow-left mr-2"></i> Back to List
+<div class="max-w-7xl mx-auto space-y-6">
+    <div class="mb-4">
+        <a href="{% url 'admin:notification_list' %}" class="text-slate-400 hover:text-indigo-600 font-bold text-sm transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Notification Manager
         </a>
     </div>
+    
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Compose <span class="text-indigo-600 font-light">Campaign</span></h1>
+            <p class="text-sm text-slate-500 mt-2">Create and schedule a new custom notification.</p>
+        </div>
+    </div>
 
-    <form method="post" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6" x-data="{ audience: '{{ form.instance.target_audience|default:"all_users" }}' }">
+    <form method="post" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6" x-data="{ audience: '{{ form.instance.target_audience|default:"all_users" }}' }">
         {% csrf_token %}
         
         {% if form.non_field_errors %}
@@ -61,7 +64,7 @@
         </div>
 
         <div class="pt-6 border-t border-slate-100 flex justify-end">
-            <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-500/20 transition flex items-center gap-2">
+            <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(79,70,229,0.3)] transition flex items-center gap-2">
                 <i class="fa-solid fa-paper-plane"></i> Save & Queue
             </button>
         </div>

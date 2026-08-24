@@ -1,0 +1,98 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-6" x-data="{ 
+    htmlContent: '', 
+    init() {
+        this.htmlContent = $refs.htmlInput.value;
+        this.$watch('htmlContent', value => {
+            $refs.htmlInput.value = value;
+        });
+    }
+}">
+    <div class="mb-4">
+        <a href="{% url 'admin:notification_template_list' %}" class="text-slate-400 hover:text-indigo-600 font-bold text-sm transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to System Templates
+        </a>
+    </div>
+    
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Edit <span class="text-indigo-600 font-light">{{ form.instance.get_event_type_display }}</span></h1>
+            <p class="text-sm text-slate-500 mt-2">Customize the email for the <strong>{{ form.instance.event_type }}</strong> event.</p>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl shadow-sm">
+            {{ form.is_active }}
+            <div>
+                <label class="text-sm font-bold text-slate-900 cursor-pointer" for="{{ form.is_active.id_for_label }}">Enable Custom Template</label>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        <div class="hidden">{{ form.is_active }}</div> <!-- Hidden because we moved it to the header -->
+        
+        {% if form.non_field_errors %}
+        <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl mb-6">
+            {% for error in form.non_field_errors %}
+                <p class="text-sm font-bold text-rose-600"><i class="fa-solid fa-triangle-exclamation mr-2"></i> {{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.subject.label }} *</label>
+                {{ form.subject }}
+                {% for error in form.subject.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <!-- HTML Editor -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col h-[700px]">
+                <div class="bg-slate-800 px-4 py-3 flex justify-between items-center border-b border-slate-700">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-code text-indigo-400"></i>
+                        <span class="text-sm font-bold text-white tracking-wide">HTML EDITOR</span>
+                    </div>
+                    <span class="text-xs text-slate-400">Supports Django tags like {% verbatim %}{{ user.first_name }}{% endverbatim %}</span>
+                </div>
+                <div class="relative flex-grow p-4">
+                    <textarea 
+                        name="{{ form.body_html.name }}"
+                        id="{{ form.body_html.id_for_label }}"
+                        x-ref="htmlInput"
+                        x-model="htmlContent"
+                        class="w-full h-full bg-transparent text-slate-300 font-mono text-sm leading-relaxed focus:outline-none resize-none border-none placeholder-slate-600"
+                        placeholder="Write your email HTML here..."
+                        spellcheck="false"
+                    >{{ form.body_html.value|default_if_none:"" }}</textarea>
+                </div>
+                {% for error in form.body_html.errors %}<div class="bg-rose-900/50 px-4 py-2 border-t border-rose-800"><p class="text-xs text-rose-400 font-bold">{{ error }}</p></div>{% endfor %}
+            </div>
+
+            <!-- Live Preview -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[700px]">
+                <div class="bg-slate-50 px-4 py-3 flex justify-between items-center border-b border-slate-200">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-eye text-indigo-600"></i>
+                        <span class="text-sm font-bold text-slate-700 tracking-wide">LIVE PREVIEW</span>
+                    </div>
+                </div>
+                <div class="flex-grow bg-[#f3f4f6] relative">
+                    <!-- Use iframe for isolated CSS preview -->
+                    <iframe class="w-full h-full border-none" :srcdoc="htmlContent"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-6 flex justify-end">
+            <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(79,70,229,0.3)] transition flex items-center gap-2">
+                <i class="fa-solid fa-save"></i> Save Template
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

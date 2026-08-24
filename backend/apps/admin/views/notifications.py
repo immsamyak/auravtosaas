@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from apps.core.models import NotificationCampaign, GlobalSettings
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -72,10 +72,40 @@ def test_email_api(request):
             subject=f"Aura Test - {settings.get_email_provider_display()}",
             template_name='emails/custom_campaign.html',
             context={'body_html': f'<p>This is a test of the <strong>{settings.email_provider.upper()}</strong> API integration via Django Anymail.</p>'},
-            recipient_list=[request.user.email]
+            to_emails=[request.user.email]
         )
         messages.success(request, f"Test email sent successfully to {request.user.email} using {settings.email_provider.upper()} API!")
     except Exception as e:
         messages.error(request, f"Failed to send test email: {str(e)}")
         
     return redirect('admin:notification_list')
+
+
+from apps.core.models import SystemEmailTemplate
+
+class SystemEmailTemplateListView(SuperAdminRequiredMixin, ListView):
+    model = SystemEmailTemplate
+    template_name = 'admin/core/notifications/templates/list.html'
+    context_object_name = 'templates'
+    
+    def get_queryset(self):
+        # Ensure all types exist in the DB
+        for evt, _ in SystemEmailTemplate.EventType.choices:
+            SystemEmailTemplate.objects.get_or_create(
+                event_type=evt,
+                defaults={
+                    'subject': f"{evt.replace('_', ' ').title()}",
+                    'body_html': "<p>Hello {{ user.first_name|default:'User' }},</p><p>This is a default template.</p>"
+                }
+            )
+        return SystemEmailTemplate.objects.all().order_by('event_type')
+
+class SystemEmailTemplateUpdateView(SuperAdminRequiredMixin, UpdateView):
+    model = SystemEmailTemplate
+    template_name = 'admin/core/notifications/templates/form.html'
+    fields = ['subject', 'body_html', 'is_active']
+    success_url = reverse_lazy('admin:notification_template_list')
+    
+    def form_valid(self, form):
+        messages.success(self.request, f"Template for {self.object.get_event_type_display()} updated successfully.")
+        return super().form_valid(form)
