@@ -1,0 +1,39 @@
+{% extends "admin/admin_base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    {% include "components/breadcrumb.html" with current="Edit DeliveryProvince" %}
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">{% if object %}Edit{% else %}Create{% endif %} <span class="text-indigo-600 font-light">DeliveryProvince</span></h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        {% csrf_token %}
+        
+        <div class="p-8 space-y-6">
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700 mb-2">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="mt-2 text-xs text-slate-500">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                <div class="mt-2 text-sm text-red-600 font-medium">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="px-8 py-5 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
+            <a href="{% url 'admin:deliveryprovince_list' %}" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm">Cancel</a>
+            <button type="submit" class="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-md">
+                <i class="fa-solid fa-check mr-2"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

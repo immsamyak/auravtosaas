@@ -1,0 +1,149 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Reports & Analytics{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    <!-- Header -->
+    <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Reports & <span class="text-indigo-600 font-light">Analytics</span></h1>
+            <p class="text-slate-500 mt-2 text-sm font-medium">Export and analyze your store's performance date-wise.</p>
+        </div>
+        <div class="flex space-x-3">
+            <a href="?export={{ filter_tab }}&range={{ filter_range }}" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 shadow-sm text-sm font-bold rounded-xl text-slate-700 bg-white hover:bg-slate-50 transition-all focus:outline-none">
+                <i class="fa-solid fa-file-csv mr-2 text-emerald-500"></i> Export to CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-wrap items-end gap-4">
+        <input type="hidden" name="tab" value="{{ filter_tab }}">
+        <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Time Range</label>
+            <select name="range" class="block w-full rounded-lg border-slate-300 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="7" {% if filter_range == '7' %}selected{% endif %}>Last 7 Days</option>
+                <option value="30" {% if filter_range == '30' %}selected{% endif %}>Last 30 Days</option>
+                <option value="90" {% if filter_range == '90' %}selected{% endif %}>Last 90 Days</option>
+                <option value="365" {% if filter_range == '365' %}selected{% endif %}>Year to Date</option>
+                <option value="all" {% if filter_range == 'all' %}selected{% endif %}>All Time</option>
+            </select>
+        </div>
+        <button type="submit" class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
+            Update View
+        </button>
+    </form>
+    
+    <!-- Tabs -->
+    <div class="border-b border-slate-200 mb-8">
+        <nav class="-mb-px flex space-x-8">
+            <a href="?tab=finance&range={{ filter_range }}" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm {% if filter_tab == 'finance' %}border-indigo-500 text-indigo-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+                Orders & Finance
+            </a>
+            <a href="?tab=products&range={{ filter_range }}" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm {% if filter_tab == 'products' %}border-indigo-500 text-indigo-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+                Product Performance
+            </a>
+            <a href="?tab=customers&range={{ filter_range }}" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm {% if filter_tab == 'customers' %}border-indigo-500 text-indigo-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+                Customers
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Content -->
+    {% if filter_tab == 'finance' %}
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Period Revenue</h3>
+                <span class="text-3xl font-extrabold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ total_revenue }}</span>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Total Orders</h3>
+                <span class="text-3xl font-extrabold text-slate-900">{{ total_orders }}</span>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Completed Orders</h3>
+                <span class="text-3xl font-extrabold text-emerald-600">{{ completed_orders }}</span>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Order ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    {% for o in recent_orders %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">#{{ o.id|truncatechars:10 }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ o.created_at|date:"M d, Y" }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600">{{ o.status }}</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold">{{ request.user.owned_brand.get_currency_symbol }}{{ o.calc_grand_total }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="px-6 py-4 text-center text-sm text-slate-500">No orders in this period.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    {% elif filter_tab == 'products' %}
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Product Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Variant</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">SKU</th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Units Sold</th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Revenue</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    {% for p in product_performance %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">{{ p.product_variant__product__name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ p.product_variant__color__name }} / {{ p.product_variant__size__code }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ p.product_variant__sku|default:"-" }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-slate-600">{{ p.sold }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-emerald-600">{{ request.user.owned_brand.get_currency_symbol }}{{ p.rev }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="px-6 py-4 text-center text-sm text-slate-500">No sales data in this period.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    {% elif filter_tab == 'customers' %}
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Email / Phone</th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Orders</th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Lifetime Value</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    {% for c in customers %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">{{ c.customer_name|default:"Unknown" }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ c.customer_email|default:"-" }} <br> <span class="text-xs text-slate-400">{{ c.customer_phone|default:"" }}</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-slate-600">{{ c.order_count }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-indigo-600">{{ request.user.owned_brand.get_currency_symbol }}{{ c.total_spent }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="px-6 py-4 text-center text-sm text-slate-500">No customers found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

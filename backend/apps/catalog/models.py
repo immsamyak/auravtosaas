@@ -83,6 +83,13 @@ class Product(models.Model):
     price = models.DecimalField(validators=[MinValueValidator(Decimal('0.00'))], max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
     is_vto_ready = models.BooleanField(default=False)
+    
+    # SEO Settings
+    seo_title = models.CharField(max_length=150, blank=True, null=True, help_text="Product SEO Title (max 150 chars)")
+    seo_description = models.TextField(blank=True, null=True, help_text="Product SEO Meta Description")
+    seo_keywords = models.CharField(max_length=255, blank=True, null=True, help_text="Comma separated keywords")
+    seo_og_image = models.ImageField(validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])], upload_to='product_seo/', blank=True, null=True, help_text="OpenGraph Image for social sharing")
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
 

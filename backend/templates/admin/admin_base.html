@@ -59,6 +59,17 @@
                 </div>
             </div>
 
+            <!-- Marketing & Growth -->
+            <div>
+                <div class="px-4 pt-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Marketing & Growth</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:popupbanner_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-bullhorn w-6 text-slate-400"></i> Popup Banners</a>
+                    <a href="{% url 'admin:coupon_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-ticket w-6 text-slate-400"></i> Coupons</a>
+                    <a href="{% url 'admin:newslettersubscriber_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-envelope-open-text w-6 text-slate-400"></i> Subscribers</a>
+                    <a href="{% url 'admin:emailcampaign_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-paper-plane w-6 text-slate-400"></i> Email Campaigns</a>
+                </div>
+            </div>
+
             <!-- CMS & Content -->
             <div>
                 <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">CMS & Content</div>
@@ -81,8 +92,10 @@
                 <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Catalog</div>
                 <div class="space-y-1">
                     <a href="{% url 'admin:product_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-box w-6 text-slate-400"></i> Products</a>
+                    <a href="{% url 'admin:collection_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-layer-group w-6 text-slate-400"></i> Collections</a>
                     <a href="{% url 'admin:productvariant_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-tags w-6 text-slate-400"></i> Variants</a>
-                    <a href="{% url 'admin:category_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-layer-group w-6 text-slate-400"></i> Categories</a>
+                    <a href="{% url 'admin:productreview_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-star-half-stroke w-6 text-slate-400"></i> Reviews</a>
+                    <a href="{% url 'admin:category_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-folder w-6 text-slate-400"></i> Categories</a>
                     <a href="{% url 'admin:producttype_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-shirt w-6 text-slate-400"></i> Product Types</a>
                     <a href="{% url 'admin:productaiprofile_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-brain w-6 text-slate-400"></i> Product AI Profiles</a>
                     <a href="{% url 'admin:color_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-palette w-6 text-slate-400"></i> Colors</a>
@@ -99,6 +112,9 @@
                     <a href="{% url 'admin:stocklevel_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-cubes-stacked w-6 text-slate-400"></i> Stock Levels</a>
                     <a href="{% url 'admin:location_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-warehouse w-6 text-slate-400"></i> Locations</a>
                     <a href="{% url 'admin:shippingzone_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-truck-fast w-6 text-slate-400"></i> Shipping Zones</a>
+                    <a href="{% url 'admin:deliveryprovince_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-map-location-dot w-6 text-slate-400"></i> Delivery Provinces</a>
+                    <a href="{% url 'admin:deliverydistrict_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-map-pin w-6 text-slate-400"></i> Delivery Districts</a>
+                    <a href="{% url 'admin:deliverycity_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-building w-6 text-slate-400"></i> Delivery Cities</a>
                 </div>
             </div>
 
@@ -124,6 +140,9 @@
                 <div class="space-y-1">
                     <a href="{% url 'admin:order_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-cart-shopping w-6 text-slate-400"></i> Global Orders</a>
                     <a href="{% url 'admin:cart_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-bag-shopping w-6 text-slate-400"></i> Active Carts</a>
+                    <a href="{% url 'admin:returnrequest_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-arrow-rotate-left w-6 text-slate-400"></i> Return Requests</a>
+                    <a href="{% url 'admin:giftcard_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-gift w-6 text-slate-400"></i> Gift Cards</a>
+                    <a href="{% url 'admin:giftcardtransaction_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-receipt w-6 text-slate-400"></i> GC Transactions</a>
                 </div>
             </div>
 
@@ -133,6 +152,7 @@
                 <div class="space-y-1">
                     <a href="{% url 'admin:user_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-users-gear w-6 text-slate-400"></i> Admin Users</a>
                     <a href="{% url 'admin:group_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-shield-halved w-6 text-slate-400"></i> Roles & Groups</a>
+                    <a href="{% url 'admin:brandstaff_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-user-tie w-6 text-slate-400"></i> Tenant Teams</a>
                     <a href="{% url 'admin:consumerprofile_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-users w-6 text-slate-400"></i> Consumers</a>
                     <a href="{% url 'admin:userphotoprofile_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-camera-retro w-6 text-slate-400"></i> User Photo Profiles</a>
                 </div>
@@ -149,6 +169,16 @@
                     <a href="{% url 'admin:brandsubscription_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-money-check-dollar w-6 text-slate-400"></i> Active Subscriptions</a>
                     <a href="{% url 'admin:subscriptionplan_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-tags w-6 text-slate-400"></i> Subscription Plans</a>
                     <a href="{% url 'admin:audit_log_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-clock-rotate-left w-6 text-slate-400"></i> Security Audit Logs</a>
+                </div>
+            </div>
+
+            <!-- Developer API -->
+            <div>
+                <div class="px-4 pt-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Developer & API</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:apikey_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-key w-6 text-slate-400"></i> API Keys</a>
+                    <a href="{% url 'admin:webhookendpoint_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-satellite-dish w-6 text-slate-400"></i> Webhooks</a>
+                    <a href="{% url 'admin:apilog_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-server w-6 text-slate-400"></i> API Logs</a>
                 </div>
             </div>
             

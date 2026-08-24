@@ -7,7 +7,15 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>{% block title %}{{ brand.name|default:"SKATE CO" }}{% endblock %}</title>
+<!-- AIO SEO META TAGS -->
+<title>{% if product and product.seo_title %}{{ product.seo_title }}{% elif brand and brand.seo_title %}{{ brand.seo_title }}{% else %}{{ brand.name }}{% endif %}</title>
+<meta name="description" content="{% if product and product.seo_description %}{{ product.seo_description }}{% elif brand and brand.seo_description %}{{ brand.seo_description }}{% else %}{{ brand.description|default:'' }}{% endif %}">
+<meta name="keywords" content="{% if product and product.seo_keywords %}{{ product.seo_keywords }}{% elif brand and brand.seo_keywords %}{{ brand.seo_keywords }}{% endif %}">
+<meta property="og:title" content="{% if product and product.seo_title %}{{ product.seo_title }}{% elif brand and brand.seo_title %}{{ brand.seo_title }}{% else %}{{ brand.name }}{% endif %}">
+<meta property="og:description" content="{% if product and product.seo_description %}{{ product.seo_description }}{% elif brand and brand.seo_description %}{{ brand.seo_description }}{% else %}{{ brand.description|default:'' }}{% endif %}">
+<meta property="og:image" content="{% if product and product.seo_og_image %}{{ product.seo_og_image.url }}{% elif brand and brand.seo_og_image %}{{ brand.seo_og_image.url }}{% elif brand and brand.logo %}{{ brand.logo.url }}{% endif %}">
+<meta name="twitter:card" content="summary_large_image">
+<!-- END SEO META TAGS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -85,7 +93,7 @@
     </script>
 <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="flex flex-col min-h-screen antialiased text-skate-dark distressed selection:bg-skate-lime" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false }">
+<body class="flex flex-col min-h-screen antialiased text-skate-dark distressed selection:bg-skate-lime" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
 
     {% if brand.top_announcement_text %}
@@ -119,6 +127,9 @@
 
     <!-- Right Icons -->
     <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
+        <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
+            <i class="fa-solid fa-bars text-lg"></i>
+        </button>
         <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
             <i class="fa-solid fa-magnifying-glass text-lg"></i>
         </button>
@@ -385,5 +396,26 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
     {% render_brand_analytics brand %}
+
+<!-- Mobile Menu Modal -->
+<div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
+    <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div @click.stop="" class="relative w-64 max-w-sm bg-white h-full shadow-2xl transform transition-all flex flex-col"
+         x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
+         x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <span class="font-bold text-lg text-black">Menu</span>
+            <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 flex flex-col space-y-6 text-black flex-1 overflow-y-auto">
+            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

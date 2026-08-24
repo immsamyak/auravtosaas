@@ -135,8 +135,14 @@ def create_product_view(request):
             description=description, 
             category_id=category_id, 
             product_type_id=product_type_id,
-            price=price
+            price=price,
+            seo_title=request.POST.get('seo_title', ''),
+            seo_description=request.POST.get('seo_description', ''),
+            seo_keywords=request.POST.get('seo_keywords', '')
         )
+        if 'seo_og_image' in request.FILES:
+            product.seo_og_image = request.FILES['seo_og_image']
+            product.save()
         
         variant = ProductVariant.objects.create(
             product=product, 
@@ -225,6 +231,14 @@ def edit_product_view(request, product_id):
         product.category_id = request.POST.get('category')
         product.product_type_id = request.POST.get('product_type')
         product.price = request.POST.get('price')
+        
+        # SEO Settings
+        product.seo_title = request.POST.get('seo_title', product.seo_title)
+        product.seo_description = request.POST.get('seo_description', product.seo_description)
+        product.seo_keywords = request.POST.get('seo_keywords', product.seo_keywords)
+        if 'seo_og_image' in request.FILES:
+            product.seo_og_image = request.FILES['seo_og_image']
+            
         product.save()
         messages.success(request, f'Product "{product.name}" updated successfully.')
         return redirect('manage_products')

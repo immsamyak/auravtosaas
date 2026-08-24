@@ -62,11 +62,74 @@ def dashboard_view(request):
     if not brand:
         return redirect('index') # Regular users don't have a dashboard
 
-    metrics = DashboardAnalyticsService.get_dashboard_metrics(brand)
+    from apps.orders.models import Order
+    from apps.catalog.models import Product, ProductVariant
+    from apps.fitting.models import VirtualTryOn
+    from django.db.models import Sum, Count, F
+    from django.utils import timezone
+    import datetime
     
+    # Time ranges
+    today = timezone.now()
+    thirty_days_ago = today - datetime.timedelta(days=30)
+    
+    # Base Order Query
+    base_orders = Order.objects.filter(brand=brand, status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED'])
+    recent_orders = base_orders.filter(created_at__gte=thirty_days_ago)
+    
+    # Core Metrics
+    total_revenue = base_orders.annotate(calc=F('total_amount') + F('shipping_cost') + F('tax_amount') - F('discount_amount')).aggregate(Sum('calc'))['calc__sum'] or 0
+    total_orders = base_orders.count()
+    
+    # 30-Day Metrics
+    recent_revenue = recent_orders.annotate(calc=F('total_amount') + F('shipping_cost') + F('tax_amount') - F('discount_amount')).aggregate(Sum('calc'))['calc__sum'] or 0
+    recent_order_count = recent_orders.count()
+    
+    # Average Order Value
+    aov = (total_revenue / total_orders) if total_orders > 0 else 0
+    
+    # Top Products by Sales
+    from django.db.models import Sum as SumAgg
+    from apps.orders.models import OrderItem
+    top_products = OrderItem.objects.filter(order__brand=brand, order__status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']).values('product_variant__product__id', 'product_variant__product__name').annotate(
+        total_sold=SumAgg('quantity'),
+        total_revenue=SumAgg(F('price') * F('quantity'))
+    ).order_by('-total_sold')[:5]
+    
+    # Live Activity Feed (Latest Orders)
+    live_orders = Order.objects.filter(brand=brand).order_by('-created_at')[:6]
+    
+    # Chart Data (Revenue last 7 days)
+    from django.db.models.functions import TruncDate
+    daily_revenue = recent_orders.filter(created_at__gte=today - datetime.timedelta(days=7)).annotate(
+        date=TruncDate('created_at')
+    ).values('date').annotate(
+        rev=SumAgg(F('total_amount') + F('shipping_cost') + F('tax_amount') - F('discount_amount'))
+    )
+    rev_dict = {entry['date'].strftime('%b %d'): float(entry['rev'] or 0) for entry in daily_revenue if entry['date']}
+    
+    chart_labels = []
+    chart_data = []
+    for i in range(6, -1, -1):
+        date_label = (today - datetime.timedelta(days=i)).strftime('%b %d')
+        chart_labels.append(date_label)
+        chart_data.append(rev_dict.get(date_label, 0))
+
     context = {
         'brand': brand,
-        **metrics
+        'total_revenue': float(total_revenue),
+        'total_orders': total_orders,
+        'recent_revenue': float(recent_revenue),
+        'recent_order_count': recent_order_count,
+        'aov': float(aov),
+        'top_products': top_products,
+        'live_orders': live_orders,
+        'chart_labels': chart_labels,
+        'chart_data': chart_data,
+        # Keep old VTO metrics for compatibility if needed
+        'total_try_ons': VirtualTryOn.objects.filter(product_variant__product__brand=brand).count(),
+        'avg_confidence': 92, # dummy
+        'conversion_rate': 0
     }
     return render(request, 'brands/dashboard.html', context)
 
@@ -141,6 +204,14 @@ def brand_settings_view(request):
         brand.banner_subtitle = request.POST.get('banner_subtitle', brand.banner_subtitle)
         brand.banner_cta_text = request.POST.get('banner_cta_text', brand.banner_cta_text)
         brand.banner_cta_link = request.POST.get('banner_cta_link', brand.banner_cta_link)
+        
+        # SEO Settings
+        brand.seo_title = request.POST.get('seo_title', brand.seo_title)
+        brand.seo_description = request.POST.get('seo_description', brand.seo_description)
+        brand.seo_keywords = request.POST.get('seo_keywords', brand.seo_keywords)
+        
+        if 'seo_og_image' in request.FILES:
+            brand.seo_og_image = request.FILES['seo_og_image']
         
         # Advanced Customization
         brand.top_announcement_text = request.POST.get('top_announcement_text', brand.top_announcement_text)
@@ -554,7 +625,7 @@ def store_product_detail_view(request, slug, product_slug):
     })
 
 @login_required(login_url='/login/')
-def finance_view(request):
+def reports_view(request):
     # Multi-tenant Team Management Check
     brand = None
     if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
@@ -566,43 +637,39 @@ def finance_view(request):
             
     if not brand:
         return redirect('index')
-    
-    from apps.orders.models import Order
-    from django.db.models import Sum, Count, Q
+        
+    from apps.orders.models import Order, OrderItem
+    from apps.catalog.models import ProductVariant, Product
+    from django.db.models import Sum, Count, F, Q
     from django.db.models.functions import TruncDate
     from django.utils import timezone
     import datetime
-    import json
+    import csv
+    from django.http import HttpResponse as DjangoHttpResponse
     
-    # --- Filter logic ---
-    filter_status = request.GET.get('status', '')
-    filter_payment = request.GET.get('payment', '')
-    filter_range = request.GET.get('range', '30')  # default last 30 days
+    # Base filter
+    filter_range = request.GET.get('range', '30')
+    filter_tab = request.GET.get('tab', 'finance') # finance, products, customers
     
-    try:
-        days_back = int(filter_range)
-    except ValueError:
-        days_back = 30
-    
-    date_from = timezone.now() - datetime.timedelta(days=days_back)
-    
+    if filter_range == 'all':
+        date_from = timezone.now() - datetime.timedelta(days=3650) # 10 years
+    else:
+        try:
+            days_back = int(filter_range)
+        except ValueError:
+            days_back = 30
+        date_from = timezone.now() - datetime.timedelta(days=days_back)
+        
     orders_qs = Order.objects.filter(brand=brand, created_at__gte=date_from)
-    if filter_status:
-        orders_qs = orders_qs.filter(status=filter_status)
-    if filter_payment:
-        orders_qs = orders_qs.filter(payment_provider=filter_payment)
-    
-    from django.db.models import F
     orders_qs = orders_qs.annotate(
         calc_grand_total=F('total_amount') + F('shipping_cost') + F('tax_amount') - F('discount_amount')
     )
-
-    # --- CSV Export ---
-    if request.GET.get('export') == 'csv':
-        import csv
-        from django.http import HttpResponse as DjangoHttpResponse
+    
+    # --- CSV EXPORTS ---
+    export_type = request.GET.get('export', '')
+    if export_type == 'orders':
         response = DjangoHttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename="finance_export_{timezone.now().strftime("%Y%m%d")}.csv"'
+        response['Content-Disposition'] = f'attachment; filename="orders_report_{timezone.now().strftime("%Y%m%d")}.csv"'
         writer = csv.writer(response)
         writer.writerow(['Order ID', 'Customer', 'Phone', 'Items Total', 'Discount', 'Shipping', 'Grand Total', 'Coupon', 'Payment Method', 'Status', 'Date'])
         for o in orders_qs.order_by('-created_at'):
@@ -620,89 +687,93 @@ def finance_view(request):
                 o.created_at.strftime('%Y-%m-%d %H:%M'),
             ])
         return response
-    
-    # --- Stat cards (real data) ---
-    total_revenue = orders_qs.filter(status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']).aggregate(total=Sum('calc_grand_total'))['total'] or 0
-    pending_amount = orders_qs.filter(status='PENDING').aggregate(total=Sum('calc_grand_total'))['total'] or 0
-    total_orders = orders_qs.count()
-    paid_orders = orders_qs.filter(status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']).count()
-    
-    # --- Payment method breakdown ---
-    payment_breakdown = orders_qs.values('payment_provider').annotate(
-        count=Count('id'),
-        revenue=Sum('calc_grand_total')
-    ).order_by('-revenue')
-    
-    # Provide friendly labels
-    PAYMENT_LABELS = {
-        'CUSTOM_MANUAL': 'Cash / Bank / QR',
-        'ESEWA': 'eSewa',
-        'KHALTI': 'Khalti',
-        None: 'Not Set',
-        '': 'Not Set',
-    }
-    payment_methods_data = []
-    for entry in payment_breakdown:
-        provider = entry['payment_provider']
-        payment_methods_data.append({
-            'provider': PAYMENT_LABELS.get(provider, provider or 'Not Set'),
-            'count': entry['count'],
-            'revenue': float(entry['revenue'] or 0),
-        })
-    
-    # --- Daily revenue chart (real data) ---
-    daily_revenue = orders_qs.filter(
-        status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']
-    ).annotate(
-        day=TruncDate('created_at')
-    ).values('day').annotate(
-        revenue=Sum('calc_grand_total'),
-        day_count=Count('id')
-    ).order_by('day')
-    
-    revenue_dict = {}
-    for entry in daily_revenue:
-        if entry['day']:
-            revenue_dict[entry['day'].strftime('%b %d')] = float(entry['revenue'] or 0)
-    
-    chart_labels = []
-    chart_data = []
-    today = timezone.now().date()
-    for i in range(min(days_back, 30) - 1, -1, -1):
-        date_label = (today - datetime.timedelta(days=i)).strftime('%b %d')
-        chart_labels.append(date_label)
-        chart_data.append(revenue_dict.get(date_label, 0))
-    
-    # --- Recent orders (real) ---
-    recent_orders = orders_qs.order_by('-created_at')[:10]
-    
-    # --- Status breakdown ---
-    status_breakdown = orders_qs.values('status').annotate(count=Count('id'))
-    status_counts = {s['status']: s['count'] for s in status_breakdown}
-    
-    # Get unique payment providers for the filter dropdown
-    all_payment_providers = Order.objects.filter(brand=brand).values_list('payment_provider', flat=True).distinct()
-    provider_choices = []
-    for p in all_payment_providers:
-        if p:
-            provider_choices.append({'code': p, 'label': PAYMENT_LABELS.get(p, p)})
-    
-    return render(request, 'brands/finance.html', {
+        
+    elif export_type == 'products':
+        response = DjangoHttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="products_report_{timezone.now().strftime("%Y%m%d")}.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Product Name', 'Variant', 'SKU', 'Price', 'Units Sold', 'Revenue Generated'])
+        
+        products_data = OrderItem.objects.filter(order__brand=brand, order__created_at__gte=date_from, order__status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']).values(
+            'product_variant__product__name', 'product_variant__color__name', 'product_variant__size__code', 'product_variant__sku', 'price'
+        ).annotate(
+            sold=Sum('quantity'),
+            rev=Sum(F('price') * F('quantity'))
+        )
+        
+        for p in products_data:
+            writer.writerow([
+                p['product_variant__product__name'],
+                f"{p['product_variant__color__name']} / {p['product_variant__size__code']}",
+                p['product_variant__sku'] or 'N/A',
+                str(p['price']),
+                str(p['sold']),
+                str(p['rev'])
+            ])
+        return response
+        
+    elif export_type == 'customers':
+        response = DjangoHttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="customers_report_{timezone.now().strftime("%Y%m%d")}.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Customer Name', 'Phone', 'Email', 'Total Orders', 'Total Spent', 'Last Order Date'])
+        
+        customers = orders_qs.values('customer_name', 'customer_phone', 'customer_email').annotate(
+            order_count=Count('id'),
+            total_spent=Sum('calc_grand_total')
+        ).order_by('-total_spent')
+        
+        for c in customers:
+            if c['customer_name'] or c['customer_email']:
+                writer.writerow([
+                    c['customer_name'] or 'Unknown',
+                    c['customer_phone'] or 'N/A',
+                    c['customer_email'] or 'N/A',
+                    str(c['order_count']),
+                    str(c['total_spent']),
+                    'N/A' # Simplifying for now
+                ])
+        return response
+
+    # --- UI DATA COLLECTION ---
+    context = {
         'brand': brand,
-        'total_revenue': total_revenue,
-        'pending_amount': pending_amount,
-        'total_orders': total_orders,
-        'paid_orders': paid_orders,
-        'payment_methods_data': payment_methods_data,
-        'chart_labels': json.dumps(chart_labels),
-        'chart_data': json.dumps(chart_data),
-        'recent_orders': recent_orders,
-        'status_counts': status_counts,
-        'filter_status': filter_status,
-        'filter_payment': filter_payment,
         'filter_range': filter_range,
-        'provider_choices': provider_choices,
-    })
+        'filter_tab': filter_tab,
+    }
+    
+    if filter_tab == 'finance':
+        context['total_revenue'] = orders_qs.filter(status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']).aggregate(total=Sum('calc_grand_total'))['total'] or 0
+        context['total_orders'] = orders_qs.count()
+        context['completed_orders'] = orders_qs.filter(status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']).count()
+        context['recent_orders'] = orders_qs.order_by('-created_at')[:15]
+        
+    elif filter_tab == 'products':
+        product_performance = OrderItem.objects.filter(
+            order__brand=brand, 
+            order__created_at__gte=date_from,
+            order__status__in=['PAID', 'SHIPPED', 'DELIVERED', 'COMPLETED']
+        ).values(
+            'product_variant__product__name', 
+            'product_variant__color__name', 
+            'product_variant__size__code',
+            'product_variant__sku',
+            'product_variant__product__id'
+        ).annotate(
+            sold=Sum('quantity'),
+            rev=Sum(F('price') * F('quantity'))
+        ).order_by('-rev')
+        context['product_performance'] = product_performance
+        
+    elif filter_tab == 'customers':
+        customers = orders_qs.values('customer_name', 'customer_phone', 'customer_email').annotate(
+            order_count=Count('id'),
+            total_spent=Sum('calc_grand_total')
+        ).exclude(customer_name__isnull=True, customer_email__isnull=True).order_by('-total_spent')
+        context['customers'] = customers
+
+    return render(request, 'brands/reports.html', context)
+
 
 @login_required(login_url='/login/')
 def media_gallery_view(request):

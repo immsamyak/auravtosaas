@@ -49,6 +49,9 @@
                 <button type="button" @click="activeTab = 'status'" :class="{'bg-indigo-50 text-indigo-700 font-bold': activeTab === 'status', 'text-slate-600 hover:bg-slate-50 font-medium': activeTab !== 'status'}" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center">
                     <i class="fa-solid fa-power-off w-6 text-center mr-2"></i> Store Status
                 </button>
+                <button type="button" @click="activeTab = 'seo'" :class="{'bg-indigo-50 text-indigo-700 font-bold': activeTab === 'seo', 'text-slate-600 hover:bg-slate-50 font-medium': activeTab !== 'seo'}" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center">
+                    <i class="fa-solid fa-magnifying-glass-chart w-6 text-center mr-2"></i> SEO & Meta
+                </button>
                 <button type="button" @click="activeTab = 'pos'" :class="{'bg-indigo-50 text-indigo-700 font-bold': activeTab === 'pos', 'text-slate-600 hover:bg-slate-50 font-medium': activeTab !== 'pos'}" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center">
                     <i class="fa-solid fa-cash-register w-6 text-center mr-2"></i> POS & Display
                 </button>
@@ -343,6 +346,49 @@
                             <span class="text-slate-400 font-medium ml-2">@</span>
                         </div>
                         <input type="text" name="pinterest_url" id="pinterest_url" value="{{ social_usernames.pinterest }}" placeholder="yourbrand" class="block w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO & META TAB -->
+            <div x-show="activeTab === 'seo'" x-transition.opacity.duration.300ms style="display: none;" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4">Storefront SEO (Search Engine Optimization)</h3>
+                <p class="text-sm text-slate-500 mb-6">Manage how your storefront appears in Google Search and when shared on social media like Facebook, Twitter, and LinkedIn.</p>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="seo_title" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">SEO Meta Title</label>
+                        <input type="text" name="seo_title" id="seo_title" value="{{ brand.seo_title|default_if_none:"" }}" placeholder="e.g. Aura Fashion | Premium Minimalist Clothing" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        <p class="text-xs text-slate-500 mt-2">Recommended length: 50-60 characters.</p>
+                    </div>
+
+                    <div>
+                        <label for="seo_description" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">SEO Meta Description</label>
+                        <textarea name="seo_description" id="seo_description" rows="3" placeholder="e.g. Discover the latest trends in minimalist fashion..." class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder-slate-400">{{ brand.seo_description|default_if_none:"" }}</textarea>
+                        <p class="text-xs text-slate-500 mt-2">Recommended length: 150-160 characters.</p>
+                    </div>
+
+                    <div>
+                        <label for="seo_keywords" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">SEO Keywords</label>
+                        <input type="text" name="seo_keywords" id="seo_keywords" value="{{ brand.seo_keywords|default_if_none:"" }}" placeholder="e.g. fashion, minimalist clothing, premium wear" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        <p class="text-xs text-slate-500 mt-2">Comma separated.</p>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-6 mt-6">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-4">OpenGraph Social Sharing Image</label>
+                        <p class="text-sm text-slate-500 mb-4">This is the image that appears when people share your store URL on social media. (1200 x 630px recommended).</p>
+                        {% if brand.seo_og_image %}
+                        <div class="mb-4">
+                            <img src="{{ brand.seo_og_image.url }}" alt="OG Image" class="h-32 object-cover rounded-xl border border-slate-200 bg-slate-50">
+                        </div>
+                        {% endif %}
+                        <div class="relative group cursor-pointer w-64">
+                            <input type="file" name="seo_og_image" id="seo_og_image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center group-hover:border-indigo-500 group-hover:bg-indigo-50 transition-all">
+                                <i class="fa-solid fa-share-nodes text-xl text-slate-400 mb-2 group-hover:text-indigo-500"></i>
+                                <p class="text-sm font-medium text-slate-600 group-hover:text-indigo-600">Upload Image</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

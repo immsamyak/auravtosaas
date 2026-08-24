@@ -1,3 +1,17 @@
+from . import delivery_city
+from . import delivery_district
+from . import delivery_province
+from . import product_review
+from . import collection
+from . import gift_card_transaction
+from . import gift_card
+from . import api_log
+from . import webhook_endpoint
+from . import api_key
+from . import email_campaign
+from . import newsletter_subscriber
+from . import coupon
+from . import popup_banner
 
 from django.urls import path
 from .dashboard import DashboardView, AdminLoginView, AdminLogoutView
@@ -21,6 +35,8 @@ from .consumers import ConsumerProfileListView, ConsumerProfileCreateView, Consu
 from .user_photo_profiles import UserPhotoProfileListView, UserPhotoProfileCreateView, UserPhotoProfileUpdateView
 from .brands import BrandListView, BrandCreateView, BrandUpdateView, ImpersonateBrandView, ImpersonateRevertView
 from .brand_integrations import BrandIntegrationListView, BrandIntegrationCreateView, BrandIntegrationUpdateView
+from .returns import ReturnRequestListView, ReturnRequestUpdateView
+from .brand_staff import BrandStaffListView, BrandStaffUpdateView
 from .store_themes import StoreThemeListView, StoreThemeCreateView, StoreThemeUpdateView
 from .products import ProductListView, ProductCreateView, ProductUpdateView
 from .product_variants import ProductVariantListView, ProductVariantCreateView, ProductVariantUpdateView
@@ -210,4 +226,56 @@ urlpatterns = [
     path('subscriptionplan/add/', SubscriptionPlanCreateView.as_view(), name='subscriptionplan_add'),
     path('subscriptionplan/<str:pk>/', SubscriptionPlanUpdateView.as_view(), name='subscriptionplan_edit'),
     path('audit-logs/', AuditLogListView.as_view(), name='audit_log_list'),
+
+    # Brand Staff
+    path('brandstaff/', BrandStaffListView.as_view(), name='brandstaff_list'),
+    path('brandstaff/<str:pk>/', BrandStaffUpdateView.as_view(), name='brandstaff_edit'),
+
+    # Returns
+    path('returnrequest/', ReturnRequestListView.as_view(), name='returnrequest_list'),
+    path('returnrequest/<str:pk>/', ReturnRequestUpdateView.as_view(), name='returnrequest_edit'),
+
+    # Auto-scaffolded
+    path('brands/popupbanner/', popup_banner.PopupBannerListView.as_view(), name='popupbanner_list'),
+    path('brands/popupbanner/create/', popup_banner.PopupBannerCreateView.as_view(), name='popupbanner_create'),
+    path('brands/popupbanner/<int:pk>/edit/', popup_banner.PopupBannerUpdateView.as_view(), name='popupbanner_edit'),
+    path('brands/coupon/', coupon.CouponListView.as_view(), name='coupon_list'),
+    path('brands/coupon/create/', coupon.CouponCreateView.as_view(), name='coupon_create'),
+    path('brands/coupon/<int:pk>/edit/', coupon.CouponUpdateView.as_view(), name='coupon_edit'),
+    path('brands/newslettersubscriber/', newsletter_subscriber.NewsletterSubscriberListView.as_view(), name='newslettersubscriber_list'),
+    path('brands/newslettersubscriber/create/', newsletter_subscriber.NewsletterSubscriberCreateView.as_view(), name='newslettersubscriber_create'),
+    path('brands/newslettersubscriber/<int:pk>/edit/', newsletter_subscriber.NewsletterSubscriberUpdateView.as_view(), name='newslettersubscriber_edit'),
+    path('brands/emailcampaign/', email_campaign.EmailCampaignListView.as_view(), name='emailcampaign_list'),
+    path('brands/emailcampaign/create/', email_campaign.EmailCampaignCreateView.as_view(), name='emailcampaign_create'),
+    path('brands/emailcampaign/<int:pk>/edit/', email_campaign.EmailCampaignUpdateView.as_view(), name='emailcampaign_edit'),
+    path('brands/apikey/', api_key.APIKeyListView.as_view(), name='apikey_list'),
+    path('brands/apikey/create/', api_key.APIKeyCreateView.as_view(), name='apikey_create'),
+    path('brands/apikey/<int:pk>/edit/', api_key.APIKeyUpdateView.as_view(), name='apikey_edit'),
+    path('brands/webhookendpoint/', webhook_endpoint.WebhookEndpointListView.as_view(), name='webhookendpoint_list'),
+    path('brands/webhookendpoint/create/', webhook_endpoint.WebhookEndpointCreateView.as_view(), name='webhookendpoint_create'),
+    path('brands/webhookendpoint/<int:pk>/edit/', webhook_endpoint.WebhookEndpointUpdateView.as_view(), name='webhookendpoint_edit'),
+    path('brands/apilog/', api_log.APILogListView.as_view(), name='apilog_list'),
+    path('brands/apilog/create/', api_log.APILogCreateView.as_view(), name='apilog_create'),
+    path('brands/apilog/<int:pk>/edit/', api_log.APILogUpdateView.as_view(), name='apilog_edit'),
+    path('shopping/giftcard/', gift_card.GiftCardListView.as_view(), name='giftcard_list'),
+    path('shopping/giftcard/create/', gift_card.GiftCardCreateView.as_view(), name='giftcard_create'),
+    path('shopping/giftcard/<int:pk>/edit/', gift_card.GiftCardUpdateView.as_view(), name='giftcard_edit'),
+    path('shopping/giftcardtransaction/', gift_card_transaction.GiftCardTransactionListView.as_view(), name='giftcardtransaction_list'),
+    path('shopping/giftcardtransaction/create/', gift_card_transaction.GiftCardTransactionCreateView.as_view(), name='giftcardtransaction_create'),
+    path('shopping/giftcardtransaction/<int:pk>/edit/', gift_card_transaction.GiftCardTransactionUpdateView.as_view(), name='giftcardtransaction_edit'),
+    path('catalog/collection/', collection.CollectionListView.as_view(), name='collection_list'),
+    path('catalog/collection/create/', collection.CollectionCreateView.as_view(), name='collection_create'),
+    path('catalog/collection/<int:pk>/edit/', collection.CollectionUpdateView.as_view(), name='collection_edit'),
+    path('catalog/productreview/', product_review.ProductReviewListView.as_view(), name='productreview_list'),
+    path('catalog/productreview/create/', product_review.ProductReviewCreateView.as_view(), name='productreview_create'),
+    path('catalog/productreview/<int:pk>/edit/', product_review.ProductReviewUpdateView.as_view(), name='productreview_edit'),
+    path('orders/deliveryprovince/', delivery_province.DeliveryProvinceListView.as_view(), name='deliveryprovince_list'),
+    path('orders/deliveryprovince/create/', delivery_province.DeliveryProvinceCreateView.as_view(), name='deliveryprovince_create'),
+    path('orders/deliveryprovince/<int:pk>/edit/', delivery_province.DeliveryProvinceUpdateView.as_view(), name='deliveryprovince_edit'),
+    path('orders/deliverydistrict/', delivery_district.DeliveryDistrictListView.as_view(), name='deliverydistrict_list'),
+    path('orders/deliverydistrict/create/', delivery_district.DeliveryDistrictCreateView.as_view(), name='deliverydistrict_create'),
+    path('orders/deliverydistrict/<int:pk>/edit/', delivery_district.DeliveryDistrictUpdateView.as_view(), name='deliverydistrict_edit'),
+    path('orders/deliverycity/', delivery_city.DeliveryCityListView.as_view(), name='deliverycity_list'),
+    path('orders/deliverycity/create/', delivery_city.DeliveryCityCreateView.as_view(), name='deliverycity_create'),
+    path('orders/deliverycity/<int:pk>/edit/', delivery_city.DeliveryCityUpdateView.as_view(), name='deliverycity_edit'),
 ]

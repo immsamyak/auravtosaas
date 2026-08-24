@@ -93,6 +93,55 @@
                 </div>
             </div>
 
+            <!-- SEO & Meta Card -->
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                <div class="p-8 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-1">SEO & Meta (Optional)</h3>
+                        <p class="text-sm text-slate-500 font-medium">Optimize how this product appears on Google and social media.</p>
+                    </div>
+                    <div class="h-12 w-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
+                        <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+                    </div>
+                </div>
+                
+                <div class="p-8 space-y-6">
+                    <div>
+                        <label for="seo_title" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">SEO Meta Title</label>
+                        <input type="text" name="seo_title" id="seo_title" value="{{ product.seo_title|default_if_none:"" }}" placeholder="e.g. Minimalist White Tee - Aura Fashion" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        <p class="text-xs text-slate-500 mt-2">Recommended length: 50-60 characters.</p>
+                    </div>
+
+                    <div>
+                        <label for="seo_description" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">SEO Meta Description</label>
+                        <textarea name="seo_description" id="seo_description" rows="3" placeholder="e.g. Shop the Minimalist White Tee at Aura Fashion..." class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder-slate-400">{{ product.seo_description|default_if_none:"" }}</textarea>
+                        <p class="text-xs text-slate-500 mt-2">Recommended length: 150-160 characters.</p>
+                    </div>
+
+                    <div>
+                        <label for="seo_keywords" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">SEO Keywords</label>
+                        <input type="text" name="seo_keywords" id="seo_keywords" value="{{ product.seo_keywords|default_if_none:"" }}" placeholder="e.g. white tee, minimalist, cotton t-shirt" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-6 mt-6">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-4">OpenGraph Social Sharing Image</label>
+                        <p class="text-sm text-slate-500 mb-4">This is the image that appears when people share this product URL on social media. (1200 x 630px recommended).</p>
+                        {% if product.seo_og_image %}
+                        <div class="mb-4">
+                            <img src="{{ product.seo_og_image.url }}" alt="OG Image" class="h-32 object-cover rounded-xl border border-slate-200 bg-slate-50">
+                        </div>
+                        {% endif %}
+                        <div class="relative group cursor-pointer w-64">
+                            <input type="file" name="seo_og_image" id="seo_og_image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center group-hover:border-indigo-500 group-hover:bg-indigo-50 transition-all">
+                                <i class="fa-solid fa-share-nodes text-xl text-slate-400 mb-2 group-hover:text-indigo-500"></i>
+                                <p class="text-sm font-medium text-slate-600 group-hover:text-indigo-600">Upload Image</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="pt-6 border-t border-slate-100 flex items-center justify-end space-x-4">
                 <a href="{% url 'manage_products' %}" class="px-6 py-3 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">

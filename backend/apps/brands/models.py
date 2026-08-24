@@ -72,6 +72,12 @@ class Brand(models.Model):
     b2b_discount_percent = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), validators=[MinValueValidator(Decimal('0.00')), MaxValueValidator(Decimal('100.00'))], help_text="Global B2B discount percentage for wholesale customers")
     enable_gift_cards = models.BooleanField(default=False, help_text="Enable gift card sales in this store")
     
+    # SEO Settings
+    seo_title = models.CharField(max_length=150, blank=True, null=True, help_text="Global SEO Title (max 150 chars)")
+    seo_description = models.TextField(blank=True, null=True, help_text="Global SEO Meta Description")
+    seo_keywords = models.CharField(max_length=255, blank=True, null=True, help_text="Comma separated keywords")
+    seo_og_image = models.ImageField(validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])], upload_to='brand_seo/', blank=True, null=True, help_text="OpenGraph Image for social sharing")
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
