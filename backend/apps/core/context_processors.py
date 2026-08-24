@@ -16,7 +16,7 @@ def global_settings(request):
     except Exception:
         return {}
 
-from .models import Notification
+from .models import Notification, FeatureFlag
 
 def user_notifications(request):
     if request.user.is_authenticated:
@@ -29,3 +29,11 @@ def user_notifications(request):
         except Exception:
             return {}
     return {}
+
+def feature_flags(request):
+    try:
+        flags = FeatureFlag.objects.all()
+        # Return a dictionary like {'virtual_try_on': True, 'new_checkout': False}
+        return {'feature_flags': {flag.name: flag.is_active for flag in flags}}
+    except Exception:
+        return {'feature_flags': {}}

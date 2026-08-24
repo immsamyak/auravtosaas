@@ -94,6 +94,7 @@ TEMPLATES = [
                 'apps.core.context_processors.footer_data',
                 'apps.core.context_processors.global_settings',
                 'apps.core.context_processors.user_notifications',
+                'apps.core.context_processors.feature_flags',
                 'apps.brands.context_processors.storefront_popups',
             ],
         },
@@ -112,7 +113,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': 'redis://:bx2Ee2Q8grqKcWfawRwCVoz8YKyQsqciijqsSmUIe1PDZIOnbbYj9liWJ2c6jQDp@64.227.167.223:6379/1',
     }
 }
 

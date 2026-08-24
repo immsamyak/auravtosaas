@@ -137,10 +137,16 @@ class DashboardView(SuperUserRequiredMixin, TemplateView):
         context['sys_uptime'] = f"{int(days)}d {int(hours)}h {int(minutes)}m"
         context['sys_db_latency'] = db_latency
         
-        # Redis Cache Hit Rate (Real-time from server)
+        # Redis Cache Hit Rate (Real-time from Coolify server)
         try:
             import redis
-            r = redis.Redis(host='127.0.0.1', port=6379, db=1, decode_responses=True)
+            r = redis.Redis(
+                host='64.227.167.223',
+                port=6379,
+                db=1,
+                password='bx2Ee2Q8grqKcWfawRwCVoz8YKyQsqciijqsSmUIe1PDZIOnbbYj9liWJ2c6jQDp',
+                decode_responses=True
+            )
             info = r.info('stats')
             hits = info.get('keyspace_hits', 0)
             misses = info.get('keyspace_misses', 0)

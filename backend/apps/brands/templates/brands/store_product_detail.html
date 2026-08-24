@@ -107,10 +107,16 @@
                             <i class="fa-solid fa-cart-plus mr-2 opacity-80"></i> Add to Cart
                         </button>
     
+                        {% if feature_flags.virtual_try_on %}
                         <a :href="isTryOnDisabled ? '#' : tryOnUrl" :class="isTryOnDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:-translate-y-1 hover:shadow-xl'" class="flex-1 border border-current rounded-2xl py-4 px-8 flex items-center justify-center text-sm font-extrabold uppercase tracking-widest bg-current text-white transition-all transform shadow-md relative overflow-hidden group" style="color: var(--tw-prose-body);">
                             <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
                             <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Try On Virtually</span>
                         </a>
+                        {% else %}
+                        <button type="button" disabled class="flex-1 border border-neutral-300 bg-neutral-100 text-neutral-400 rounded-2xl py-4 px-8 flex items-center justify-center text-sm font-extrabold uppercase tracking-widest cursor-not-allowed shadow-sm relative overflow-hidden">
+                            <i class="fa-solid fa-wrench mr-2"></i> AI Engine Under Maintenance
+                        </button>
+                        {% endif %}
 
                     </div>
                 </form>
