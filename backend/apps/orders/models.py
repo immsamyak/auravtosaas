@@ -175,3 +175,18 @@ class ReturnRequest(models.Model):
 
     def __str__(self):
         return f"Return RMA-{self.id} for Order {self.order.id}"
+
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from apps.core.notifications import NotificationManager
+
+@receiver(pre_save, sender=Order)
+def order_status_changed(sender, instance, **kwargs):
+    if instance.id:
+        old_order = Order.objects.get(pk=instance.id)
+        if old_order.status != 'PAID' and instance.status == 'PAID':
+            try:
+                NotificationManager.send_order_confirmation(instance)
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).error(f"Failed to send order confirmation: {e}")

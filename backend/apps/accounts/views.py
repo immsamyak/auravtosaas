@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from apps.accounts.models import ConsumerProfile
 from apps.brands.models import Brand
 from apps.core.models import Testimonial
+from apps.core.notifications import NotificationManager
 from apps.recommendations.engine import analyze_body_proportions
 import random
 
@@ -21,7 +22,11 @@ def signup_view(request):
         if not User.objects.filter(username=username).exists():
             user = User.objects.create_user(username=username, email=email, password=password)
             slug = slugify(brand_name)
-            Brand.objects.create(owner=user, name=brand_name, slug=slug, contact_email=email)
+            brand = Brand.objects.create(owner=user, name=brand_name, slug=slug, contact_email=email)
+            
+            # Send Welcome Notification
+            NotificationManager.send_welcome_email(user, brand)
+            
             login(request, user)
             return redirect('dashboard')
     return render(request, 'accounts/signup.html', {'testimonial': Testimonial.objects.filter(is_active=True).order_by('?').first()})

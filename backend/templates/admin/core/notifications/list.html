@@ -1,0 +1,77 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-6">
+    <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Notification Manager</h1>
+            <p class="text-sm text-slate-500 mt-1">Manage, schedule, and send custom email and SMS campaigns.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="px-3 py-1 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">
+                Active Provider: <span class="text-indigo-600">{{ provider }}</span>
+            </span>
+            <form action="{% url 'admin:notification_test' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition shadow-sm">
+                    <i class="fa-solid fa-flask mr-2"></i> Send Test
+                </button>
+            </form>
+            <a href="{% url 'admin:notification_create' %}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition shadow-md shadow-indigo-500/20">
+                <i class="fa-solid fa-plus mr-2"></i> New Campaign
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50/50 border-b border-slate-100">
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Campaign Subject</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Target</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Scheduled / Sent</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for campaign in campaigns %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-bold text-slate-900">{{ campaign.subject }}</td>
+                    <td class="p-4 text-sm text-slate-600">{{ campaign.get_target_audience_display }}</td>
+                    <td class="p-4">
+                        {% if campaign.status == 'scheduled' %}
+                            <span class="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-xs font-bold border border-amber-200"><i class="fa-regular fa-clock mr-1"></i> Scheduled</span>
+                        {% elif campaign.status == 'sent' %}
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-200"><i class="fa-solid fa-check mr-1"></i> Sent</span>
+                        {% elif campaign.status == 'failed' %}
+                            <span class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold border border-rose-200"><i class="fa-solid fa-xmark mr-1"></i> Failed</span>
+                        {% else %}
+                            <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">{{ campaign.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4 text-sm text-slate-500 font-medium">
+                        {% if campaign.sent_at %}
+                            {{ campaign.sent_at|date:"M j, Y, g:i a" }}
+                        {% elif campaign.scheduled_for %}
+                            {{ campaign.scheduled_for|date:"M j, Y, g:i a" }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="p-8 text-center text-slate-500">
+                        <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fa-regular fa-envelope-open text-2xl text-slate-300"></i>
+                        </div>
+                        <p class="font-medium text-slate-900">No campaigns yet</p>
+                        <p class="text-sm mt-1">Create your first custom notification campaign.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

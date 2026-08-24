@@ -16,12 +16,15 @@ Including another URLconf
 """
 
 from django.urls import path, include
+from django.contrib import admin
+admin.site.name = 'django_admin'  # Rename namespace so it doesn't conflict with custom 'admin' app
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
 
 urlpatterns = [
     path('admin/', include('apps.admin.urls')),
+    path('django-admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('p/', include('apps.core.urls')),
     path('', include('apps.billing.urls')),

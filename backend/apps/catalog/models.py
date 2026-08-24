@@ -11,6 +11,7 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='categories/', null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategories')
     is_active = models.BooleanField(default=True)
     display_order = models.IntegerField(default=0)

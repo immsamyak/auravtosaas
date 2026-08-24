@@ -91,8 +91,11 @@
             <a href="{% url 'dashboard' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                 <i class="fa-solid fa-chart-pie w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'dashboard' %}text-indigo-400{% endif %}"></i> Overview
             </a>
+            <a href="{% url 'finance' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'finance' %}active{% endif %}">
+                <i class="fa-solid fa-wallet w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'finance' %}text-indigo-400{% endif %}"></i> Finance
+            </a>
             <a href="{% url 'reports' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
-                <i class="fa-solid fa-wallet w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'reports' %}text-indigo-400{% endif %}"></i> Reports & Analytics
+                <i class="fa-solid fa-file-invoice w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'reports' %}text-indigo-400{% endif %}"></i> Reports
             </a>
 
             <div class="px-6 mt-8 mb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Store</div>
@@ -207,16 +210,24 @@
 
         <!-- Top Navigation Bar (Desktop) -->
         <header class="hidden md:flex h-20 items-center justify-between px-8 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-[40]">
-            <!-- Global Search Simulation -->
-            <div class="flex-1 max-w-lg relative group">
+            <!-- Global Search Form -->
+            <form action="{% url 'global_search' %}" method="GET" class="flex-1 max-w-lg relative group">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <i class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
                 </div>
-                <input type="text" class="block w-full pl-11 pr-4 py-2.5 border-transparent bg-slate-100 rounded-2xl text-sm placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all" placeholder="Search orders, products, or customers... (Press '/' to focus)">
+                <input type="text" name="q" id="global-search-input" required value="{{ request.GET.q|default:'' }}" class="block w-full pl-11 pr-4 py-2.5 border-transparent bg-slate-100 rounded-2xl text-sm placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all" placeholder="Search orders, products, or customers... (Press '/' to focus)">
                 <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded shadow-sm border border-slate-200">⌘K</span>
+                    <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded shadow-sm border border-slate-200">/</span>
                 </div>
-            </div>
+            </form>
+            <script>
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                        e.preventDefault();
+                        document.getElementById('global-search-input').focus();
+                    }
+                });
+            </script>
 
             <div class="flex items-center space-x-6 ml-8">
                 

@@ -63,6 +63,7 @@
             <div>
                 <div class="px-4 pt-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Marketing & Growth</div>
                 <div class="space-y-1">
+                    <a href="{% url 'admin:notification_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-paper-plane w-6 text-slate-400"></i> Notification Manager</a>
                     <a href="{% url 'admin:popupbanner_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-bullhorn w-6 text-slate-400"></i> Popup Banners</a>
                     <a href="{% url 'admin:coupon_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-ticket w-6 text-slate-400"></i> Coupons</a>
                     <a href="{% url 'admin:newslettersubscriber_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-envelope-open-text w-6 text-slate-400"></i> Subscribers</a>
@@ -74,7 +75,7 @@
             <div>
                 <div class="px-4 pb-3 text-[11px] font-bold text-slate-500 uppercase tracking-widest">CMS & Content</div>
                 <div class="space-y-1">
-                    <a href="{% url 'admin:page_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-file-lines w-6 text-slate-400"></i> Custom Pages</a>
+                    <a href="{% url 'admin:page_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-file-lines w-6 text-slate-400"></i> HTML Pages / CMS</a>
                     <a href="{% url 'admin:landingpageconfig_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-rocket w-6 text-slate-400"></i> Landing Pages</a>
                     <a href="{% url 'admin:landingpagefeature_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-star w-6 text-slate-400"></i> Features List</a>
                     <a href="{% url 'admin:metric_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-chart-line w-6 text-slate-400"></i> Metrics</a>
@@ -179,9 +180,9 @@
                     <a href="{% url 'admin:apikey_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-key w-6 text-slate-400"></i> API Keys</a>
                     <a href="{% url 'admin:webhookendpoint_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-satellite-dish w-6 text-slate-400"></i> Webhooks</a>
                     <a href="{% url 'admin:apilog_list' %}" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"><i class="fa-solid fa-server w-6 text-slate-400"></i> API Logs</a>
+                                    <a href="/django-admin/" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors" target="_blank"><i class="fa-solid fa-database w-6 text-slate-400"></i> Raw Database Admin</a>
                 </div>
             </div>
-            
             <div class="h-10"></div>
         </nav>
         

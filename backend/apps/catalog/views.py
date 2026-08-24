@@ -138,7 +138,8 @@ def create_product_view(request):
             price=price,
             seo_title=request.POST.get('seo_title', ''),
             seo_description=request.POST.get('seo_description', ''),
-            seo_keywords=request.POST.get('seo_keywords', '')
+            seo_keywords=request.POST.get('seo_keywords', ''),
+            is_vto_ready=(request.POST.get('is_vto_ready') == 'on')
         )
         if 'seo_og_image' in request.FILES:
             product.seo_og_image = request.FILES['seo_og_image']
@@ -231,6 +232,7 @@ def edit_product_view(request, product_id):
         product.category_id = request.POST.get('category')
         product.product_type_id = request.POST.get('product_type')
         product.price = request.POST.get('price')
+        product.is_vto_ready = request.POST.get('is_vto_ready') == 'on'
         
         # SEO Settings
         product.seo_title = request.POST.get('seo_title', product.seo_title)
@@ -369,7 +371,10 @@ def catalog_settings_view(request):
                 while Category.objects.filter(slug=slug).exists():
                     slug = f"{base_slug}-{counter}"
                     counter += 1
-                Category.objects.create(brand=brand, name=name, slug=slug)
+                cat = Category(brand=brand, name=name, slug=slug)
+                if 'image' in request.FILES:
+                    cat.image = request.FILES['image']
+                cat.save()
                 messages.success(request, f'Category "{name}" created.')
 
             elif entity == 'product_type':
@@ -398,6 +403,55 @@ def catalog_settings_view(request):
                 order = request.POST.get('display_order', 0)
                 Size.objects.create(brand=brand, name=name, slug=slug, code=code, display_order=int(order) if order else 0)
                 messages.success(request, f'Size "{name}" created.')
+
+        elif action == 'edit':
+            item_id = request.POST.get('item_id')
+            name = request.POST.get('name', '').strip()
+            
+            if not name or not item_id:
+                messages.error(request, 'Name is required.')
+                return redirect('catalog_settings')
+                
+            if entity == 'category':
+                try:
+                    cat = Category.objects.get(id=item_id, brand=brand)
+                    cat.name = name
+                    if 'image' in request.FILES:
+                        cat.image = request.FILES['image']
+                    cat.save()
+                    messages.success(request, f'Category "{name}" updated.')
+                except Category.DoesNotExist:
+                    messages.error(request, 'Category not found.')
+                    
+            elif entity == 'product_type':
+                try:
+                    pt = ProductType.objects.get(id=item_id, brand=brand)
+                    pt.name = name
+                    pt.save()
+                    messages.success(request, f'Product Type "{name}" updated.')
+                except ProductType.DoesNotExist:
+                    pass
+                    
+            elif entity == 'color':
+                try:
+                    c = Color.objects.get(id=item_id, brand=brand)
+                    c.name = name
+                    c.hex_code = request.POST.get('hex_code', '#000000')
+                    c.save()
+                    messages.success(request, f'Color "{name}" updated.')
+                except Color.DoesNotExist:
+                    pass
+                    
+            elif entity == 'size':
+                try:
+                    s = Size.objects.get(id=item_id, brand=brand)
+                    s.name = name
+                    s.code = request.POST.get('code', s.code).strip().upper()
+                    s.display_order = request.POST.get('display_order', s.display_order)
+                    s.save()
+                    messages.success(request, f'Size "{name}" updated.')
+                except Size.DoesNotExist:
+                    pass
 
         elif action == 'delete':
             item_id = request.POST.get('item_id')

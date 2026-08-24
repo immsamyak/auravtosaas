@@ -232,25 +232,101 @@
                         </div>
                     </div>
 
-                    <!-- Tab: SMTP Settings -->
-                    <div x-show="activeTab === 'smtp'" class="space-y-6" x-transition.opacity style="display: none;">
+                                        <!-- Tab: SMTP Settings -->
+                    <div x-show="activeTab === 'smtp'" class="space-y-6" x-transition.opacity style="display: none;" x-data="{ provider: '{{ form.instance.email_provider|default:"smtp" }}' }">
                         <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
                             <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            SMTP Email Configuration
+                            Email Provider & Configuration
                         </h2>
+                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "smtp_host,smtp_port,smtp_username,smtp_password" %}
+                            <div class="col-span-full">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">
+                                    {{ form.email_provider.label }} <span class="text-rose-500">*</span>
+                                </label>
+                                <!-- We apply x-model to a hidden input or manually handle the select if needed, but x-model works on select too. -->
+                                <div @change="provider = $event.target.value">
+                                    {{ form.email_provider }}
+                                </div>
+                                {% if form.email_provider.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.email_provider.help_text }}</p>{% endif %}
+                            </div>
+                            
+                            
+                            <!-- Resend -->
+                            <div class="col-span-full" x-show="provider === 'resend'">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">
+                                    {{ form.resend_api_key.label }}
+                                </label>
+                                {{ form.resend_api_key }}
+                                {% if form.resend_api_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.resend_api_key.help_text }}</p>{% endif %}
+                            </div>
+                            
+                            <!-- SendGrid -->
+                            <div class="col-span-full" x-show="provider === 'sendgrid'">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">
+                                    {{ form.sendgrid_api_key.label }}
+                                </label>
+                                {{ form.sendgrid_api_key }}
+                                {% if form.sendgrid_api_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.sendgrid_api_key.help_text }}</p>{% endif %}
+                            </div>
+
+                            <!-- Mailgun -->
+                            <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" x-show="provider === 'mailgun'">
+                                <div class="col-span-full">
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">
+                                        {{ form.mailgun_api_key.label }}
+                                    </label>
+                                    {{ form.mailgun_api_key }}
+                                    {% if form.mailgun_api_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.mailgun_api_key.help_text }}</p>{% endif %}
+                                </div>
+                                <div class="col-span-full">
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">
+                                        {{ form.smtp_username.label }} (Domain Name)
+                                    </label>
+                                    {{ form.smtp_username }}
+                                    <p class="text-xs text-slate-500 mt-2 font-medium">For Mailgun, enter your Domain Username here.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Amazon SES -->
+                            <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" x-show="provider === 'ses'">
                                 <div>
                                     <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+                                        {{ form.ses_access_key_id.label }}
                                     </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+                                    {{ form.ses_access_key_id }}
+                                    {% if form.ses_access_key_id.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.ses_access_key_id.help_text }}</p>{% endif %}
                                 </div>
-                                {% endif %}
-                            {% endfor %}
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">
+                                        {{ form.ses_secret_access_key.label }}
+                                    </label>
+                                    {{ form.ses_secret_access_key }}
+                                    {% if form.ses_secret_access_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.ses_secret_access_key.help_text }}</p>{% endif %}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">
+                                        {{ form.ses_region.label }}
+                                    </label>
+                                    {{ form.ses_region }}
+                                    {% if form.ses_region.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.ses_region.help_text }}</p>{% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Standard SMTP Fields -->
+                            <div x-show="provider === 'smtp'" class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                                {% for field in form %}
+                                    {% if field.name in "smtp_encryption,smtp_host,smtp_port,smtp_username,smtp_password" %}
+                                    <div>
+                                        <label class="block text-sm font-bold text-slate-700 mb-1">
+                                            {{ field.label }}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
 

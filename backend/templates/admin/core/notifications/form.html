@@ -1,0 +1,70 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+    <div class="flex justify-between items-center bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Compose Campaign</h1>
+            <p class="text-sm text-slate-500 mt-1">Create and schedule a new custom notification.</p>
+        </div>
+        <a href="{% url 'admin:notification_list' %}" class="text-slate-500 hover:text-slate-900 font-bold text-sm transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to List
+        </a>
+    </div>
+
+    <form method="post" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6" x-data="{ audience: '{{ form.instance.target_audience|default:"all_users" }}' }">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+        <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl mb-6">
+            {% for error in form.non_field_errors %}
+                <p class="text-sm font-bold text-rose-600"><i class="fa-solid fa-triangle-exclamation mr-2"></i> {{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.subject.label }} *</label>
+            {{ form.subject }}
+            {% for error in form.subject.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.body_html.label }} *</label>
+            {{ form.body_html }}
+            <p class="text-xs text-slate-500 mt-2 font-medium">Supports full HTML. Will be wrapped in the standard Aura email template.</p>
+            {% for error in form.body_html.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100">
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.target_audience.label }} *</label>
+                <div @change="audience = $event.target.value">
+                    {{ form.target_audience }}
+                </div>
+                {% for error in form.target_audience.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.scheduled_for.label }}</label>
+                {{ form.scheduled_for }}
+                {% if form.scheduled_for.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.scheduled_for.help_text }}</p>{% endif %}
+                {% for error in form.scheduled_for.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
+            </div>
+        </div>
+
+        <div x-show="audience === 'specific_users'" class="pt-6 border-t border-slate-100" style="display: none;">
+            <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.specific_users.label }}</label>
+            {{ form.specific_users }}
+            <p class="text-xs text-slate-500 mt-2 font-medium">Hold Cmd/Ctrl to select multiple users.</p>
+            {% for error in form.specific_users.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="pt-6 border-t border-slate-100 flex justify-end">
+            <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-500/20 transition flex items-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i> Save & Queue
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

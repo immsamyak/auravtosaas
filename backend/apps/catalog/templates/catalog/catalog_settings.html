@@ -58,7 +58,7 @@
         <div x-show="activeTab === 'category'" class="p-6 sm:p-8">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-slate-900">Categories</h2>
-                <button onclick="document.getElementById('add-modal').classList.remove('hidden'); document.getElementById('modal-entity').value = 'category';" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
+                <button onclick="document.getElementById('add-modal').classList.remove('hidden'); document.getElementById('modal-entity').value = 'category'; document.getElementById('category-image-group').classList.remove('hidden');" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
                     <i class="fa-solid fa-plus mr-1"></i> Add Custom Category
                 </button>
             </div>
@@ -71,9 +71,19 @@
                     <ul class="divide-y divide-slate-100">
                         {% for item in categories_brand %}
                         <li class="py-3 flex justify-between items-center">
-                            <span class="text-sm font-bold text-slate-900">{{ item.name }}</span>
+                            
+                                <div class="flex items-center">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" class="w-8 h-8 rounded object-cover mr-3 border border-slate-200">
+                                    {% else %}
+                                        <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center mr-3 border border-slate-200"><i class="fa-solid fa-image text-slate-400 text-xs"></i></div>
+                                    {% endif %}
+                                    <span class="text-sm font-bold text-slate-900">{{ item.name }}</span>
+                                </div>
+
                             <!-- Dropdown Action -->
                             {% dropdown %}
+                                    <button type="button" onclick="openEditModal('category', '{{ item.id }}', '{{ item.name|escapejs }}', '', '', 0)" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
                                 <form method="POST" onsubmit="confirmAction(event, 'Delete this category?');" class="block w-full">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
@@ -126,6 +136,7 @@
                             <span class="text-sm font-bold text-slate-900">{{ item.name }}</span>
                             <!-- Dropdown Action -->
                             {% dropdown %}
+                                    <button type="button" onclick="openEditModal('product_type', '{{ item.id }}', '{{ item.name|escapejs }}', '', '', 0)" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
                                 <form method="POST" onsubmit="confirmAction(event, 'Delete this type?');" class="block w-full">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
@@ -181,6 +192,7 @@
                             </div>
                             <!-- Dropdown Action -->
                             {% dropdown %}
+                                    <button type="button" onclick="openEditModal('color', '{{ item.id }}', '{{ item.name|escapejs }}', '{{ item.hex_code }}', '', 0)" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
                                 <form method="POST" onsubmit="confirmAction(event, 'Delete this color?');" class="block w-full">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
@@ -234,6 +246,7 @@
                             <span class="text-sm font-bold text-slate-900">{{ item.name }} <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded ml-2">{{ item.code }}</span></span>
                             <!-- Dropdown Action -->
                             {% dropdown %}
+                                    <button type="button" onclick="openEditModal('size', '{{ item.id }}', '{{ item.name|escapejs }}', '', '{{ item.code }}', '{{ item.display_order }}')" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
                                 <form method="POST" onsubmit="confirmAction(event, 'Delete this size?');" class="block w-full">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
@@ -268,6 +281,9 @@
 
     </div>
 </div>
+
+
+
 {% endblock %}
 
 {% block extra_modals %}
@@ -277,7 +293,7 @@
         <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="closeAddModal()"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form method="POST" action="{% url 'catalog_settings' %}">
+            <form method="POST" action="{% url 'catalog_settings' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="entity" id="modal-entity">
@@ -291,7 +307,13 @@
                             <input type="text" name="name" required class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                         </div>
                         
-                        <div id="color-picker-group" class="hidden">
+        
+                <!-- Specific Fields -->
+                <div id="category-image-group" class="hidden mb-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Category Image</label>
+                    <input type="file" name="image" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                </div>
+                <div id="color-picker-group" class="hidden">
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Hex Code (for Color)</label>
                             <div class="flex items-center space-x-2">
                                 <input type="color" name="hex_code" value="#000000" class="h-10 w-10 border-0 p-0 rounded cursor-pointer">
@@ -332,4 +354,99 @@ function closeAddModal() {
     document.getElementById('size-order-group').classList.add('hidden');
 }
 </script>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="text-lg font-bold text-slate-900" id="edit-modal-title">Edit Item</h3>
+                <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form method="POST" enctype="multipart/form-data" class="p-6">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="entity" id="edit-modal-entity">
+                <input type="hidden" name="item_id" id="edit-modal-item-id">
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Name</label>
+                    <input type="text" name="name" id="edit-modal-name" required class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                </div>
+                
+                <!-- Specific Fields for Edit -->
+                <div id="edit-category-image-group" class="hidden mb-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Update Image (Optional)</label>
+                    <input type="file" name="image" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                </div>
+
+                <div id="edit-color-picker-group" class="hidden mb-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Hex Code</label>
+                    <div class="flex items-center space-x-3">
+                        <input type="color" name="hex_code" id="edit-modal-hex" class="h-10 w-14 p-1 rounded cursor-pointer border border-slate-200">
+                        <span class="text-xs text-slate-500 font-mono">Pick a color</span>
+                    </div>
+                </div>
+
+                <div id="edit-size-code-group" class="hidden mb-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Short Code (e.g., XL, 42)</label>
+                    <input type="text" name="code" id="edit-modal-code" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm uppercase">
+                </div>
+                
+                <div id="edit-size-order-group" class="hidden mb-4">
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Display Order</label>
+                    <input type="number" name="display_order" id="edit-modal-order" value="0" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                </div>
+
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center">
+                        <i class="fa-solid fa-save mr-2"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function openEditModal(entity, id, name, hex, code, order) {
+            console.log("Opening edit modal for:", entity, id, name);
+            try {
+                document.getElementById('edit-modal-entity').value = entity;
+                document.getElementById('edit-modal-item-id').value = id;
+                document.getElementById('edit-modal-name').value = name;
+                
+                // Hide all specific groups
+                document.getElementById('edit-category-image-group').classList.add('hidden');
+                document.getElementById('edit-color-picker-group').classList.add('hidden');
+                document.getElementById('edit-size-code-group').classList.add('hidden');
+                document.getElementById('edit-size-order-group').classList.add('hidden');
+                
+                if (entity === 'category') {
+                    document.getElementById('edit-modal-title').innerText = 'Edit Category';
+                    document.getElementById('edit-category-image-group').classList.remove('hidden');
+                } else if (entity === 'color') {
+                    document.getElementById('edit-modal-title').innerText = 'Edit Color';
+                    document.getElementById('edit-color-picker-group').classList.remove('hidden');
+                    document.getElementById('edit-modal-hex').value = hex;
+                } else if (entity === 'size') {
+                    document.getElementById('edit-modal-title').innerText = 'Edit Size';
+                    document.getElementById('edit-size-code-group').classList.remove('hidden');
+                    document.getElementById('edit-size-order-group').classList.remove('hidden');
+                    document.getElementById('edit-modal-code').value = code;
+                    document.getElementById('edit-modal-order').value = order;
+                } else if (entity === 'product_type') {
+                    document.getElementById('edit-modal-title').innerText = 'Edit Product Type';
+                }
+                
+                document.getElementById('edit-modal').classList.remove('hidden');
+                console.log("Modal should be visible now.");
+            } catch (e) {
+                console.error("Error opening edit modal:", e);
+                alert("Error opening modal: " + e.message);
+            }
+        }
+    </script>
+
 {% endblock %}

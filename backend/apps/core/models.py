@@ -244,6 +244,33 @@ class GlobalSettings(models.Model):
     
     
     # SMTP
+    # Email Configuration
+    class EmailProvider(models.TextChoices):
+        SMTP = 'smtp', 'Custom SMTP'
+        RESEND = 'resend', 'Resend'
+        SENDGRID = 'sendgrid', 'SendGrid'
+        MAILGUN = 'mailgun', 'Mailgun'
+        SES = 'ses', 'Amazon SES'
+        
+    class SMTPEncryption(models.TextChoices):
+        TLS = 'tls', 'TLS (Recommended)'
+        SSL = 'ssl', 'SSL'
+        NONE = 'none', 'None'
+
+    email_provider = models.CharField(max_length=20, choices=EmailProvider.choices, default=EmailProvider.SMTP)
+    
+    # Specific API Keys
+    resend_api_key = models.CharField(max_length=255, blank=True, help_text="API Key for Resend")
+    sendgrid_api_key = models.CharField(max_length=255, blank=True, help_text="API Key for SendGrid")
+    mailgun_api_key = models.CharField(max_length=255, blank=True, help_text="API Key for Mailgun")
+    
+    # Amazon SES
+    ses_access_key_id = models.CharField(max_length=255, blank=True, help_text="AWS Access Key ID for SES")
+    ses_secret_access_key = models.CharField(max_length=255, blank=True, help_text="AWS Secret Access Key for SES")
+    ses_region = models.CharField(max_length=50, blank=True, default='us-east-1', help_text="AWS Region (e.g. us-east-1)")
+    
+    smtp_encryption = models.CharField(max_length=10, choices=SMTPEncryption.choices, default=SMTPEncryption.TLS)
+
     smtp_host = models.CharField(max_length=255, blank=True)
     smtp_port = models.IntegerField(default=587)
     smtp_username = models.CharField(max_length=255, blank=True)
@@ -416,3 +443,34 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"Message from {self.name} ({self.email})"
+
+class NotificationCampaign(models.Model):
+    class Status(models.TextChoices):
+        DRAFT = 'draft', 'Draft'
+        SCHEDULED = 'scheduled', 'Scheduled'
+        SENDING = 'sending', 'Sending in Progress'
+        SENT = 'sent', 'Sent'
+        FAILED = 'failed', 'Failed'
+        
+    class TargetAudience(models.TextChoices):
+        ALL_BRANDS = 'all_brands', 'All Brands (Owners)'
+        ALL_CONSUMERS = 'all_consumers', 'All Consumers'
+        ALL_USERS = 'all_users', 'All Users'
+        SPECIFIC_USERS = 'specific_users', 'Specific Users'
+
+    subject = models.CharField(max_length=255)
+    body_html = models.TextField()
+    
+    target_audience = models.CharField(max_length=20, choices=TargetAudience.choices, default=TargetAudience.ALL_USERS)
+    specific_users = models.ManyToManyField('auth.User', blank=True, related_name='targeted_campaigns')
+    
+    status = models.CharField(max_length=15, choices=Status.choices, default=Status.DRAFT)
+    
+    scheduled_for = models.DateTimeField(null=True, blank=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.subject} ({self.get_status_display()})"
