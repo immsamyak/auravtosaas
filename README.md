@@ -1,118 +1,100 @@
-# Aura AI Virtual Fitting & Fashion Commerce Platform
+# Aura - Virtual Try-On SaaS Commerce Platform
 
-## 1. Project Overview
-Aura is a B2B SaaS platform that enables fashion brands to offer a Virtual Fitting Room experience directly on their storefronts. Using generative AI, customers can instantly try on clothes on their own photos, drastically improving conversion rates and reducing return rates.
+Aura is a modern, multi-tenant Django platform built for fashion brands and technology startups to offer Virtual Try-On (VTO) and digital storefront experiences. It features a complete Role-Based Access Control (RBAC) architecture isolating Customers, Brand Owners, and System Administrators.
 
-## 2. Problem Statement
-The fashion e-commerce industry suffers from a high rate of returns due to poor fit and visualization. Customers struggle to imagine how garments look on their unique body shapes. Traditional try-on solutions require expensive 3D body mapping, which is inaccessible to most mid-market brands.
+## Overview
 
-## 3. Objectives
-- Provide a seamless virtual try-on experience using generative AI.
-- Enable brands to manage their catalogs and monitor try-on conversion analytics.
-- Create a modular, highly scalable Django backend to support multi-tenancy.
-- Deliver an aesthetically premium, Tailwind-powered user interface.
+Aura is a complete out-of-the-box marketplace architecture where:
+- **System Admins** oversee the entire platform and users.
+- **Brand Owners** operate their own isolated dashboards, managing their product catalog, variations (colors/sizes), and orders.
+- **Customers** browse products, generate Virtual Try-On previews using their personal fit profiles, and purchase apparel.
 
-## 4. Features
-### Public/Consumer Features
-- **Brand Storefronts**: Dedicated storefronts for different brands.
-- **Consumer Profiles**: Consumers can upload base photos for size analysis and try-ons.
-- **Virtual Try-On**: Generate realistic try-on composites with AI.
-- **Size Recommendation**: AI-driven analysis of shoulder and waist widths.
+## Key Features
 
-### SaaS/Brand Features
-- **Brand Dashboard**: Track conversion rates, average AI confidence, and top-performing garments.
-- **Catalog Management**: Full CRUD capabilities for Garments and Variants.
-- **Multi-Tenant Architecture**: Strict data isolation between brands.
+- **Multi-Role Architecture:** Admin, Brand Owner, and Customer isolation.
+- **VTO Integration Engine:** Backend pipeline ready for external Stable Diffusion/Replicate APIs to generate customer clothing previews.
+- **Advanced Catalog:** Support for complex product variants (combinations of sizes, colors, and stock).
+- **Security-First:** Proven IDOR (Insecure Direct Object Reference) prevention. Brands cannot access or mutate competitor data.
+- **Modern UI:** Built heavily on Tailwind CSS for fully responsive and beautiful interfaces.
+- **Commerce Ready:** Pre-built checkout flows and order tracking modules.
 
-## 5. User Roles
-- **Consumer**: Shoppers who browse brand storefronts and use the Virtual Fitting Room.
-- **Brand Owner**: SaaS tenants who manage their brand's catalog and monitor analytics.
-- **Platform Admin**: Superusers managing the global Aura infrastructure.
+## Technology Stack
 
-## 6. System Architecture
-The platform is built as a single, modular Django application optimized for maintainability and clear separation of concerns. The architecture follows a strict Service Layer pattern to keep views thin.
+- **Backend Framework:** Python 3.12 / Django 5+
+- **Database:** PostgreSQL (with SQLite for local development)
+- **Frontend:** HTML5, Tailwind CSS, minimal vanilla JavaScript
+- **Deployment:** Docker, Gunicorn, WhiteNoise (for static file serving)
 
-## 7. Technology Stack
-- **Backend**: Python 3.12, Django 5+
-- **Database**: PostgreSQL 16
-- **Frontend**: Vanilla HTML/JS, Tailwind CSS
-- **AI/ML (Mock)**: Pillow-based image generation engine (abstracted via Provider pattern)
+## Server Requirements
 
-## 8. Database Architecture
-PostgreSQL is used as the primary relational database. The schema is highly normalized with strong foreign key constraints to enforce tenant isolation.
+| Requirement | Minimum | Recommended (Production) |
+| :--- | :--- | :--- |
+| **CPU** | 1 Core | 2+ Cores |
+| **RAM** | 1 GB | 2 GB+ |
+| **Storage** | 10 GB | 20 GB+ (SSD highly recommended for media) |
+| **OS** | Linux (Ubuntu/Debian) | Linux (Ubuntu 22.04 LTS) |
+| **Software** | Docker & Docker Compose | Docker & Docker Compose |
 
-## 9. ER Diagram Description
-- `User` (1) --- (1) `ConsumerProfile`
-- `User` (1) --- (1) `Brand` (Owner)
-- `Brand` (1) --- (M) `Garment`
-- `Garment` (1) --- (M) `GarmentVariant`
-- `GarmentVariant` (1) --- (M) `VirtualTryOn`
-- `User` (1) --- (M) `VirtualTryOn`
+*(Note: The internal application runs headless backend ML queues. If you wish to run your own local Stable Diffusion weights rather than hitting the Replicate API, a dedicated GPU server is required.)*
 
-## 10. Application Structure
-The monolith has been split into dedicated modular apps:
-- `accounts`: User authentication and consumer profiles.
-- `analytics`: Aggregation queries and metrics services.
-- `brands`: Tenant isolation and brand dashboard views.
-- `catalog`: Garment and Variant CRUD logic.
-- `fitting`: Virtual try-on views and AI Provider abstractions.
-- `recommendations`: Body analysis engines.
-- `shopping`: Mock app ready for cart functionality.
-- `orders`: Mock app ready for checkout functionality.
-- `core`: Shared infrastructure.
+## Installation & Local Development
 
-## 11. Installation
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo> aura
+   cd aura/backend
+   ```
+
+2. **Setup Python Environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. **Database Migrations**
+   ```bash
+   python manage.py migrate
+   ```
+
+4. **Run Development Server**
+   ```bash
+   python manage.py runserver
+   ```
+
+## Environment Variables (.env)
+
+Aura utilizes `.env` files for configuration. The following variables dictate the application behavior:
+
+| Variable | Purpose | Required? | Example | Security Note |
+| :--- | :--- | :--- | :--- | :--- |
+| `SECRET_KEY` | Django cryptographic key | **YES** | `django-insecure-xxx` | NEVER expose |
+| `DEBUG` | Enable debug mode | **YES** | `False` | MUST be `False` in prod |
+| `DATABASE_URL` | PostgreSQL connection string | Optional | `postgres://user:pass@host/db` | Keep private |
+| `REPLICATE_API_TOKEN` | Generates VTO Images | **Required for VTO** | `r8_abc123` | Do not commit |
+| `STRIPE_SECRET_KEY` | Processes Orders | **Required for Commerce**| `sk_test_xxx` | Do not commit |
+
+## Virtual Try-On (VTO) Configuration Status
+
+Aura ships with the internal workflow and database architecture to handle VTO. **However, external ML image generation is NOT included out-of-the-box.** 
+
+- **AVAILABLE:** The user interface, the queuing system, the customer fit profile database, and the image upload architecture.
+- **CONFIGURATION REQUIRED:** You MUST supply a valid `REPLICATE_API_TOKEN` in your `.env` for the platform to actually ping the Stable Diffusion model and receive generated images. Without this token, the VTO feature will safely block itself.
+
+## Production Deployment (Docker)
+
+Aura is production-ready via Docker.
+
 ```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+cd aura
+docker build -t aura-app .
+docker run -d -p 8000:8000 --env-file .env aura-app
 ```
+*(For full production, we recommend deploying behind a reverse proxy like Traefik, Caddy, or Nginx with Let's Encrypt SSL certificates.)*
 
-## 12. Environment Configuration
-Create a `.env` file in the root based on `.env.example`:
-```
-DEBUG=True
-SECRET_KEY=your-secret
-DB_NAME=aura_db
-```
+## Demo & Testing
 
-## 13. Database Setup
-```bash
-psql -c "CREATE DATABASE aura_db;"
-python manage.py migrate
-python manage.py createsuperuser
-```
+For marketplace review, please reference `DEMO_CREDENTIALS.md` for safe usernames and passwords to explore the various permission roles.
 
-## 14. Running the Project
-```bash
-python manage.py runserver
-```
-Visit `http://localhost:8000/`
-
-## 15. API Documentation
-*To be implemented in Phase 2 using Django REST Framework in `apps/*/serializers.py`*.
-
-## 16. Authentication
-Uses Django's built-in session-based authentication for the web portal.
-
-## 17. Multi-Tenant Architecture
-Brand-specific views are isolated by checking `request.user.owned_brand`. A standard `get_object_or_404(Garment, id=id, brand=brand)` pattern is strictly enforced across the catalog.
-
-## 18. AI Architecture
-The AI integration is built on a Provider pattern:
-`BaseVirtualTryOnProvider` -> `MockGenerativeProvider`. 
-This allows swapping the mock implementation for a real API (like Stable Diffusion) via environment variables without changing business logic.
-
-## 19. Testing
-*To be implemented.*
-
-## 20. Security
-- Clickjacking protection via `XFrameOptionsMiddleware` (with specific `@xframe_options_sameorigin` exemptions for try-ons).
-- Strict ORM isolation for tenant data.
-
-## 21. Future Improvements
-- DRF API for mobile apps.
-- Real Stable Diffusion integration.
-- Cart and Checkout flows.
-# audavto
-# audavto
+## License & Support
+For installation and configuration support, please contact the developer profile directly. Extensive custom ML model integration (beyond the provided Replicate API structure) falls outside standard support.
