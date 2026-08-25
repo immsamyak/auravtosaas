@@ -38,6 +38,18 @@ def login_view(request):
         user = authenticate(request, username=u, password=p)
         if user is not None:
             login(request, user)
+            
+            # Honor 'next' parameter if present
+            next_url = request.GET.get('next') or request.POST.get('next')
+            if next_url:
+                from django.utils.http import url_has_allowed_host_and_scheme
+                if url_has_allowed_host_and_scheme(url=next_url, allowed_hosts={request.get_host()}):
+                    return redirect(next_url)
+                    
+            # Admin role redirect
+            if user.is_superuser or user.groups.filter(name='Platform Admin').exists():
+                return redirect('admin:dashboard')
+                
             return redirect('dashboard')
     return render(request, 'accounts/login.html', {'trusted_brands': Brand.objects.exclude(logo='').order_by('-created_at')[:4]})
 
