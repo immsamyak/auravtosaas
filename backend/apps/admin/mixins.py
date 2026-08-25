@@ -4,15 +4,20 @@ from django.forms import FileField, ImageField
 from .widgets import TailwindImageWidget
 from django.contrib import messages
 
-class SuperUserRequiredMixin(UserPassesTestMixin):
-    """Restricts access exclusively to active superusers (Owner/Sysadmin)."""
+from django.contrib.auth.views import redirect_to_login
+
+class AdminAccessMixin(UserPassesTestMixin):
     login_url = reverse_lazy('admin:login')
+    def handle_no_permission(self):
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
+
+class SuperUserRequiredMixin(AdminAccessMixin):
+    """Restricts access exclusively to active superusers (Owner/Sysadmin)."""
     def test_func(self):
         return self.request.user.is_active and self.request.user.is_superuser
 
-class PlatformAdminRequiredMixin(UserPassesTestMixin):
+class PlatformAdminRequiredMixin(AdminAccessMixin):
     """Restricts access to Superusers and Platform Admins (SaaS operations)."""
-    login_url = reverse_lazy('admin:login')
     def test_func(self):
         user = self.request.user
         if not user.is_active:
@@ -21,9 +26,8 @@ class PlatformAdminRequiredMixin(UserPassesTestMixin):
             return True
         return user.groups.filter(name='Platform Admin').exists()
 
-class PlatformSupportRequiredMixin(UserPassesTestMixin):
+class PlatformSupportRequiredMixin(AdminAccessMixin):
     """Restricts access to Superusers, Admins, and Support staff."""
-    login_url = reverse_lazy('admin:login')
     def test_func(self):
         user = self.request.user
         if not user.is_active:
