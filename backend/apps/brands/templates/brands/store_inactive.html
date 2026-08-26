@@ -12,21 +12,21 @@
  body { font-family: 'Plus Jakarta Sans', sans-serif; }
  </style>
 </head>
-<body class="antialiased text-theme-text-base bg-theme-bg-base dark:bg-slate-800/50/80 min-h-screen flex flex-col justify-center items-center">
+<body class="antialiased text-theme-text-primary bg-theme-bg min-h-screen flex flex-col justify-center items-center">
  
  <div class="z-10 text-center px-6 max-w-lg mx-auto">
  <div class="mb-8 flex justify-center">
  <div class="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center">
- <i class="fa-solid fa-store-slash text-3xl text-slate-400 dark:text-slate-500"></i>
+ <i class="fa-solid fa-store-slash text-3xl text-theme-text-disabled"></i>
  </div>
  </div>
  
- <h1 class="text-3xl font-extrabold tracking-tight text-theme-text-base mb-4">{{ brand.name }} is currently unavailable</h1>
- <p class="text-theme-text-muted text-lg leading-relaxed mb-8">
+ <h1 class="text-3xl font-extrabold tracking-tight text-theme-text-primary dark:text-white mb-4">{{ brand.name }} is currently unavailable</h1>
+ <p class="text-theme-text-muted dark:text-gray-400 text-lg leading-relaxed mb-8">
  This store is currently not active or accepting new orders. Please check back later.
  </p>
  
- <p class="mt-12 text-sm text-slate-400 dark:text-slate-500 font-medium tracking-wide uppercase">Powered by Aura</p>
+ <p class="mt-12 text-sm text-theme-text-disabled font-medium tracking-wide uppercase">Powered by Aura</p>
  </div>
 </body>
 </html>

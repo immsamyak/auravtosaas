@@ -9,21 +9,21 @@
  <nav class="flex mb-8" aria-label="Breadcrumb">
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li>
- <a href="{% url 'coupon_list' %}" class="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-colors">
+ <a href="{% url 'coupon_list' %}" class="flex items-center text-theme-text-disabled hover:text-indigo-600 transition-colors">
  <i class="fa-solid fa-bullhorn mr-2"></i>
  <span class="text-sm font-medium">Marketing</span>
  </a>
  </li>
  <li>
  <div class="flex items-center">
- <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+ <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <a href="{% url 'coupon_list' %}" class="text-sm font-medium text-theme-text-muted hover:text-indigo-600">Coupons</a>
  </div>
  </li>
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
- <span class="text-sm font-bold text-theme-text-base">{% if coupon %}Edit{% else %}Create{% endif %} Coupon</span>
+ <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">{% if coupon %}Edit{% else %}Create{% endif %} Coupon</span>
  </div>
  </li>
  </ol>
@@ -31,12 +31,12 @@
 
  <!-- Header -->
  <div class="mb-10">
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">{% if coupon %}Edit <span class="text-indigo-600 font-light">Coupon</span>{% else %}Create <span class="text-indigo-600 font-light">Coupon</span>{% endif %}</h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">{% if coupon %}Edit <span class="text-indigo-600 font-light">Coupon</span>{% else %}Create <span class="text-indigo-600 font-light">Coupon</span>{% endif %}</h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Configure discount codes for your customers.</p>
  </div>
 
  <!-- Form -->
- <form method="POST" class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 overflow-hidden">
+ <form method="POST" class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border dark:border-slate-600/50/50 overflow-hidden">
  {% csrf_token %}
  <div class="p-8 space-y-8">
  {{ form.non_field_errors }}
@@ -44,14 +44,14 @@
  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
  <!-- Basic Info -->
  <div class="md:col-span-2">
- <label class="block text-sm font-bold text-slate-700 mb-2">Coupon Code <span class="text-rose-500">*</span></label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">Coupon Code <span class="text-rose-500">*</span></label>
  <input type="text" name="code" value="{% if coupon %}{{ coupon.code }}{% endif %}" required class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm uppercase font-mono" placeholder="e.g. SUMMER2026">
  <p class="mt-2 text-xs text-theme-text-muted">Customers will enter this code at checkout.</p>
  </div>
 
  <!-- Discount -->
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-2">Discount Type <span class="text-rose-500">*</span></label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">Discount Type <span class="text-rose-500">*</span></label>
  <select name="discount_type" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
  <option value="PERCENTAGE" {% if coupon and coupon.discount_type == 'PERCENTAGE' %}selected{% endif %}>Percentage (%)</option>
  <option value="FIXED_AMOUNT" {% if coupon and coupon.discount_type == 'FIXED_AMOUNT' %}selected{% endif %}>Fixed Amount ($)</option>
@@ -59,13 +59,13 @@
  </div>
 
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-2">Discount Value <span class="text-rose-500">*</span></label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">Discount Value <span class="text-rose-500">*</span></label>
  <input type="number" name="discount_value" value="{% if coupon %}{{ coupon.discount_value }}{% endif %}" required min="0" step="0.01" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 20">
  </div>
 
  <!-- Conditions -->
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-2">Condition <span class="text-rose-500">*</span></label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">Condition <span class="text-rose-500">*</span></label>
  <select name="condition" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
  <option value="NONE" {% if coupon and coupon.condition == 'NONE' %}selected{% endif %}>No restrictions</option>
  <option value="MINIMUM_PURCHASE" {% if coupon and coupon.condition == 'MINIMUM_PURCHASE' %}selected{% endif %}>Minimum Purchase Amount</option>
@@ -73,20 +73,20 @@
  </div>
 
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-2">Minimum Purchase Amount (Optional)</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">Minimum Purchase Amount (Optional)</label>
  <input type="number" name="min_order_value" value="{% if coupon %}{{ coupon.min_purchase_amount }}{% endif %}" min="0" step="0.01" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 50.00">
  </div>
 
  <div class="md:col-span-2">
- <label class="block text-sm font-bold text-slate-700 mb-2">Maximum Uses (Optional)</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">Maximum Uses (Optional)</label>
  <input type="number" name="max_uses" value="{% if coupon %}{{ coupon.max_uses }}{% endif %}" min="0" class="block w-full md:w-1/2 rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 100">
  <p class="mt-2 text-xs text-theme-text-muted">Leave blank for unlimited usage.</p>
  </div>
 
  <!-- Status -->
- <div class="md:col-span-2 bg-theme-bg-base dark:bg-slate-800/50/80 p-6 rounded-xl border border-theme-border-divider dark:border-slate-600/50/50 flex items-center justify-between mt-4">
+ <div class="md:col-span-2 bg-theme-bg p-6 rounded-xl border border-theme-border-subtle dark:border-slate-600/50/50 flex items-center justify-between mt-4">
  <div>
- <h4 class="text-sm font-bold text-theme-text-base">Active Status</h4>
+ <h4 class="text-sm font-bold text-theme-text-primary">Active Status</h4>
  <p class="text-xs text-theme-text-muted mt-1">Enable or disable this coupon</p>
  </div>
  <label class="relative inline-flex items-center cursor-pointer">
@@ -97,8 +97,8 @@
  </div>
  </div>
 
- <div class="bg-theme-bg-base dark:bg-slate-800/50/80 px-8 py-5 border-t border-theme-border-base dark:border-slate-600/50/50 flex justify-end space-x-4">
- <a href="{% url 'coupon_list' %}" class="inline-flex items-center justify-center px-6 py-2.5 border border-theme-input-border shadow-sm text-sm font-bold rounded-xl text-slate-700 bg-theme-bg-surface dark:bg-slate-800/50/80 hover:bg-theme-bg-hover transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+ <div class="bg-theme-bg px-8 py-5 border-t border-theme-border dark:border-slate-600/50/50 flex justify-end space-x-4">
+ <a href="{% url 'coupon_list' %}" class="inline-flex items-center justify-center px-6 py-2.5 border border-theme-input-border shadow-sm text-sm font-bold rounded-xl text-theme-text-secondary bg-theme-surface hover:bg-theme-surface-hover transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
  Cancel
  </a>
  <button type="submit" class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent shadow-sm text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

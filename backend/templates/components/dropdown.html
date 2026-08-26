@@ -1,9 +1,9 @@
 {# Usage Example for {% dropdown %} is in the Walkthrough artifact #}
 <div class="relative" x-data="{ open: false }" @click.stop>
- <button @click="open = !open" @click.away="open = false" type="button" class="text-slate-400 dark:text-slate-500 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-theme-bg-hover focus:outline-none">
+ <button @click="open = !open" @click.away="open = false" type="button" class="text-theme-text-disabled hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-theme-surface-hover focus:outline-none">
  <i class="fa-solid fa-ellipsis-vertical w-4 text-center"></i>
  </button>
- <div x-show="open" x-transition class="absolute right-0 mt-2 w-48 bg-theme-bg-surface rounded-xl shadow-lg border border-theme-border-divider py-1 z-50" x-cloak>
+ <div x-show="open" x-transition class="absolute right-0 mt-2 w-48 bg-theme-surface rounded-xl shadow-lg border border-theme-border-subtle py-1 z-50" x-cloak>
  {{ dropdown_content|safe }}
  </div>
 </div>

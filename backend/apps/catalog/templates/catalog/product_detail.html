@@ -21,7 +21,7 @@
  <li aria-current="page">
  <div class="flex items-center">
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-1"></i>
- <span class="ml-1 text-sm font-medium text-theme-text-base md:ml-2">{{ product.name }} Variants</span>
+ <span class="ml-1 text-sm font-medium text-theme-text-primary md:ml-2">{{ product.name }} Variants</span>
  </div>
  </li>
  </ol>
@@ -30,7 +30,7 @@
  <!-- Product Header -->
  <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">{{ product.name }} <span class="text-indigo-600 font-light">Variants</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">{{ product.name }} <span class="text-indigo-600 font-light">Variants</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">
  {{ product.category.name }} • {{ product.product_type.name }} • {{ request.user.owned_brand.get_currency_symbol }}{{ product.price }}
  </p>
@@ -39,7 +39,7 @@
  <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
  Active
  </span>
- <a href="{% url 'edit_product' product.id %}" class="bg-theme-bg-surface border border-theme-border-base text-slate-700 px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:bg-theme-bg-hover transition-all inline-flex items-center justify-center">
+ <a href="{% url 'edit_product' product.id %}" class="bg-theme-surface border border-theme-border text-theme-text-secondary px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:bg-theme-surface-hover transition-all inline-flex items-center justify-center">
  <i class="fa-solid fa-pen mr-2"></i> Edit Product
  </a>
  </div>
@@ -49,14 +49,14 @@
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
  <!-- Add Variant Form -->
  <div class="lg:col-span-1">
- <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base p-6 lg:sticky lg:top-24">
- <h3 class="text-lg font-bold text-theme-text-base mb-6 border-b border-theme-border-divider pb-2">Add New Variant</h3>
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border p-6 lg:sticky lg:top-24">
+ <h3 class="text-lg font-bold text-theme-text-primary mb-6 border-b border-theme-border-subtle pb-2">Add New Variant</h3>
  <form action="{% url 'product_detail' product.id %}" method="POST" enctype="multipart/form-data" class="space-y-5">
  {% csrf_token %}
  
  <div>
- <label for="color" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Color</label>
- <select id="color" name="color" required class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <label for="color" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Color</label>
+ <select id="color" name="color" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
  {% for color in colors %}
  <option value="{{ color.id }}">{{ color.name }}</option>
  {% endfor %}
@@ -64,8 +64,8 @@
  </div>
 
  <div>
- <label for="size" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Size</label>
- <select id="size" name="size" required class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <label for="size" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Size</label>
+ <select id="size" name="size" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
  {% for size in sizes %}
  <option value="{{ size.id }}">{{ size.code }} - {{ size.name }}</option>
  {% endfor %}
@@ -73,16 +73,16 @@
  </div>
 
  <div>
- <label for="stock" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Stock Quantity</label>
- <input type="number" name="stock" id="stock" required min="0" value="10" class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label for="stock" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Stock Quantity</label>
+ <input type="number" name="stock" id="stock" required min="0" value="10" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
 
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Variant Image</label>
- <div class="mt-1 flex justify-center px-4 pt-6 pb-6 border-2 border-theme-input-border border-dashed rounded-xl bg-theme-bg-base hover:border-indigo-500 hover:bg-indigo-50/50 transition-all group relative cursor-pointer">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Variant Image</label>
+ <div class="mt-1 flex justify-center px-4 pt-6 pb-6 border-2 border-theme-input-border border-dashed rounded-xl bg-theme-bg hover:border-indigo-500 hover:bg-indigo-50/50 transition-all group relative cursor-pointer">
  <input id="image" name="image" type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" required>
  <div class="space-y-1 text-center">
- <i class="fa-solid fa-image text-slate-400 group-hover:text-indigo-600 text-3xl mb-2 transition-colors"></i>
+ <i class="fa-solid fa-image text-theme-text-disabled group-hover:text-indigo-600 text-3xl mb-2 transition-colors"></i>
  <div class="flex text-sm text-theme-text-muted justify-center">
  <span class="font-bold text-indigo-600 group-hover:text-indigo-500">Upload file</span>
  </div>
@@ -91,7 +91,7 @@
  </div>
  </div>
  
- <div class="pt-4 border-t border-theme-border-divider">
+ <div class="pt-4 border-t border-theme-border-subtle">
  <button type="submit" class="w-full inline-flex justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
  Add Variant
  </button>
@@ -102,32 +102,32 @@
 
  <!-- Variants List -->
  <div class="lg:col-span-2">
- <h3 class="text-lg font-bold text-theme-text-base mb-6 px-1">Existing Variants</h3>
- <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base overflow-visible">
+ <h3 class="text-lg font-bold text-theme-text-primary mb-6 px-1">Existing Variants</h3>
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border overflow-visible">
  <ul class="divide-y divide-slate-100">
  {% for variant in product.variants.all %}
- <li class="p-6 hover:bg-theme-bg-hover transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 first:rounded-t-3xl last:rounded-b-3xl">
+ <li class="p-6 hover:bg-theme-surface-hover transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 first:rounded-t-3xl last:rounded-b-3xl">
  <div class="flex items-center space-x-4">
- <div class="flex-shrink-0 h-20 w-20 bg-slate-100 rounded-xl overflow-hidden border border-theme-border-base shadow-sm relative group">
+ <div class="flex-shrink-0 h-20 w-20 bg-theme-bg-secondary rounded-xl overflow-hidden border border-theme-border shadow-sm relative group">
  {% if variant.image %}
  <img src="{{ variant.image.url }}" alt="{{ variant.color.name }}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500">
  {% else %}
- <div class="h-full w-full flex items-center justify-center text-slate-400">
+ <div class="h-full w-full flex items-center justify-center text-theme-text-disabled">
  <i class="fa-solid fa-shirt text-2xl"></i>
  </div>
  {% endif %}
  </div>
  <div class="flex-1 min-w-0">
- <p class="text-base font-bold text-theme-text-base truncate flex items-center gap-2">
+ <p class="text-base font-bold text-theme-text-primary truncate flex items-center gap-2">
  {{ variant.color.name }}
- <span class="bg-slate-100 text-theme-text-muted text-xs px-2 py-0.5 rounded font-mono border border-theme-border-base">
+ <span class="bg-theme-bg-secondary text-theme-text-muted text-xs px-2 py-0.5 rounded font-mono border border-theme-border">
  #{{ variant.id }}
  </span>
  </p>
  <div class="mt-1 flex flex-wrap gap-2 text-sm text-theme-text-muted">
- <span class="inline-flex items-center"><i class="fa-solid fa-ruler mr-1.5 text-slate-400"></i> Size: {{ variant.size.code }}</span>
+ <span class="inline-flex items-center"><i class="fa-solid fa-ruler mr-1.5 text-theme-text-disabled"></i> Size: {{ variant.size.code }}</span>
  <span class="text-slate-300">•</span>
- <span class="inline-flex items-center"><i class="fa-solid fa-box mr-1.5 text-slate-400"></i> Stock: {{ variant.total_stock }}</span>
+ <span class="inline-flex items-center"><i class="fa-solid fa-box mr-1.5 text-theme-text-disabled"></i> Stock: {{ variant.total_stock }}</span>
  </div>
  </div>
  </div>
@@ -135,10 +135,10 @@
  <div class="flex-shrink-0 flex items-center justify-end">
  <!-- Dropdown Action -->
  {% dropdown %}
- <a href="{% url 'edit_variant' variant.id %}" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover flex items-center">
- <i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit Variant
+ <a href="{% url 'edit_variant' variant.id %}" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover flex items-center">
+ <i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit Variant
  </a>
- <div class="border-t border-theme-border-divider my-1"></div>
+ <div class="border-t border-theme-border-subtle my-1"></div>
  <form action="{% url 'delete_variant' variant.id %}" method="POST" class="block w-full" onsubmit="confirmAction(event, 'Are you sure you want to delete this variant?');">
  {% csrf_token %}
  <button type="submit" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 font-medium flex items-center">
@@ -150,10 +150,10 @@
  </li>
  {% empty %}
  <li class="p-12 text-center">
- <div class="mx-auto h-20 w-20 bg-theme-bg-base rounded-full flex items-center justify-center border border-theme-border-divider mb-4">
+ <div class="mx-auto h-20 w-20 bg-theme-bg rounded-full flex items-center justify-center border border-theme-border-subtle mb-4">
  <i class="fa-solid fa-shirt text-3xl text-indigo-400"></i>
  </div>
- <h3 class="text-lg font-bold text-theme-text-base mb-2">No variants exist</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary mb-2">No variants exist</h3>
  <p class="text-sm text-theme-text-muted max-w-sm mx-auto">Use the form to add a variant, otherwise customers cannot virtually try it on or purchase it.</p>
  </li>
  {% endfor %}

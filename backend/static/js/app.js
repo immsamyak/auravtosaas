@@ -15,10 +15,16 @@ const ThemeManager = {
             document.documentElement.classList.remove('dark');
         }
 
-        // Attach event listeners when DOM loads
-        document.addEventListener('DOMContentLoaded', () => {
+        // Attach event listeners safely
+        const bindHandler = () => {
             this.bindToggles();
-        });
+        };
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bindHandler);
+        } else {
+            bindHandler();
+        }
     },
 
     toggle: function() {

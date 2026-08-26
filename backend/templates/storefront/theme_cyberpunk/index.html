@@ -14,7 +14,7 @@
  </div>
 <h1 class="font-display font-black text-6xl md:text-9xl tracking-wider uppercase leading-[0.85] mb-8 glitch-hover">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}<span class="text-cyber-cyan neon-text block">FUTURE</span>
 <span class="text-cyber-magenta neon-text block">WEAR_</span>{% endif %}</h1>
-<p class="font-mono text-gray-500 max-w-lg mb-10 text-sm leading-relaxed">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}// Apparel designed for digital natives. <br/>
+<p class="font-mono text-theme-text-muted max-w-lg mb-10 text-sm leading-relaxed">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}// Apparel designed for digital natives. <br/>
  // Engineered with advanced materials. <br/>
  // Limited units. Zero compromises.{% endif %}</p>
 <div class="flex gap-4">
@@ -68,7 +68,7 @@
 </h3>
 <div class="flex justify-between items-center">
 <span class="font-mono text-cyber-cyan text-lg">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
-<button class="font-mono text-xs text-gray-500 border border-gray-700 px-3 py-1 hover:border-cyber-magenta hover:text-cyber-magenta transition-colors">[ADD]</button>
+<button class="font-mono text-xs text-theme-text-muted border border-gray-700 px-3 py-1 hover:border-cyber-magenta hover:text-cyber-magenta transition-colors">[ADD]</button>
 </div>
 </div>
 </div>
@@ -82,7 +82,7 @@
 
  {% else %}
  <div class="border border-cyber-cyan/10 p-16 text-center bg-cyber-surface">
-<p class="font-mono text-gray-600 text-lg">&gt; ERROR: catalog_empty // awaiting_restock</p>
+<p class="font-mono text-theme-text-secondary text-lg">&gt; ERROR: catalog_empty // awaiting_restock</p>
 </div>
  {% endif %}
 </section>
@@ -104,7 +104,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -124,7 +124,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

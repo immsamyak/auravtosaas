@@ -12,7 +12,7 @@
  </div>
 {% endif %}
 <h1 class="font-display text-6xl md:text-8xl uppercase leading-[0.85] mb-6">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}Limited <br/>Edition <br/><span class="text-snkr-red">Drops.</span>{% endif %}</h1>
-<p class="font-sans text-gray-400 text-lg mb-10 max-w-md">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}The most coveted kicks on the planet. Authenticated. Exclusive. First come, first served.{% endif %}</p>
+<p class="font-sans text-theme-text-disabled text-lg mb-10 max-w-md">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}The most coveted kicks on the planet. Authenticated. Exclusive. First come, first served.{% endif %}</p>
 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
 <a class="inline-block bg-snkr-red text-white font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg hover:bg-snkr-ember transition-colors shadow-lg shadow-snkr-red/25" href="{{ brand.banner_cta_link|default:'#drops' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}View All Releases{% endif %}</a>
 
@@ -41,8 +41,8 @@
 <section class="py-24 max-w-7xl mx-auto px-6" id="drops">
 <div class="flex justify-between items-end mb-12 border-b border-white/5 pb-4">
 <h2 class="font-display text-4xl uppercase">All Releases</h2>
-<div class="hidden md:flex gap-4 font-sans text-sm font-semibold text-gray-500">
-<button class="px-4 py-2 bg-theme-bg-surface text-black rounded-lg">All</button>
+<div class="hidden md:flex gap-4 font-sans text-sm font-semibold text-theme-text-muted">
+<button class="px-4 py-2 bg-theme-surface text-black rounded-lg">All</button>
 
  {% for cat in categories|slice:":3" %}
  <a class="px-4 py-2 hover:text-opacity-80 transition-colors" href="{% url 'storefront_shop' brand.slug %}?category={{ cat.id }}">{{ cat.name }}</a>
@@ -75,7 +75,7 @@
 </div>
 <div class="flex justify-between items-center">
 <span class="font-display text-2xl">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
-<button class="bg-theme-bg-surface text-black font-sans font-bold text-sm px-6 py-2 rounded-lg hover:bg-snkr-red hover:text-white transition-colors">
+<button class="bg-theme-surface text-black font-sans font-bold text-sm px-6 py-2 rounded-lg hover:bg-snkr-red hover:text-white transition-colors">
  Buy Now
  </button>
 </div>
@@ -92,7 +92,7 @@
  {% else %}
  <div class="text-center py-20 bg-snkr-surface rounded-2xl border border-white/5">
 <i class="fa-solid fa-shoe-prints text-5xl text-white/5 mb-4"></i>
-<h3 class="font-display text-3xl text-gray-600 uppercase">No Releases Yet</h3>
+<h3 class="font-display text-3xl text-theme-text-secondary uppercase">No Releases Yet</h3>
 </div>
  {% endif %}
 </section>
@@ -114,7 +114,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -134,7 +134,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

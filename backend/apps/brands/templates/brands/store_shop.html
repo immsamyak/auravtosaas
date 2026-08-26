@@ -3,12 +3,12 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
  <!-- Header -->
- <div class="mb-12 border-b border-gray-200 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+ <div class="mb-12 border-b border-theme-border pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
  <div>
- <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 uppercase">Shop All</h1>
- <p class="mt-4 text-sm text-gray-500 max-w-xl">Browse our entire collection. Use the filters to find exactly what you're looking for.</p>
+ <h1 class="text-3xl font-extrabold tracking-tight text-theme-text-primary uppercase">Shop All</h1>
+ <p class="mt-4 text-sm text-theme-text-muted max-w-xl">Browse our entire collection. Use the filters to find exactly what you're looking for.</p>
  </div>
- <div class="text-sm text-gray-500 font-medium">
+ <div class="text-sm text-theme-text-muted font-medium">
  Showing {{ products|length }} products
  </div>
  </div>
@@ -24,19 +24,19 @@
 
  <!-- Category Filter -->
  <div>
- <h3 class="text-xs font-bold tracking-widest text-gray-900 uppercase mb-4">Categories</h3>
+ <h3 class="text-xs font-bold tracking-widest text-theme-text-primary uppercase mb-4">Categories</h3>
  <div class="space-y-3">
  <div class="flex items-center">
  <input type="radio" name="category" value="" id="cat_all" {% if not selected_category %}checked{% endif %} 
- class="h-4 w-4 border-gray-300 text-black focus:ring-black" onchange="document.getElementById('filter-form').submit()">
- <label for="cat_all" class="ml-3 text-sm text-gray-600">All Categories</label>
+ class="h-4 w-4 border-theme-border text-black focus:ring-black" onchange="document.getElementById('filter-form').submit()">
+ <label for="cat_all" class="ml-3 text-sm text-theme-text-secondary">All Categories</label>
  </div>
  {% for cat in categories %}
  <div class="flex items-center">
  <input type="radio" name="category" value="{{ cat.id }}" id="cat_{{ cat.id }}" 
  {% if selected_category == cat.id|stringformat:"s" %}checked{% endif %} 
- class="h-4 w-4 border-gray-300 text-black focus:ring-black" onchange="document.getElementById('filter-form').submit()">
- <label for="cat_{{ cat.id }}" class="ml-3 text-sm text-gray-600">{{ cat.name }}</label>
+ class="h-4 w-4 border-theme-border text-black focus:ring-black" onchange="document.getElementById('filter-form').submit()">
+ <label for="cat_{{ cat.id }}" class="ml-3 text-sm text-theme-text-secondary">{{ cat.name }}</label>
  </div>
  {% endfor %}
  </div>
@@ -44,8 +44,8 @@
 
  <!-- Color Filter -->
  {% if filter_colors %}
- <div class="border-t border-gray-200 pt-8">
- <h3 class="text-xs font-bold tracking-widest text-gray-900 uppercase mb-4">Colors</h3>
+ <div class="border-t border-theme-border pt-8">
+ <h3 class="text-xs font-bold tracking-widest text-theme-text-primary uppercase mb-4">Colors</h3>
  <div class="flex flex-wrap gap-3">
  {% for color in filter_colors %}
  <label class="relative cursor-pointer group">
@@ -62,15 +62,15 @@
 
  <!-- Size Filter -->
  {% if filter_sizes %}
- <div class="border-t border-gray-200 pt-8">
- <h3 class="text-xs font-bold tracking-widest text-gray-900 uppercase mb-4">Sizes</h3>
+ <div class="border-t border-theme-border pt-8">
+ <h3 class="text-xs font-bold tracking-widest text-theme-text-primary uppercase mb-4">Sizes</h3>
  <div class="grid grid-cols-4 gap-2">
  {% for size in filter_sizes %}
  <label class="cursor-pointer">
  <input type="checkbox" name="size" value="{{ size.id }}" class="peer sr-only"
  {% if size.id|stringformat:"s" in selected_sizes %}checked{% endif %}
  onchange="document.getElementById('filter-form').submit()">
- <div class="flex items-center justify-center py-2 px-1 text-xs border border-gray-200 bg-theme-bg-surface dark:bg-slate-800/50/80 text-gray-600 peer-checked:border-black peer-checked:bg-black peer-checked:text-white transition-colors">
+ <div class="flex items-center justify-center py-2 px-1 text-xs border border-theme-border bg-theme-surface text-theme-text-secondary peer-checked:border-black peer-checked:bg-black peer-checked:text-white transition-colors">
  {{ size.code }}
  </div>
  </label>
@@ -86,7 +86,7 @@
  
  <!-- Clear Filters -->
  {% if selected_category or selected_colors or selected_sizes %}
- <a href="{% url 'storefront_shop' brand.slug %}" class="block text-center text-xs text-gray-500 hover:text-black underline tracking-wide mt-4">Clear All Filters</a>
+ <a href="{% url 'storefront_shop' brand.slug %}" class="block text-center text-xs text-theme-text-muted hover:text-black underline tracking-wide mt-4">Clear All Filters</a>
  {% endif %}
  </form>
  </aside>
@@ -97,41 +97,41 @@
  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
  {% for product in products %}
  <div class="group relative flex flex-col">
- <div class="aspect-[4/5] w-full bg-gray-100 overflow-hidden mb-4 relative">
+ <div class="aspect-[4/5] w-full bg-theme-bg-secondary overflow-hidden mb-4 relative">
  {% if product.images.first %}
  <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" class="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-500">
  {% elif product.variants.first.image %}
  <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-500">
  {% else %}
- <div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
+ <div class="w-full h-full flex items-center justify-center text-theme-text-disabled">No Image</div>
  {% endif %}
  
  {% if product.is_vto_ready %}
- <div class="absolute top-3 right-3 bg-theme-bg-surface dark:bg-slate-800/50/80 px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+ <div class="absolute top-3 right-3 bg-theme-surface px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
  VTO Ready
  </div>
  {% endif %}
  </div>
  
  <div class="flex flex-col flex-grow">
- <h3 class="text-sm font-bold text-gray-900 mb-1">
+ <h3 class="text-sm font-bold text-theme-text-primary mb-1">
  <a href="{% url 'store_product_detail' brand.slug product.slug %}">
  <span class="absolute inset-0"></span>
  {{ product.name }}
  </a>
  </h3>
- <p class="text-xs text-gray-500 mb-2">{{ product.category.name|default:"Uncategorized" }}</p>
+ <p class="text-xs text-theme-text-muted mb-2">{{ product.category.name|default:"Uncategorized" }}</p>
  
  <!-- Variant Colors -->
  {% if product.unique_colors %}
  <div class="flex flex-wrap gap-1 mb-3 relative z-10">
  {% for color in product.unique_colors %}
- <div class="w-3.5 h-3.5 rounded-full border border-gray-300 shadow-sm" style="background-color: {{ color.hex_code }};" title="{{ color.name }}"></div>
+ <div class="w-3.5 h-3.5 rounded-full border border-theme-border shadow-sm" style="background-color: {{ color.hex_code }};" title="{{ color.name }}"></div>
  {% endfor %}
  </div>
  {% endif %}
  
- <p class="text-sm font-medium text-gray-900 mt-auto">{{ brand.get_currency_symbol }}{{ product.price }}</p>
+ <p class="text-sm font-medium text-theme-text-primary mt-auto">{{ brand.get_currency_symbol }}{{ product.price }}</p>
  </div>
  </div>
  {% endfor %}
@@ -142,7 +142,7 @@
  <div class="mt-12 flex justify-center w-full">
  <nav class="flex items-center space-x-2" aria-label="Pagination">
  {% if page_obj.has_previous %}
- <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|cut:'page='|cut:request.GET.page }}{% endif %}" class="px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 bg-theme-bg-surface dark:bg-slate-800/50/80 hover:bg-gray-50 uppercase tracking-widest transition-colors">
+ <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|cut:'page='|cut:request.GET.page }}{% endif %}" class="px-4 py-2 border border-theme-border text-sm font-medium text-theme-text-secondary bg-theme-surface hover:bg-theme-surface-hover uppercase tracking-widest transition-colors">
  Prev
  </a>
  {% endif %}
@@ -152,7 +152,7 @@
  </span>
  
  {% if page_obj.has_next %}
- <a href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|cut:'page='|cut:request.GET.page }}{% endif %}" class="px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 bg-theme-bg-surface dark:bg-slate-800/50/80 hover:bg-gray-50 uppercase tracking-widest transition-colors">
+ <a href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode|cut:'page='|cut:request.GET.page }}{% endif %}" class="px-4 py-2 border border-theme-border text-sm font-medium text-theme-text-secondary bg-theme-surface hover:bg-theme-surface-hover uppercase tracking-widest transition-colors">
  Next
  </a>
  {% endif %}
@@ -161,10 +161,10 @@
  {% endif %}
  
  {% else %}
- <div class="flex flex-col items-center justify-center py-20 bg-gray-50 border border-dashed border-gray-300">
+ <div class="flex flex-col items-center justify-center py-20 bg-theme-bg border border-dashed border-theme-border">
  <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-4"></i>
- <h3 class="text-lg font-bold text-gray-900 mb-2">No products found</h3>
- <p class="text-gray-500 text-sm text-center max-w-sm">Try adjusting your filters or browsing a different category.</p>
+ <h3 class="text-lg font-bold text-theme-text-primary mb-2">No products found</h3>
+ <p class="text-theme-text-muted text-sm text-center max-w-sm">Try adjusting your filters or browsing a different category.</p>
  <a href="{% url 'storefront_shop' brand.slug %}" class="mt-6 text-sm font-bold text-black border-b border-black pb-1">Clear Filters</a>
  </div>
  {% endif %}

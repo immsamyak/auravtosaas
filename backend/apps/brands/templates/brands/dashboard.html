@@ -7,9 +7,9 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-chart-pie text-slate-400 dark:text-slate-500 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Analytics</span>
- <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+ <i class="fa-solid fa-chart-pie text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Analytics</span>
+ <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Overview</span>
  </div>
  </li>
@@ -19,7 +19,7 @@
  <!-- Header Section -->
  <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">{{ brand.name }} <span class="text-indigo-600 font-light">Overview</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">{{ brand.name }} <span class="text-indigo-600 font-light">Overview</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Real-time performance metrics for your virtual catalog.</p>
  </div>
  <div class="flex items-center space-x-4">
@@ -50,7 +50,7 @@
  
  
  <!-- Stat 5: Revenue -->
- <div class="relative group bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl p-6 shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+ <div class="relative group bg-theme-surface rounded-2xl p-6 shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
  <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
  <div class="relative z-10">
  <div class="flex items-center justify-between mb-4">
@@ -59,12 +59,12 @@
  </div>
  </div>
  <h3 class="text-sm font-semibold text-theme-text-muted tracking-wide uppercase">Total Revenue</h3>
- <p class="text-3xl font-extrabold text-theme-text-base mt-1">{{ request.user.owned_brand.get_currency_symbol }}{{ total_revenue }}</p>
+ <p class="text-3xl font-extrabold text-theme-text-primary mt-1">{{ request.user.owned_brand.get_currency_symbol }}{{ total_revenue }}</p>
  </div>
  </div>
 
  <!-- Stat 1 -->
- <div class="relative group bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl p-6 shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+ <div class="relative group bg-theme-surface rounded-2xl p-6 shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
  <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
  <div class="relative z-10">
  <div class="flex items-center justify-between mb-4">
@@ -74,12 +74,12 @@
  <span class="text-xs font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 px-2.5 py-1 rounded-full">+12%</span>
  </div>
  <h3 class="text-sm font-semibold text-theme-text-muted tracking-wide uppercase">Virtual Try-Ons</h3>
- <p class="text-3xl font-extrabold text-theme-text-base mt-1">{{ total_try_ons }}</p>
+ <p class="text-3xl font-extrabold text-theme-text-primary mt-1">{{ total_try_ons }}</p>
  </div>
  </div>
 
  <!-- Stat 2 -->
- <div class="relative group bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl p-6 shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+ <div class="relative group bg-theme-surface rounded-2xl p-6 shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
  <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
  <div class="relative z-10">
  <div class="flex items-center justify-between mb-4">
@@ -88,12 +88,12 @@
  </div>
  </div>
  <h3 class="text-sm font-semibold text-theme-text-muted tracking-wide uppercase">Direct Purchases</h3>
- <p class="text-3xl font-extrabold text-theme-text-base mt-1">{{ purchases }}</p>
+ <p class="text-3xl font-extrabold text-theme-text-primary mt-1">{{ purchases }}</p>
  </div>
  </div>
 
  <!-- Stat 3 -->
- <div class="relative group bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl p-6 shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+ <div class="relative group bg-theme-surface rounded-2xl p-6 shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
  <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
  <div class="relative z-10">
  <div class="flex items-center justify-between mb-4">
@@ -102,12 +102,12 @@
  </div>
  </div>
  <h3 class="text-sm font-semibold text-theme-text-muted tracking-wide uppercase">Conversion Rate</h3>
- <p class="text-3xl font-extrabold text-theme-text-base mt-1">{{ conversion_rate }}%</p>
+ <p class="text-3xl font-extrabold text-theme-text-primary mt-1">{{ conversion_rate }}%</p>
  </div>
  </div>
 
  <!-- Stat 4 -->
- <div class="relative group bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl p-6 shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+ <div class="relative group bg-theme-surface rounded-2xl p-6 shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
  <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-purple-50 to-purple-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
  <div class="relative z-10">
  <div class="flex items-center justify-between mb-4">
@@ -116,7 +116,7 @@
  </div>
  </div>
  <h3 class="text-sm font-semibold text-theme-text-muted tracking-wide uppercase">Avg AI Confidence</h3>
- <p class="text-3xl font-extrabold text-theme-text-base mt-1">{{ avg_confidence }}%</p>
+ <p class="text-3xl font-extrabold text-theme-text-primary mt-1">{{ avg_confidence }}%</p>
  </div>
  </div>
 
@@ -125,13 +125,13 @@
  <!-- Charts Row -->
  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-10">
  <!-- Main Line Chart -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 p-6 lg:col-span-2 relative overflow-hidden">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 p-6 lg:col-span-2 relative overflow-hidden">
  <div class="flex justify-between items-center mb-6">
  <div>
- <h3 class="text-lg font-bold text-theme-text-base">Engagement Over Time</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary">Engagement Over Time</h3>
  <p class="text-sm text-theme-text-muted">Virtual try-on requests over the last 7 days</p>
  </div>
- <button class="text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-colors"><i class="fa-solid fa-ellipsis"></i></button>
+ <button class="text-theme-text-disabled hover:text-indigo-600 transition-colors"><i class="fa-solid fa-ellipsis"></i></button>
  </div>
  <div class="relative h-[300px] w-full">
  <canvas id="conversionChart"></canvas>
@@ -140,10 +140,10 @@
 
  
  <!-- Revenue Bar Chart -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 p-6 relative overflow-hidden">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 p-6 relative overflow-hidden">
  <div class="flex justify-between items-center mb-6">
  <div>
- <h3 class="text-lg font-bold text-theme-text-base">Revenue</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary">Revenue</h3>
  <p class="text-sm text-theme-text-muted">Sales generated over 7 days</p>
  </div>
  </div>
@@ -153,17 +153,17 @@
  </div>
 
  <!-- System Health Donut Chart -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 p-6 relative overflow-hidden flex flex-col">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 p-6 relative overflow-hidden flex flex-col">
  <div class="flex justify-between items-center mb-6">
- <h3 class="text-lg font-bold text-theme-text-base">System Health</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary">System Health</h3>
  <i class="fa-solid fa-heart-pulse text-rose-500"></i>
  </div>
  <div class="relative flex-1 w-full flex items-center justify-center min-h-[250px]">
  <canvas id="statusChart"></canvas>
  <!-- Center Text for Donut -->
  <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2">
- <span class="text-3xl font-extrabold text-theme-text-base">{{ total_try_ons }}</span>
- <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Total</span>
+ <span class="text-3xl font-extrabold text-theme-text-primary">{{ total_try_ons }}</span>
+ <span class="text-xs font-semibold text-theme-text-disabled uppercase tracking-widest">Total</span>
  </div>
  </div>
  </div>
@@ -173,41 +173,41 @@
  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
  
  <!-- Top Products Table -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 overflow-hidden flex flex-col">
- <div class="px-6 py-5 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
- <h3 class="text-base font-bold text-theme-text-base">Top Performing Products</h3>
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 overflow-hidden flex flex-col">
+ <div class="px-6 py-5 border-b border-theme-border-subtle dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <h3 class="text-base font-bold text-theme-text-primary">Top Performing Products</h3>
  <a href="{% url 'manage_products' %}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View All</a>
  </div>
  <div class="flex-1">
  <ul class="divide-y divide-slate-100">
  {% for variant in top_products %}
- <li class="px-6 py-4 hover:bg-theme-bg-hover transition-colors group">
+ <li class="px-6 py-4 hover:bg-theme-surface-hover transition-colors group">
  <div class="flex items-center space-x-4">
  <div class="flex-shrink-0 relative">
  {% if variant.image %}
- <img class="h-12 w-12 rounded-xl object-cover shadow-sm border border-theme-border-base dark:border-slate-600/50/50" src="{{ variant.image.url }}" alt="">
+ <img class="h-12 w-12 rounded-xl object-cover shadow-sm border border-theme-border dark:border-slate-600/50/50" src="{{ variant.image.url }}" alt="">
  {% else %}
- <div class="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 dark:text-slate-500 border border-theme-border-base dark:border-slate-600/50/50"><i class="fa-solid fa-shirt"></i></div>
+ <div class="h-12 w-12 rounded-xl bg-theme-bg-secondary flex items-center justify-center text-theme-text-disabled border border-theme-border dark:border-slate-600/50/50"><i class="fa-solid fa-shirt"></i></div>
  {% endif %}
  <div class="absolute -top-2 -right-2 w-5 h-5 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm border border-white">{{ forloop.counter }}</div>
  </div>
  <div class="flex-1 min-w-0">
- <p class="text-sm font-bold text-theme-text-base truncate">{{ variant.product.name }}</p>
+ <p class="text-sm font-bold text-theme-text-primary truncate">{{ variant.product.name }}</p>
  <p class="text-xs font-medium text-theme-text-muted mt-0.5">{{ variant.color.name }} • Size {{ variant.size.code }}</p>
  </div>
  <div class="text-right">
- <div class="text-sm font-extrabold text-theme-text-base">{{ variant.try_on_count }}</div>
- <div class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-0.5">Try-Ons</div>
+ <div class="text-sm font-extrabold text-theme-text-primary">{{ variant.try_on_count }}</div>
+ <div class="text-xs font-medium text-theme-text-disabled uppercase tracking-widest mt-0.5">Try-Ons</div>
  </div>
  </div>
  </li>
  {% empty %}
  <li class="py-12 px-6 flex flex-col items-center justify-center text-center">
- <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-3">
- <i class="fa-solid fa-box-open text-2xl text-slate-300 dark:text-slate-600"></i>
+ <div class="w-16 h-16 bg-theme-bg-secondary rounded-full flex items-center justify-center mb-3">
+ <i class="fa-solid fa-box-open text-2xl text-slate-300"></i>
  </div>
  <p class="text-sm font-semibold text-theme-text-muted">No product data available yet.</p>
- <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Upload products to see performance.</p>
+ <p class="text-xs text-theme-text-disabled mt-1">Upload products to see performance.</p>
  </li>
  {% endfor %}
  </ul>
@@ -215,9 +215,9 @@
  </div>
 
  <!-- Recent Activity Table -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-divider dark:border-slate-600/50/50 overflow-hidden flex flex-col">
- <div class="px-6 py-5 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
- <h3 class="text-base font-bold text-theme-text-base">Live Activity Feed</h3>
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border-subtle dark:border-slate-600/50/50 overflow-hidden flex flex-col">
+ <div class="px-6 py-5 border-b border-theme-border-subtle dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <h3 class="text-base font-bold text-theme-text-primary">Live Activity Feed</h3>
  <span class="relative flex h-3 w-3">
  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
  <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
@@ -226,20 +226,20 @@
  <div class="flex-1">
  <ul class="divide-y divide-slate-100">
  {% for tryon in recent_try_ons %}
- <li class="px-6 py-4 hover:bg-theme-bg-hover transition-colors">
+ <li class="px-6 py-4 hover:bg-theme-surface-hover transition-colors">
  <div class="flex items-center space-x-4">
  <!-- User Avatar -->
  <div class="flex-shrink-0">
  {% if tryon.session.passport.user %}
  <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white flex items-center justify-center font-bold text-sm shadow-sm">{{ tryon.session.passport.user.username|make_list|first|upper }}</div>
  {% else %}
- <div class="h-10 w-10 rounded-full bg-slate-100 border border-theme-border-base dark:border-slate-600/50/50 text-slate-400 dark:text-slate-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-secret"></i></div>
+ <div class="h-10 w-10 rounded-full bg-theme-bg-secondary border border-theme-border dark:border-slate-600/50/50 text-theme-text-disabled flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-secret"></i></div>
  {% endif %}
  </div>
  
  <!-- Try-On Info -->
  <div class="flex-1 min-w-0">
- <p class="text-sm font-bold text-theme-text-base truncate">
+ <p class="text-sm font-bold text-theme-text-primary truncate">
  {% if tryon.session.passport.user %}{{ tryon.session.passport.user.username }}{% else %}Guest Shopper{% endif %}
  </p>
  <p class="text-xs font-medium text-theme-text-muted mt-0.5 truncate">Tried on <span class="text-indigo-600">{{ tryon.product_variant.product.name }}</span></p>
@@ -248,7 +248,7 @@
  <!-- Generated Result Thumbnail (if completed) -->
  {% if tryon.status == 'COMPLETED' and tryon.generated_image %}
  <div class="flex-shrink-0 relative group mr-2">
- <img src="{{ tryon.generated_image.url }}" onclick="openImageModal('{{ tryon.generated_image.url }}')" class="h-12 w-10 object-cover rounded-md shadow-sm border border-theme-border-base dark:border-slate-600/50/50 cursor-pointer hover:ring-2 hover:ring-indigo-500 transition-all">
+ <img src="{{ tryon.generated_image.url }}" onclick="openImageModal('{{ tryon.generated_image.url }}')" class="h-12 w-10 object-cover rounded-md shadow-sm border border-theme-border dark:border-slate-600/50/50 cursor-pointer hover:ring-2 hover:ring-indigo-500 transition-all">
  </div>
  {% endif %}
  
@@ -259,18 +259,18 @@
  {% elif tryon.status == 'FAILED' %}
  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-700 uppercase tracking-widest border border-rose-200/50">Failed</span>
  {% elif tryon.status == 'CANCELLED' %}
- <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-theme-text-muted uppercase tracking-widest border border-slate-200/50">Cancelled</span>
+ <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-theme-bg-secondary text-theme-text-muted uppercase tracking-widest border border-slate-200/50">Cancelled</span>
  {% else %}
  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-700 uppercase tracking-widest border border-amber-200/50"><i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>{{ tryon.progress_percent }}%</span>
  {% endif %}
- <span class="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-1.5 whitespace-nowrap">{{ tryon.created_at|timesince }} ago</span>
+ <span class="text-[11px] font-medium text-theme-text-disabled mt-1.5 whitespace-nowrap">{{ tryon.created_at|timesince }} ago</span>
  </div>
  </div>
  </li>
  {% empty %}
  <li class="py-12 px-6 flex flex-col items-center justify-center text-center">
- <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-3">
- <i class="fa-solid fa-clock-rotate-left text-2xl text-slate-300 dark:text-slate-600"></i>
+ <div class="w-16 h-16 bg-theme-bg-secondary rounded-full flex items-center justify-center mb-3">
+ <i class="fa-solid fa-clock-rotate-left text-2xl text-slate-300"></i>
  </div>
  <p class="text-sm font-semibold text-theme-text-muted">No recent activity.</p>
  </li>

@@ -16,7 +16,7 @@
  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
  
  .numpad-btn {
- @apply w-full py-4 text-xl font-bold bg-theme-bg-surface border border-theme-border-base rounded-xl hover:bg-theme-bg-hover hover:border-slate-300 active:bg-slate-100 transition-all text-slate-700 shadow-sm;
+ @apply w-full py-4 text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl hover:bg-slate-800 hover:border-slate-300 active:bg-slate-100 transition-all text-slate-200 shadow-sm;
  }
  
  @media print {
@@ -44,16 +44,16 @@
  }
  </style>
 </head>
-<body class="bg-slate-100 h-screen overflow-hidden text-theme-text-base" x-data="posApp()">
+<body class="bg-slate-900 h-screen overflow-hidden text-white" x-data="posApp()">
  
  <!-- Top Nav -->
  <header class="bg-slate-900 text-white h-16 flex items-center justify-between px-6 shadow-md z-10 relative">
  <div class="flex items-center gap-4">
- <a href="{% url 'manage_orders' %}" class="text-slate-400 hover:text-white transition-colors">
+ <a href="{% url 'manage_orders' %}" class="text-slate-500 hover:text-white transition-colors">
  <i class="fa-solid fa-arrow-left"></i> Dashboard
  </a>
  <div class="h-6 w-px bg-slate-700"></div>
- <h1 class="text-lg font-bold tracking-wide">{{ brand.name }} <span class="font-light text-slate-400 ml-2">Point of Sale</span></h1>
+ <h1 class="text-lg font-bold tracking-wide">{{ brand.name }} <span class="font-light text-slate-500 ml-2">Point of Sale</span></h1>
  </div>
  
  <div class="flex items-center">
@@ -72,11 +72,11 @@
  </div>
  
  <div class="text-sm border-l border-r border-slate-700 px-4 mr-4">
- <span class="text-slate-400">Cashier:</span> 
+ <span class="text-slate-500">Cashier:</span> 
  <span class="font-semibold">{{ request.user.get_full_name|default:request.user.username }}</span>
  </div>
  
- <button onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()" class="text-slate-400 hover:text-white transition-colors p-2 mr-4" title="Toggle Fullscreen">
+ <button onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()" class="text-slate-500 hover:text-white transition-colors p-2 mr-4" title="Toggle Fullscreen">
  <i class="fa-solid fa-expand text-xl"></i>
  </button>
  
@@ -92,11 +92,11 @@
 
  <div class="flex flex-row-reverse h-[calc(100vh-4rem)] w-full">
  <!-- CART & CHECKOUT -->
- <div class="w-[400px] bg-theme-bg-surface border-l border-theme-border-base flex flex-col shadow-xl z-10">
+ <div class="w-[400px] bg-slate-900 border-l border-slate-700 flex flex-col shadow-xl z-10">
  <!-- Cart Items -->
  <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
  <template x-if="cart.length === 0">
- <div class="h-full flex flex-col items-center justify-center text-slate-400">
+ <div class="h-full flex flex-col items-center justify-center text-slate-500">
  <i class="fa-solid fa-cart-arrow-down text-5xl mb-4 text-slate-300"></i>
  <p>Cart is empty</p>
  <p class="text-xs mt-1">Scan a barcode or select products</p>
@@ -104,26 +104,26 @@
  </template>
  
  <template x-for="(item, index) in cart" :key="item.id">
- <div class="bg-theme-bg-surface p-3 rounded-xl border border-theme-border-base shadow-sm flex gap-3 relative group">
+ <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 shadow-sm flex gap-3 relative group">
  <!-- Product Image -->
- <div class="w-16 h-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+ <div class="w-16 h-16 bg-slate-900 rounded-lg overflow-hidden flex-shrink-0">
  <img x-show="item.image" :src="item.image" class="w-full h-full object-cover">
- <div x-show="!item.image" class="w-full h-full flex items-center justify-center text-slate-400">
+ <div x-show="!item.image" class="w-full h-full flex items-center justify-center text-slate-500">
  <i class="fa-solid fa-shirt"></i>
  </div>
  </div>
  <!-- Details -->
  <div class="flex-1">
- <h3 class="font-bold text-sm text-theme-text-base leading-tight" x-text="item.name"></h3>
- <p class="text-xs text-theme-text-muted mt-0.5" x-text="'SKU: ' + item.sku"></p>
+ <h3 class="font-bold text-sm text-white leading-tight" x-text="item.name"></h3>
+ <p class="text-xs text-slate-400 mt-0.5" x-text="'SKU: ' + item.sku"></p>
  <div class="flex justify-between items-center mt-2">
  <div class="font-bold text-indigo-600">{{ currency_symbol }}<span x-text="item.price.toFixed(2)"></span></div>
  
  <!-- Quantity Controls -->
- <div class="flex items-center bg-slate-100 rounded-lg">
- <button @click="updateQty(index, -1)" class="w-7 h-7 flex items-center justify-center text-theme-text-muted hover:bg-slate-200 rounded-l-lg"><i class="fa-solid fa-minus text-[10px]"></i></button>
+ <div class="flex items-center bg-slate-900 rounded-lg">
+ <button @click="updateQty(index, -1)" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-slate-200 rounded-l-lg"><i class="fa-solid fa-minus text-[10px]"></i></button>
  <span class="w-8 text-center text-sm font-bold" x-text="item.quantity"></span>
- <button @click="updateQty(index, 1)" class="w-7 h-7 flex items-center justify-center text-theme-text-muted hover:bg-slate-200 rounded-r-lg"><i class="fa-solid fa-plus text-[10px]"></i></button>
+ <button @click="updateQty(index, 1)" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-slate-200 rounded-r-lg"><i class="fa-solid fa-plus text-[10px]"></i></button>
  </div>
  </div>
  </div>
@@ -136,11 +136,11 @@
  </div>
  
  <!-- Customer Info & Global CRM Lookup -->
- <div class="px-4 py-3 border-t border-theme-border-base bg-theme-bg-surface shadow-sm z-20">
+ <div class="px-4 py-3 border-t border-slate-700 bg-slate-900 shadow-sm z-20">
  <div class="relative flex gap-2">
  <div class="relative flex-1">
- <i class="fa-solid fa-mobile-screen absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
- <input type="text" x-model="customerLookup" @input.debounce.500ms="lookupCustomer" placeholder="Phone or Email (Aura Global)" class="w-full pl-9 pr-3 py-2 bg-theme-bg-base border border-theme-border-base rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+ <i class="fa-solid fa-mobile-screen absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"></i>
+ <input type="text" x-model="customerLookup" @input.debounce.500ms="lookupCustomer" placeholder="Phone or Email (Aura Global)" class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
  <i x-show="lookingUpCustomer" class="fa-solid fa-circle-notch fa-spin absolute right-3 top-1/2 -translate-y-1/2 text-indigo-500"></i>
  </div>
  </div>
@@ -156,30 +156,30 @@
  <button @click="clearCustomer()" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-times text-xs"></i></button>
  </div>
  
- <div x-show="!customerId && customerLookup.length > 0 && !lookingUpCustomer" class="mt-2 text-xs text-theme-text-muted flex items-center gap-1">
+ <div x-show="!customerId && customerLookup.length > 0 && !lookingUpCustomer" class="mt-2 text-xs text-slate-400 flex items-center gap-1">
  <i class="fa-solid fa-user-clock"></i> Checking out as Guest: <span class="font-bold" x-text="customerLookup"></span>
  </div>
  </div>
 
  <!-- Numpad & Totals -->
- <div class="p-4 bg-theme-bg-surface border-t border-theme-border-base shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
- <div class="flex justify-between text-sm text-theme-text-muted mb-2">
+ <div class="p-4 bg-slate-900 border-t border-slate-700 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+ <div class="flex justify-between text-sm text-slate-400 mb-2">
  <span>Subtotal</span>
  <span>{{ currency_symbol }}<span x-text="subtotal.toFixed(2)"></span></span>
  </div>
- <div class="flex justify-between text-sm text-theme-text-muted mb-2 items-center">
- <span class="cursor-pointer border-b border-dashed border-theme-input-border hover:text-indigo-600" @click="promptDiscount">Discount</span>
+ <div class="flex justify-between text-sm text-slate-400 mb-2 items-center">
+ <span class="cursor-pointer border-b border-dashed border-slate-700 hover:text-indigo-600" @click="promptDiscount">Discount</span>
  <span class="text-rose-500">- {{ currency_symbol }}<span x-text="discount.toFixed(2)"></span></span>
  </div>
  <template x-if="taxRate > 0">
- <div class="flex justify-between text-sm text-theme-text-muted mb-2">
+ <div class="flex justify-between text-sm text-slate-400 mb-2">
  <span>Tax (<span x-text="taxRate"></span>%)</span>
  <span>{{ currency_symbol }}<span x-text="taxAmount.toFixed(2)"></span></span>
  </div>
  </template>
  
- <div class="flex justify-between items-end mb-4 p-3 bg-theme-bg-base rounded-lg border border-theme-border-base">
- <span class="text-lg font-bold text-slate-700">Total</span>
+ <div class="flex justify-between items-end mb-4 p-3 bg-slate-950 rounded-lg border border-slate-700">
+ <span class="text-lg font-bold text-slate-200">Total</span>
  <span class="text-3xl font-black text-indigo-700">{{ currency_symbol }}<span x-text="grandTotal.toFixed(2)"></span></span>
  </div>
  
@@ -217,12 +217,12 @@
  </div>
 
  <!-- RIGHT PANEL: PRODUCTS & CATEGORIES -->
- <div class="flex-1 flex flex-col bg-slate-100 h-full relative">
+ <div class="flex-1 flex flex-col bg-slate-900 h-full relative">
  <!-- Search & Filters -->
  <div class="p-6 pb-0 flex gap-4">
  <div class="relative flex-1">
- <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
- <input type="text" x-model="searchQuery" @input.debounce.300ms="fetchProducts" placeholder="Scan Barcode or Search Product..." class="w-full bg-theme-bg-surface border border-theme-border-base rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg shadow-sm">
+ <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+ <input type="text" x-model="searchQuery" @input.debounce.300ms="fetchProducts" placeholder="Scan Barcode or Search Product..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg shadow-sm">
  </div>
  <button class="bg-slate-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-700 transition-colors shadow-sm">Search</button>
  </div>
@@ -231,13 +231,13 @@
  <div class="px-6 pt-4 pb-2">
  <div class="flex overflow-x-auto hide-scrollbar gap-2 pb-2">
  <button @click="selectedCategory = ''; fetchProducts()" 
- :class="selectedCategory === '' ? 'bg-slate-800 text-white' : 'bg-theme-bg-surface text-slate-700 hover:bg-slate-200 border-theme-border-base'"
+ :class="selectedCategory === '' ? 'bg-slate-800 text-white' : 'bg-slate-900 text-slate-200 hover:bg-slate-200 border-slate-700'"
  class="whitespace-nowrap px-4 py-2 rounded-full font-bold text-sm border shadow-sm transition-colors">
  All Items
  </button>
  {% for category in categories %}
  <button @click="selectedCategory = '{{ category.id }}'; fetchProducts()" 
- :class="selectedCategory === '{{ category.id }}' ? 'bg-slate-800 text-white' : 'bg-theme-bg-surface text-slate-700 hover:bg-slate-200 border-theme-border-base'"
+ :class="selectedCategory === '{{ category.id }}' ? 'bg-slate-800 text-white' : 'bg-slate-900 text-slate-200 hover:bg-slate-200 border-slate-700'"
  class="whitespace-nowrap px-4 py-2 rounded-full font-bold text-sm border shadow-sm transition-colors">
  {{ category.name }}
  </button>
@@ -253,14 +253,14 @@
  
  <div x-show="!loading" class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
  <template x-for="product in products" :key="product.id">
- <div @click="handleProductClick(product)" :class="{'opacity-50 grayscale cursor-not-allowed': product.total_stock <= 0, 'cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-indigo-300': product.total_stock > 0}" class="bg-theme-bg-surface rounded-2xl border border-theme-border-base overflow-hidden shadow-sm transition-all group relative">
+ <div @click="handleProductClick(product)" :class="{'opacity-50 grayscale cursor-not-allowed': product.total_stock <= 0, 'cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-indigo-300': product.total_stock > 0}" class="bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden shadow-sm transition-all group relative">
  <!-- Out of stock badge -->
  <div x-show="product.total_stock <= 0" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/60 backdrop-blur-[2px]">
  <div class="bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">OUT OF STOCK</div>
  </div>
  
  <!-- Image -->
- <div class="aspect-square bg-slate-100 overflow-hidden relative">
+ <div class="aspect-square bg-slate-900 overflow-hidden relative">
  <img x-show="product.image" :src="product.image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
  <div x-show="!product.image" class="w-full h-full flex items-center justify-center text-slate-300 group-hover:scale-105 transition-transform duration-500">
  <i class="fa-solid fa-shirt text-4xl"></i>
@@ -276,7 +276,7 @@
  
  <!-- Details -->
  <div class="p-4">
- <h3 class="font-bold text-sm text-theme-text-base leading-tight mb-1 truncate" x-text="product.name"></h3>
+ <h3 class="font-bold text-sm text-white leading-tight mb-1 truncate" x-text="product.name"></h3>
  <div class="flex justify-between items-center mt-2">
  <span class="font-black text-emerald-600 text-base">{{ currency_symbol }}<span x-text="product.price.toFixed(2)"></span></span>
  </div>
@@ -286,7 +286,7 @@
  
  <!-- Empty state -->
  <template x-if="products.length === 0">
- <div class="col-span-full py-12 flex flex-col items-center text-slate-400">
+ <div class="col-span-full py-12 flex flex-col items-center text-slate-500">
  <i class="fa-solid fa-magnifying-glass text-4xl mb-3"></i>
  <p>No products found.</p>
  </div>
@@ -296,42 +296,42 @@
  </div>
  <!-- Variant Selection Modal -->
  <div x-show="selectedProduct" x-transition class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
- <div class="bg-theme-bg-surface rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden" @click.away="selectedProduct = null">
+ <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden" @click.away="selectedProduct = null">
  <!-- Modal Header -->
- <div class="p-6 border-b border-theme-border-divider flex justify-between items-center bg-theme-bg-base">
+ <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950">
  <div class="flex items-center gap-4">
- <img :src="selectedProduct?.image" class="w-16 h-16 object-cover rounded-xl shadow-sm border border-theme-border-base">
+ <img :src="selectedProduct?.image" class="w-16 h-16 object-cover rounded-xl shadow-sm border border-slate-700">
  <div>
- <h2 class="text-xl font-bold text-theme-text-base" x-text="selectedProduct?.name"></h2>
- <p class="text-theme-text-muted font-medium" x-text="'Select Variant to Add'"></p>
+ <h2 class="text-xl font-bold text-white" x-text="selectedProduct?.name"></h2>
+ <p class="text-slate-400 font-medium" x-text="'Select Variant to Add'"></p>
  </div>
  </div>
- <button @click="selectedProduct = null" class="w-10 h-10 bg-theme-bg-surface border border-theme-border-base rounded-full text-slate-400 hover:text-slate-700 hover:bg-theme-bg-hover transition-colors flex items-center justify-center shadow-sm">
+ <button @click="selectedProduct = null" class="w-10 h-10 bg-slate-900 border border-slate-700 rounded-full text-slate-500 hover:text-slate-700 hover:bg-slate-800 transition-colors flex items-center justify-center shadow-sm">
  <i class="fa-solid fa-xmark text-lg"></i>
  </button>
  </div>
  
  <!-- Modal Body (Variants) -->
- <div class="p-6 overflow-y-auto bg-theme-bg-surface flex-1">
+ <div class="p-6 overflow-y-auto bg-slate-900 flex-1">
  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
  <template x-for="variant in selectedProduct?.variants" :key="variant.id">
- <div @click="addVariantToCart(variant)" :class="variant.stock > 0 ? 'cursor-pointer hover:border-indigo-400 hover:shadow-md hover:bg-indigo-50/30' : 'opacity-50 grayscale cursor-not-allowed'" class="border border-theme-border-base rounded-xl p-4 transition-all relative overflow-hidden group">
+ <div @click="addVariantToCart(variant)" :class="variant.stock > 0 ? 'cursor-pointer hover:border-indigo-400 hover:shadow-md hover:bg-indigo-50/30' : 'opacity-50 grayscale cursor-not-allowed'" class="border border-slate-700 rounded-xl p-4 transition-all relative overflow-hidden group">
  
  <div x-show="variant.stock <= 0" class="absolute inset-0 bg-white/60 flex items-center justify-center z-10">
  <span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">OUT OF STOCK</span>
  </div>
  
  <div class="flex items-center gap-3 mb-3">
- <div class="w-10 h-10 rounded-full border border-theme-border-base shadow-inner flex-shrink-0" :style="`background-color: ${variant.hex || '#ddd'}`"></div>
+ <div class="w-10 h-10 rounded-full border border-slate-700 shadow-inner flex-shrink-0" :style="`background-color: ${variant.hex || '#ddd'}`"></div>
  <div>
- <div class="font-bold text-theme-text-base leading-tight" x-text="variant.size"></div>
- <div class="text-xs font-medium text-theme-text-muted" x-text="variant.color"></div>
+ <div class="font-bold text-white leading-tight" x-text="variant.size"></div>
+ <div class="text-xs font-medium text-slate-400" x-text="variant.color"></div>
  </div>
  </div>
  
- <div class="flex items-center justify-between mt-2 pt-2 border-t border-theme-border-divider">
+ <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-800">
  <div class="font-black text-emerald-600">{{ currency_symbol }}<span x-text="variant.price.toFixed(2)"></span></div>
- <div class="text-[10px] font-bold px-2 py-1 rounded-md" :class="variant.stock > 0 ? 'bg-slate-100 text-theme-text-muted' : 'bg-rose-100 text-rose-600'">
+ <div class="text-[10px] font-bold px-2 py-1 rounded-md" :class="variant.stock > 0 ? 'bg-slate-900 text-slate-400' : 'bg-rose-100 text-rose-600'">
  <span x-text="variant.stock"></span> left
  </div>
  </div>
@@ -345,34 +345,34 @@
  <div class="flex flex-col md:flex-row gap-10 max-w-4xl w-full items-center md:items-stretch">
  
  <!-- Receipt Paper -->
- <div id="printable-receipt" class="bg-theme-bg-surface p-6 w-80 shadow-2xl relative flex-shrink-0 flex flex-col" style="font-family: 'Courier New', Courier, monospace;">
+ <div id="printable-receipt" class="bg-slate-900 p-6 w-80 shadow-2xl relative flex-shrink-0 flex flex-col" style="font-family: 'Courier New', Courier, monospace;">
  <!-- top zig zag (CSS trick) -->
  <div class="absolute -top-2 left-0 right-0 h-2 bg-repeat-x no-print" style="background-image: radial-gradient(circle at 50% 0, transparent 4px, white 5px); background-size: 12px 10px;"></div>
  
  <div class="text-center border-b border-dashed border-slate-400 pb-4 mb-4">
- <h2 class="text-2xl font-black text-theme-text-base">{{ brand.name }}</h2>
- <p class="text-xs text-theme-text-muted font-bold mt-1">{{ brand.address|default:"123 Store St" }}</p>
- <p class="text-xs text-theme-text-muted">{{ brand.support_phone|default:"" }}</p>
+ <h2 class="text-2xl font-black text-white">{{ brand.name }}</h2>
+ <p class="text-xs text-slate-400 font-bold mt-1">{{ brand.address|default:"123 Store St" }}</p>
+ <p class="text-xs text-slate-400">{{ brand.support_phone|default:"" }}</p>
  {% if brand.settings.show_tax_on_receipt and brand.settings.tax_id_number %}
- <p class="text-xs text-theme-text-base font-bold mt-1">{{ brand.settings.tax_id_type }}: {{ brand.settings.tax_id_number }}</p>
+ <p class="text-xs text-white font-bold mt-1">{{ brand.settings.tax_id_type }}: {{ brand.settings.tax_id_number }}</p>
  {% endif %}
  </div>
  
- <div class="text-xs mb-4 flex justify-between font-bold text-theme-text-base">
+ <div class="text-xs mb-4 flex justify-between font-bold text-white">
  <span>Date: <span x-text="new Date().toLocaleDateString()"></span></span>
  <span>Order: #<span x-text="lastOrderId"></span></span>
  </div>
  
  <div class="border-b border-dashed border-slate-400 pb-4 mb-4 space-y-2 flex-1 overflow-y-auto min-h-[150px]">
  <template x-for="item in cart" :key="item.id">
- <div class="flex justify-between text-xs font-bold text-theme-text-base">
+ <div class="flex justify-between text-xs font-bold text-white">
  <span class="truncate pr-2" x-text="item.quantity + 'x ' + item.name"></span>
  <span x-text="(item.price * item.quantity).toFixed(2)"></span>
  </div>
  </template>
  </div>
  
- <div class="space-y-1 mb-4 text-sm font-bold text-theme-text-base">
+ <div class="space-y-1 mb-4 text-sm font-bold text-white">
  <div class="flex justify-between text-xs font-normal">
  <span>Subtotal</span>
  <span>{{ currency_symbol }}<span x-text="subtotal.toFixed(2)"></span></span>
@@ -393,18 +393,18 @@
  <span>Total</span>
  <span>{{ currency_symbol }}<span x-text="grandTotal.toFixed(2)"></span></span>
  </div>
- <div class="flex justify-between text-xs font-bold mt-2 text-theme-text-muted uppercase tracking-widest">
+ <div class="flex justify-between text-xs font-bold mt-2 text-slate-400 uppercase tracking-widest">
  <span>Paid via</span>
  <span x-text="lastCheckoutMethod === 'CUSTOM_MANUAL' ? 'QR / BANK' : lastCheckoutMethod"></span>
  </div>
  </div>
  
  <div class="border-t border-dashed border-slate-400 pt-6 text-center">
- <p class="text-xs mb-3 font-bold text-theme-text-base">Scan for Digital Receipt</p>
- <div class="inline-block p-1 bg-theme-bg-surface border-2 border-slate-900 rounded-lg">
+ <p class="text-xs mb-3 font-bold text-white">Scan for Digital Receipt</p>
+ <div class="inline-block p-1 bg-slate-900 border-2 border-slate-900 rounded-lg">
  <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(window.location.origin + '/track/' + lastOrderId)" alt="Receipt QR" class="w-32 h-32 opacity-90">
  </div>
- <p class="text-[10px] mt-4 text-theme-text-muted font-bold uppercase tracking-widest">Thank you for shopping!</p>
+ <p class="text-[10px] mt-4 text-slate-400 font-bold uppercase tracking-widest">Thank you for shopping!</p>
  </div>
  
  <!-- bottom zig zag -->
@@ -422,7 +422,7 @@
  </div>
  
  <div class="flex flex-col gap-4 max-w-md mx-auto md:mx-0 w-full">
- <button onclick="window.print()" class="w-full py-4 px-6 bg-theme-bg-surface hover:bg-theme-bg-hover text-theme-text-base rounded-2xl font-bold transition-all shadow-xl flex items-center justify-center gap-3 text-lg">
+ <button onclick="window.print()" class="w-full py-4 px-6 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-bold transition-all shadow-xl flex items-center justify-center gap-3 text-lg">
  <i class="fa-solid fa-print"></i> Print Receipt
  </button>
  
@@ -442,27 +442,27 @@
  <!-- QR Payment Modal -->
  {% if qr_code_url %}
  <div x-show="showQrModal" x-transition.opacity class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center" style="display: none;">
- <div class="bg-theme-bg-surface rounded-2xl shadow-2xl max-w-md w-full overflow-hidden text-center" @click.away="showQrModal = false">
- <div class="p-6 bg-theme-bg-base border-b border-theme-border-divider flex justify-between items-center">
- <h2 class="text-xl font-bold text-theme-text-base"><i class="fa-solid fa-qrcode mr-2 text-fuchsia-600"></i> Scan to Pay</h2>
- <button @click="showQrModal = false" class="text-slate-400 hover:text-slate-700 transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+ <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden text-center" @click.away="showQrModal = false">
+ <div class="p-6 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
+ <h2 class="text-xl font-bold text-white"><i class="fa-solid fa-qrcode mr-2 text-fuchsia-600"></i> Scan to Pay</h2>
+ <button @click="showQrModal = false" class="text-slate-500 hover:text-slate-700 transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
  </div>
  <div class="p-8 pb-4">
  <div class="mb-4">
- <span class="text-sm font-medium text-theme-text-muted">Amount Due</span>
+ <span class="text-sm font-medium text-slate-400">Amount Due</span>
  <div class="text-4xl font-black text-indigo-700">{{ currency_symbol }}<span x-text="grandTotal.toFixed(2)"></span></div>
  </div>
  
  <div class="flex justify-center mb-6">
- <div class="p-3 bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm inline-block">
+ <div class="p-3 bg-slate-900 border border-slate-700 rounded-2xl shadow-sm inline-block">
  <img src="{{ qr_code_url }}" alt="Payment QR Code" class="w-64 h-64 object-contain">
  </div>
  </div>
  
- <p class="text-sm text-theme-text-muted mb-6">Have the customer scan this code with their payment app.</p>
+ <p class="text-sm text-slate-400 mb-6">Have the customer scan this code with their payment app.</p>
  
  <div class="flex gap-3">
- <button @click="showQrModal = false; activeQrType = 'STORE'" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors">Cancel</button>
+ <button @click="showQrModal = false; activeQrType = 'STORE'" class="flex-1 py-3 bg-slate-900 hover:bg-slate-200 text-slate-200 rounded-xl font-bold transition-colors">Cancel</button>
  <button @click="showQrModal = false; activeQrType = 'STORE'; checkout('CUSTOM_MANUAL')" :disabled="processing" class="flex-1 py-3 bg-fuchsia-600 hover:bg-fuchsia-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-fuchsia-200 flex items-center justify-center gap-2">
  <i x-show="!processing" class="fa-solid fa-check"></i>
  <i x-show="processing" class="fa-solid fa-circle-notch fa-spin"></i>
@@ -476,11 +476,11 @@
 
  <!-- Drafts Modal -->
  <div x-show="showDraftsModal" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
- <div @click.away="showDraftsModal = false" class="bg-slate-100 rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+ <div @click.away="showDraftsModal = false" class="bg-slate-900 rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col max-h-[90vh]">
  <!-- Header -->
- <div class="bg-theme-bg-surface px-6 py-4 border-b border-theme-border-base flex justify-between items-center">
- <h2 class="text-xl font-bold text-theme-text-base"><i class="fa-solid fa-file-signature text-theme-text-muted mr-2"></i> Saved Drafts</h2>
- <button @click="showDraftsModal = false" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+ <div class="bg-slate-900 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+ <h2 class="text-xl font-bold text-white"><i class="fa-solid fa-file-signature text-slate-400 mr-2"></i> Saved Drafts</h2>
+ <button @click="showDraftsModal = false" class="text-slate-500 hover:text-slate-600 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
  </div>
  <!-- Body -->
  <div class="flex-1 overflow-y-auto p-6 space-y-4">
@@ -490,26 +490,26 @@
  </div>
  </template>
  <template x-if="!loadingDrafts && drafts.length === 0">
- <div class="text-center py-10 text-theme-text-muted">
+ <div class="text-center py-10 text-slate-400">
  <i class="fa-solid fa-file-excel text-4xl mb-3 text-slate-300"></i>
  <p>No saved drafts found.</p>
  </div>
  </template>
  <template x-for="draft in drafts" :key="draft.id">
- <div class="bg-theme-bg-surface border border-theme-border-base rounded-xl p-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition hover:border-indigo-300 hover:shadow-md cursor-pointer" @click="openDraft(draft)">
+ <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition hover:border-indigo-300 hover:shadow-md cursor-pointer" @click="openDraft(draft)">
  <div>
  <div class="flex items-center gap-2 mb-1">
  <span class="text-sm font-mono font-bold text-indigo-600">#<span x-text="draft.id.substring(0,8)"></span></span>
- <span class="text-xs text-theme-text-muted"><i class="fa-regular fa-clock"></i> <span x-text="draft.created_at"></span></span>
+ <span class="text-xs text-slate-400"><i class="fa-regular fa-clock"></i> <span x-text="draft.created_at"></span></span>
  </div>
- <div class="font-bold text-theme-text-base" x-text="draft.customer_name || 'Walk-in Customer'"></div>
- <div class="text-sm text-theme-text-muted" x-text="draft.customer_phone || 'No phone provided'"></div>
- <div class="text-xs text-slate-400 mt-1" x-text="draft.items.length + ' item(s)'"></div>
+ <div class="font-bold text-white" x-text="draft.customer_name || 'Walk-in Customer'"></div>
+ <div class="text-sm text-slate-400" x-text="draft.customer_phone || 'No phone provided'"></div>
+ <div class="text-xs text-slate-500 mt-1" x-text="draft.items.length + ' item(s)'"></div>
  </div>
  <div class="flex items-center gap-4">
  <div class="text-right">
- <div class="text-sm text-theme-text-muted">Total</div>
- <div class="text-xl font-extrabold text-theme-text-base">{{ currency_symbol }}<span x-text="draft.total_amount.toFixed(2)"></span></div>
+ <div class="text-sm text-slate-400">Total</div>
+ <div class="text-xl font-extrabold text-white">{{ currency_symbol }}<span x-text="draft.total_amount.toFixed(2)"></span></div>
  </div>
  <button @click.stop="deleteDraft(draft.id)" class="w-10 h-10 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-colors">
  <i class="fa-solid fa-trash-can"></i>
@@ -523,11 +523,11 @@
 
  <!-- Tender / Calculator Modal -->
  <div x-show="showTender" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center" style="display: none;">
- <div @click.away="showTender = false" class="bg-slate-100 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+ <div @click.away="showTender = false" class="bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
  <!-- Header -->
- <div class="bg-theme-bg-surface px-6 py-4 border-b border-theme-border-base flex justify-between items-center">
- <h2 class="text-xl font-bold text-theme-text-base"><i class="fa-solid fa-calculator text-indigo-500 mr-2"></i> Tender Cash / Calculator</h2>
- <button @click="showTender = false" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+ <div class="bg-slate-900 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+ <h2 class="text-xl font-bold text-white"><i class="fa-solid fa-calculator text-indigo-500 mr-2"></i> Tender Cash / Calculator</h2>
+ <button @click="showTender = false" class="text-slate-500 hover:text-slate-600 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
  </div>
  
  <div class="flex p-6 gap-6">
@@ -538,30 +538,30 @@
  <div class="text-5xl font-black tracking-tight">{{ currency_symbol }}<span x-text="grandTotal.toFixed(2)"></span></div>
  </div>
  
- <div class="bg-theme-bg-surface p-4 rounded-2xl border border-theme-border-base flex flex-col gap-2 flex-1">
- <div class="flex justify-between items-center text-theme-text-muted">
+ <div class="bg-slate-900 p-4 rounded-2xl border border-slate-700 flex flex-col gap-2 flex-1">
+ <div class="flex justify-between items-center text-slate-400">
  <span>Tendered:</span>
- <span class="font-bold text-theme-text-base text-lg">{{ currency_symbol }}<span x-text="tenderAmount || '0.00'"></span></span>
+ <span class="font-bold text-white text-lg">{{ currency_symbol }}<span x-text="tenderAmount || '0.00'"></span></span>
  </div>
- <div class="flex justify-between items-center text-theme-text-muted">
+ <div class="flex justify-between items-center text-slate-400">
  <span>Change Due:</span>
  <span class="font-bold text-emerald-600 text-2xl">{{ currency_symbol }}<span x-text="changeDue.toFixed(2)"></span></span>
  </div>
  </div>
  
  <div class="grid grid-cols-2 gap-3 mt-auto">
- <button @click="setTender(grandTotal)" class="py-3 bg-theme-bg-surface border border-theme-border-base hover:border-indigo-400 hover:bg-indigo-50 text-slate-700 font-bold rounded-xl transition-colors shadow-sm">
+ <button @click="setTender(grandTotal)" class="py-3 bg-slate-900 border border-slate-700 hover:border-indigo-400 hover:bg-indigo-50 text-slate-200 font-bold rounded-xl transition-colors shadow-sm">
  Exact Cash
  </button>
- <button @click="setTender(Math.ceil(grandTotal/500)*500)" class="py-3 bg-theme-bg-surface border border-theme-border-base hover:border-indigo-400 hover:bg-indigo-50 text-slate-700 font-bold rounded-xl transition-colors shadow-sm">
+ <button @click="setTender(Math.ceil(grandTotal/500)*500)" class="py-3 bg-slate-900 border border-slate-700 hover:border-indigo-400 hover:bg-indigo-50 text-slate-200 font-bold rounded-xl transition-colors shadow-sm">
  Next {{ currency_symbol }}500
  </button>
  </div>
  </div>
  
  <!-- Right: Professional Numpad -->
- <div class="w-[280px] bg-theme-bg-surface p-4 rounded-2xl shadow-sm border border-theme-border-base">
- <div class="w-full bg-theme-bg-base border border-theme-border-base rounded-xl h-14 mb-4 flex items-center justify-end px-4 text-2xl font-bold tracking-wider text-theme-text-base overflow-hidden">
+ <div class="w-[280px] bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-700">
+ <div class="w-full bg-slate-950 border border-slate-700 rounded-xl h-14 mb-4 flex items-center justify-end px-4 text-2xl font-bold tracking-wider text-white overflow-hidden">
  <span x-text="tenderInput || '0'"></span>
  </div>
  
@@ -580,7 +580,7 @@
  
  <button @click="typeTender('C')" class="numpad-btn text-rose-500">C</button>
  <button @click="typeTender('0')" class="numpad-btn">0</button>
- <button @click="typeTender('DEL')" class="numpad-btn text-slate-400"><i class="fa-solid fa-delete-left"></i></button>
+ <button @click="typeTender('DEL')" class="numpad-btn text-slate-500"><i class="fa-solid fa-delete-left"></i></button>
  </div>
  
  <button @click="checkout('CASH'); showTender = false" :disabled="!tenderAmount || tenderAmount < grandTotal" class="w-full mt-4 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-emerald-200 transition-all disabled:opacity-50 flex justify-center items-center gap-2">
@@ -605,14 +605,14 @@
 
  <!-- Confirm Modal -->
  <div x-show="confirmModal.show" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center" style="display: none;">
- <div @click.away="confirmModal.show = false" class="bg-theme-bg-surface rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center">
+ <div @click.away="confirmModal.show = false" class="bg-slate-900 rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center">
  <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
  <i class="fa-solid fa-triangle-exclamation"></i>
  </div>
- <h3 class="text-xl font-bold text-theme-text-base mb-2" x-text="confirmModal.title"></h3>
- <p class="text-theme-text-muted text-sm mb-6" x-text="confirmModal.message"></p>
+ <h3 class="text-xl font-bold text-white mb-2" x-text="confirmModal.title"></h3>
+ <p class="text-slate-400 text-sm mb-6" x-text="confirmModal.message"></p>
  <div class="flex gap-3">
- <button @click="confirmModal.show = false" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors">Cancel</button>
+ <button @click="confirmModal.show = false" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-200 text-slate-200 rounded-xl font-bold transition-colors">Cancel</button>
  <button @click="if(confirmModal.onConfirm) confirmModal.onConfirm(); confirmModal.show = false" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold transition-colors">Confirm</button>
  </div>
  </div>
@@ -620,27 +620,27 @@
 
  <!-- Discount & Coupon Modal -->
  <div x-show="discountModal.show" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center" style="display: none;">
- <div @click.away="discountModal.show = false" class="bg-theme-bg-surface rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center">
- <h3 class="text-lg font-bold text-theme-text-base mb-4">Apply Discount or Coupon</h3>
+ <div @click.away="discountModal.show = false" class="bg-slate-900 rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center">
+ <h3 class="text-lg font-bold text-white mb-4">Apply Discount or Coupon</h3>
  
  <div class="mb-4 text-left">
- <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-2">Custom Amount</label>
+ <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Custom Amount</label>
  <div class="relative">
- <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">{{ currency_symbol }}</span>
- <input type="number" x-model="discountModal.value" @keydown.enter="applyDiscount()" class="w-full pl-8 pr-4 py-3 bg-theme-bg-base border border-theme-border-base rounded-xl font-bold text-theme-text-base text-center text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+ <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">{{ currency_symbol }}</span>
+ <input type="number" x-model="discountModal.value" @keydown.enter="applyDiscount()" class="w-full pl-8 pr-4 py-3 bg-slate-950 border border-slate-700 rounded-xl font-bold text-white text-center text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
  </div>
  </div>
  
  <div class="flex items-center gap-4 mb-4">
  <div class="flex-1 h-px bg-slate-200"></div>
- <span class="text-xs font-bold text-slate-400 uppercase">OR</span>
+ <span class="text-xs font-bold text-slate-500 uppercase">OR</span>
  <div class="flex-1 h-px bg-slate-200"></div>
  </div>
  
  <div class="mb-6 text-left">
- <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-2">Coupon Code</label>
+ <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Coupon Code</label>
  <div class="flex gap-2">
- <input type="text" x-model="discountModal.couponCode" placeholder="SUMMER20" class="flex-1 px-4 py-3 bg-theme-bg-base border border-theme-border-base rounded-xl font-bold text-theme-text-base text-center uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500">
+ <input type="text" x-model="discountModal.couponCode" placeholder="SUMMER20" class="flex-1 px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl font-bold text-white text-center uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500">
  <button @click="validateCoupon()" :disabled="validatingCoupon" class="px-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition-colors disabled:opacity-50">
  <i x-show="!validatingCoupon" class="fa-solid fa-check"></i>
  <i x-show="validatingCoupon" class="fa-solid fa-circle-notch fa-spin"></i>
@@ -650,7 +650,7 @@
  </div>
  
  <div class="flex gap-3">
- <button @click="discountModal.show = false" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors">Cancel</button>
+ <button @click="discountModal.show = false" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-200 text-slate-200 rounded-xl font-bold transition-colors">Cancel</button>
  <button @click="applyDiscount()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-colors">Apply Amount</button>
  </div>
  </div>
@@ -1097,10 +1097,10 @@
  timestamp: Date.now()
  }));
  } else {
- alert(data.error || "Checkout failed");
+ this.showToast(data.error || "Checkout failed", "error");
  }
  } catch(e) {
- alert("Error processing transaction");
+ this.showToast("Error processing transaction", "error");
  }
  this.processing = false;
  }

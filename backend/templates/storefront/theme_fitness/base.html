@@ -79,7 +79,7 @@
 </header>
 
  <!-- Main Content -->
- <main class="flex-grow bg-theme-bg-surface text-black">
+ <main class="flex-grow bg-theme-surface text-black">
  {% block content %}{% endblock %}
  </main>
 
@@ -97,13 +97,13 @@
 {% endif %}
  {% endif %}
  {% if brand.description %}
- <p class="text-gray-400 text-lg font-medium leading-relaxed max-w-sm mb-8">{{ brand.description }}</p>
+ <p class="text-theme-text-disabled text-lg font-medium leading-relaxed max-w-sm mb-8">{{ brand.description }}</p>
  {% endif %}
  <div class="flex space-x-4">
- {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-12 h-12 bg-theme-bg-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
- {% if brand.tiktok_url %}<a href="{{ brand.tiktok_url }}" class="w-12 h-12 bg-theme-bg-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-tiktok"></i></a>{% endif %}
- {% if brand.twitter_url %}<a href="{{ brand.twitter_url }}" class="w-12 h-12 bg-theme-bg-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-x-twitter"></i></a>{% endif %}
- {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-12 h-12 bg-theme-bg-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
+ {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a href="{{ brand.tiktok_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-tiktok"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a href="{{ brand.twitter_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-x-twitter"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
  </div>
  </div>
  
@@ -113,7 +113,7 @@
  {% for category in categories %}
  <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-white hover:text-yellow-500 font-bold transition-colors">{{ category.name|upper }}</a></li>
  {% empty %}
- <li><span class="text-gray-500 font-bold">ALL GEAR</span></li>
+ <li><span class="text-theme-text-muted font-bold">ALL GEAR</span></li>
  {% endfor %}
  </ul>
  </div>
@@ -124,13 +124,13 @@
  {% for collection in collections %}
  <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-white hover:text-yellow-500 font-bold transition-colors">{{ collection.name|upper }}</a></li>
  {% empty %}
- <li><span class="text-gray-500 font-bold">CORE COLLECTION</span></li>
+ <li><span class="text-theme-text-muted font-bold">CORE COLLECTION</span></li>
  {% endfor %}
  </ul>
  </div>
  </div>
  
- <div class="max-w-7xl mx-auto px-6 border-t-2 border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center font-bold text-gray-500">
+ <div class="max-w-7xl mx-auto px-6 border-t-2 border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center font-bold text-theme-text-muted">
  <p>&copy; {% now "Y" %} {{ brand.name|upper }}. ALL RIGHTS RESERVED.</p>
  <p class="mt-4 md:mt-0">POWERED BY AURA</p>
  </div>
@@ -138,7 +138,7 @@
  <div class="max-w-7xl mx-auto px-6 pb-8">
  <div class="text-center mb-6">
  <h4 class="text-sm font-black uppercase tracking-wider text-white mb-2">Join the Team</h4>
- <p class="text-gray-500 text-sm">Get training tips and exclusive drops.</p>
+ <p class="text-theme-text-muted text-sm">Get training tips and exclusive drops.</p>
  </div>
  <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border border-white/20 rounded-lg overflow-hidden">
  <input type="email" name="email" placeholder="Your email" required class="flex-1 px-4 py-3 bg-transparent outline-none text-white text-sm placeholder-gray-500">
@@ -202,12 +202,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Mobile Menu Modal -->
 <div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
  <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
- <div @click.stop="" class="relative w-64 max-w-sm bg-theme-bg-surface h-full shadow-2xl transform transition-all flex flex-col"
+ <div @click.stop="" class="relative w-64 max-w-sm bg-theme-surface h-full shadow-2xl transform transition-all flex flex-col"
  x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
  x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
- <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+ <div class="p-6 border-b border-theme-border-subtle flex justify-between items-center">
  <span class="font-bold text-lg text-black">Menu</span>
- <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+ <button @click="isMenuOpen = false" class="text-theme-text-disabled hover:text-black">
  <i class="fa-solid fa-xmark text-xl"></i>
  </button>
  </div>

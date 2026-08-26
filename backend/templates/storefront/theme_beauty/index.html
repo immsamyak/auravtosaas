@@ -44,7 +44,7 @@
  
  <div class="text-center">
  <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block text-lg font-serif text-glow-charcoal hover:text-glow-clay transition-colors mb-2">{{ product.name }}</a>
- <p class="text-gray-500 font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+ <p class="text-theme-text-muted font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
  </div>
  </div>
  {% endfor %}
@@ -58,7 +58,7 @@
  {% else %}
  <div class="text-center py-16 bg-[#fcfcfb] rounded-3xl border border-[#efede5]">
  <h3 class="text-2xl font-serif text-glow-charcoal mb-2">Coming Soon</h3>
- <p class="text-gray-500">Products are currently being curated. Check back shortly.</p>
+ <p class="text-theme-text-muted">Products are currently being curated. Check back shortly.</p>
  </div>
  {% endif %}
  </div>

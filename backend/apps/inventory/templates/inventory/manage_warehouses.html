@@ -10,8 +10,8 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-store text-slate-400 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-store text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Store</span>
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Warehouses</span>
  </div>
@@ -22,7 +22,7 @@
  <!-- Header & Actions -->
  <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Manage <span class="text-indigo-600 font-light">Locations</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Manage <span class="text-indigo-600 font-light">Locations</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Manage your fulfillment centers, physical stores, and warehouses. Track stock distributed across your entire supply chain.</p>
  </div>
  <div class="flex space-x-3">
@@ -38,24 +38,24 @@
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
  <div x-show="showCreateModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" aria-hidden="true" @click="showCreateModal = false"></div>
  <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
- <div x-show="showCreateModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-theme-bg-surface rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative z-[101]">
+ <div x-show="showCreateModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-theme-surface rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative z-[101]">
  <form method="post" action="{% url 'manage_warehouses' %}">
  {% csrf_token %}
  <input type="hidden" name="action" value="add">
- <div class="bg-theme-bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+ <div class="bg-theme-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
  <div class="sm:flex sm:items-start">
  <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
  <i class="fa-solid fa-warehouse text-indigo-600"></i>
  </div>
  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
- <h3 class="text-lg leading-6 font-extrabold text-theme-text-base" id="modal-title">Create New Location</h3>
+ <h3 class="text-lg leading-6 font-extrabold text-theme-text-primary" id="modal-title">Create New Location</h3>
  <div class="mt-4 space-y-4">
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">Name</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Name</label>
  <input type="text" name="name" required class="block w-full border-theme-input-border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
  </div>
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">Type</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Type</label>
  <select name="location_type" class="block w-full border-theme-input-border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
  {% for type_code, type_label in location_types %}
  <option value="{{ type_code }}">{{ type_label }}</option>
@@ -63,16 +63,16 @@
  </select>
  </div>
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">Address</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Address</label>
  <textarea name="address" rows="3" class="block w-full border-theme-input-border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
  </div>
  </div>
  </div>
  </div>
  </div>
- <div class="bg-theme-bg-base px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-theme-border-divider">
+ <div class="bg-theme-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-theme-border-subtle">
  <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">Create Location</button>
- <button type="button" @click="showCreateModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-4 py-2 bg-theme-bg-surface text-base font-bold text-slate-700 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+ <button type="button" @click="showCreateModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-4 py-2 bg-theme-surface text-base font-bold text-theme-text-secondary hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
  </div>
  </form>
  </div>
@@ -83,14 +83,14 @@
  <!-- Location Cards Grid -->
  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
  {% for loc in locations %}
- <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-slate-200/60 p-6 flex flex-col transition-all hover:shadow-md hover:border-indigo-200 group" x-data="{ showEditModal: false, showDeleteModal: false }">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-slate-200/60 p-6 flex flex-col transition-all hover:shadow-md hover:border-indigo-200 group" x-data="{ showEditModal: false, showDeleteModal: false }">
  <div class="flex items-center justify-between mb-4">
  <div class="flex items-center space-x-3">
  <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm {% if loc.location_type == 'STORE' %}bg-blue-50 text-blue-600 border border-blue-100{% elif loc.location_type == 'WAREHOUSE' %}bg-indigo-50 text-indigo-600 border border-indigo-100{% else %}bg-purple-50 text-purple-600 border border-purple-100{% endif %}">
  <i class="fa-solid text-lg {% if loc.location_type == 'STORE' %}fa-store{% elif loc.location_type == 'WAREHOUSE' %}fa-warehouse{% else %}fa-globe{% endif %}"></i>
  </div>
  <div>
- <h3 class="text-lg font-extrabold text-theme-text-base group-hover:text-indigo-600 transition-colors">{{ loc.name }}</h3>
+ <h3 class="text-lg font-extrabold text-theme-text-primary group-hover:text-indigo-600 transition-colors">{{ loc.name }}</h3>
  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mt-1 {% if loc.is_active %}bg-green-100 text-green-800{% else %}bg-slate-100 text-slate-800{% endif %}">
  {{ loc.get_location_type_display }}
  </span>
@@ -98,14 +98,14 @@
  </div>
  
  <div class="relative" x-data="{ menuOpen: false }">
- <button @click="menuOpen = !menuOpen" @click.away="menuOpen = false" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-theme-bg-hover transition-colors">
+ <button @click="menuOpen = !menuOpen" @click.away="menuOpen = false" class="w-8 h-8 rounded-full flex items-center justify-center text-theme-text-disabled hover:text-slate-600 hover:bg-theme-surface-hover transition-colors">
  <i class="fa-solid fa-ellipsis-vertical"></i>
  </button>
- <div x-show="menuOpen" class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-theme-bg-surface ring-1 ring-black ring-opacity-5 divide-y divide-slate-100 focus:outline-none z-10 overflow-hidden" style="display: none;">
+ <div x-show="menuOpen" class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-theme-surface ring-1 ring-black ring-opacity-5 divide-y divide-slate-100 focus:outline-none z-10 overflow-hidden" style="display: none;">
  <div class="py-1">
- <button @click="showEditModal = true; menuOpen = false" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover font-medium"><i class="fa-solid fa-pen mr-2 text-slate-400"></i> Edit Location</button>
+ <button @click="showEditModal = true; menuOpen = false" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover font-medium"><i class="fa-solid fa-pen mr-2 text-theme-text-disabled"></i> Edit Location</button>
  </div>
- <div class="py-1 bg-theme-bg-base">
+ <div class="py-1 bg-theme-bg">
  <button @click="showDeleteModal = true; menuOpen = false" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 font-bold"><i class="fa-solid fa-trash mr-2"></i> Delete</button>
  </div>
  </div>
@@ -117,12 +117,12 @@
  {% if loc.address %}{{ loc.address }}{% else %}No physical address provided.{% endif %}
  </p>
  
- <div class="border-t border-theme-border-divider pt-4 flex items-center justify-between">
+ <div class="border-t border-theme-border-subtle pt-4 flex items-center justify-between">
  <div>
- <span class="block text-2xl font-extrabold text-theme-text-base">{{ loc.total_stock }}</span>
- <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Total Items</span>
+ <span class="block text-2xl font-extrabold text-theme-text-primary">{{ loc.total_stock }}</span>
+ <span class="block text-[10px] font-bold text-theme-text-disabled uppercase tracking-widest mt-0.5">Total Items</span>
  </div>
- <a href="{% url 'warehouse_detail' loc.id %}" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-theme-bg-base text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors">
+ <a href="{% url 'warehouse_detail' loc.id %}" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-theme-bg text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors">
  <i class="fa-solid fa-arrow-right"></i>
  </a>
  </div>
@@ -133,20 +133,20 @@
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
  <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="showEditModal = false"></div>
  <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
- <div x-show="showEditModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-theme-bg-surface rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative z-[101]">
+ <div x-show="showEditModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-theme-surface rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative z-[101]">
  <form method="post" action="{% url 'manage_warehouses' %}">
  {% csrf_token %}
  <input type="hidden" name="action" value="edit">
  <input type="hidden" name="location_id" value="{{ loc.id }}">
- <div class="bg-theme-bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
- <h3 class="text-lg leading-6 font-extrabold text-theme-text-base mb-4">Edit Location</h3>
+ <div class="bg-theme-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+ <h3 class="text-lg leading-6 font-extrabold text-theme-text-primary mb-4">Edit Location</h3>
  <div class="space-y-4">
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">Name</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Name</label>
  <input type="text" name="name" value="{{ loc.name }}" required class="block w-full border-theme-input-border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
  </div>
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">Type</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Type</label>
  <select name="location_type" class="block w-full border-theme-input-border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
  {% for type_code, type_label in location_types %}
  <option value="{{ type_code }}" {% if loc.location_type == type_code %}selected{% endif %}>{{ type_label }}</option>
@@ -154,18 +154,18 @@
  </select>
  </div>
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">Address</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Address</label>
  <textarea name="address" rows="3" class="block w-full border-theme-input-border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{{ loc.address }}</textarea>
  </div>
  <div class="flex items-center pt-2">
  <input type="checkbox" name="is_active" id="active_{{ loc.id }}" {% if loc.is_active %}checked{% endif %} class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-theme-input-border rounded">
- <label for="active_{{ loc.id }}" class="ml-3 block text-sm font-bold text-slate-700">Location is Active</label>
+ <label for="active_{{ loc.id }}" class="ml-3 block text-sm font-bold text-theme-text-secondary">Location is Active</label>
  </div>
  </div>
  </div>
- <div class="bg-theme-bg-base px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-theme-border-divider">
+ <div class="bg-theme-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-theme-border-subtle">
  <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">Save Changes</button>
- <button type="button" @click="showEditModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-4 py-2 bg-theme-bg-surface text-base font-bold text-slate-700 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+ <button type="button" @click="showEditModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-4 py-2 bg-theme-surface text-base font-bold text-theme-text-secondary hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
  </div>
  </form>
  </div>
@@ -179,27 +179,27 @@
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
  <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="showDeleteModal = false"></div>
  <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
- <div x-show="showDeleteModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-theme-bg-surface rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative z-[101]">
+ <div x-show="showDeleteModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-theme-surface rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full relative z-[101]">
  <form method="post" action="{% url 'manage_warehouses' %}">
  {% csrf_token %}
  <input type="hidden" name="action" value="delete">
  <input type="hidden" name="location_id" value="{{ loc.id }}">
- <div class="bg-theme-bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+ <div class="bg-theme-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
  <div class="sm:flex sm:items-start">
  <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-rose-100 sm:mx-0 sm:h-10 sm:w-10">
  <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
  </div>
  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
- <h3 class="text-lg leading-6 font-extrabold text-theme-text-base">Delete Location</h3>
+ <h3 class="text-lg leading-6 font-extrabold text-theme-text-primary">Delete Location</h3>
  <div class="mt-2">
- <p class="text-sm text-theme-text-muted">Are you sure you want to delete <strong class="text-theme-text-base">{{ loc.name }}</strong>? This action cannot be undone and will orphan any associated stock levels.</p>
+ <p class="text-sm text-theme-text-muted">Are you sure you want to delete <strong class="text-theme-text-primary">{{ loc.name }}</strong>? This action cannot be undone and will orphan any associated stock levels.</p>
  </div>
  </div>
  </div>
  </div>
- <div class="bg-theme-bg-base px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-theme-border-divider">
+ <div class="bg-theme-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-theme-border-subtle">
  <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-rose-600 text-base font-bold text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 sm:ml-3 sm:w-auto sm:text-sm">Yes, Delete Location</button>
- <button type="button" @click="showDeleteModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-4 py-2 bg-theme-bg-surface text-base font-bold text-slate-700 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+ <button type="button" @click="showDeleteModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-4 py-2 bg-theme-surface text-base font-bold text-theme-text-secondary hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
  </div>
  </form>
  </div>
@@ -210,10 +210,10 @@
  </div>
  {% empty %}
  <div class="col-span-full py-16 text-center border-2 border-dashed border-theme-input-border rounded-3xl bg-slate-50/50">
- <div class="w-20 h-20 bg-theme-bg-surface rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-theme-border-divider">
+ <div class="w-20 h-20 bg-theme-surface rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-theme-border-subtle">
  <i class="fa-solid fa-warehouse text-slate-300 text-3xl"></i>
  </div>
- <h3 class="text-lg font-extrabold text-theme-text-base">No Locations Found</h3>
+ <h3 class="text-lg font-extrabold text-theme-text-primary">No Locations Found</h3>
  <p class="text-sm text-theme-text-muted mt-2 max-w-sm mx-auto leading-relaxed">You haven't set up any stores, warehouses, or fulfillment centers yet. Create your first location to start tracking inventory.</p>
  <button @click="showCreateModal = true" class="mt-6 inline-flex items-center px-5 py-2.5 border border-transparent shadow-sm text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:shadow-md">
  <i class="fa-solid fa-plus mr-2 text-sm"></i> Create First Location

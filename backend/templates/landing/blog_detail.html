@@ -2,7 +2,7 @@
 {% block title %}{{ post.title }} | {{ cms.hero_headline|default:"Aura SaaS" }}{% endblock %}
 
 {% block content %}
-<div class="bg-theme-bg-surface min-h-screen pt-32 pb-24 relative overflow-hidden">
+<div class="bg-theme-surface min-h-screen pt-32 pb-24 relative overflow-hidden">
  <!-- Hero Image Area -->
  <div class="max-w-4xl mx-auto px-6 lg:px-8 mb-12 relative z-10 text-center">
  <a href="{% url 'landing_blog_list' %}" class="inline-flex items-center text-indigo-600 font-bold hover:text-indigo-700 transition-colors mb-8 text-sm uppercase tracking-wider">
@@ -13,7 +13,7 @@
  <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
  <span>By {{ post.author_name }}</span>
  </div>
- <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-theme-text-base tracking-tight mb-8 leading-[1.1]">{{ post.title }}</h1>
+ <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-theme-text-primary tracking-tight mb-8 leading-[1.1]">{{ post.title }}</h1>
  </div>
 
  {% if post.featured_image %}
@@ -31,30 +31,30 @@
  </div>
  
  <!-- Share & Author -->
- <div class="mt-16 pt-8 border-t border-theme-border-base flex flex-col sm:flex-row justify-between items-center gap-6">
+ <div class="mt-16 pt-8 border-t border-theme-border flex flex-col sm:flex-row justify-between items-center gap-6">
  <div class="flex items-center gap-4">
  <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 text-xl font-bold">
  {{ post.author_name|slice:":1" }}
  </div>
  <div>
  <p class="text-sm text-theme-text-muted font-bold uppercase tracking-wider mb-0.5">Written by</p>
- <p class="text-lg font-bold text-theme-text-base">{{ post.author_name }}</p>
+ <p class="text-lg font-bold text-theme-text-primary">{{ post.author_name }}</p>
  </div>
  </div>
  
  <div class="flex items-center gap-3">
  <span class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mr-2">Share</span>
- <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-theme-text-muted flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
- <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-theme-text-muted flex items-center justify-center hover:bg-[#0A66C2] hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
- <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-theme-text-muted flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors"><i class="fa-solid fa-link"></i></a>
+ <a href="#" class="w-10 h-10 rounded-full bg-theme-bg-secondary text-theme-text-muted flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+ <a href="#" class="w-10 h-10 rounded-full bg-theme-bg-secondary text-theme-text-muted flex items-center justify-center hover:bg-[#0A66C2] hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+ <a href="#" class="w-10 h-10 rounded-full bg-theme-bg-secondary text-theme-text-muted flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors"><i class="fa-solid fa-link"></i></a>
  </div>
  </div>
  </div>
 
  <!-- Related Posts -->
  {% if recent_posts %}
- <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-24 pt-24 border-t border-theme-border-divider relative z-10">
- <h3 class="text-3xl font-extrabold text-theme-text-base mb-10 text-center">More from our blog</h3>
+ <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-24 pt-24 border-t border-theme-border-subtle relative z-10">
+ <h3 class="text-3xl font-extrabold text-theme-text-primary mb-10 text-center">More from our blog</h3>
  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
  {% for recent in recent_posts %}
  <a href="{% url 'landing_blog_detail' recent.slug %}" class="group">
@@ -63,7 +63,7 @@
  <img src="{{ recent.featured_image.url }}" alt="{{ recent.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
  </div>
  {% endif %}
- <h4 class="text-xl font-bold text-theme-text-base mb-2 group-hover:text-indigo-600 transition-colors leading-tight">{{ recent.title }}</h4>
+ <h4 class="text-xl font-bold text-theme-text-primary mb-2 group-hover:text-indigo-600 transition-colors leading-tight">{{ recent.title }}</h4>
  <p class="text-theme-text-muted font-medium text-sm">{{ recent.published_at|date:"F d, Y" }}</p>
  </a>
  {% endfor %}

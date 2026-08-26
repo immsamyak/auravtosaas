@@ -91,7 +91,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -111,7 +111,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

@@ -1,12 +1,12 @@
 {% if widget.is_initial %}
  <div class="mb-4">
  <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Current File/Image</label>
- <div class="relative inline-block border border-theme-border-base rounded-xl overflow-hidden shadow-sm bg-theme-bg-base">
+ <div class="relative inline-block border border-theme-border rounded-xl overflow-hidden shadow-sm bg-theme-bg">
  {% if widget.value.url %}
  <!-- Check if the file is likely an image to show preview -->
  <img src="{{ widget.value.url }}" class="h-32 object-contain" alt="Current Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
  <!-- Fallback if not an image -->
- <div style="display: none;" class="h-32 w-32 items-center justify-center text-slate-400">
+ <div style="display: none;" class="h-32 w-32 items-center justify-center text-theme-text-disabled">
  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
  </div>
  {% endif %}

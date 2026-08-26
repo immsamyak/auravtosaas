@@ -5,16 +5,16 @@
 <div class="max-w-3xl mx-auto">
  {% include "components/breadcrumb.html" with current="Edit GiftCard" %}
  <div class="mb-8">
- <h1 class="text-3xl font-extrabold text-theme-text-base tracking-tight">{% if object %}Edit{% else %}Create{% endif %} <span class="text-indigo-600 font-light">GiftCard</span></h1>
+ <h1 class="text-3xl font-extrabold text-theme-text-primary tracking-tight">{% if object %}Edit{% else %}Create{% endif %} <span class="text-indigo-600 font-light">GiftCard</span></h1>
  </div>
 
- <form method="post" enctype="multipart/form-data" class="bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm overflow-hidden">
+ <form method="post" enctype="multipart/form-data" class="bg-theme-surface border border-theme-border rounded-2xl shadow-sm overflow-hidden">
  {% csrf_token %}
  
  <div class="p-8 space-y-6">
  {% for field in form %}
  <div>
- <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700 mb-2">{{ field.label }}</label>
+ <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-theme-text-secondary mb-2">{{ field.label }}</label>
  {{ field }}
  {% if field.help_text %}
  <p class="mt-2 text-xs text-theme-text-muted">{{ field.help_text }}</p>
@@ -28,8 +28,8 @@
  {% endfor %}
  </div>
 
- <div class="px-8 py-5 bg-theme-bg-base border-t border-theme-border-base flex justify-end gap-3">
- <a href="{% url 'admin:giftcard_list' %}" class="px-5 py-2.5 text-sm font-bold text-theme-text-muted bg-theme-bg-surface border border-theme-border-base rounded-xl hover:bg-theme-bg-hover transition shadow-sm">Cancel</a>
+ <div class="px-8 py-5 bg-theme-bg border-t border-theme-border flex justify-end gap-3">
+ <a href="{% url 'admin:giftcard_list' %}" class="px-5 py-2.5 text-sm font-bold text-theme-text-muted bg-theme-surface border border-theme-border rounded-xl hover:bg-theme-surface-hover transition shadow-sm">Cancel</a>
  <button type="submit" class="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-md">
  <i class="fa-solid fa-check mr-2"></i> Save Changes
  </button>

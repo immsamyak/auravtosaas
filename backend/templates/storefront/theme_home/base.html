@@ -223,12 +223,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Mobile Menu Modal -->
 <div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
  <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
- <div @click.stop="" class="relative w-64 max-w-sm bg-theme-bg-surface h-full shadow-2xl transform transition-all flex flex-col"
+ <div @click.stop="" class="relative w-64 max-w-sm bg-theme-surface h-full shadow-2xl transform transition-all flex flex-col"
  x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
  x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
- <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+ <div class="p-6 border-b border-theme-border-subtle flex justify-between items-center">
  <span class="font-bold text-lg text-black">Menu</span>
- <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+ <button @click="isMenuOpen = false" class="text-theme-text-disabled hover:text-black">
  <i class="fa-solid fa-xmark text-xl"></i>
  </button>
  </div>

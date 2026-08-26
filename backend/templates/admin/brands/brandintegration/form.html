@@ -3,17 +3,17 @@
 <div class="max-w-7xl mx-auto" x-data="brandIntegrationForm()">
  {% include "components/breadcrumb.html" with current="Brand Integration Details" %}
  <div class="mb-8">
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Brand Integration <span class="text-indigo-600 font-light">Details</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Brand Integration <span class="text-indigo-600 font-light">Details</span></h1>
  <p class="text-theme-text-muted mt-1">Configure your third-party platform integration below.</p>
  </div>
  
- <div class="bg-theme-bg-surface p-8 rounded-2xl shadow-sm border border-theme-border-divider">
+ <div class="bg-theme-surface p-8 rounded-2xl shadow-sm border border-theme-border-subtle">
  <form method="post" enctype="multipart/form-data" class="space-y-6" @submit="syncCredentials">
 
  {% csrf_token %}
  <div x-data="{ activeTab: 'general' }">
  
- <div class="flex border-b border-theme-border-base mb-8 space-x-8">
+ <div class="flex border-b border-theme-border mb-8 space-x-8">
  <button type="button" @click="activeTab = 'general'" 
  :class="activeTab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-theme-text-muted hover:text-slate-700'" 
  class="pb-3 border-b-2 font-bold px-2 transition-colors">
@@ -35,7 +35,7 @@
  
  {% if field.name == 'integration' %}
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">
  {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
  </label>
  <div @change="checkIntegrationType($event)">
@@ -46,29 +46,29 @@
  {% elif field.name == 'credentials' %}
  <!-- Hidden raw credentials -->
  <div x-show="currentProvider === 'UNKNOWN'" class="col-span-1 md:col-span-2">
- <label class="block text-sm font-bold text-slate-700 mb-1">Raw JSON Credentials</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Raw JSON Credentials</label>
  <div class="credentials-wrapper">
  {{ field }}
  </div>
  </div>
  
  <!-- Custom Dynamic Fields Wrapper -->
- <div x-show="currentProvider !== 'UNKNOWN'" x-cloak class="col-span-1 md:col-span-2 space-y-6 bg-theme-bg-base p-6 rounded-xl border border-theme-border-base">
+ <div x-show="currentProvider !== 'UNKNOWN'" x-cloak class="col-span-1 md:col-span-2 space-y-6 bg-theme-bg p-6 rounded-xl border border-theme-border">
  
- <h3 class="font-bold text-theme-text-base text-lg border-b border-theme-border-base pb-3" x-text="providerName + ' Configuration'"></h3>
+ <h3 class="font-bold text-theme-text-primary text-lg border-b border-theme-border pb-3" x-text="providerName + ' Configuration'"></h3>
 
  <!-- Stripe -->
  <template x-if="currentProvider === 'STRIPE'">
  <div class="space-y-4">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Publishable Key (pk)</label><input type="text" x-model="creds.publishable_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Secret Key (sk)</label><input type="text" x-model="creds.secret_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Publishable Key (pk)</label><input type="text" x-model="creds.publishable_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Secret Key (sk)</label><input type="text" x-model="creds.secret_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Webhook Secret</label><input type="text" x-model="creds.webhook_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Webhook Secret</label><input type="text" x-model="creds.webhook_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  
  <div class="mt-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
  <label class="block text-sm font-bold text-indigo-900 mb-2">Your Webhook URL</label>
- <input type="text" readonly :value="webhookUrl" class="block w-full rounded-lg border-indigo-200 bg-theme-bg-surface text-indigo-800 font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <input type="text" readonly :value="webhookUrl" class="block w-full rounded-lg border-indigo-200 bg-theme-surface text-indigo-800 font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
  </div>
  </div>
  </template>
@@ -76,117 +76,117 @@
  <!-- PayPal -->
  <template x-if="currentProvider === 'PAYPAL'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Client ID</label><input type="text" x-model="creds.client_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Client Secret</label><input type="text" x-model="creds.client_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Client ID</label><input type="text" x-model="creds.client_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Client Secret</label><input type="text" x-model="creds.client_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
  
  <!-- Razorpay -->
  <template x-if="currentProvider === 'RAZORPAY'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Key ID</label><input type="text" x-model="creds.key_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Key Secret</label><input type="text" x-model="creds.key_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Key ID</label><input type="text" x-model="creds.key_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Key Secret</label><input type="text" x-model="creds.key_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
 
  <!-- Klarna -->
  <template x-if="currentProvider === 'KLARNA'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Username (UID)</label><input type="text" x-model="creds.username" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Password</label><input type="text" x-model="creds.password" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Username (UID)</label><input type="text" x-model="creds.username" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Password</label><input type="text" x-model="creds.password" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
 
  <!-- Afterpay -->
  <template x-if="currentProvider === 'AFTERPAY'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Merchant ID</label><input type="text" x-model="creds.merchant_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Secret Key</label><input type="text" x-model="creds.secret_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Merchant ID</label><input type="text" x-model="creds.merchant_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Secret Key</label><input type="text" x-model="creds.secret_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
 
  <!-- TikTok Pixel -->
  <template x-if="currentProvider === 'TIKTOK_PIXEL'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Pixel ID</label><input type="text" x-model="creds.pixel_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Pixel ID</label><input type="text" x-model="creds.pixel_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </template>
 
  <!-- Hotjar -->
  <template x-if="currentProvider === 'HOTJAR'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Site ID</label><input type="text" x-model="creds.site_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Site ID</label><input type="text" x-model="creds.site_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </template>
 
  <!-- Klaviyo -->
  <template x-if="currentProvider === 'KLAVIYO'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Public API Key</label><input type="text" x-model="creds.public_api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Private API Key</label><input type="text" x-model="creds.private_api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Public API Key</label><input type="text" x-model="creds.public_api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Private API Key</label><input type="text" x-model="creds.private_api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
 
  <!-- Tawk.to -->
  <template x-if="currentProvider === 'TAWK_TO'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Property ID</label><input type="text" x-model="creds.property_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Found in your embed code"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Property ID</label><input type="text" x-model="creds.property_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Found in your embed code"></div>
  </template>
 
  <!-- WhatsApp -->
  <template x-if="currentProvider === 'WHATSAPP'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Phone Number (with Country Code)</label><input type="text" x-model="creds.phone_number" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g. 14155552671"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Phone Number (with Country Code)</label><input type="text" x-model="creds.phone_number" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g. 14155552671"></div>
  </template>
  
  <!-- Twilio -->
  <template x-if="currentProvider === 'TWILIO'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Account SID</label><input type="text" x-model="creds.account_sid" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Auth Token</label><input type="text" x-model="creds.auth_token" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div class="md:col-span-2"><label class="block text-sm font-bold text-slate-700 mb-1">From Phone Number</label><input type="text" x-model="creds.from_phone" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Account SID</label><input type="text" x-model="creds.account_sid" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Auth Token</label><input type="text" x-model="creds.auth_token" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div class="md:col-span-2"><label class="block text-sm font-bold text-theme-text-secondary mb-1">From Phone Number</label><input type="text" x-model="creds.from_phone" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
 
  <!-- SendGrid -->
  <template x-if="currentProvider === 'SENDGRID'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">API Key</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">API Key</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </template>
 
  <!-- Zapier -->
  <template x-if="currentProvider === 'ZAPIER'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Webhook Target URL</label><input type="text" x-model="creds.webhook_url" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Webhook Target URL</label><input type="text" x-model="creds.webhook_url" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </template>
  
  <!-- Shiprocket -->
  <template x-if="currentProvider === 'SHIPROCKET'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">API Token</label><input type="text" x-model="creds.api_token" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">API Token</label><input type="text" x-model="creds.api_token" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </template>
  
  <!-- DHL -->
  <template x-if="currentProvider === 'DHL'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">API Key</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">API Secret</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div class="md:col-span-2"><label class="block text-sm font-bold text-slate-700 mb-1">Account Number</label><input type="text" x-model="creds.account_number" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">API Key</label><input type="text" x-model="creds.api_key" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">API Secret</label><input type="text" x-model="creds.api_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div class="md:col-span-2"><label class="block text-sm font-bold text-theme-text-secondary mb-1">Account Number</label><input type="text" x-model="creds.account_number" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
  
  <!-- Pathao -->
  <template x-if="currentProvider === 'PATHAO'">
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Client ID</label><input type="text" x-model="creds.client_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Client Secret</label><input type="text" x-model="creds.client_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Username</label><input type="text" x-model="creds.username" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Password</label><input type="password" x-model="creds.password" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
- <div class="md:col-span-2"><label class="block text-sm font-bold text-slate-700 mb-1">Store ID</label><input type="text" x-model="creds.store_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Client ID</label><input type="text" x-model="creds.client_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Client Secret</label><input type="text" x-model="creds.client_secret" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Username</label><input type="text" x-model="creds.username" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Password</label><input type="password" x-model="creds.password" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div class="md:col-span-2"><label class="block text-sm font-bold text-theme-text-secondary mb-1">Store ID</label><input type="text" x-model="creds.store_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </div>
  </template>
  
  <!-- GA4 & META (Legacy) -->
  <template x-if="currentProvider === 'GA4' || currentProvider === 'META_PIXEL'">
- <div><label class="block text-sm font-bold text-slate-700 mb-1">Measurement/Pixel ID</label><input type="text" x-model="creds.measurement_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
+ <div><label class="block text-sm font-bold text-theme-text-secondary mb-1">Measurement/Pixel ID</label><input type="text" x-model="creds.measurement_id" class="block w-full rounded-xl border-theme-input-border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></div>
  </template>
 
  </div>
  
  {% else %}
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">
  {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
  </label>
  {{ field }}
@@ -203,7 +203,7 @@
  {% for field in form %}
  {% if forloop.counter > 6 %}
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-1">
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">
  {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
  </label>
  {{ field }}
@@ -215,8 +215,8 @@
  
  </div>
 
- <div class="pt-6 border-t border-theme-border-divider flex justify-end gap-4">
- <a href="{% url 'admin:brandintegration_list' %}" class="px-5 py-2.5 rounded-xl font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 transition">Cancel</a>
+ <div class="pt-6 border-t border-theme-border-subtle flex justify-end gap-4">
+ <a href="{% url 'admin:brandintegration_list' %}" class="px-5 py-2.5 rounded-xl font-bold text-theme-text-muted bg-theme-bg-secondary hover:bg-slate-200 transition">Cancel</a>
  <button type="submit" class="px-5 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">Save Integration</button>
  </div>
  </form>

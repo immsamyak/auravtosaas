@@ -23,7 +23,7 @@
 </div>
 </div>
 <div class="flex-1 relative z-10">
-<div class="aspect-square neo-brutal bg-theme-bg-surface overflow-hidden rotate-3 hover:rotate-0 transition-transform duration-500">
+<div class="aspect-square neo-brutal bg-theme-surface overflow-hidden rotate-3 hover:rotate-0 transition-transform duration-500">
  {% if brand.banner %}
  <img alt="Hero" class="w-full h-full object-cover" src="{{ brand.banner.url }}"/>
  {% else %}
@@ -47,7 +47,7 @@
  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
  {% for product in products|slice:":4" %}
  {% with colors="bg-pop-yellow bg-pop-pink bg-pop-blue bg-pop-green" %}
- <div class="group neo-brutal-sm bg-theme-bg-surface hover:neo-brutal transition-all duration-200">
+ <div class="group neo-brutal-sm bg-theme-surface hover:neo-brutal transition-all duration-200">
 <a class="block aspect-square overflow-hidden relative border-b-3 border-pop-black" href="{% url 'store_product_detail' brand.slug product.slug %}">
  {% if product.images.first %}
  <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
@@ -81,7 +81,7 @@
  </div>
 
  {% else %}
- <div class="neo-brutal bg-theme-bg-surface p-16 text-center">
+ <div class="neo-brutal bg-theme-surface p-16 text-center">
 <h3 class="font-display text-3xl text-pop-red">SOLD OUT!</h3>
 <p class="font-sans text-pop-black/50 mt-2">New drop coming soon. Stay loud.</p>
 </div>
@@ -106,7 +106,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -126,7 +126,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

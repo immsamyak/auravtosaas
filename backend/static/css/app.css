@@ -55,3 +55,12 @@ html.dark {
 @layer utilities {
     /* Add utility classes here if necessary */
 }
+
+/* Global Form Element Fallbacks (Fixes white inputs in Dark Mode) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="color"]),
+select,
+textarea {
+    background-color: var(--theme-input-bg);
+    color: var(--theme-input-text);
+    border-color: var(--theme-input-border);
+}

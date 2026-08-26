@@ -9,7 +9,7 @@
  <!-- Alpine.js -->
  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 </head>
-<body class="bg-theme-bg-surface h-screen overflow-hidden text-theme-text-base flex" x-data="customerDisplayApp()">
+<body class="bg-slate-900 h-screen overflow-hidden text-white flex" x-data="customerDisplayApp()">
 
  <!-- LEFT PANEL: Promotional / Branding -->
  <div class="flex-1 bg-indigo-900 text-white flex flex-col items-center justify-center relative overflow-hidden">
@@ -25,7 +25,7 @@
  <h1 class="text-6xl font-black mb-6 tracking-tight">{{ brand.name }}</h1>
  <p class="text-2xl text-indigo-200 font-light max-w-lg mx-auto leading-relaxed">Thank you for shopping with us today. Please review your order on the screen.</p>
  
- <div class="mt-16 inline-flex flex-col items-center justify-center w-80 p-6 bg-theme-bg-surface rounded-3xl shadow-2xl relative overflow-hidden transition-all min-h-[350px]">
+ <div class="mt-16 inline-flex flex-col items-center justify-center w-80 p-6 bg-slate-900 rounded-3xl shadow-2xl relative overflow-hidden transition-all min-h-[350px]">
  
  <!-- Store Link QR (Default) -->
  <div x-show="activeQrType === 'STORE'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center">
@@ -63,12 +63,12 @@
  </div>
 
  <!-- RIGHT PANEL: Live Cart Summary -->
- <div class="w-[500px] bg-theme-bg-surface border-l border-theme-border-base flex flex-col shadow-2xl z-10">
+ <div class="w-[500px] bg-slate-900 border-l border-slate-700 flex flex-col shadow-2xl z-10">
  
- <div class="p-6 bg-theme-bg-base border-b border-theme-border-base text-center">
- <h2 class="text-2xl font-bold text-theme-text-base">Your Order</h2>
+ <div class="p-6 bg-slate-950 border-b border-slate-700 text-center">
+ <h2 class="text-2xl font-bold text-white">Your Order</h2>
  {% if brand.settings.show_tax_on_receipt and brand.settings.tax_id_number %}
- <p class="text-xs text-theme-text-muted font-bold mt-1">{{ brand.settings.tax_id_type }}: {{ brand.settings.tax_id_number }}</p>
+ <p class="text-xs text-slate-400 font-bold mt-1">{{ brand.settings.tax_id_type }}: {{ brand.settings.tax_id_number }}</p>
  {% endif %}
  </div>
 
@@ -77,7 +77,7 @@
  
  <!-- Welcome / Empty State -->
  <template x-if="cart.length === 0 && orderStatus !== 'SUCCESS'">
- <div class="h-full flex flex-col items-center justify-center text-slate-400">
+ <div class="h-full flex flex-col items-center justify-center text-slate-500">
  <i class="fa-solid fa-store text-6xl mb-6 text-slate-200"></i>
  <p class="text-xl font-medium">Welcome to {{ brand.name }}!</p>
  <p class="text-sm mt-2">Next customer please...</p>
@@ -90,36 +90,36 @@
  <div class="w-24 h-24 bg-emerald-500 text-white rounded-full flex items-center justify-center text-5xl mb-6 shadow-xl shadow-emerald-500/30">
  <i class="fa-solid fa-check"></i>
  </div>
- <h2 class="text-3xl font-black text-theme-text-base mb-2">Checkout Complete!</h2>
- <p class="text-theme-text-muted mb-8 font-medium">Thank you for your purchase.</p>
+ <h2 class="text-3xl font-black text-white mb-2">Checkout Complete!</h2>
+ <p class="text-slate-400 mb-8 font-medium">Thank you for your purchase.</p>
  
- <div class="bg-theme-bg-surface p-3 rounded-2xl border-2 border-slate-900 inline-block shadow-sm">
+ <div class="bg-slate-900 p-3 rounded-2xl border-2 border-slate-900 inline-block shadow-sm">
  <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(window.location.origin + '/track/' + lastOrderId)" alt="Receipt QR" class="w-48 h-48 opacity-90">
  </div>
- <p class="text-xs text-theme-text-muted mt-4 font-bold uppercase tracking-widest">Scan for Digital Receipt</p>
+ <p class="text-xs text-slate-400 mt-4 font-bold uppercase tracking-widest">Scan for Digital Receipt</p>
  </div>
  </template>
  
  <!-- Items -->
  <template x-for="item in cart" :key="item.id">
- <div class="flex gap-4 items-center bg-theme-bg-surface border border-theme-border-divider p-4 rounded-2xl shadow-sm">
+ <div class="flex gap-4 items-center bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-sm">
  <!-- Image -->
- <div class="w-16 h-16 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0">
+ <div class="w-16 h-16 bg-slate-900 rounded-xl overflow-hidden flex-shrink-0">
  <img x-show="item.image" :src="item.image" class="w-full h-full object-cover">
- <div x-show="!item.image" class="w-full h-full flex items-center justify-center text-slate-400">
+ <div x-show="!item.image" class="w-full h-full flex items-center justify-center text-slate-500">
  <i class="fa-solid fa-shirt"></i>
  </div>
  </div>
  
  <!-- Details -->
  <div class="flex-1">
- <h3 class="font-bold text-lg text-theme-text-base leading-tight" x-text="item.name"></h3>
- <p class="text-theme-text-muted mt-1">Qty: <span class="font-bold text-slate-700" x-text="item.quantity"></span></p>
+ <h3 class="font-bold text-lg text-white leading-tight" x-text="item.name"></h3>
+ <p class="text-slate-400 mt-1">Qty: <span class="font-bold text-slate-200" x-text="item.quantity"></span></p>
  </div>
  
  <!-- Price -->
  <div class="text-right">
- <div class="font-bold text-xl text-theme-text-base">{{ currency_symbol }}<span x-text="(item.price * item.quantity).toFixed(2)"></span></div>
+ <div class="font-bold text-xl text-white">{{ currency_symbol }}<span x-text="(item.price * item.quantity).toFixed(2)"></span></div>
  </div>
  </div>
  </template>

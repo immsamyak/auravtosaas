@@ -2,13 +2,13 @@
 
 {% block content %}
 <div class="min-h-[80vh] flex items-center justify-center bg-gray-50/50">
- <div class="bg-theme-bg-surface rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-12 max-w-lg w-full text-center border border-gray-100">
+ <div class="bg-theme-surface rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-12 max-w-lg w-full text-center border border-theme-border-subtle">
  <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-8">
  <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500"></i>
  </div>
  
- <h2 class="text-2xl font-black text-gray-900 tracking-tight uppercase mb-4">Fitting Room Unavailable</h2>
- <p class="text-gray-500 mb-10 text-sm tracking-wide leading-relaxed">{{ message }}</p>
+ <h2 class="text-2xl font-black text-theme-text-primary tracking-tight uppercase mb-4">Fitting Room Unavailable</h2>
+ <p class="text-theme-text-muted mb-10 text-sm tracking-wide leading-relaxed">{{ message }}</p>
  
  <button onclick="window.history.back()" class="group relative inline-flex items-center justify-center px-8 py-4 w-full text-sm font-bold text-white transition-all duration-200 bg-gray-900 overflow-hidden hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
  <span class="tracking-widest uppercase relative z-10 flex items-center">

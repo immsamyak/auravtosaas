@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="vintage-border rounded-xl p-4 md:p-8 bg-theme-bg-surface mb-16 shadow-lg shadow-sepia-900/5">
+<section class="vintage-border rounded-xl p-4 md:p-8 bg-theme-surface mb-16 shadow-lg shadow-sepia-900/5">
 <div class="flex flex-col md:flex-row gap-8 items-center">
 <div class="flex-1 text-center md:text-left">
 <span class="font-sans font-bold text-rust uppercase tracking-widest text-sm mb-2 block">New Arrivals</span>
@@ -40,7 +40,7 @@
  {% if products %}
  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
  {% for product in products|slice:":4" %}
- <div class="group bg-theme-bg-surface p-4 rounded-xl border border-sepia-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+ <div class="group bg-theme-surface p-4 rounded-xl border border-sepia-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 <a class="block aspect-[3/4] rounded-lg overflow-hidden mb-4 relative bg-sepia-100" href="{% url 'store_product_detail' brand.slug product.slug %}">
  {% if product.images.first %}
  <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
@@ -53,7 +53,7 @@
  {% endif %}
  
  <div class="absolute inset-0 bg-sepia-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-<span class="bg-theme-bg-surface text-sepia-900 font-sans font-bold uppercase tracking-widest text-xs px-4 py-2 rounded">View</span>
+<span class="bg-theme-surface text-sepia-900 font-sans font-bold uppercase tracking-widest text-xs px-4 py-2 rounded">View</span>
 </div>
 </a>
 <div class="text-center">
@@ -70,7 +70,7 @@
  </div>
 
  {% else %}
- <div class="text-center py-16 bg-theme-bg-surface rounded-xl border border-sepia-200">
+ <div class="text-center py-16 bg-theme-surface rounded-xl border border-sepia-200">
 <i class="fa-solid fa-box-open text-4xl text-sepia-300 mb-4"></i>
 <h3 class="font-serif text-2xl text-sepia-800">Inventory Empty</h3>
 </div>
@@ -94,7 +94,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -114,7 +114,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

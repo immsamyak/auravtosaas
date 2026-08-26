@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+:root {
+  --my-color: #ff0000;
+}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        custom: 'color-mix(in srgb, var(--my-color) calc(<alpha-value> * 100%), transparent)',
+        custom2: ({ opacityValue }) => {
+          if (opacityValue !== undefined) {
+              return `color-mix(in srgb, var(--my-color) ${opacityValue * 100}%, transparent)`;
+          }
+          return `var(--my-color)`;
+        }
+      }
+    }
+  }
+}
+</script>
+</head>
+<body>
+  <div class="bg-custom/50 w-20 h-20">Alpha Value</div>
+  <div class="bg-custom2/50 w-20 h-20">Function</div>
+</body>
+</html>

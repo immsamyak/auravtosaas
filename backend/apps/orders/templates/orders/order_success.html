@@ -79,7 +79,7 @@
  {% if qr_code_url %}
  <div class="mb-6">
  <p class="text-xs font-bold uppercase tracking-wider mb-3 opacity-70">Scan to Pay</p>
- <div class="inline-block p-3 bg-theme-bg-surface rounded-2xl border border-neutral-500/20 shadow-lg">
+ <div class="inline-block p-3 bg-theme-surface rounded-2xl border border-neutral-500/20 shadow-lg">
  <img src="{{ qr_code_url }}" alt="QR Code" class="h-40 w-40 object-contain">
  </div>
  </div>
@@ -94,7 +94,7 @@
  <input type="file" name="payment_proof" accept="image/*" required class="flex-1 block w-full text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-neutral-500/20 file:text-current hover:file:bg-neutral-500/30 file:cursor-pointer cursor-pointer border border-dashed border-neutral-500/40 rounded-xl p-2 bg-neutral-500/5 hover:border-current transition-all">
  
  <button type="submit" class="sm:w-auto w-full inline-flex justify-center items-center py-2 px-6 border border-current rounded-xl shadow-sm text-sm font-bold uppercase tracking-widest bg-current text-white hover:opacity-90 transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
- <span class="absolute inset-0 w-full h-full bg-theme-bg-surface mix-blend-difference pointer-events-none"></span>
+ <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none"></span>
  <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-upload mr-2"></i> Submit</span>
  </button>
  </form>
@@ -121,7 +121,7 @@
  <i class="fa-solid fa-location-dot mr-2 opacity-70"></i> Track / Return Order
  </a>
  <a href="{% url 'storefront' brand.slug %}" class="flex-1 inline-flex justify-center items-center px-6 py-4 border border-current shadow-md text-sm font-bold rounded-xl bg-current transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
- <span class="absolute inset-0 w-full h-full bg-theme-bg-surface mix-blend-difference pointer-events-none"></span>
+ <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none"></span>
  <span class="relative z-10 mix-blend-exclusion text-white flex items-center">
  Continue Shopping <i class="fa-solid fa-arrow-right ml-2"></i>
  </span>
@@ -147,7 +147,7 @@
  </div>
  {% endif %}
  <div class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-current text-white flex items-center justify-center text-[10px] font-bold shadow-sm" style="color: var(--tw-prose-body);">
- <span class="absolute inset-0 w-full h-full bg-theme-bg-surface mix-blend-difference pointer-events-none rounded-full"></span>
+ <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none rounded-full"></span>
  <span class="relative z-10 mix-blend-exclusion text-white">{{ item.quantity }}</span>
  </div>
  </div>

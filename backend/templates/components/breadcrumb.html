@@ -8,7 +8,7 @@ where breadcrumb_links is a list of dicts: [{'name': 'Dashboard', 'url': '/dashb
 <nav class="flex mb-4" aria-label="Breadcrumb">
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li class="inline-flex items-center">
- <a href="{% url 'index' %}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-accent transition">
+ <a href="{% url 'index' %}" class="inline-flex items-center text-sm font-medium text-theme-text-secondary hover:text-accent transition">
  <i class="fa-solid fa-house mr-2"></i>
  Home
  </a>
@@ -17,8 +17,8 @@ where breadcrumb_links is a list of dicts: [{'name': 'Dashboard', 'url': '/dashb
  {% for link in links %}
  <li>
  <div class="flex items-center">
- <i class="fa-solid fa-chevron-right text-gray-400 text-xs mx-1"></i>
- <a href="{{ link.url }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-accent md:ml-2 transition">{{ link.name }}</a>
+ <i class="fa-solid fa-chevron-right text-theme-text-disabled text-xs mx-1"></i>
+ <a href="{{ link.url }}" class="ml-1 text-sm font-medium text-theme-text-secondary hover:text-accent md:ml-2 transition">{{ link.name }}</a>
  </div>
  </li>
  {% endfor %}
@@ -26,8 +26,8 @@ where breadcrumb_links is a list of dicts: [{'name': 'Dashboard', 'url': '/dashb
  {% if current %}
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-chevron-right text-gray-400 text-xs mx-1"></i>
- <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{ current }}</span>
+ <i class="fa-solid fa-chevron-right text-theme-text-disabled text-xs mx-1"></i>
+ <span class="ml-1 text-sm font-medium text-theme-text-muted md:ml-2">{{ current }}</span>
  </div>
  </li>
  {% endif %}

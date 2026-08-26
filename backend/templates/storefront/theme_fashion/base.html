@@ -33,7 +33,7 @@
 
 
  <!-- Crisp Header -->
- <header class="bg-theme-bg-surface border-b border-gray-200 sticky top-0 z-50">
+ <header class="bg-theme-surface border-b border-theme-border sticky top-0 z-50">
 <div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
  
  <!-- Navigation Links -->
@@ -96,7 +96,7 @@
 {% endif %}
  {% endif %}
  {% if brand.description %}
- <p class="text-gray-400 text-sm leading-relaxed max-w-xs font-light">{{ brand.description }}</p>
+ <p class="text-theme-text-disabled text-sm leading-relaxed max-w-xs font-light">{{ brand.description }}</p>
  {% endif %}
  </div>
  
@@ -104,9 +104,9 @@
  <h4 class="text-xs font-bold uppercase tracking-[0.15em] mb-6 border-b border-gray-800 pb-2">Categories</h4>
  <ul class="space-y-4">
  {% for category in categories %}
- <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-gray-400 hover:text-white text-sm font-light transition-colors">{{ category.name }}</a></li>
+ <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors">{{ category.name }}</a></li>
  {% empty %}
- <li><span class="text-gray-600 text-sm font-light">All Products</span></li>
+ <li><span class="text-theme-text-secondary text-sm font-light">All Products</span></li>
  {% endfor %}
  </ul>
  </div>
@@ -115,9 +115,9 @@
  <h4 class="text-xs font-bold uppercase tracking-[0.15em] mb-6 border-b border-gray-800 pb-2">Collections</h4>
  <ul class="space-y-4">
  {% for collection in collections %}
- <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-gray-400 hover:text-white text-sm font-light transition-colors">{{ collection.name }}</a></li>
+ <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors">{{ collection.name }}</a></li>
  {% empty %}
- <li><span class="text-gray-600 text-sm font-light">Default Collection</span></li>
+ <li><span class="text-theme-text-secondary text-sm font-light">Default Collection</span></li>
  {% endfor %}
  </ul>
  </div>
@@ -126,29 +126,29 @@
  <h4 class="text-xs font-bold uppercase tracking-[0.15em] mb-6 border-b border-gray-800 pb-2">Connect</h4>
  <ul class="space-y-4">
  {% if brand.contact_email %}
- <li><a href="mailto:{{ brand.contact_email }}" class="text-gray-400 hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-regular fa-envelope w-5"></i> Email Us</a></li>
+ <li><a href="mailto:{{ brand.contact_email }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-regular fa-envelope w-5"></i> Email Us</a></li>
  {% endif %}
  
- {% if brand.instagram_url %}<li><a href="{{ brand.instagram_url }}" class="text-gray-400 hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-instagram w-5"></i> Instagram</a></li>{% endif %}
- {% if brand.tiktok_url %}<li><a href="{{ brand.tiktok_url }}" class="text-gray-400 hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-tiktok w-5"></i> TikTok</a></li>{% endif %}
- {% if brand.facebook_url %}<li><a href="{{ brand.facebook_url }}" class="text-gray-400 hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-facebook-f w-5"></i> Facebook</a></li>{% endif %}
+ {% if brand.instagram_url %}<li><a href="{{ brand.instagram_url }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-instagram w-5"></i> Instagram</a></li>{% endif %}
+ {% if brand.tiktok_url %}<li><a href="{{ brand.tiktok_url }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-tiktok w-5"></i> TikTok</a></li>{% endif %}
+ {% if brand.facebook_url %}<li><a href="{{ brand.facebook_url }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-facebook-f w-5"></i> Facebook</a></li>{% endif %}
  </ul>
  </div>
  </div>
  
- <div class="max-w-7xl mx-auto px-6 border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-light tracking-wide uppercase">
+ <div class="max-w-7xl mx-auto px-6 border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-theme-text-muted font-light tracking-wide uppercase">
  <p>&copy; {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
  <p class="mt-4 md:mt-0">Powered by Aura</p>
  </div>
  
  <div class="max-w-6xl mx-auto px-6 pb-8">
  <div class="text-center mb-6">
- <h4 class="text-xs font-medium uppercase tracking-[0.3em] text-gray-400 mb-2">Newsletter</h4>
- <p class="text-gray-500 text-sm">Be the first to know about new arrivals.</p>
+ <h4 class="text-xs font-medium uppercase tracking-[0.3em] text-theme-text-disabled mb-2">Newsletter</h4>
+ <p class="text-theme-text-muted text-sm">Be the first to know about new arrivals.</p>
  </div>
- <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border-b border-gray-300 pb-1">
- <input type="email" name="email" placeholder="Email address" required class="flex-1 bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400 py-2">
- <button type="submit" class="px-4 py-2 text-sm font-medium text-gray-800 hover:text-black transition-colors uppercase tracking-wider">Join</button>
+ <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border-b border-theme-border pb-1">
+ <input type="email" name="email" placeholder="Email address" required class="flex-1 bg-transparent outline-none text-sm text-theme-text-primary placeholder-theme-placeholder py-2">
+ <button type="submit" class="px-4 py-2 text-sm font-medium text-theme-text-primary hover:text-black transition-colors uppercase tracking-wider">Join</button>
  </form>
  </div>
 
@@ -208,12 +208,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Mobile Menu Modal -->
 <div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
  <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
- <div @click.stop="" class="relative w-64 max-w-sm bg-theme-bg-surface h-full shadow-2xl transform transition-all flex flex-col"
+ <div @click.stop="" class="relative w-64 max-w-sm bg-theme-surface h-full shadow-2xl transform transition-all flex flex-col"
  x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
  x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
- <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+ <div class="p-6 border-b border-theme-border-subtle flex justify-between items-center">
  <span class="font-bold text-lg text-black">Menu</span>
- <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+ <button @click="isMenuOpen = false" class="text-theme-text-disabled hover:text-black">
  <i class="fa-solid fa-xmark text-xl"></i>
  </button>
  </div>

@@ -8,8 +8,8 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-box-open text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Store</span>
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Collections</span>
  </div>
@@ -20,7 +20,7 @@
  <!-- Header -->
  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Curated <span class="text-indigo-600 font-light">Collections</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Curated <span class="text-indigo-600 font-light">Collections</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Group products together for seasonal campaigns or special categories.</p>
  </div>
  <button onclick="document.getElementById('add-modal').classList.remove('hidden')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-indigo-700 hover:shadow transition-all inline-flex items-center justify-center">
@@ -42,12 +42,12 @@
  {% if collections %}
  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
  {% for collection in collections %}
- <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base overflow-visible group hover:shadow-md transition-shadow">
- <div class="h-48 bg-slate-100 relative overflow-hidden rounded-t-3xl">
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border overflow-visible group hover:shadow-md transition-shadow">
+ <div class="h-48 bg-theme-bg-secondary relative overflow-hidden rounded-t-3xl">
  {% if collection.image %}
  <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
  {% else %}
- <div class="w-full h-full flex flex-col items-center justify-center text-slate-400">
+ <div class="w-full h-full flex flex-col items-center justify-center text-theme-text-disabled">
  <i class="fa-solid fa-layer-group text-4xl mb-2 opacity-50"></i>
  <span class="text-xs font-bold uppercase tracking-wider">No Image</span>
  </div>
@@ -66,19 +66,19 @@
  </div>
  
  <div class="p-6">
- <h3 class="text-xl font-bold text-theme-text-base mb-2 truncate" title="{{ collection.name }}">{{ collection.name }}</h3>
+ <h3 class="text-xl font-bold text-theme-text-primary mb-2 truncate" title="{{ collection.name }}">{{ collection.name }}</h3>
  <p class="text-sm text-theme-text-muted mb-4 line-clamp-2 min-h-[2.5rem]">{{ collection.description|default:"No description provided." }}</p>
  
- <div class="flex items-center justify-between mt-6 pt-4 border-t border-theme-border-divider">
- <span class="text-xs font-bold text-theme-text-muted uppercase tracking-wider bg-theme-bg-base px-3 py-1 rounded-lg">
+ <div class="flex items-center justify-between mt-6 pt-4 border-t border-theme-border-subtle">
+ <span class="text-xs font-bold text-theme-text-muted uppercase tracking-wider bg-theme-bg px-3 py-1 rounded-lg">
  {{ collection.products.count }} Products
  </span>
  <!-- Dropdown Action -->
  {% dropdown %}
- <a href="{% url 'edit_collection' collection.id %}" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover flex items-center">
- <i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit Collection
+ <a href="{% url 'edit_collection' collection.id %}" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover flex items-center">
+ <i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit Collection
  </a>
- <div class="border-t border-theme-border-divider my-1"></div>
+ <div class="border-t border-theme-border-subtle my-1"></div>
  <form method="POST" action="{% url 'manage_collections' %}" onsubmit="confirmAction(event, 'Are you sure you want to delete this collection? This will not delete the products inside it.');" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="delete">
@@ -94,17 +94,17 @@
  {% endfor %}
  </div>
 
- <div class="mt-8 rounded-3xl border border-theme-border-base overflow-hidden shadow-sm">
+ <div class="mt-8 rounded-3xl border border-theme-border overflow-hidden shadow-sm">
  {% include 'components/pagination.html' %}
  </div>
  {% else %}
- <div class="bg-theme-bg-surface rounded-3xl border border-theme-border-base border-dashed p-12 text-center">
+ <div class="bg-theme-surface rounded-3xl border border-theme-border border-dashed p-12 text-center">
  <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
  <i class="fa-solid fa-layer-group text-2xl"></i>
  </div>
- <h3 class="text-xl font-bold text-theme-text-base mb-2">No Collections Yet</h3>
+ <h3 class="text-xl font-bold text-theme-text-primary mb-2">No Collections Yet</h3>
  <p class="text-theme-text-muted max-w-sm mx-auto mb-6">Create your first collection to group products for seasons, sales, or special edits.</p>
- <button onclick="document.getElementById('add-modal').classList.remove('hidden')" class="bg-theme-bg-surface border border-theme-input-border text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-theme-bg-hover transition-all inline-flex items-center justify-center">
+ <button onclick="document.getElementById('add-modal').classList.remove('hidden')" class="bg-theme-surface border border-theme-input-border text-theme-text-secondary px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-theme-surface-hover transition-all inline-flex items-center justify-center">
  Create First Collection
  </button>
  </div>
@@ -118,39 +118,39 @@
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
  <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('add-modal').classList.add('hidden')"></div>
  <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
- <div class="inline-block align-bottom bg-theme-bg-surface rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+ <div class="inline-block align-bottom bg-theme-surface rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
  <form method="POST" action="{% url 'manage_collections' %}" enctype="multipart/form-data">
  {% csrf_token %}
  <input type="hidden" name="action" value="create">
  
- <div class="bg-theme-bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
- <h3 class="text-xl font-bold text-theme-text-base mb-6" id="modal-title">Create New Collection</h3>
+ <div class="bg-theme-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+ <h3 class="text-xl font-bold text-theme-text-primary mb-6" id="modal-title">Create New Collection</h3>
  
  <div class="space-y-6">
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Collection Name</label>
- <input type="text" name="name" required class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" placeholder="e.g. Summer Essentials">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Collection Name</label>
+ <input type="text" name="name" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" placeholder="e.g. Summer Essentials">
  </div>
  
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Description (Optional)</label>
- <textarea name="description" rows="3" class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none" placeholder="A short description for this collection..."></textarea>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Description (Optional)</label>
+ <textarea name="description" rows="3" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none" placeholder="A short description for this collection..."></textarea>
  </div>
 
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Cover Image (Optional)</label>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Cover Image (Optional)</label>
  <div class="flex items-center">
  <input type="file" name="image" accept="image/*" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
  </div>
  </div>
 
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Select Products</label>
- <div class="max-h-48 overflow-y-auto border border-theme-border-base rounded-xl bg-theme-bg-base p-2 divide-y divide-slate-100">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Select Products</label>
+ <div class="max-h-48 overflow-y-auto border border-theme-border rounded-xl bg-theme-bg p-2 divide-y divide-slate-100">
  {% for product in products %}
- <label class="flex items-center py-2 px-2 hover:bg-theme-bg-hover rounded cursor-pointer transition-colors">
- <input type="checkbox" name="products" value="{{ product.id }}" class="w-4 h-4 text-indigo-600 bg-theme-bg-surface border-theme-input-border rounded focus:ring-indigo-500">
- <span class="ml-3 text-sm font-medium text-theme-text-base">{{ product.name }}</span>
+ <label class="flex items-center py-2 px-2 hover:bg-theme-surface-hover rounded cursor-pointer transition-colors">
+ <input type="checkbox" name="products" value="{{ product.id }}" class="w-4 h-4 text-indigo-600 bg-theme-surface border-theme-input-border rounded focus:ring-indigo-500">
+ <span class="ml-3 text-sm font-medium text-theme-text-primary">{{ product.name }}</span>
  <span class="ml-auto text-xs text-theme-text-muted">{{ request.user.owned_brand.get_currency_symbol }}{{ product.price }}</span>
  </label>
  {% empty %}
@@ -161,11 +161,11 @@
  </div>
  </div>
  
- <div class="bg-theme-bg-base px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-theme-border-divider">
+ <div class="bg-theme-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-theme-border-subtle">
  <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-5 py-3 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
  Create Collection
  </button>
- <button type="button" onclick="document.getElementById('add-modal').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-5 py-3 bg-theme-bg-surface text-base font-bold text-slate-700 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-auto sm:w-auto sm:text-sm transition-colors">
+ <button type="button" onclick="document.getElementById('add-modal').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-5 py-3 bg-theme-surface text-base font-bold text-theme-text-secondary hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-auto sm:w-auto sm:text-sm transition-colors">
  Cancel
  </button>
  </div>

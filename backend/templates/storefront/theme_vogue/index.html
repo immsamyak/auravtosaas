@@ -43,7 +43,7 @@
  <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
  {% for product in products|slice:":4" %}
  <div class="group cursor-pointer">
-<div class="aspect-[2/3] overflow-hidden bg-gray-100 mb-6 relative">
+<div class="aspect-[2/3] overflow-hidden bg-theme-bg-secondary mb-6 relative">
 <a class="block w-full h-full" href="{% url 'store_product_detail' brand.slug product.slug %}">
  {% if product.images.first %}
  <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
@@ -62,7 +62,7 @@
 </div>
 <div class="text-center">
 <h3 class="font-serif text-lg mb-1"><a class="hover:text-[#c5a059] transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
-<p class="text-sm font-light text-gray-600">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+<p class="text-sm font-light text-theme-text-secondary">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
 </div>
 </div>
  {% endfor %}
@@ -74,8 +74,8 @@
  </div>
 
  {% else %}
- <div class="text-center py-20 bg-theme-bg-surface luxury-border border">
-<span class="font-serif italic text-2xl text-gray-400">The collection is currently being prepared.</span>
+ <div class="text-center py-20 bg-theme-surface luxury-border border">
+<span class="font-serif italic text-2xl text-theme-text-disabled">The collection is currently being prepared.</span>
 </div>
  {% endif %}
 </section>
@@ -84,7 +84,7 @@
 <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 <div>
 <h2 class="text-4xl md:text-5xl font-serif mb-6 leading-tight">Craftsmanship <br/>&amp; Heritage</h2>
-<p class="text-gray-400 font-light leading-relaxed mb-8 max-w-md">Every piece is meticulously crafted using only the finest materials, ensuring a standard of luxury that transcends fleeting trends.</p>
+<p class="text-theme-text-disabled font-light leading-relaxed mb-8 max-w-md">Every piece is meticulously crafted using only the finest materials, ensuring a standard of luxury that transcends fleeting trends.</p>
 <a class="inline-block border-b border-[#c5a059] text-[#c5a059] pb-1 uppercase tracking-widest text-xs font-bold hover:text-white hover:border-white transition-all" href="#">Read our Story</a>
 </div>
 <div class="aspect-square bg-[#222] overflow-hidden">
@@ -113,7 +113,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -133,7 +133,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

@@ -8,8 +8,8 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-box-open text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Store</span>
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Catalog Settings</span>
  </div>
@@ -19,7 +19,7 @@
 
  <!-- Header -->
  <div class="mb-8">
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Catalog <span class="text-indigo-600 font-light">Settings</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Catalog <span class="text-indigo-600 font-light">Settings</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Manage your custom categories, product types, colors, and sizes.</p>
  </div>
 
@@ -34,7 +34,7 @@
  {% endif %}
 
  <!-- Tabs -->
- <div class="border-b border-theme-border-base mb-8">
+ <div class="border-b border-theme-border mb-8">
  <nav class="-mb-px flex space-x-8" aria-label="Tabs">
  <button @click="activeTab = 'category'" :class="{'border-indigo-500 text-indigo-600': activeTab === 'category', 'border-transparent text-theme-text-muted hover:text-slate-700 hover:border-slate-300': activeTab !== 'category'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-bold text-sm transition-colors">
  Categories
@@ -52,12 +52,12 @@
  </div>
 
  <!-- Tab Contents -->
- <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base overflow-visible">
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border overflow-visible">
  
  <!-- Category Tab -->
  <div x-show="activeTab === 'category'" class="p-6 sm:p-8">
  <div class="flex justify-between items-center mb-6">
- <h2 class="text-xl font-bold text-theme-text-base">Categories</h2>
+ <h2 class="text-xl font-bold text-theme-text-primary">Categories</h2>
  <button onclick="document.getElementById('add-modal').classList.remove('hidden'); document.getElementById('modal-entity').value = 'category'; document.getElementById('category-image-group').classList.remove('hidden');" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
  <i class="fa-solid fa-plus mr-1"></i> Add Custom Category
  </button>
@@ -66,7 +66,7 @@
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
  <!-- Custom -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Your Custom Categories</h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Your Custom Categories</h3>
  {% if categories_brand %}
  <ul class="divide-y divide-slate-100">
  {% for item in categories_brand %}
@@ -74,16 +74,16 @@
  
  <div class="flex items-center">
  {% if item.image %}
- <img src="{{ item.image.url }}" class="w-8 h-8 rounded object-cover mr-3 border border-theme-border-base">
+ <img src="{{ item.image.url }}" class="w-8 h-8 rounded object-cover mr-3 border border-theme-border">
  {% else %}
- <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center mr-3 border border-theme-border-base"><i class="fa-solid fa-image text-slate-400 text-xs"></i></div>
+ <div class="w-8 h-8 rounded bg-theme-bg-secondary flex items-center justify-center mr-3 border border-theme-border"><i class="fa-solid fa-image text-theme-text-disabled text-xs"></i></div>
  {% endif %}
- <span class="text-sm font-bold text-theme-text-base">{{ item.name }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ item.name }}</span>
  </div>
 
  <!-- Dropdown Action -->
  {% dropdown %}
- <button type="button" onclick="openEditModal('category', '{{ item.id }}', '{{ item.name|escapejs }}', '', '', 0)" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
+ <button type="button" onclick="openEditModal('category', '{{ item.id }}', '{{ item.name|escapejs }}', '', '', 0)" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit</button>
  <form method="POST" onsubmit="confirmAction(event, 'Delete this category?');" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="delete">
@@ -98,17 +98,17 @@
  {% endfor %}
  </ul>
  {% else %}
- <p class="text-sm text-theme-text-muted italic bg-theme-bg-base p-4 rounded-xl">You haven't created any custom categories.</p>
+ <p class="text-sm text-theme-text-muted italic bg-theme-bg p-4 rounded-xl">You haven't created any custom categories.</p>
  {% endif %}
  </div>
  
  <!-- Global -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Default Platform Categories <span class="text-xs font-normal normal-case ml-2 text-slate-400">(Read-only)</span></h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Default Platform Categories <span class="text-xs font-normal normal-case ml-2 text-theme-text-disabled">(Read-only)</span></h3>
  <ul class="divide-y divide-slate-100">
  {% for item in categories_global %}
  <li class="py-3">
- <span class="text-sm text-slate-700">{{ item.name }}</span>
+ <span class="text-sm text-theme-text-secondary">{{ item.name }}</span>
  </li>
  {% endfor %}
  </ul>
@@ -119,7 +119,7 @@
  <!-- Product Type Tab -->
  <div x-show="activeTab === 'product_type'" x-cloak class="p-6 sm:p-8">
  <div class="flex justify-between items-center mb-6">
- <h2 class="text-xl font-bold text-theme-text-base">Product Types</h2>
+ <h2 class="text-xl font-bold text-theme-text-primary">Product Types</h2>
  <button onclick="document.getElementById('add-modal').classList.remove('hidden'); document.getElementById('modal-entity').value = 'product_type';" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
  <i class="fa-solid fa-plus mr-1"></i> Add Custom Type
  </button>
@@ -128,15 +128,15 @@
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
  <!-- Custom -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Your Custom Types</h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Your Custom Types</h3>
  {% if types_brand %}
  <ul class="divide-y divide-slate-100">
  {% for item in types_brand %}
  <li class="py-3 flex justify-between items-center">
- <span class="text-sm font-bold text-theme-text-base">{{ item.name }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ item.name }}</span>
  <!-- Dropdown Action -->
  {% dropdown %}
- <button type="button" onclick="openEditModal('product_type', '{{ item.id }}', '{{ item.name|escapejs }}', '', '', 0)" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
+ <button type="button" onclick="openEditModal('product_type', '{{ item.id }}', '{{ item.name|escapejs }}', '', '', 0)" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit</button>
  <form method="POST" onsubmit="confirmAction(event, 'Delete this type?');" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="delete">
@@ -151,17 +151,17 @@
  {% endfor %}
  </ul>
  {% else %}
- <p class="text-sm text-theme-text-muted italic bg-theme-bg-base p-4 rounded-xl">You haven't created any custom product types.</p>
+ <p class="text-sm text-theme-text-muted italic bg-theme-bg p-4 rounded-xl">You haven't created any custom product types.</p>
  {% endif %}
  </div>
  
  <!-- Global -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Default Platform Types <span class="text-xs font-normal normal-case ml-2 text-slate-400">(Read-only)</span></h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Default Platform Types <span class="text-xs font-normal normal-case ml-2 text-theme-text-disabled">(Read-only)</span></h3>
  <ul class="divide-y divide-slate-100">
  {% for item in types_global %}
  <li class="py-3">
- <span class="text-sm text-slate-700">{{ item.name }}</span>
+ <span class="text-sm text-theme-text-secondary">{{ item.name }}</span>
  </li>
  {% endfor %}
  </ul>
@@ -172,7 +172,7 @@
  <!-- Color Tab -->
  <div x-show="activeTab === 'color'" x-cloak class="p-6 sm:p-8">
  <div class="flex justify-between items-center mb-6">
- <h2 class="text-xl font-bold text-theme-text-base">Colors</h2>
+ <h2 class="text-xl font-bold text-theme-text-primary">Colors</h2>
  <button onclick="document.getElementById('add-modal').classList.remove('hidden'); document.getElementById('modal-entity').value = 'color'; document.getElementById('color-picker-group').classList.remove('hidden');" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
  <i class="fa-solid fa-plus mr-1"></i> Add Custom Color
  </button>
@@ -181,18 +181,18 @@
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
  <!-- Custom -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Your Custom Colors</h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Your Custom Colors</h3>
  {% if colors_brand %}
  <ul class="divide-y divide-slate-100">
  {% for item in colors_brand %}
  <li class="py-3 flex justify-between items-center">
  <div class="flex items-center">
- <span class="w-6 h-6 rounded-full border border-theme-border-base mr-3" style="background-color: {{ item.hex_code }}"></span>
- <span class="text-sm font-bold text-theme-text-base">{{ item.name }} <span class="text-xs text-slate-400 font-mono ml-2">{{ item.hex_code }}</span></span>
+ <span class="w-6 h-6 rounded-full border border-theme-border mr-3" style="background-color: {{ item.hex_code }}"></span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ item.name }} <span class="text-xs text-theme-text-disabled font-mono ml-2">{{ item.hex_code }}</span></span>
  </div>
  <!-- Dropdown Action -->
  {% dropdown %}
- <button type="button" onclick="openEditModal('color', '{{ item.id }}', '{{ item.name|escapejs }}', '{{ item.hex_code }}', '', 0)" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
+ <button type="button" onclick="openEditModal('color', '{{ item.id }}', '{{ item.name|escapejs }}', '{{ item.hex_code }}', '', 0)" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit</button>
  <form method="POST" onsubmit="confirmAction(event, 'Delete this color?');" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="delete">
@@ -207,18 +207,18 @@
  {% endfor %}
  </ul>
  {% else %}
- <p class="text-sm text-theme-text-muted italic bg-theme-bg-base p-4 rounded-xl">You haven't created any custom colors.</p>
+ <p class="text-sm text-theme-text-muted italic bg-theme-bg p-4 rounded-xl">You haven't created any custom colors.</p>
  {% endif %}
  </div>
  
  <!-- Global -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Default Platform Colors <span class="text-xs font-normal normal-case ml-2 text-slate-400">(Read-only)</span></h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Default Platform Colors <span class="text-xs font-normal normal-case ml-2 text-theme-text-disabled">(Read-only)</span></h3>
  <ul class="divide-y divide-slate-100">
  {% for item in colors_global %}
  <li class="py-3 flex items-center">
- <span class="w-6 h-6 rounded-full border border-theme-border-base mr-3" style="background-color: {{ item.hex_code }}"></span>
- <span class="text-sm text-slate-700">{{ item.name }}</span>
+ <span class="w-6 h-6 rounded-full border border-theme-border mr-3" style="background-color: {{ item.hex_code }}"></span>
+ <span class="text-sm text-theme-text-secondary">{{ item.name }}</span>
  </li>
  {% endfor %}
  </ul>
@@ -229,7 +229,7 @@
  <!-- Size Tab -->
  <div x-show="activeTab === 'size'" x-cloak class="p-6 sm:p-8">
  <div class="flex justify-between items-center mb-6">
- <h2 class="text-xl font-bold text-theme-text-base">Sizes</h2>
+ <h2 class="text-xl font-bold text-theme-text-primary">Sizes</h2>
  <button onclick="document.getElementById('add-modal').classList.remove('hidden'); document.getElementById('modal-entity').value = 'size'; document.getElementById('size-code-group').classList.remove('hidden'); document.getElementById('size-order-group').classList.remove('hidden');" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
  <i class="fa-solid fa-plus mr-1"></i> Add Custom Size
  </button>
@@ -238,15 +238,15 @@
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
  <!-- Custom -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Your Custom Sizes</h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Your Custom Sizes</h3>
  {% if sizes_brand %}
  <ul class="divide-y divide-slate-100">
  {% for item in sizes_brand %}
  <li class="py-3 flex justify-between items-center">
- <span class="text-sm font-bold text-theme-text-base">{{ item.name }} <span class="bg-slate-100 text-theme-text-muted text-xs px-2 py-1 rounded ml-2">{{ item.code }}</span></span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ item.name }} <span class="bg-theme-bg-secondary text-theme-text-muted text-xs px-2 py-1 rounded ml-2">{{ item.code }}</span></span>
  <!-- Dropdown Action -->
  {% dropdown %}
- <button type="button" onclick="openEditModal('size', '{{ item.id }}', '{{ item.name|escapejs }}', '', '{{ item.code }}', '{{ item.display_order }}')" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit</button>
+ <button type="button" onclick="openEditModal('size', '{{ item.id }}', '{{ item.name|escapejs }}', '', '{{ item.code }}', '{{ item.display_order }}')" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover font-medium flex items-center"><i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit</button>
  <form method="POST" onsubmit="confirmAction(event, 'Delete this size?');" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="delete">
@@ -261,17 +261,17 @@
  {% endfor %}
  </ul>
  {% else %}
- <p class="text-sm text-theme-text-muted italic bg-theme-bg-base p-4 rounded-xl">You haven't created any custom sizes.</p>
+ <p class="text-sm text-theme-text-muted italic bg-theme-bg p-4 rounded-xl">You haven't created any custom sizes.</p>
  {% endif %}
  </div>
  
  <!-- Global -->
  <div>
- <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-divider pb-2">Default Platform Sizes <span class="text-xs font-normal normal-case ml-2 text-slate-400">(Read-only)</span></h3>
+ <h3 class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mb-4 border-b border-theme-border-subtle pb-2">Default Platform Sizes <span class="text-xs font-normal normal-case ml-2 text-theme-text-disabled">(Read-only)</span></h3>
  <ul class="divide-y divide-slate-100">
  {% for item in sizes_global %}
  <li class="py-3">
- <span class="text-sm text-slate-700">{{ item.name }} <span class="text-xs text-slate-400 ml-2">{{ item.code }}</span></span>
+ <span class="text-sm text-theme-text-secondary">{{ item.name }} <span class="text-xs text-theme-text-disabled ml-2">{{ item.code }}</span></span>
  </li>
  {% endfor %}
  </ul>
@@ -292,29 +292,29 @@
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
  <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="closeAddModal()"></div>
  <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
- <div class="inline-block align-bottom bg-theme-bg-surface rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+ <div class="inline-block align-bottom bg-theme-surface rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
  <form method="POST" action="{% url 'catalog_settings' %}" enctype="multipart/form-data">
  {% csrf_token %}
  <input type="hidden" name="action" value="create">
  <input type="hidden" name="entity" id="modal-entity">
  
- <div class="bg-theme-bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
- <h3 class="text-xl font-bold text-theme-text-base mb-4" id="modal-title">Add New Item</h3>
+ <div class="bg-theme-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+ <h3 class="text-xl font-bold text-theme-text-primary mb-4" id="modal-title">Add New Item</h3>
  
  <div class="space-y-4">
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Name</label>
- <input type="text" name="name" required class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Name</label>
+ <input type="text" name="name" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
  
  
  <!-- Specific Fields -->
  <div id="category-image-group" class="hidden mb-4">
- <label class="block text-sm font-bold text-slate-700 mb-1">Category Image</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Category Image</label>
  <input type="file" name="image" accept="image/*" class="w-full text-sm text-theme-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
  </div>
  <div id="color-picker-group" class="hidden">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Hex Code (for Color)</label>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Hex Code (for Color)</label>
  <div class="flex items-center space-x-2">
  <input type="color" name="hex_code" value="#000000" class="h-10 w-10 border-0 p-0 rounded cursor-pointer">
  <span class="text-xs text-theme-text-muted">Pick a color</span>
@@ -322,22 +322,22 @@
  </div>
  
  <div id="size-code-group" class="hidden">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Code (for Size, e.g. 'XL', '42')</label>
- <input type="text" name="code" class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Code (for Size, e.g. 'XL', '42')</label>
+ <input type="text" name="code" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
 
  <div id="size-order-group" class="hidden">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Display Order (for sorting sizes)</label>
- <input type="number" name="display_order" value="0" class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Display Order (for sorting sizes)</label>
+ <input type="number" name="display_order" value="0" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
  </div>
  </div>
  
- <div class="bg-theme-bg-base px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-theme-border-divider">
+ <div class="bg-theme-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-theme-border-subtle">
  <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-5 py-3 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
  Create
  </button>
- <button type="button" onclick="closeAddModal()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-5 py-3 bg-theme-bg-surface text-base font-bold text-slate-700 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-auto sm:w-auto sm:text-sm transition-colors">
+ <button type="button" onclick="closeAddModal()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-5 py-3 bg-theme-surface text-base font-bold text-theme-text-secondary hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-auto sm:w-auto sm:text-sm transition-colors">
  Cancel
  </button>
  </div>
@@ -357,10 +357,10 @@ function closeAddModal() {
 
  <!-- Edit Modal -->
  <div id="edit-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity">
- <div class="bg-theme-bg-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
- <div class="px-6 py-4 border-b border-theme-border-divider flex justify-between items-center bg-slate-50/50">
- <h3 class="text-lg font-bold text-theme-text-base" id="edit-modal-title">Edit Item</h3>
- <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 transition">
+ <div class="bg-theme-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
+ <div class="px-6 py-4 border-b border-theme-border-subtle flex justify-between items-center bg-slate-50/50">
+ <h3 class="text-lg font-bold text-theme-text-primary" id="edit-modal-title">Edit Item</h3>
+ <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')" class="text-theme-text-disabled hover:text-slate-600 transition">
  <i class="fa-solid fa-xmark text-lg"></i>
  </button>
  </div>
@@ -371,36 +371,36 @@ function closeAddModal() {
  <input type="hidden" name="item_id" id="edit-modal-item-id">
  
  <div class="mb-4">
- <label class="block text-sm font-bold text-slate-700 mb-1">Name</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Name</label>
  <input type="text" name="name" id="edit-modal-name" required class="w-full rounded-lg border-theme-input-border focus:border-indigo-500 focus:ring-indigo-500 text-sm">
  </div>
  
  <!-- Specific Fields for Edit -->
  <div id="edit-category-image-group" class="hidden mb-4">
- <label class="block text-sm font-bold text-slate-700 mb-1">Update Image (Optional)</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Update Image (Optional)</label>
  <input type="file" name="image" accept="image/*" class="w-full text-sm text-theme-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
  </div>
 
  <div id="edit-color-picker-group" class="hidden mb-4">
- <label class="block text-sm font-bold text-slate-700 mb-1">Hex Code</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Hex Code</label>
  <div class="flex items-center space-x-3">
- <input type="color" name="hex_code" id="edit-modal-hex" class="h-10 w-14 p-1 rounded cursor-pointer border border-theme-border-base">
+ <input type="color" name="hex_code" id="edit-modal-hex" class="h-10 w-14 p-1 rounded cursor-pointer border border-theme-border">
  <span class="text-xs text-theme-text-muted font-mono">Pick a color</span>
  </div>
  </div>
 
  <div id="edit-size-code-group" class="hidden mb-4">
- <label class="block text-sm font-bold text-slate-700 mb-1">Short Code (e.g., XL, 42)</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Short Code (e.g., XL, 42)</label>
  <input type="text" name="code" id="edit-modal-code" class="w-full rounded-lg border-theme-input-border focus:border-indigo-500 focus:ring-indigo-500 text-sm uppercase">
  </div>
  
  <div id="edit-size-order-group" class="hidden mb-4">
- <label class="block text-sm font-bold text-slate-700 mb-1">Display Order</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">Display Order</label>
  <input type="number" name="display_order" id="edit-modal-order" value="0" class="w-full rounded-lg border-theme-input-border focus:border-indigo-500 focus:ring-indigo-500 text-sm">
  </div>
 
  <div class="mt-6 flex justify-end space-x-3">
- <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-slate-700 bg-theme-bg-surface border border-theme-input-border rounded-lg hover:bg-theme-bg-hover transition">Cancel</button>
+ <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-theme-text-secondary bg-theme-surface border border-theme-input-border rounded-lg hover:bg-theme-surface-hover transition">Cancel</button>
  <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm transition flex items-center">
  <i class="fa-solid fa-save mr-2"></i> Save Changes
  </button>

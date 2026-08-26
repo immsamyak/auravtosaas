@@ -63,9 +63,9 @@
  <div>
  <label class="block text-sm font-bold opacity-80 mb-2">Province <span class="text-rose-500">*</span></label>
  <select x-model="selectedProvince" @change="selectedDistrict = ''; selectedCity = ''" required class="block w-full rounded-xl bg-transparent border-neutral-500/30 py-3 px-4 shadow-sm focus:ring-1 focus:ring-current focus:border-current transition-colors sm:text-sm text-current">
- <option value="" class="text-theme-text-base">Select Province</option>
+ <option value="" class="text-theme-text-primary">Select Province</option>
  <template x-for="p in locations" :key="p.id">
- <option :value="p.id" x-text="p.name" class="text-theme-text-base"></option>
+ <option :value="p.id" x-text="p.name" class="text-theme-text-primary"></option>
  </template>
  </select>
  </div>
@@ -74,9 +74,9 @@
  <div>
  <label class="block text-sm font-bold opacity-80 mb-2">District <span class="text-rose-500">*</span></label>
  <select x-model="selectedDistrict" @change="selectedCity = ''" :disabled="!selectedProvince" required class="block w-full rounded-xl bg-transparent border-neutral-500/30 py-3 px-4 shadow-sm focus:ring-1 focus:ring-current focus:border-current transition-colors sm:text-sm text-current disabled:opacity-50 disabled:cursor-not-allowed">
- <option value="" class="text-theme-text-base">Select District</option>
+ <option value="" class="text-theme-text-primary">Select District</option>
  <template x-for="d in availableDistricts" :key="d.id">
- <option :value="d.id" x-text="d.name" class="text-theme-text-base"></option>
+ <option :value="d.id" x-text="d.name" class="text-theme-text-primary"></option>
  </template>
  </select>
  </div>
@@ -85,9 +85,9 @@
  <div>
  <label class="block text-sm font-bold opacity-80 mb-2">City / Area <span class="text-rose-500">*</span></label>
  <select x-model="selectedCity" :disabled="!selectedDistrict" required class="block w-full rounded-xl bg-transparent border-neutral-500/30 py-3 px-4 shadow-sm focus:ring-1 focus:ring-current focus:border-current transition-colors sm:text-sm text-current disabled:opacity-50 disabled:cursor-not-allowed">
- <option value="" class="text-theme-text-base">Select City</option>
+ <option value="" class="text-theme-text-primary">Select City</option>
  <template x-for="c in availableCities" :key="c.id">
- <option :value="c.id" x-text="`${c.name} (${brandCurrency}${c.rate})`" class="text-theme-text-base"></option>
+ <option :value="c.id" x-text="`${c.name} (${brandCurrency}${c.rate})`" class="text-theme-text-primary"></option>
  </template>
  </select>
  </div>
@@ -222,7 +222,7 @@
  <p class="font-bold text-sm mb-3">Scan QR Code to Pay</p>
  <div class="flex flex-col sm:flex-row gap-6 items-start">
  {% if pm.credentials.qr_code_url %}
- <div class="bg-theme-bg-surface p-2 rounded-xl shadow-lg shrink-0">
+ <div class="bg-theme-surface p-2 rounded-xl shadow-lg shrink-0">
  <img src="{{ pm.credentials.qr_code_url }}" alt="Payment QR Code" class="h-32 w-32 object-contain">
  </div>
  {% endif %}

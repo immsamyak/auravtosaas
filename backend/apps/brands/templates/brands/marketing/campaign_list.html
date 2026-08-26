@@ -7,7 +7,7 @@
 <div class="max-w-7xl mx-auto pb-12">
  <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Email <span class="text-indigo-600 font-light">Campaigns</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Email <span class="text-indigo-600 font-light">Campaigns</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Send marketing emails and notifications to your subscribers and customers.</p>
  </div>
  <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 hover:scale-[1.02] active:scale-100 transition-all shadow-lg shadow-indigo-200">
@@ -16,11 +16,11 @@
  </div>
 
  <!-- Campaigns List -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl border border-theme-border-base dark:border-slate-600/50/50 shadow-sm overflow-hidden relative">
+ <div class="bg-theme-surface rounded-2xl border border-theme-border dark:border-slate-600/50/50 shadow-sm overflow-hidden relative">
  <div class="overflow-x-auto">
  <table class="w-full text-left border-collapse">
  <thead>
- <tr class="bg-slate-50/80 border-b border-theme-border-base dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-theme-text-muted font-bold">
+ <tr class="bg-slate-50/80 border-b border-theme-border dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-theme-text-muted font-bold">
  <th class="px-6 py-4">Campaign Name</th>
  <th class="px-6 py-4">Subject</th>
  <th class="px-6 py-4">Audience</th>
@@ -32,20 +32,20 @@
  {% for campaign in campaigns %}
  <tr class="hover:bg-slate-50/50 transition-colors group">
  <td class="px-6 py-4">
- <div class="font-bold text-theme-text-base">{{ campaign.name }}</div>
- <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">Created {{ campaign.created_at|date:"M d, Y" }}</div>
+ <div class="font-bold text-theme-text-primary">{{ campaign.name }}</div>
+ <div class="text-xs text-theme-text-disabled mt-1">Created {{ campaign.created_at|date:"M d, Y" }}</div>
  </td>
  <td class="px-6 py-4 text-theme-text-muted max-w-xs truncate" title="{{ campaign.subject }}">
  {{ campaign.subject }}
  </td>
  <td class="px-6 py-4">
- <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+ <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-theme-bg-secondary text-theme-text-secondary">
  {% if campaign.target_audience == 'SUBSCRIBERS' %}
- <i class="fa-solid fa-envelope-open-text mr-1.5 text-slate-400 dark:text-slate-500"></i> Subscribers
+ <i class="fa-solid fa-envelope-open-text mr-1.5 text-theme-text-disabled"></i> Subscribers
  {% elif campaign.target_audience == 'CUSTOMERS' %}
- <i class="fa-solid fa-users mr-1.5 text-slate-400 dark:text-slate-500"></i> Customers
+ <i class="fa-solid fa-users mr-1.5 text-theme-text-disabled"></i> Customers
  {% else %}
- <i class="fa-solid fa-globe mr-1.5 text-slate-400 dark:text-slate-500"></i> Everyone
+ <i class="fa-solid fa-globe mr-1.5 text-theme-text-disabled"></i> Everyone
  {% endif %}
  </span>
  </td>
@@ -62,13 +62,13 @@
  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700">
  <i class="fa-solid fa-paper-plane mr-1.5"></i> Sent
  </span>
- <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{{ campaign.sent_at|date:"M d, Y H:i" }}</div>
+ <div class="text-[10px] text-theme-text-disabled mt-1">{{ campaign.sent_at|date:"M d, Y H:i" }}</div>
  {% endif %}
  </td>
  <td class="px-6 py-4 text-right">
  <div class="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
  {% if campaign.status == 'DRAFT' %}
- <a href="{% url 'campaign_edit' campaign.id %}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" title="Edit">
+ <a href="{% url 'campaign_edit' campaign.id %}" class="w-8 h-8 rounded-lg flex items-center justify-center text-theme-text-disabled hover:text-indigo-600 hover:bg-indigo-50 transition-colors" title="Edit">
  <i class="fa-solid fa-pen-to-square"></i>
  </a>
  
@@ -82,7 +82,7 @@
  
  <form method="POST" action="{% url 'campaign_delete' campaign.id %}" onsubmit="return confirm('Delete this campaign?');">
  {% csrf_token %}
- <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete">
+ <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-theme-text-disabled hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete">
  <i class="fa-solid fa-trash-can"></i>
  </button>
  </form>
@@ -92,10 +92,10 @@
  {% empty %}
  <tr>
  <td colspan="5" class="px-6 py-16 text-center text-theme-text-muted">
- <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-theme-bg-base dark:bg-slate-800/50/80 mb-4">
- <i class="fa-solid fa-envelope-open-text text-2xl text-slate-400 dark:text-slate-500"></i>
+ <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-theme-bg mb-4">
+ <i class="fa-solid fa-envelope-open-text text-2xl text-theme-text-disabled"></i>
  </div>
- <h3 class="text-lg font-bold text-theme-text-base mb-1">No campaigns yet</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary mb-1">No campaigns yet</h3>
  <p class="text-sm">Create your first email campaign to engage with your audience.</p>
  <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-4 py-2 mt-4 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors">
  <i class="fa-solid fa-plus mr-2"></i> Create Campaign

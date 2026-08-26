@@ -20,7 +20,7 @@
  <li aria-current="page">
  <div class="flex items-center">
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-1"></i>
- <span class="ml-1 text-sm font-medium text-theme-text-base md:ml-2">Edit {{ collection.name }}</span>
+ <span class="ml-1 text-sm font-medium text-theme-text-primary md:ml-2">Edit {{ collection.name }}</span>
  </div>
  </li>
  </ol>
@@ -28,32 +28,32 @@
 
  <!-- Header -->
  <div class="mb-10">
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Edit <span class="text-indigo-600 font-light">Collection</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Edit <span class="text-indigo-600 font-light">Collection</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Update the details and assigned products for this collection.</p>
  </div>
 
  <!-- Form Container -->
- <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base p-8">
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border p-8">
  <form action="{% url 'edit_collection' collection.id %}" method="POST" enctype="multipart/form-data" class="space-y-8">
  {% csrf_token %}
  
  <div class="space-y-6">
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Collection Name</label>
- <input type="text" name="name" value="{{ collection.name }}" required class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Collection Name</label>
+ <input type="text" name="name" value="{{ collection.name }}" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
  
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Description</label>
- <textarea name="description" rows="3" class="block w-full bg-theme-bg-base border border-theme-border-base rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none">{{ collection.description|default:"" }}</textarea>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-1">Description</label>
+ <textarea name="description" rows="3" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none">{{ collection.description|default:"" }}</textarea>
  </div>
 
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Cover Image</label>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Cover Image</label>
  {% if collection.image %}
  <div class="mb-4">
  <p class="text-xs text-theme-text-muted mb-2">Current Image:</p>
- <img src="{{ collection.image.url }}" alt="Current Image" class="w-48 h-32 object-cover rounded-xl border border-theme-border-base">
+ <img src="{{ collection.image.url }}" alt="Current Image" class="w-48 h-32 object-cover rounded-xl border border-theme-border">
  </div>
  {% endif %}
  <div class="flex items-center">
@@ -62,12 +62,12 @@
  </div>
 
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Selected Products</label>
- <div class="max-h-64 overflow-y-auto border border-theme-border-base rounded-xl bg-theme-bg-base p-2 divide-y divide-slate-100">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Selected Products</label>
+ <div class="max-h-64 overflow-y-auto border border-theme-border rounded-xl bg-theme-bg p-2 divide-y divide-slate-100">
  {% for product in products %}
- <label class="flex items-center py-2 px-2 hover:bg-theme-bg-hover rounded cursor-pointer transition-colors">
- <input type="checkbox" name="products" value="{{ product.id }}" {% if product in collection.products.all %}checked{% endif %} class="w-4 h-4 text-indigo-600 bg-theme-bg-surface border-theme-input-border rounded focus:ring-indigo-500">
- <span class="ml-3 text-sm font-medium text-theme-text-base">{{ product.name }}</span>
+ <label class="flex items-center py-2 px-2 hover:bg-theme-surface-hover rounded cursor-pointer transition-colors">
+ <input type="checkbox" name="products" value="{{ product.id }}" {% if product in collection.products.all %}checked{% endif %} class="w-4 h-4 text-indigo-600 bg-theme-surface border-theme-input-border rounded focus:ring-indigo-500">
+ <span class="ml-3 text-sm font-medium text-theme-text-primary">{{ product.name }}</span>
  <span class="ml-auto text-xs text-theme-text-muted">{{ request.user.owned_brand.get_currency_symbol }}{{ product.price }}</span>
  </label>
  {% empty %}
@@ -78,8 +78,8 @@
  </div>
 
  <!-- Action Buttons -->
- <div class="pt-6 border-t border-theme-border-divider flex items-center justify-end space-x-4">
- <a href="{% url 'manage_collections' %}" class="px-6 py-3 border border-theme-border-base rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-theme-bg-surface hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+ <div class="pt-6 border-t border-theme-border-subtle flex items-center justify-end space-x-4">
+ <a href="{% url 'manage_collections' %}" class="px-6 py-3 border border-theme-border rounded-xl shadow-sm text-sm font-bold text-theme-text-secondary bg-theme-surface hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
  Cancel
  </a>
  <button type="submit" class="px-6 py-3 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">

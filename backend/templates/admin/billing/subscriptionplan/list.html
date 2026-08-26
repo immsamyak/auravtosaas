@@ -5,7 +5,7 @@
  
  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Subscription <span class="text-indigo-600 font-light">Plans</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Subscription <span class="text-indigo-600 font-light">Plans</span></h1>
  <p class="text-theme-text-muted mt-1">Manage the pricing tiers available for brands.</p>
  </div>
  <div class="flex items-center gap-3">
@@ -17,13 +17,13 @@
  </div>
 
  <!-- Filter/Search Bar (Optional for Pricing Plans, usually few, but keeping consistency) -->
- <div class="bg-theme-bg-surface p-4 rounded-2xl shadow-sm border border-theme-border-divider mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+ <div class="bg-theme-surface p-4 rounded-2xl shadow-sm border border-theme-border-subtle mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
  <form method="get" class="flex w-full md:w-auto relative" x-data="{ search: '{{ request.GET.q|default:"" }}' }">
  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
- <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+ <svg class="w-4 h-4 text-theme-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
  </div>
- <input type="text" name="q" x-model="search" placeholder="Search plans..." class="w-full md:w-80 pl-10 pr-4 py-2 bg-theme-bg-base border border-theme-border-base rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
- <button type="submit" class="ml-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-colors">Search</button>
+ <input type="text" name="q" x-model="search" placeholder="Search plans..." class="w-full md:w-80 pl-10 pr-4 py-2 bg-theme-bg border border-theme-border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
+ <button type="submit" class="ml-2 px-4 py-2 bg-theme-bg-secondary hover:bg-slate-200 text-theme-text-secondary text-sm font-bold rounded-xl transition-colors">Search</button>
  {% if request.GET.q %}
  <a href="?" class="ml-2 px-4 py-2 text-rose-500 hover:text-rose-600 text-sm font-bold flex items-center">Clear</a>
  {% endif %}
@@ -33,7 +33,7 @@
  <!-- Pricing Cards Grid -->
  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
  {% for obj in objects %}
- <div class="relative bg-theme-bg-surface rounded-3xl p-8 border {% if obj.is_popular %}border-indigo-500 ring-4 ring-indigo-50 shadow-xl scale-105 z-10{% else %}border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300{% endif %} transition-all duration-300 flex flex-col h-full">
+ <div class="relative bg-theme-surface rounded-3xl p-8 border {% if obj.is_popular %}border-indigo-500 ring-4 ring-indigo-50 shadow-xl scale-105 z-10{% else %}border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300{% endif %} transition-all duration-300 flex flex-col h-full">
  
  {% if obj.is_popular %}
  <div class="absolute -top-4 inset-x-0 flex justify-center">
@@ -43,11 +43,11 @@
 
  <!-- Admin Actions Dropdown -->
  <div class="absolute top-4 right-4" x-data="{ open: false }">
- <button @click="open = !open" @click.away="open = false" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-theme-bg-hover rounded-lg transition">
+ <button @click="open = !open" @click.away="open = false" class="p-2 text-theme-text-disabled hover:text-slate-700 hover:bg-theme-surface-hover rounded-lg transition">
  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
  </button>
- <div x-show="open" x-transition.opacity class="absolute right-0 mt-2 w-32 bg-theme-bg-surface rounded-xl shadow-lg border border-theme-border-divider overflow-hidden z-20">
- <a href="{% url 'admin:subscriptionplan_edit' obj.pk %}" class="block px-4 py-2 text-sm font-bold text-slate-700 hover:bg-theme-bg-hover hover:text-indigo-600 transition">Edit Plan</a>
+ <div x-show="open" x-transition.opacity class="absolute right-0 mt-2 w-32 bg-theme-surface rounded-xl shadow-lg border border-theme-border-subtle overflow-hidden z-20">
+ <a href="{% url 'admin:subscriptionplan_edit' obj.pk %}" class="block px-4 py-2 text-sm font-bold text-theme-text-secondary hover:bg-theme-surface-hover hover:text-indigo-600 transition">Edit Plan</a>
  
  <form method="post" action="#" onsubmit="alert('Delete functionality is not yet implemented.'); return false;">
  {% csrf_token %}
@@ -57,19 +57,19 @@
  </div>
 
  <div class="mb-6">
- <h3 class="text-xl font-extrabold text-theme-text-base mb-2">{{ obj.name }}</h3>
+ <h3 class="text-xl font-extrabold text-theme-text-primary mb-2">{{ obj.name }}</h3>
  <div class="flex items-baseline gap-1">
- <span class="text-4xl font-extrabold tracking-tight text-theme-text-base">${{ obj.monthly_price }}</span>
+ <span class="text-4xl font-extrabold tracking-tight text-theme-text-primary">${{ obj.monthly_price }}</span>
  <span class="text-theme-text-muted font-medium">/month</span>
  </div>
- <div class="mt-2 inline-block px-3 py-1 bg-slate-100 rounded-lg">
+ <div class="mt-2 inline-block px-3 py-1 bg-theme-bg-secondary rounded-lg">
  <span class="text-xs font-bold text-theme-text-muted font-mono">{{ obj.stripe_price_id|default:"No Stripe ID" }}</span>
  </div>
  </div>
 
- <div class="py-6 border-y border-theme-border-divider flex-1">
+ <div class="py-6 border-y border-theme-border-subtle flex-1">
  <div class="mb-4">
- <p class="text-sm font-bold text-theme-text-base mb-1 flex items-center gap-2">
+ <p class="text-sm font-bold text-theme-text-primary mb-1 flex items-center gap-2">
  <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
  Try-On Quota
  </p>
@@ -83,7 +83,7 @@
  </div>
 
  <div>
- <p class="text-sm font-bold text-theme-text-base mb-3">Included Features</p>
+ <p class="text-sm font-bold text-theme-text-primary mb-3">Included Features</p>
  <ul class="space-y-3">
  {% for feature in obj.features %}
  <li class="flex items-start">
@@ -91,25 +91,25 @@
  <span class="text-sm text-theme-text-muted">{{ feature }}</span>
  </li>
  {% empty %}
- <li class="text-sm text-slate-400 italic">No features listed.</li>
+ <li class="text-sm text-theme-text-disabled italic">No features listed.</li>
  {% endfor %}
  </ul>
  </div>
  </div>
  
  <div class="pt-6 mt-auto">
- <a href="{% url 'admin:subscriptionplan_edit' obj.pk %}" class="block w-full py-3 px-4 rounded-xl font-bold text-center transition-colors {% if obj.is_popular %}bg-indigo-600 text-white hover:bg-indigo-700 shadow-md{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+ <a href="{% url 'admin:subscriptionplan_edit' obj.pk %}" class="block w-full py-3 px-4 rounded-xl font-bold text-center transition-colors {% if obj.is_popular %}bg-indigo-600 text-white hover:bg-indigo-700 shadow-md{% else %}bg-slate-100 text-theme-text-secondary hover:bg-slate-200{% endif %}">
  Configure Plan
  </a>
  </div>
  </div>
  {% empty %}
  <div class="col-span-full">
- <div class="text-center py-20 bg-theme-bg-surface border border-dashed border-theme-input-border rounded-3xl">
- <div class="mx-auto w-16 h-16 bg-theme-bg-base text-slate-400 rounded-full flex items-center justify-center mb-4">
+ <div class="text-center py-20 bg-theme-surface border border-dashed border-theme-input-border rounded-3xl">
+ <div class="mx-auto w-16 h-16 bg-theme-bg text-theme-text-disabled rounded-full flex items-center justify-center mb-4">
  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
  </div>
- <h3 class="text-xl font-extrabold text-theme-text-base mb-2">No subscription plans found</h3>
+ <h3 class="text-xl font-extrabold text-theme-text-primary mb-2">No subscription plans found</h3>
  <p class="text-theme-text-muted max-w-md mx-auto mb-6">Create your first pricing tier to offer subscriptions to your brands.</p>
  <a href="{% url 'admin:subscriptionplan_add' %}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition-all focus:ring-4 focus:ring-indigo-100">
  Create Starter Plan

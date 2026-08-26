@@ -13,13 +13,13 @@ Types: primary, secondary, danger, outline
  {% if type == 'primary' or not type %}
  bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-600/30 focus:ring-indigo-600
  {% elif type == 'secondary' %}
- bg-slate-800 hover:bg-slate-900 text-white shadow-sm shadow-slate-900/30 focus:ring-slate-900
+ bg-theme-secondary hover:bg-theme-primary-active text-theme-text-inverse shadow-sm focus:ring-slate-900
  {% elif type == 'danger' %}
  bg-rose-600 hover:bg-rose-700 text-white shadow-sm shadow-rose-600/30 focus:ring-rose-600
  {% elif type == 'outline' %}
- bg-theme-bg-surface hover:bg-theme-bg-hover text-slate-700 border border-theme-input-border shadow-sm focus:ring-slate-200
+ bg-theme-surface hover:bg-theme-surface-hover text-theme-text-secondary border border-theme-input-border shadow-sm focus:ring-slate-200
  {% elif type == 'ghost' %}
- bg-transparent hover:bg-theme-bg-hover text-theme-text-muted focus:ring-slate-200
+ bg-transparent hover:bg-theme-surface-hover text-theme-text-muted focus:ring-slate-200
  {% endif %}
  {% if classes %}{{ classes }}{% endif %}"
  {% if extra_attrs %}{{ extra_attrs }}{% endif %}>

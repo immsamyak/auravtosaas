@@ -4,7 +4,7 @@
  {% include "components/breadcrumb.html" with current="Featureflag Management" %}
  <div class="flex justify-between items-center mb-8">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Featureflag <span class="text-indigo-600 font-light">Management</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Featureflag <span class="text-indigo-600 font-light">Management</span></h1>
  <p class="text-theme-text-muted mt-1">Manage all FeatureFlag records.</p>
  </div>
  <a href="{% url 'admin:featureflag_add' %}" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">
@@ -44,11 +44,11 @@
  }">
  <div class="mb-6 flex flex-wrap gap-4 items-center">
  <div class="relative flex-1 min-w-[250px]">
- <input type="text" x-model="search" @input.debounce.300ms="updateTable()" placeholder="Type to search featureflags in real-time..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-theme-border-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-theme-text-base placeholder-theme-input-placeholder">
- <svg class="w-5 h-5 absolute left-4 top-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+ <input type="text" x-model="search" @input.debounce.300ms="updateTable()" placeholder="Type to search featureflags in real-time..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-theme-border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-theme-text-primary placeholder-theme-placeholder">
+ <svg class="w-5 h-5 absolute left-4 top-3.5 text-theme-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
  </div>
  
- <select x-model="filters.is_active" @change="updateTable()" class="px-4 py-3 rounded-xl border border-theme-border-base focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium text-slate-700 bg-theme-bg-surface shadow-sm cursor-pointer min-w-[140px]">
+ <select x-model="filters.is_active" @change="updateTable()" class="px-4 py-3 rounded-xl border border-theme-border focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium text-theme-text-secondary bg-theme-surface shadow-sm cursor-pointer min-w-[140px]">
  <option value="">Any Is Active</option>
  <option value="True">Yes</option>
  <option value="False">No</option>
@@ -62,10 +62,10 @@
  <div id="table-container" class="relative">
  <!-- Table Container -->
 
- <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-divider overflow-hidden">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border-subtle overflow-hidden">
  <div class="overflow-x-auto min-h-[300px]"><table class="w-full text-left border-collapse">
  <thead>
- <tr class="bg-theme-bg-base border-b border-theme-border-base">
+ <tr class="bg-theme-bg border-b border-theme-border">
  <th class="p-4 text-xs font-semibold text-theme-text-muted uppercase tracking-wider w-16">SN</th>
  <th class="p-4 text-xs font-semibold text-theme-text-muted uppercase tracking-wider">Record</th>
  <th class="p-4 text-xs font-semibold text-theme-text-muted uppercase tracking-wider">name</th>
@@ -75,9 +75,9 @@
  </thead>
  <tbody>
  {% for obj in objects %}
- <tr x-data="{ open: false }" class="border-b border-theme-border-divider hover:bg-slate-50/80 transition-colors">
- <td class="p-4 text-sm font-bold text-slate-400">{{ forloop.counter }}</td>
- <td class="p-4 text-sm font-bold text-theme-text-base">{{ obj }}</td>
+ <tr x-data="{ open: false }" class="border-b border-theme-border-subtle hover:bg-slate-50/80 transition-colors">
+ <td class="p-4 text-sm font-bold text-theme-text-disabled">{{ forloop.counter }}</td>
+ <td class="p-4 text-sm font-bold text-theme-text-primary">{{ obj }}</td>
  <td class="p-4 text-sm text-theme-text-muted">{{ obj.name }}</td>
  <td class="p-4">
  {% if obj.is_active %}
@@ -104,25 +104,25 @@
  x-transition:leave="transition ease-in duration-200"
  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
- class="bg-theme-bg-surface rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto m-4 z-10 relative flex flex-col text-left">
+ class="bg-theme-surface rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto m-4 z-10 relative flex flex-col text-left">
  
- <div class="px-8 py-6 border-b border-theme-border-divider flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur z-10">
+ <div class="px-8 py-6 border-b border-theme-border-subtle flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur z-10">
  <div>
- <h3 class="text-2xl font-extrabold text-theme-text-base">{{ obj }}</h3>
+ <h3 class="text-2xl font-extrabold text-theme-text-primary">{{ obj }}</h3>
  <p class="text-theme-text-muted text-sm mt-1">Featureflag</p>
  </div>
- <button @click="open = false" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full w-8 h-8 flex items-center justify-center transition">
+ <button @click="open = false" class="text-theme-text-disabled hover:text-slate-600 bg-theme-bg-secondary hover:bg-slate-200 rounded-full w-8 h-8 flex items-center justify-center transition">
  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
  </button>
  </div>
  
  <div class="px-8 py-6 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
  <div>
- <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">name</span>
- <span class="text-sm font-medium text-theme-text-base break-words">{{ obj.name|default:"-" }}</span>
+ <span class="block text-xs font-bold text-theme-text-disabled uppercase tracking-wider mb-1">name</span>
+ <span class="text-sm font-medium text-theme-text-primary break-words">{{ obj.name|default:"-" }}</span>
  </div>
  <div>
- <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">is active</span>
+ <span class="block text-xs font-bold text-theme-text-disabled uppercase tracking-wider mb-2">is active</span>
  {% if obj.is_active %}
  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm">Active</span>
  {% else %}
@@ -131,8 +131,8 @@
  </div>
  </div>
  
- <div class="px-8 py-4 bg-theme-bg-base border-t border-theme-border-divider flex justify-end gap-3 rounded-b-2xl sticky bottom-0">
- <button @click="open = false" class="px-5 py-2.5 text-sm font-bold text-theme-text-muted bg-theme-bg-surface border border-theme-border-base rounded-xl hover:bg-theme-bg-hover transition shadow-sm">Close</button>
+ <div class="px-8 py-4 bg-theme-bg border-t border-theme-border-subtle flex justify-end gap-3 rounded-b-2xl sticky bottom-0">
+ <button @click="open = false" class="px-5 py-2.5 text-sm font-bold text-theme-text-muted bg-theme-surface border border-theme-border rounded-xl hover:bg-theme-surface-hover transition shadow-sm">Close</button>
  <a href="{% url 'admin:featureflag_edit' obj.pk %}" class="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-md">Edit Record</a>
  </div>
  </div>

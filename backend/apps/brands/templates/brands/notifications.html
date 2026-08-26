@@ -18,19 +18,19 @@
  <!-- Header -->
  <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
  <div>
- <h1 class="text-3xl font-black text-theme-text-base tracking-tight">Notifications</h1>
+ <h1 class="text-3xl font-black text-theme-text-primary tracking-tight">Notifications</h1>
  <p class="text-theme-text-muted mt-2">View all your alerts, updates, and low stock warnings.</p>
  </div>
  
  {% if unread_notifications_count > 0 %}
- <button @click="markAllRead()" class="px-5 py-2.5 bg-theme-bg-surface dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 hover:bg-theme-bg-hover hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2">
+ <button @click="markAllRead()" class="px-5 py-2.5 bg-theme-surface border border-theme-border dark:border-slate-600/50/50 hover:bg-theme-surface-hover hover:border-slate-300 dark:hover:border-slate-600 text-theme-text-secondary rounded-xl font-bold transition-all shadow-sm flex items-center gap-2">
  <i class="fa-solid fa-check-double"></i> Mark All as Read
  </button>
  {% endif %}
  </div>
 
  <!-- Content -->
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 overflow-hidden">
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border dark:border-slate-600/50/50 overflow-hidden">
  
  <div class="divide-y divide-slate-100">
  {% for notif in notifications %}
@@ -42,10 +42,10 @@
  <div class="flex-1">
  <div class="flex items-start justify-between gap-4">
  <div>
- <h3 class="font-bold text-theme-text-base text-lg {% if not notif.is_read %}text-indigo-900{% endif %}">{{ notif.title }}</h3>
+ <h3 class="font-bold text-theme-text-primary text-lg {% if not notif.is_read %}text-indigo-900{% endif %}">{{ notif.title }}</h3>
  <p class="text-theme-text-muted mt-1 leading-relaxed">{{ notif.message }}</p>
  </div>
- <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">{{ notif.created_at|timesince }} ago</span>
+ <span class="text-xs font-bold text-theme-text-disabled uppercase tracking-widest whitespace-nowrap">{{ notif.created_at|timesince }} ago</span>
  </div>
  
  {% if notif.action_url %}
@@ -59,10 +59,10 @@
  </div>
  {% empty %}
  <div class="p-16 text-center">
- <div class="w-20 h-20 bg-theme-bg-base dark:bg-slate-800/50/80 rounded-full flex items-center justify-center mx-auto mb-6">
- <i class="fa-regular fa-bell-slash text-slate-300 dark:text-slate-600 text-3xl"></i>
+ <div class="w-20 h-20 bg-theme-bg rounded-full flex items-center justify-center mx-auto mb-6">
+ <i class="fa-regular fa-bell-slash text-slate-300 text-3xl"></i>
  </div>
- <h3 class="text-xl font-bold text-theme-text-base mb-2">No notifications yet</h3>
+ <h3 class="text-xl font-bold text-theme-text-primary mb-2">No notifications yet</h3>
  <p class="text-theme-text-muted max-w-md mx-auto">When things happen in your store like low stock alerts, they will appear here.</p>
  </div>
  {% endfor %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            bg: {
+                                secondary: ({ opacityValue }) => {
+                                    if (opacityValue !== undefined) {
+                                        return `color-mix(in srgb, red calc(${opacityValue} * 100%), transparent)`;
+                                    }
+                                    return `red`;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <div id="test-div" class="bg-theme-bg-secondary">Test</div>
+</body>
+</html>

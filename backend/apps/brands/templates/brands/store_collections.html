@@ -3,19 +3,19 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
  <div class="text-center mb-16">
- <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 uppercase mb-4">Collections</h1>
- <p class="text-gray-500 max-w-2xl mx-auto">Explore our carefully curated collections, designed to bring you the best pieces for any occasion.</p>
+ <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-theme-text-primary uppercase mb-4">Collections</h1>
+ <p class="text-theme-text-muted max-w-2xl mx-auto">Explore our carefully curated collections, designed to bring you the best pieces for any occasion.</p>
  </div>
 
  {% if collections %}
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
  {% for collection in collections %}
- <a href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}" class="group block relative overflow-hidden bg-gray-100 aspect-[16/9]">
+ <a href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}" class="group block relative overflow-hidden bg-theme-bg-secondary aspect-[16/9]">
  {% if collection.image %}
  <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-700">
  {% else %}
  <div class="w-full h-full flex items-center justify-center bg-gray-200">
- <span class="text-gray-400 font-bold uppercase tracking-widest">{{ collection.name }}</span>
+ <span class="text-theme-text-disabled font-bold uppercase tracking-widest">{{ collection.name }}</span>
  </div>
  {% endif %}
  
@@ -32,10 +32,10 @@
  {% endfor %}
  </div>
  {% else %}
- <div class="flex flex-col items-center justify-center py-20 bg-gray-50 border border-dashed border-gray-300">
+ <div class="flex flex-col items-center justify-center py-20 bg-theme-bg border border-dashed border-theme-border">
  <i class="fa-solid fa-layer-group text-4xl text-gray-300 mb-4"></i>
- <h3 class="text-lg font-bold text-gray-900 mb-2">No Collections Yet</h3>
- <p class="text-gray-500 text-sm text-center max-w-sm">We are currently curating new collections. Please check back soon.</p>
+ <h3 class="text-lg font-bold text-theme-text-primary mb-2">No Collections Yet</h3>
+ <p class="text-theme-text-muted text-sm text-center max-w-sm">We are currently curating new collections. Please check back soon.</p>
  <a href="{% url 'storefront_shop' brand.slug %}" class="mt-6 text-sm font-bold text-black border-b border-black pb-1">Shop All Products</a>
  </div>
  {% endif %}

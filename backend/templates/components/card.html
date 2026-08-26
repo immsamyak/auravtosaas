@@ -1,9 +1,9 @@
 ---5<div
- class="bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm overflow-hidden flex flex-col {% if classes %}{{ classes }}{% endif %}">
+ class="bg-theme-surface border border-theme-border rounded-2xl shadow-sm overflow-hidden flex flex-col {% if classes %}{{ classes }}{% endif %}">
  {% if title or subtitle %}
- <div class="px-6 py-5 border-b border-theme-border-divider flex justify-between items-center bg-slate-50/50">
+ <div class="px-6 py-5 border-b border-theme-border-subtle flex justify-between items-center bg-theme-surface-hover">
  <div>
- {% if title %}<h3 class="text-base font-bold text-theme-text-base">{{ title }}</h3>{% endif %}
+ {% if title %}<h3 class="text-base font-bold text-theme-text-primary">{{ title }}</h3>{% endif %}
  {% if subtitle %}<p class="text-sm font-medium text-theme-text-muted mt-0.5">{{ subtitle }}</p>{% endif %}
  </div>
  {% if actions %}
@@ -17,7 +17,7 @@
  {{ content }}
  </div>
  {% if footer %}
- <div class="px-6 py-4 bg-theme-bg-base border-t border-theme-border-divider text-sm">
+ <div class="px-6 py-4 bg-theme-bg border-t border-theme-border-subtle text-sm">
  {{ footer }}
  </div>
  {% endif %}

@@ -11,7 +11,7 @@
  <img alt="Skate" class="w-full h-full object-cover filter contrast-125 saturate-75" src="{{ brand.banner.url }}"/>
  {% else %}
  <div class="w-full h-full flex items-center justify-center bg-skate-dark">
-<i class="fa-solid fa-skull-crossbones text-8xl text-gray-800"></i>
+<i class="fa-solid fa-skull-crossbones text-8xl text-theme-text-primary"></i>
 </div>
  {% endif %}
  </div>
@@ -25,7 +25,7 @@
 <h1 class="font-display text-7xl md:text-9xl text-skate-dark leading-[0.85] mb-6 uppercase">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}Shred<br/>
 <span class="text-skate-orange">Or</span><br/>
  Die.{% endif %}</h1>
-<p class="font-sans text-lg text-gray-600 font-semibold mb-8 max-w-sm">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Raw, unfiltered skate culture. Built by skaters, for skaters. No posers allowed.{% endif %}</p>
+<p class="font-sans text-lg text-theme-text-secondary font-semibold mb-8 max-w-sm">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Raw, unfiltered skate culture. Built by skaters, for skaters. No posers allowed.{% endif %}</p>
 <div class="flex gap-4">
 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
 <a class="bg-skate-dark text-skate-cream font-display text-2xl tracking-wider px-8 py-3 skate-border hover:bg-skate-orange hover:text-white transition-colors" href="{{ brand.banner_cta_link|default:'#shop' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}SHOP NOW{% endif %}</a>
@@ -57,7 +57,7 @@
  <img alt="{{ product.name }}" class="w-full h-full object-cover filter contrast-110 group-hover:scale-110 transition-transform duration-300" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
  {% else %}
  <div class="w-full h-full flex items-center justify-center bg-skate-dark">
-<i class="fa-solid fa-skull text-4xl text-gray-700"></i>
+<i class="fa-solid fa-skull text-4xl text-theme-text-secondary"></i>
 </div>
  {% endif %}
  </a>
@@ -81,7 +81,7 @@
 
  {% else %}
  <div class="text-center py-16 skate-border border-dashed">
-<h3 class="font-display text-4xl text-gray-600">RESTOCKING...</h3>
+<h3 class="font-display text-4xl text-theme-text-secondary">RESTOCKING...</h3>
 </div>
  {% endif %}
  </div>
@@ -104,7 +104,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -124,7 +124,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

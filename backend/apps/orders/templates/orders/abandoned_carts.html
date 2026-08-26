@@ -7,8 +7,8 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-box-open text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Store</span>
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Abandoned Carts</span>
  </div>
@@ -18,20 +18,20 @@
 
  <!-- Header -->
  <div class="mb-10">
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Abandoned <span class="text-indigo-600 font-light">Carts</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Abandoned <span class="text-indigo-600 font-light">Carts</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Track customers who added items to their cart but did not complete the checkout.</p>
  </div>
 
  <!-- Carts List -->
- <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base overflow-hidden">
- <div class="px-6 py-5 border-b border-theme-border-divider bg-theme-bg-base flex justify-between items-center">
- <h3 class="text-lg font-bold text-theme-text-base">Abandoned Carts (Older than 2 hours)</h3>
+ <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border overflow-hidden">
+ <div class="px-6 py-5 border-b border-theme-border-subtle bg-theme-bg flex justify-between items-center">
+ <h3 class="text-lg font-bold text-theme-text-primary">Abandoned Carts (Older than 2 hours)</h3>
  </div>
  
  <div class="overflow-x-auto">
  <table class="w-full text-left border-collapse">
  <thead>
- <tr class="bg-slate-50/50 border-b border-theme-border-base text-xs uppercase tracking-wider text-theme-text-muted font-bold">
+ <tr class="bg-slate-50/50 border-b border-theme-border text-xs uppercase tracking-wider text-theme-text-muted font-bold">
  <th class="px-6 py-4">Cart ID</th>
  <th class="px-6 py-4">Customer</th>
  <th class="px-6 py-4">Items</th>
@@ -43,14 +43,14 @@
  {% for cart in carts %}
  <tr class="hover:bg-slate-50/50 transition">
  <td class="px-6 py-4">
- <span class="text-sm font-bold text-theme-text-base">#{{ cart.id|truncatechars:12 }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">#{{ cart.id|truncatechars:12 }}</span>
  </td>
  <td class="px-6 py-4">
  {% if cart.user %}
- <div class="text-sm font-bold text-theme-text-base">{{ cart.user.get_full_name|default:cart.user.username }}</div>
+ <div class="text-sm font-bold text-theme-text-primary">{{ cart.user.get_full_name|default:cart.user.username }}</div>
  <div class="text-xs text-theme-text-muted">{{ cart.user.email }}</div>
  {% else %}
- <div class="text-sm font-bold text-theme-text-base">Guest User</div>
+ <div class="text-sm font-bold text-theme-text-primary">Guest User</div>
  {% endif %}
  </td>
  <td class="px-6 py-4">
@@ -67,11 +67,11 @@
  {# This is a simplification, proper calc would need custom template tag or model method #}
  {% endfor %}
  {% endwith %}
- <span class="text-sm font-bold text-theme-text-base">Review Items</span>
+ <span class="text-sm font-bold text-theme-text-primary">Review Items</span>
  </td>
  <td class="px-6 py-4">
  <div class="text-sm text-theme-text-muted">{{ cart.updated_at|timesince }} ago</div>
- <div class="text-xs text-slate-400">{{ cart.updated_at|date:"M d, Y H:i" }}</div>
+ <div class="text-xs text-theme-text-disabled">{{ cart.updated_at|date:"M d, Y H:i" }}</div>
  </td>
  </tr>
  {% empty %}

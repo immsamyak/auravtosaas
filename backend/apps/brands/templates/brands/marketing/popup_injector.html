@@ -11,7 +11,7 @@
  x-transition:leave="translate-y-0"
  x-transition:leave-end="translate-y-[-100%]"
  {% elif popup.banner_type == 'BOTTOM_POPUP' %}
- class="fixed bottom-4 right-4 z-50 bg-theme-bg-surface dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 text-theme-text-base shadow-xl rounded-xl p-6 max-w-sm transition-all duration-500 transform"
+ class="fixed bottom-4 right-4 z-50 bg-theme-surface border border-theme-border dark:border-slate-600/50/50 text-theme-text-primary shadow-xl rounded-xl p-6 max-w-sm transition-all duration-500 transform"
  x-transition:enter="translate-y-12 opacity-0"
  x-transition:enter-end="translate-y-0 opacity-100"
  x-transition:leave="translate-y-0 opacity-100"
@@ -25,16 +25,16 @@
  {% endif %}>
  
  {% if popup.banner_type == 'MODAL' %}
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl shadow-2xl p-8 max-w-md w-full relative transform transition-transform duration-300"
+ <div class="bg-theme-surface rounded-2xl shadow-2xl p-8 max-w-md w-full relative transform transition-transform duration-300"
  @click.away="showPopup = false"
  x-transition:enter="scale-95 translate-y-4"
  x-transition:enter-end="scale-100 translate-y-0"
  x-transition:leave="scale-100 translate-y-0"
  x-transition:leave-end="scale-95 translate-y-4">
- <button @click="showPopup = false" class="absolute top-4 right-4 text-slate-400 dark:text-slate-500 hover:text-slate-900">
+ <button @click="showPopup = false" class="absolute top-4 right-4 text-theme-text-disabled hover:text-slate-900">
  <i class="fa-solid fa-xmark text-xl"></i>
  </button>
- <h3 class="text-2xl font-black text-theme-text-base mb-2">{{ popup.title }}</h3>
+ <h3 class="text-2xl font-black text-theme-text-primary mb-2">{{ popup.title }}</h3>
  <p class="text-theme-text-muted mb-6">{{ popup.description }}</p>
  {% if popup.cta_text and popup.cta_link %}
  <a href="{{ popup.cta_link }}" {% if popup.open_in_new_tab %}target="_blank"{% endif %} class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center py-3 rounded-xl font-bold transition">
@@ -44,7 +44,7 @@
  </div>
  {% else %}
  <div class="flex-1 {% if popup.banner_type == 'TOP_BAR' %}text-center{% endif %}">
- <h3 class="font-bold {% if popup.banner_type == 'TOP_BAR' %}text-sm{% else %}text-lg text-theme-text-base mb-1{% endif %}">
+ <h3 class="font-bold {% if popup.banner_type == 'TOP_BAR' %}text-sm{% else %}text-lg text-theme-text-primary mb-1{% endif %}">
  {{ popup.title }}
  </h3>
  <p class="{% if popup.banner_type == 'TOP_BAR' %}text-xs text-indigo-100{% else %}text-sm text-theme-text-muted mb-4{% endif %}">
@@ -59,7 +59,7 @@
  </a>
  {% endif %}
  
- <button @click="showPopup = false" class="{% if popup.banner_type == 'TOP_BAR' %}text-indigo-200 hover:text-white ml-2{% else %}absolute top-4 right-4 text-slate-400 dark:text-slate-500 hover:text-slate-900{% endif %} transition">
+ <button @click="showPopup = false" class="{% if popup.banner_type == 'TOP_BAR' %}text-indigo-200 hover:text-white ml-2{% else %}absolute top-4 right-4 text-theme-text-disabled hover:text-slate-900{% endif %} transition">
  <i class="fa-solid fa-xmark"></i>
  </button>
  {% endif %}

@@ -11,20 +11,20 @@
  }
 }">
  <div class="mb-4">
- <a href="{% url 'admin:notification_template_list' %}" class="text-slate-400 hover:text-indigo-600 font-bold text-sm transition">
+ <a href="{% url 'admin:notification_template_list' %}" class="text-theme-text-disabled hover:text-indigo-600 font-bold text-sm transition">
  <i class="fa-solid fa-arrow-left mr-2"></i> Back to System Templates
  </a>
  </div>
  
  <div class="flex justify-between items-center mb-8">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Edit <span class="text-indigo-600 font-light">{{ form.instance.get_event_type_display }}</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Edit <span class="text-indigo-600 font-light">{{ form.instance.get_event_type_display }}</span></h1>
  <p class="text-sm text-theme-text-muted mt-2">Customize the email for the <strong>{{ form.instance.event_type }}</strong> event.</p>
  </div>
- <div class="flex items-center gap-3 p-3 bg-theme-bg-surface border border-theme-border-base rounded-xl shadow-sm">
+ <div class="flex items-center gap-3 p-3 bg-theme-surface border border-theme-border rounded-xl shadow-sm">
  {{ form.is_active }}
  <div>
- <label class="text-sm font-bold text-theme-text-base cursor-pointer" for="{{ form.is_active.id_for_label }}">Enable Custom Template</label>
+ <label class="text-sm font-bold text-theme-text-primary cursor-pointer" for="{{ form.is_active.id_for_label }}">Enable Custom Template</label>
  </div>
  </div>
  </div>
@@ -41,9 +41,9 @@
  </div>
  {% endif %}
 
- <div class="bg-theme-bg-surface p-8 rounded-2xl border border-theme-border-base shadow-sm space-y-6">
+ <div class="bg-theme-surface p-8 rounded-2xl border border-theme-border shadow-sm space-y-6">
  <div>
- <label class="block text-sm font-bold text-slate-700 mb-2">{{ form.subject.label }} *</label>
+ <label class="block text-sm font-bold text-theme-text-secondary mb-2">{{ form.subject.label }} *</label>
  {{ form.subject }}
  {% for error in form.subject.errors %}<p class="text-xs text-rose-500 mt-1 font-bold">{{ error }}</p>{% endfor %}
  </div>
@@ -57,7 +57,7 @@
  <i class="fa-solid fa-code text-indigo-400"></i>
  <span class="text-sm font-bold text-white tracking-wide">HTML EDITOR</span>
  </div>
- <span class="text-xs text-slate-400">Supports Django tags like {% verbatim %}{{ user.first_name }}{% endverbatim %}</span>
+ <span class="text-xs text-theme-text-disabled">Supports Django tags like {% verbatim %}{{ user.first_name }}{% endverbatim %}</span>
  </div>
  <div class="relative flex-grow p-4">
  <textarea 
@@ -74,11 +74,11 @@
  </div>
 
  <!-- Live Preview -->
- <div class="bg-theme-bg-surface rounded-2xl border border-theme-border-base shadow-sm overflow-hidden flex flex-col h-[700px]">
- <div class="bg-theme-bg-base px-4 py-3 flex justify-between items-center border-b border-theme-border-base">
+ <div class="bg-theme-surface rounded-2xl border border-theme-border shadow-sm overflow-hidden flex flex-col h-[700px]">
+ <div class="bg-theme-bg px-4 py-3 flex justify-between items-center border-b border-theme-border">
  <div class="flex items-center gap-2">
  <i class="fa-solid fa-eye text-indigo-600"></i>
- <span class="text-sm font-bold text-slate-700 tracking-wide">LIVE PREVIEW</span>
+ <span class="text-sm font-bold text-theme-text-secondary tracking-wide">LIVE PREVIEW</span>
  </div>
  </div>
  <div class="flex-grow bg-[#f3f4f6] relative">

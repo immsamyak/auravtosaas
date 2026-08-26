@@ -149,17 +149,17 @@
 {% else %}
  <h3 class="font-display text-3xl uppercase mb-4">{{ brand.name }}</h3>
 {% endif %}
-<p class="text-gray-500 font-sans">{% if brand.description %}{{ brand.description }}{% else %}The definitive destination for sneaker culture.{% endif %}</p>
+<p class="text-theme-text-muted font-sans">{% if brand.description %}{{ brand.description }}{% else %}The definitive destination for sneaker culture.{% endif %}</p>
 <div class="flex space-x-4 mt-6">
- {% if brand.instagram_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
- {% if brand.facebook_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
- {% if brand.twitter_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
- {% if brand.tiktok_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
- {% if brand.pinterest_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+ {% if brand.instagram_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
+ {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
  </div>
 
 </div>
-<div class="font-sans text-sm text-gray-500 space-y-3">
+<div class="font-sans text-sm text-theme-text-muted space-y-3">
 <a class="block hover:text-white transition-colors" href="#">Release Calendar</a>
 <a class="block hover:text-white transition-colors" href="#">Authentication</a>
 <a class="block hover:text-white transition-colors" href="#">FAQ</a>
@@ -172,31 +172,31 @@
 </form>
 </div>
 </div>
-<p class="text-center text-gray-700 text-xs font-sans mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}{% endif %}</p>
+<p class="text-center text-theme-text-secondary text-xs font-sans mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}{% endif %}</p>
 </footer>
 <!-- Search Modal -->
 <div class="fixed inset-0 z-[100] flex items-start justify-center pt-20" style="display: none;" x-show="isSearchOpen" x-transition.opacity="">
 <div @click="isSearchOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-<div @click.stop="" class="relative w-full max-w-3xl bg-theme-bg-surface p-8 rounded-2xl shadow-2xl mx-4 transform transition-all">
-<button @click="isSearchOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+<div @click.stop="" class="relative w-full max-w-3xl bg-theme-surface p-8 rounded-2xl shadow-2xl mx-4 transform transition-all">
+<button @click="isSearchOpen = false" class="absolute top-4 right-4 text-theme-text-disabled hover:text-black">
 <i class="fa-solid fa-xmark text-xl"></i>
 </button>
 <h2 class="text-2xl font-bold mb-6 text-black">Search</h2>
 <form action="{% url 'storefront_shop' brand.slug %}" id="globalSearchForm" method="POST">
  {% csrf_token %}
  <div class="relative">
-<input class="w-full text-black bg-gray-100 border-none rounded-xl px-6 py-4 text-lg focus:ring-2 focus:ring-black outline-none" id="globalSearchInput" name="search" placeholder="Search for products, collections..." required="" type="text"/>
-<button class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black" type="submit">
+<input class="w-full text-black bg-theme-bg-secondary border-none rounded-xl px-6 py-4 text-lg focus:ring-2 focus:ring-black outline-none" id="globalSearchInput" name="search" placeholder="Search for products, collections..." required="" type="text"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-theme-text-muted hover:text-black" type="submit">
 <i class="fa-solid fa-magnifying-glass text-xl"></i>
 </button>
 </div>
 </form>
 <div class="mt-8">
-<h3 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-4">Popular Searches</h3>
+<h3 class="text-xs uppercase tracking-widest text-theme-text-disabled font-bold mb-4">Popular Searches</h3>
 <div class="flex flex-wrap gap-2">
-<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Dresses'; document.getElementById('globalSearchForm').submit();">Dresses</button>
-<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Summer'; document.getElementById('globalSearchForm').submit();">Summer Collection</button>
-<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Accessories'; document.getElementById('globalSearchForm').submit();">Accessories</button>
+<button class="px-4 py-2 bg-theme-bg-secondary text-theme-text-secondary rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Dresses'; document.getElementById('globalSearchForm').submit();">Dresses</button>
+<button class="px-4 py-2 bg-theme-bg-secondary text-theme-text-secondary rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Summer'; document.getElementById('globalSearchForm').submit();">Summer Collection</button>
+<button class="px-4 py-2 bg-theme-bg-secondary text-theme-text-secondary rounded-full text-sm cursor-pointer hover:bg-gray-200" onclick="document.getElementById('globalSearchInput').value='Accessories'; document.getElementById('globalSearchForm').submit();">Accessories</button>
 </div>
 </div>
 </div>
@@ -204,70 +204,70 @@
 <!-- Profile Modal -->
 <div class="fixed inset-0 z-[100] flex items-center justify-center" style="display: none;" x-show="isProfileOpen" x-transition.opacity="">
 <div @click="isProfileOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-<div @click.stop="" class="relative w-full max-w-md bg-theme-bg-surface p-8 rounded-2xl shadow-2xl mx-4 text-center text-black" x-data="{ mode: 'login' }">
-<button @click="isProfileOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+<div @click.stop="" class="relative w-full max-w-md bg-theme-surface p-8 rounded-2xl shadow-2xl mx-4 text-center text-black" x-data="{ mode: 'login' }">
+<button @click="isProfileOpen = false" class="absolute top-4 right-4 text-theme-text-disabled hover:text-black">
 <i class="fa-solid fa-xmark text-xl"></i>
 </button>
  
  {% if user.is_authenticated %}
- <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+ <div class="w-16 h-16 bg-theme-bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
 <i class="fa-solid fa-user-check text-2xl text-green-500"></i>
 </div>
 <h2 class="text-2xl font-bold mb-2">Welcome, {{ user.first_name|default:user.username }}</h2>
-<p class="text-gray-500 mb-8">{{ user.email }}</p>
-<a class="block w-full bg-gray-100 text-black py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors mb-4" href="{% url 'storefront_account' brand.slug %}">View Orders</a>
+<p class="text-theme-text-muted mb-8">{{ user.email }}</p>
+<a class="block w-full bg-theme-bg-secondary text-black py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors mb-4" href="{% url 'storefront_account' brand.slug %}">View Orders</a>
 <a class="block w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors" href="{% url 'storefront_logout' brand.slug %}">Sign Out</a>
  
  {% else %}
  
  <!-- Login Form -->
 <div x-show="mode === 'login'">
-<div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-<i class="fa-regular fa-user text-2xl text-gray-500"></i>
+<div class="w-16 h-16 bg-theme-bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="fa-regular fa-user text-2xl text-theme-text-muted"></i>
 </div>
 <h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
-<p class="text-gray-500 mb-6">Sign in to view your orders and profile.</p>
+<p class="text-theme-text-muted mb-6">Sign in to view your orders and profile.</p>
 <form action="{% url 'storefront_login' brand.slug %}" class="space-y-4 text-left" method="POST">
  {% csrf_token %}
  <div>
-<label class="block text-sm font-medium text-gray-700">Email</label>
-<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="email" required="" type="email"/>
+<label class="block text-sm font-medium text-theme-text-secondary">Email</label>
+<input class="mt-1 block w-full rounded-md border-theme-border shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-theme-bg" name="email" required="" type="email"/>
 </div>
 <div>
-<label class="block text-sm font-medium text-gray-700">Password</label>
-<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="password" required="" type="password"/>
+<label class="block text-sm font-medium text-theme-text-secondary">Password</label>
+<input class="mt-1 block w-full rounded-md border-theme-border shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-theme-bg" name="password" required="" type="password"/>
 </div>
 <button class="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors mt-6" type="submit">Sign In</button>
 </form>
 <div class="mt-4">
-<button @click="mode = 'register'" class="text-sm text-gray-500 hover:text-black">Don't have an account? Create one.</button>
+<button @click="mode = 'register'" class="text-sm text-theme-text-muted hover:text-black">Don't have an account? Create one.</button>
 </div>
 </div>
 <!-- Register Form -->
 <div style="display:none;" x-show="mode === 'register'">
-<div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-<i class="fa-solid fa-user-plus text-2xl text-gray-500"></i>
+<div class="w-16 h-16 bg-theme-bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="fa-solid fa-user-plus text-2xl text-theme-text-muted"></i>
 </div>
 <h2 class="text-2xl font-bold mb-2">Create Account</h2>
-<p class="text-gray-500 mb-6">Join us for a seamless shopping experience.</p>
+<p class="text-theme-text-muted mb-6">Join us for a seamless shopping experience.</p>
 <form action="{% url 'storefront_register' brand.slug %}" class="space-y-4 text-left" method="POST">
  {% csrf_token %}
  <div>
-<label class="block text-sm font-medium text-gray-700">Full Name</label>
-<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="name" required="" type="text"/>
+<label class="block text-sm font-medium text-theme-text-secondary">Full Name</label>
+<input class="mt-1 block w-full rounded-md border-theme-border shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-theme-bg" name="name" required="" type="text"/>
 </div>
 <div>
-<label class="block text-sm font-medium text-gray-700">Email</label>
-<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="email" required="" type="email"/>
+<label class="block text-sm font-medium text-theme-text-secondary">Email</label>
+<input class="mt-1 block w-full rounded-md border-theme-border shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-theme-bg" name="email" required="" type="email"/>
 </div>
 <div>
-<label class="block text-sm font-medium text-gray-700">Password</label>
-<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="password" required="" type="password"/>
+<label class="block text-sm font-medium text-theme-text-secondary">Password</label>
+<input class="mt-1 block w-full rounded-md border-theme-border shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-theme-bg" name="password" required="" type="password"/>
 </div>
 <button class="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors mt-6" type="submit">Create Account</button>
 </form>
 <div class="mt-4">
-<button @click="mode = 'login'" class="text-sm text-gray-500 hover:text-black">Already have an account? Sign in.</button>
+<button @click="mode = 'login'" class="text-sm text-theme-text-muted hover:text-black">Already have an account? Sign in.</button>
 </div>
 </div>
  
@@ -279,13 +279,13 @@
 <div @click="isCartOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" x-show="isCartOpen" x-transition.opacity=""></div>
 <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
 <div @click.stop="" class="w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700" x-show="isCartOpen" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:enter-start="translate-x-full" x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-full" x-transition:leave-start="translate-x-0">
-<div class="h-full flex flex-col bg-theme-bg-surface shadow-xl overflow-y-scroll text-black">
+<div class="h-full flex flex-col bg-theme-surface shadow-xl overflow-y-scroll text-black">
 <!-- Cart Header -->
 <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
 <div class="flex items-start justify-between">
-<h2 class="text-xl font-bold text-gray-900" id="slide-over-title">Shopping Cart</h2>
+<h2 class="text-xl font-bold text-theme-text-primary" id="slide-over-title">Shopping Cart</h2>
 <div class="ml-3 h-7 flex items-center">
-<button @click="isCartOpen = false" class="-m-2 p-2 text-gray-400 hover:text-gray-500" type="button">
+<button @click="isCartOpen = false" class="-m-2 p-2 text-theme-text-disabled hover:text-gray-500" type="button">
 <span class="sr-only">Close panel</span>
 <i class="fa-solid fa-xmark text-xl"></i>
 </button>
@@ -297,24 +297,24 @@
 <template x-if="$store.cart.items.length === 0">
 <li class="py-12 text-center">
 <i class="fa-solid fa-bag-shopping text-4xl text-gray-300 mb-4"></i>
-<p class="text-gray-500 font-medium">Your cart is currently empty.</p>
+<p class="text-theme-text-muted font-medium">Your cart is currently empty.</p>
 </li>
 </template>
 <template :key="index" x-for="(item, index) in $store.cart.items">
 <li class="py-6 flex">
-<div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden bg-gray-50">
+<div class="flex-shrink-0 w-24 h-24 border border-theme-border rounded-md overflow-hidden bg-theme-bg">
 <img :alt="item.name" :src="item.image" class="w-full h-full object-center object-cover"/>
 </div>
 <div class="ml-4 flex-1 flex flex-col">
 <div>
-<div class="flex justify-between text-base font-medium text-gray-900">
+<div class="flex justify-between text-base font-medium text-theme-text-primary">
 <h3 x-text="item.name"></h3>
 <p class="ml-4" x-text="'{{ brand.currency_symbol|default:'$'|escapejs }}' + (item.price * item.quantity).toFixed(2)"></p>
 </div>
-<p class="mt-1 text-sm text-gray-500" x-text="(!item.variant_name || item.variant_name === 'undefined / undefined') ? '' : item.variant_name"></p>
+<p class="mt-1 text-sm text-theme-text-muted" x-text="(!item.variant_name || item.variant_name === 'undefined / undefined') ? '' : item.variant_name"></p>
 </div>
 <div class="flex-1 flex items-end justify-between text-sm">
-<p class="text-gray-500">Qty <span x-text="item.quantity"></span></p>
+<p class="text-theme-text-muted">Qty <span x-text="item.quantity"></span></p>
 <div class="flex">
 <button @click="$store.cart.remove(index)" class="font-medium text-red-600 hover:text-red-500" type="button">Remove</button>
 </div>
@@ -327,16 +327,16 @@
 </div>
 </div>
 <!-- Cart Footer -->
-<div class="border-t border-gray-200 py-6 px-4 sm:px-6">
-<div class="flex justify-between text-lg font-bold text-gray-900">
+<div class="border-t border-theme-border py-6 px-4 sm:px-6">
+<div class="flex justify-between text-lg font-bold text-theme-text-primary">
 <p>Subtotal</p>
 <p x-text="'{{ brand.currency_symbol|default:'$'|escapejs }}' + $store.cart.total.toFixed(2)"></p>
 </div>
-<p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+<p class="mt-0.5 text-sm text-theme-text-muted">Shipping and taxes calculated at checkout.</p>
 <div class="mt-6">
 <a class="flex justify-center items-center px-6 py-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-black hover:bg-gray-800 w-full" href="#" @click.prevent="$store.cart.checkout()" @click.prevent="$store.cart.checkout()">Checkout</a>
 </div>
-<div class="mt-6 flex justify-center text-sm text-center text-gray-500">
+<div class="mt-6 flex justify-center text-sm text-center text-theme-text-muted">
 <p>
  or <button @click="isCartOpen = false" class="text-black font-bold hover:underline" type="button">Continue Shopping<span aria-hidden="true"> →</span></button>
 </p>
@@ -396,12 +396,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Mobile Menu Modal -->
 <div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
  <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
- <div @click.stop="" class="relative w-64 max-w-sm bg-theme-bg-surface h-full shadow-2xl transform transition-all flex flex-col"
+ <div @click.stop="" class="relative w-64 max-w-sm bg-theme-surface h-full shadow-2xl transform transition-all flex flex-col"
  x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
  x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
- <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+ <div class="p-6 border-b border-theme-border-subtle flex justify-between items-center">
  <span class="font-bold text-lg text-black">Menu</span>
- <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+ <button @click="isMenuOpen = false" class="text-theme-text-disabled hover:text-black">
  <i class="fa-solid fa-xmark text-xl"></i>
  </button>
  </div>

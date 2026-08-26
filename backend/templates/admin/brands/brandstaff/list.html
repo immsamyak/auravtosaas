@@ -4,15 +4,15 @@
  {% include "components/breadcrumb.html" with current="Tenant Teams" %}
  <div class="flex justify-between items-center mb-8">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Tenant <span class="text-indigo-600 font-light">Teams</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Tenant <span class="text-indigo-600 font-light">Teams</span></h1>
  </div>
  </div>
  
- <div class="bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm overflow-hidden">
+ <div class="bg-theme-surface border border-theme-border rounded-2xl shadow-sm overflow-hidden">
  <div class="overflow-x-auto">
  <table class="w-full text-left border-collapse">
  <thead>
- <tr class="bg-theme-bg-base border-b border-theme-border-base text-sm font-bold text-theme-text-muted uppercase tracking-wider">
+ <tr class="bg-theme-bg border-b border-theme-border text-sm font-bold text-theme-text-muted uppercase tracking-wider">
  <th class="px-6 py-4">Brand</th>
  <th class="px-6 py-4">User</th>
  <th class="px-6 py-4">Role</th>
@@ -21,10 +21,10 @@
  </thead>
  <tbody class="divide-y divide-slate-100">
  {% for obj in objects %}
- <tr class="hover:bg-theme-bg-hover transition">
- <td class="px-6 py-4 text-theme-text-base font-bold">{{ obj.brand.name }}</td>
- <td class="px-6 py-4 text-theme-text-base font-bold">{{ obj.user.email }}</td>
- <td class="px-6 py-4 text-theme-text-base font-bold">
+ <tr class="hover:bg-theme-surface-hover transition">
+ <td class="px-6 py-4 text-theme-text-primary font-bold">{{ obj.brand.name }}</td>
+ <td class="px-6 py-4 text-theme-text-primary font-bold">{{ obj.user.email }}</td>
+ <td class="px-6 py-4 text-theme-text-primary font-bold">
  <span class="px-2 py-1 text-xs font-semibold rounded-full 
  {% if obj.role == 'OWNER' %}bg-purple-100 text-purple-800
  {% elif obj.role == 'ADMIN' %}bg-blue-100 text-blue-800

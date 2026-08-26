@@ -8,8 +8,8 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-box-open text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Store</span>
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Catalog</span>
  </div>
@@ -20,7 +20,7 @@
  <!-- Header & Actions -->
  <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Manage <span class="text-indigo-600 font-light">Catalog</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Manage <span class="text-indigo-600 font-light">Catalog</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">View and manage the products available in your virtual store.</p>
  </div>
  <div class="flex space-x-3">
@@ -32,29 +32,29 @@
 
  <!-- Stat Cards -->
  <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
- <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-5 flex items-center gap-4">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-5 flex items-center gap-4">
  <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
  <i class="fa-solid fa-box text-xl"></i>
  </div>
  <div>
  <p class="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Products</p>
- <p class="text-2xl font-extrabold text-theme-text-base">{{ total_products }}</p>
+ <p class="text-2xl font-extrabold text-theme-text-primary">{{ total_products }}</p>
  </div>
  </div>
- <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-5 flex items-center gap-4">
+ <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-5 flex items-center gap-4">
  <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
  <i class="fa-solid fa-swatchbook text-xl"></i>
  </div>
  <div>
  <p class="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Total Variants</p>
- <p class="text-2xl font-extrabold text-theme-text-base">{{ total_variants }}</p>
+ <p class="text-2xl font-extrabold text-theme-text-primary">{{ total_variants }}</p>
  </div>
  </div>
  </div>
 
  <!-- Filters & Tabs -->
- <div class="mb-6 bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-visible">
- <div class="border-b border-theme-border-base">
+ <div class="mb-6 bg-theme-surface rounded-2xl shadow-sm border border-theme-border overflow-visible">
+ <div class="border-b border-theme-border">
  <nav class="-mb-px flex" aria-label="Tabs">
  <a href="?{% if filter_search %}q={{ filter_search }}&{% endif %}{% if filter_category %}category={{ filter_category }}&{% endif %}" class="w-1/3 py-4 px-1 text-center border-b-2 font-bold text-sm {% if filter_active == '' %}border-indigo-500 text-indigo-600{% else %}border-transparent text-theme-text-muted hover:text-slate-700 hover:border-slate-300{% endif %}">
  All Products ({{ total_products }})
@@ -75,9 +75,9 @@
  <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Search</label>
  <div class="relative">
  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
- <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+ <i class="fa-solid fa-magnifying-glass text-theme-text-disabled"></i>
  </div>
- <input type="text" name="q" value="{{ filter_search }}" placeholder="Search products..." class="block w-full pl-10 pr-3 py-2 border border-theme-border-base rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+ <input type="text" name="q" value="{{ filter_search }}" placeholder="Search products..." class="block w-full pl-10 pr-3 py-2 border border-theme-border rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
  </div>
  </div>
  <div class="min-w-[160px]">
@@ -93,27 +93,27 @@
  <i class="fa-solid fa-filter mr-2"></i> Filter
  </button>
  {% if filter_search or filter_category %}
- <a href="{% url 'manage_products' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+ <a href="{% url 'manage_products' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-theme-text-muted bg-theme-bg-secondary hover:bg-slate-200 rounded-xl transition">
  <i class="fa-solid fa-xmark mr-1"></i> Clear
  </a>
  {% endif %}
  </form>
 
  <!-- Products List -->
- <div class="bg-theme-bg-surface shadow-sm sm:rounded-3xl border border-theme-border-base overflow-visible">
+ <div class="bg-theme-surface shadow-sm sm:rounded-3xl border border-theme-border overflow-visible">
  <ul class="divide-y divide-slate-100">
  {% for product in products %}
- <li class="group hover:bg-theme-bg-hover transition-colors duration-200">
+ <li class="group hover:bg-theme-surface-hover transition-colors duration-200">
  <div class="px-6 py-5 sm:px-8">
  <div class="flex items-center justify-between">
  <div class="flex flex-col">
- <p class="text-lg font-bold text-theme-text-base mb-1 group-hover:text-indigo-600 transition-colors">{{ product.name }}</p>
+ <p class="text-lg font-bold text-theme-text-primary mb-1 group-hover:text-indigo-600 transition-colors">{{ product.name }}</p>
  <p class="text-sm font-medium text-theme-text-muted flex items-center gap-2">
- <span class="bg-slate-100 text-theme-text-muted px-2 py-0.5 rounded-md text-xs">{{ product.category.name }}</span>
+ <span class="bg-theme-bg-secondary text-theme-text-muted px-2 py-0.5 rounded-md text-xs">{{ product.category.name }}</span>
  <span class="text-slate-300">•</span>
- <span class="bg-slate-100 text-theme-text-muted px-2 py-0.5 rounded-md text-xs">{{ product.product_type.name }}</span>
+ <span class="bg-theme-bg-secondary text-theme-text-muted px-2 py-0.5 rounded-md text-xs">{{ product.product_type.name }}</span>
  <span class="text-slate-300">•</span>
- <span class="font-bold text-slate-700">{{ request.user.owned_brand.get_currency_symbol }}{{ product.price }}</span>
+ <span class="font-bold text-theme-text-secondary">{{ request.user.owned_brand.get_currency_symbol }}{{ product.price }}</span>
  </p>
  </div>
  <div class="ml-2 flex-shrink-0 flex space-x-2">
@@ -122,7 +122,7 @@
  Active
  </span>
  {% else %}
- <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base">
+ <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border">
  Inactive
  </span>
  {% endif %}
@@ -130,37 +130,37 @@
  </div>
  <div class="mt-4 sm:flex sm:justify-between items-center">
  <div class="sm:flex text-sm text-theme-text-muted">
- <p class="flex items-center text-sm font-medium text-theme-text-muted bg-theme-bg-surface border border-theme-border-base px-3 py-1.5 rounded-lg shadow-sm">
+ <p class="flex items-center text-sm font-medium text-theme-text-muted bg-theme-surface border border-theme-border px-3 py-1.5 rounded-lg shadow-sm">
  <i class="fa-solid fa-swatchbook mr-2 text-indigo-500"></i>
  {{ product.variants.count }} Variant(s)
  </p>
  </div>
  <div class="mt-4 flex items-center space-x-3 sm:mt-0">
- <p class="text-xs font-medium text-slate-400 mr-2">
+ <p class="text-xs font-medium text-theme-text-disabled mr-2">
  Added on <time datetime="{{ product.created_at|date:'Y-m-d' }}">{{ product.created_at|date:"M d, Y" }}</time>
  </p>
  
  <!-- Dropdown Action -->
  <div class="ml-2">
  {% dropdown %}
- <a href="{% url 'edit_product' product.id %}" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover flex items-center">
- <i class="fa-solid fa-pen w-4 mr-2 text-slate-400"></i> Edit Product
+ <a href="{% url 'edit_product' product.id %}" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover flex items-center">
+ <i class="fa-solid fa-pen w-4 mr-2 text-theme-text-disabled"></i> Edit Product
  </a>
  
  <form method="POST" action="{% url 'manage_products' %}" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="toggle_active">
  <input type="hidden" name="product_id" value="{{ product.id }}">
- <button type="submit" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover flex items-center">
+ <button type="submit" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover flex items-center">
  {% if product.is_active %}
- <i class="fa-solid fa-eye-slash w-4 mr-2 text-slate-400"></i> Deactivate
+ <i class="fa-solid fa-eye-slash w-4 mr-2 text-theme-text-disabled"></i> Deactivate
  {% else %}
  <i class="fa-solid fa-eye w-4 mr-2 text-emerald-500"></i> Activate
  {% endif %}
  </button>
  </form>
  
- <div class="border-t border-theme-border-divider my-1"></div>
+ <div class="border-t border-theme-border-subtle my-1"></div>
  <form action="{% url 'delete_product' product.id %}" method="POST" onsubmit="confirmAction(event, 'Are you sure you want to delete this product? This will also delete all variants and cannot be undone.');" class="block w-full">
  {% csrf_token %}
  <button type="submit" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 font-medium flex items-center">
@@ -179,10 +179,10 @@
  </li>
  {% empty %}
  <li class="px-6 py-16 sm:px-8 text-center">
- <div class="mx-auto h-24 w-24 bg-theme-bg-base border-2 border-dashed border-theme-border-base rounded-full flex items-center justify-center mb-4">
- <i class="fa-solid fa-box-open text-3xl text-slate-400"></i>
+ <div class="mx-auto h-24 w-24 bg-theme-bg border-2 border-dashed border-theme-border rounded-full flex items-center justify-center mb-4">
+ <i class="fa-solid fa-box-open text-3xl text-theme-text-disabled"></i>
  </div>
- <h3 class="text-lg font-bold text-theme-text-base">No products found</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary">No products found</h3>
  <p class="mt-2 text-sm text-theme-text-muted max-w-sm mx-auto">
  {% if filter_search or filter_category %}
  Try adjusting your filters.

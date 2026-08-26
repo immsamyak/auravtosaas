@@ -11,7 +11,7 @@
  New Season
  </div>
 <h1 class="font-display font-black text-7xl md:text-8xl leading-[0.9] uppercase tracking-tighter mb-6 italic text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-500" style="-webkit-text-stroke: 1px rgba(255,255,255,0.1);">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}Rule <br/>The <br/>Streets.{% endif %}</h1>
-<p class="font-sans text-gray-400 font-medium mb-10 max-w-sm">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}No compromises. Unapologetic design for the modern era.{% endif %}</p>
+<p class="font-sans text-theme-text-disabled font-medium mb-10 max-w-sm">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}No compromises. Unapologetic design for the modern era.{% endif %}</p>
 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
 <a class="inline-flex items-center justify-center bg-neon text-black font-bold uppercase tracking-wider px-8 py-4 brutal-border hover:bg-white hover:-translate-y-1 hover:brutal-shadow transition-all w-fit" href="{{ brand.banner_cta_link|default:'#shop' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop The Drop <i class="fa-solid fa-arrow-right ml-3"></i>{% endif %}</a>
 
@@ -38,7 +38,7 @@
 </div>
 </section>
 <!-- Scrolling text separator -->
-<div class="bg-theme-bg-surface text-black font-display font-black text-4xl uppercase overflow-hidden whitespace-nowrap py-4 border-b brutal-border">
+<div class="bg-theme-surface text-black font-display font-black text-4xl uppercase overflow-hidden whitespace-nowrap py-4 border-b brutal-border">
 <div class="inline-block animate-[marquee_10s_linear_infinite]">
  WARNING: EXTREME HEAT /// WARNING: EXTREME HEAT /// WARNING: EXTREME HEAT /// WARNING: EXTREME HEAT /// 
  </div>
@@ -66,7 +66,7 @@
  {% endif %}
  
  <!-- Hover overlay tag -->
-<div class="absolute top-3 left-3 bg-theme-bg-surface text-black font-bold text-xs uppercase px-2 py-1 brutal-border opacity-0 group-hover:opacity-100 transition-opacity transform -rotate-3">
+<div class="absolute top-3 left-3 bg-theme-surface text-black font-bold text-xs uppercase px-2 py-1 brutal-border opacity-0 group-hover:opacity-100 transition-opacity transform -rotate-3">
  Click to view
  </div>
 </a>
@@ -74,7 +74,7 @@
 <h3 class="font-display font-bold text-xl uppercase leading-tight mb-2 truncate"><a class="hover:text-neon" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
 <div class="flex justify-between items-center">
 <p class="font-sans font-bold text-neon text-lg">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
-<button class="w-10 h-10 bg-theme-bg-surface text-black brutal-border rounded-full flex items-center justify-center hover:bg-neon transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >
+<button class="w-10 h-10 bg-theme-surface text-black brutal-border rounded-full flex items-center justify-center hover:bg-neon transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >
 <i class="fa-solid fa-plus"></i>
 </button>
 </div>
@@ -112,7 +112,7 @@
  </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
+<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
@@ -132,7 +132,7 @@
  {% if category.image %}
  <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
  {% else %}
- <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
  {% endif %}

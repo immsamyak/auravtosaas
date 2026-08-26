@@ -8,8 +8,8 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-box-open text-slate-400 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-box-open text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Store</span>
  <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Orders</span>
  </div>
@@ -20,23 +20,23 @@
  <!-- Header -->
  <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Manage <span class="text-indigo-600 font-light">Orders</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Manage <span class="text-indigo-600 font-light">Orders</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">View and track customer purchases for your brand.</p>
  </div>
  </div>
 
  <!-- Stat Cards -->
  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
- <a href="{% url 'manage_orders' %}" class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-4 flex items-center gap-3 hover:border-indigo-300 transition {% if not filter_status %}ring-2 ring-indigo-500{% endif %}">
- <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-theme-text-muted">
+ <a href="{% url 'manage_orders' %}" class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-4 flex items-center gap-3 hover:border-indigo-300 transition {% if not filter_status %}ring-2 ring-indigo-500{% endif %}">
+ <div class="w-10 h-10 rounded-xl bg-theme-bg-secondary flex items-center justify-center text-theme-text-muted">
  <i class="fa-solid fa-layer-group"></i>
  </div>
  <div>
  <p class="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Total</p>
- <p class="text-xl font-extrabold text-theme-text-base">{{ total_count }}</p>
+ <p class="text-xl font-extrabold text-theme-text-primary">{{ total_count }}</p>
  </div>
  </a>
- <a href="?status=PENDING&q={{ filter_search }}" class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-4 flex items-center gap-3 hover:border-amber-300 transition {% if filter_status == 'PENDING' %}ring-2 ring-amber-500{% endif %}">
+ <a href="?status=PENDING&q={{ filter_search }}" class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-4 flex items-center gap-3 hover:border-amber-300 transition {% if filter_status == 'PENDING' %}ring-2 ring-amber-500{% endif %}">
  <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
  <i class="fa-solid fa-clock"></i>
  </div>
@@ -45,7 +45,7 @@
  <p class="text-xl font-extrabold text-amber-600">{{ pending_count }}</p>
  </div>
  </a>
- <a href="?status=PAID&q={{ filter_search }}" class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-4 flex items-center gap-3 hover:border-emerald-300 transition {% if filter_status == 'PAID' %}ring-2 ring-emerald-500{% endif %}">
+ <a href="?status=PAID&q={{ filter_search }}" class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-4 flex items-center gap-3 hover:border-emerald-300 transition {% if filter_status == 'PAID' %}ring-2 ring-emerald-500{% endif %}">
  <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
  <i class="fa-solid fa-check-circle"></i>
  </div>
@@ -54,7 +54,7 @@
  <p class="text-xl font-extrabold text-emerald-600">{{ paid_count }}</p>
  </div>
  </a>
- <a href="?status=SHIPPED&q={{ filter_search }}" class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-4 flex items-center gap-3 hover:border-blue-300 transition {% if filter_status == 'SHIPPED' %}ring-2 ring-blue-500{% endif %}">
+ <a href="?status=SHIPPED&q={{ filter_search }}" class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-4 flex items-center gap-3 hover:border-blue-300 transition {% if filter_status == 'SHIPPED' %}ring-2 ring-blue-500{% endif %}">
  <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
  <i class="fa-solid fa-truck-fast"></i>
  </div>
@@ -63,60 +63,60 @@
  <p class="text-xl font-extrabold text-blue-600">{{ shipped_count }}</p>
  </div>
  </a>
- <a href="?status=DELIVERED&q={{ filter_search }}" class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-4 flex items-center gap-3 hover:border-slate-300 transition {% if filter_status == 'DELIVERED' %}ring-2 ring-slate-500{% endif %}">
- <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-theme-text-muted">
+ <a href="?status=DELIVERED&q={{ filter_search }}" class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-4 flex items-center gap-3 hover:border-slate-300 transition {% if filter_status == 'DELIVERED' %}ring-2 ring-slate-500{% endif %}">
+ <div class="w-10 h-10 rounded-xl bg-theme-bg-secondary flex items-center justify-center text-theme-text-muted">
  <i class="fa-solid fa-box-open"></i>
  </div>
  <div>
  <p class="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Delivered</p>
- <p class="text-xl font-extrabold text-slate-700">{{ delivered_count }}</p>
+ <p class="text-xl font-extrabold text-theme-text-secondary">{{ delivered_count }}</p>
  </div>
  </a>
  </div>
 
  <!-- Search Bar -->
- <form method="GET" class="mb-6 bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-4 flex items-end gap-4">
+ <form method="GET" class="mb-6 bg-theme-surface rounded-2xl shadow-sm border border-theme-border p-4 flex items-end gap-4">
  {% if filter_status %}<input type="hidden" name="status" value="{{ filter_status }}">{% endif %}
  <div class="flex-1">
  <div class="relative">
  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
- <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+ <i class="fa-solid fa-magnifying-glass text-theme-text-disabled"></i>
  </div>
- <input type="text" name="q" value="{{ filter_search }}" placeholder="Search by customer name, phone, or order ID..." class="block w-full pl-10 pr-3 py-2.5 border border-theme-border-base rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+ <input type="text" name="q" value="{{ filter_search }}" placeholder="Search by customer name, phone, or order ID..." class="block w-full pl-10 pr-3 py-2.5 border border-theme-border rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
  </div>
  </div>
  <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
  <i class="fa-solid fa-search mr-2"></i> Search
  </button>
  {% if filter_search or filter_status %}
- <a href="{% url 'manage_orders' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+ <a href="{% url 'manage_orders' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-theme-text-muted bg-theme-bg-secondary hover:bg-slate-200 rounded-xl transition">
  <i class="fa-solid fa-xmark mr-1"></i> Clear
  </a>
  {% endif %}
  </form>
 
  <!-- Orders List -->
- <div class="bg-theme-bg-surface shadow-sm sm:rounded-3xl border border-theme-border-base overflow-visible">
+ <div class="bg-theme-surface shadow-sm sm:rounded-3xl border border-theme-border overflow-visible">
  <ul class="divide-y divide-slate-100">
  {% for order in orders %}
- <li class="group hover:bg-theme-bg-hover transition-colors duration-200 cursor-pointer" @click="$dispatch('open-order', '{{ order.id }}')">
+ <li class="group hover:bg-theme-surface-hover transition-colors duration-200 cursor-pointer" @click="$dispatch('open-order', '{{ order.id }}')">
  <div class="px-6 py-5 sm:px-8">
  <div class="flex items-center justify-between">
  <div class="flex flex-col">
- <p class="text-lg font-bold text-theme-text-base mb-1 group-hover:text-indigo-600 transition-colors flex items-center gap-2">
+ <p class="text-lg font-bold text-theme-text-primary mb-1 group-hover:text-indigo-600 transition-colors flex items-center gap-2">
  Order #{{ order.id|stringformat:"s"|slice:":8" }}
  {% if order.payment_provider in 'CASH,CARD,QR,CUSTOM_MANUAL,DRAFT' %}
  <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-sm"><i class="fa-solid fa-cash-register mr-1"></i> POS</span>
  {% endif %}
  </p>
  <p class="text-sm font-medium text-theme-text-muted flex items-center gap-2 flex-wrap">
- <span class="text-slate-700 font-bold"><i class="fa-regular fa-user mr-1 text-slate-400"></i> {% if order.customer_name %}{{ order.customer_name }}{% elif order.user %}{{ order.user.username }}{% else %}Guest{% endif %}</span>
+ <span class="text-theme-text-secondary font-bold"><i class="fa-regular fa-user mr-1 text-theme-text-disabled"></i> {% if order.customer_name %}{{ order.customer_name }}{% elif order.user %}{{ order.user.username }}{% else %}Guest{% endif %}</span>
  <span class="text-slate-300">•</span>
  <span class="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md text-xs">{{ request.user.owned_brand.get_currency_symbol }}{{ order.grand_total }}</span>
  {% if order.payment_provider and order.payment_provider != 'NONE' %}
  <span class="text-slate-300">•</span>
- <span class="text-xs font-bold text-theme-text-muted bg-slate-100 border border-theme-border-base px-2 py-0.5 rounded-md">
- <i class="fa-solid fa-wallet mr-1 text-slate-400"></i>
+ <span class="text-xs font-bold text-theme-text-muted bg-theme-bg-secondary border border-theme-border px-2 py-0.5 rounded-md">
+ <i class="fa-solid fa-wallet mr-1 text-theme-text-disabled"></i>
  {% if order.payment_provider == 'CUSTOM_MANUAL' %}
  COD / Bank / QR
  {% else %}
@@ -138,23 +138,23 @@
  {% elif order.status == 'COURIER_PROCESSING' %}
  <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-purple-50 text-purple-600 border border-purple-100"><i class="fa-solid fa-route mr-1.5 mt-0.5"></i> Transit</span>
  {% elif order.status == 'DELIVERED' %}
- <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base"><i class="fa-solid fa-box-open mr-1.5 mt-0.5"></i> Delivered</span>
+ <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border"><i class="fa-solid fa-box-open mr-1.5 mt-0.5"></i> Delivered</span>
  {% elif order.status == 'COMPLETED' %}
- <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base"><i class="fa-solid fa-check-double mr-1.5 mt-0.5"></i> Completed</span>
+ <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border"><i class="fa-solid fa-check-double mr-1.5 mt-0.5"></i> Completed</span>
  {% elif order.status == 'DRAFT' %}
  <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100"><i class="fa-solid fa-file-signature mr-1.5 mt-0.5"></i> Draft</span>
  {% elif order.status == 'CANCELLED' %}
  <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-rose-50 text-rose-600 border border-rose-100"><i class="fa-solid fa-xmark mr-1.5 mt-0.5"></i> Cancelled</span>
  {% else %}
- <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base">{{ order.status }}</span>
+ <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border">{{ order.status }}</span>
  {% endif %}
  </div>
  
  <!-- Dropdown Action -->
  <div class="ml-4">
  {% dropdown %}
- <button @click="$dispatch('open-order', '{{ order.id }}'); open = false" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover flex items-center">
- <i class="fa-solid fa-eye w-4 mr-2 text-slate-400"></i> View Details
+ <button @click="$dispatch('open-order', '{{ order.id }}'); open = false" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover flex items-center">
+ <i class="fa-solid fa-eye w-4 mr-2 text-theme-text-disabled"></i> View Details
  </button>
  
  {% if order.status == 'PENDING' %}
@@ -162,14 +162,14 @@
  {% csrf_token %}
  <input type="hidden" name="action" value="verify_payment">
  <input type="hidden" name="order_id" value="{{ order.id }}">
- <button type="submit" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-theme-bg-hover flex items-center">
+ <button type="submit" class="w-full text-left px-4 py-2 text-sm text-theme-text-secondary hover:bg-theme-surface-hover flex items-center">
  <i class="fa-solid fa-check w-4 mr-2 text-emerald-500"></i> Verify Payment
  </button>
  </form>
  {% endif %}
  
  {% if order.status == 'PENDING' or order.status == 'PAID' %}
- <div class="border-t border-theme-border-divider my-1"></div>
+ <div class="border-t border-theme-border-subtle my-1"></div>
  <form method="POST" action="{% url 'manage_orders' %}" onsubmit="confirmAction(event, 'Are you sure you want to cancel this order?');" class="block w-full">
  {% csrf_token %}
  <input type="hidden" name="action" value="cancel_order">
@@ -184,13 +184,13 @@
  </div>
  <div class="mt-4 sm:flex sm:justify-between items-center">
  <div class="sm:flex text-sm text-theme-text-muted">
- <p class="flex items-center text-sm font-medium text-theme-text-muted bg-theme-bg-surface border border-theme-border-base px-3 py-1.5 rounded-lg shadow-sm">
+ <p class="flex items-center text-sm font-medium text-theme-text-muted bg-theme-surface border border-theme-border px-3 py-1.5 rounded-lg shadow-sm">
  <i class="fa-solid fa-box mr-2 text-indigo-500"></i>
  {{ order.items.count }} Item(s)
  </p>
  </div>
  <div class="mt-4 flex items-center space-x-3 sm:mt-0">
- <p class="text-xs font-medium text-slate-400">
+ <p class="text-xs font-medium text-theme-text-disabled">
  Placed on <time datetime="{{ order.created_at|date:'Y-m-d' }}">{{ order.created_at|date:"M d, Y h:i A" }}</time>
  </p>
  </div>
@@ -199,10 +199,10 @@
  </li>
  {% empty %}
  <li class="px-6 py-16 sm:px-8 text-center">
- <div class="mx-auto h-24 w-24 bg-theme-bg-base border-2 border-dashed border-theme-border-base rounded-full flex items-center justify-center mb-4">
- <i class="fa-solid fa-cart-arrow-down text-3xl text-slate-400"></i>
+ <div class="mx-auto h-24 w-24 bg-theme-bg border-2 border-dashed border-theme-border rounded-full flex items-center justify-center mb-4">
+ <i class="fa-solid fa-cart-arrow-down text-3xl text-theme-text-disabled"></i>
  </div>
- <h3 class="text-lg font-bold text-theme-text-base">No orders found</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary">No orders found</h3>
  <p class="mt-2 text-sm text-theme-text-muted max-w-sm mx-auto">
  {% if filter_search or filter_status %}
  Try adjusting your search or filters.
@@ -239,7 +239,7 @@
  x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" 
  x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" 
  class="pointer-events-auto w-screen max-w-xl">
- <div class="flex h-full flex-col overflow-y-auto bg-theme-bg-surface shadow-2xl">
+ <div class="flex h-full flex-col overflow-y-auto bg-theme-surface shadow-2xl">
  
  <!-- Modal Header -->
  <div class="bg-indigo-600 px-4 py-6 sm:px-6 relative overflow-hidden">
@@ -264,19 +264,19 @@
  <!-- Customer Info -->
  <div>
  <h3 class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-3">Customer Information</h3>
- <div class="bg-theme-bg-base rounded-xl p-4 space-y-2 border border-theme-border-divider">
+ <div class="bg-theme-bg rounded-xl p-4 space-y-2 border border-theme-border-subtle">
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Name</span>
- <span class="text-sm font-bold text-theme-text-base">{{ order.customer_name|default:"N/A" }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ order.customer_name|default:"N/A" }}</span>
  </div>
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Phone</span>
- <span class="text-sm font-bold text-theme-text-base">{{ order.customer_phone|default:"N/A" }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ order.customer_phone|default:"N/A" }}</span>
  </div>
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Address</span>
  <div class="text-right max-w-[200px]">
- <span class="block text-sm font-bold text-theme-text-base">{{ order.shipping_address|default:"N/A" }}</span>
+ <span class="block text-sm font-bold text-theme-text-primary">{{ order.shipping_address|default:"N/A" }}</span>
  {% if order.delivery_city %}
  <span class="block text-xs font-medium text-theme-text-muted mt-1">{{ order.delivery_city.name }}, {{ order.delivery_city.district.name }}, {{ order.delivery_city.district.province.name }}</span>
  {% endif %}
@@ -288,10 +288,10 @@
  <!-- Order Items -->
  <div>
  <h3 class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-3">Order Items</h3>
- <div class="bg-theme-bg-surface rounded-xl border border-theme-border-base overflow-hidden divide-y divide-slate-100">
+ <div class="bg-theme-surface rounded-xl border border-theme-border overflow-hidden divide-y divide-slate-100">
  {% for item in order.items.all %}
  <div class="p-3 sm:p-4 flex gap-4">
- <div class="h-16 w-16 rounded-lg bg-theme-bg-base border border-theme-border-divider flex-shrink-0 overflow-hidden">
+ <div class="h-16 w-16 rounded-lg bg-theme-bg border border-theme-border-subtle flex-shrink-0 overflow-hidden">
  {% if item.product_variant.image %}
  <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" class="h-full w-full object-cover">
  {% else %}
@@ -299,11 +299,11 @@
  {% endif %}
  </div>
  <div class="flex-1 min-w-0">
- <h4 class="text-sm font-bold text-theme-text-base truncate">{{ item.product_variant.product.name }}</h4>
+ <h4 class="text-sm font-bold text-theme-text-primary truncate">{{ item.product_variant.product.name }}</h4>
  <p class="text-xs font-medium text-theme-text-muted mt-0.5">{{ item.product_variant.color.name }} • Size {{ item.product_variant.size.code }}</p>
  <div class="mt-1 flex items-center justify-between">
- <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">Qty: {{ item.quantity }}</span>
- <span class="text-sm font-bold text-theme-text-base">{{ request.user.owned_brand.get_currency_symbol }}{{ item.product_variant.product.price }}</span>
+ <span class="text-xs font-bold text-theme-text-secondary bg-theme-bg-secondary px-2 py-0.5 rounded">Qty: {{ item.quantity }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ request.user.owned_brand.get_currency_symbol }}{{ item.product_variant.product.price }}</span>
  </div>
  </div>
  </div>
@@ -316,10 +316,10 @@
  <!-- Order Summary -->
  <div>
  <h3 class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-3">Order Summary</h3>
- <div class="bg-theme-bg-base rounded-xl p-4 space-y-2 border border-theme-border-divider">
+ <div class="bg-theme-bg rounded-xl p-4 space-y-2 border border-theme-border-subtle">
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Items Total</span>
- <span class="text-sm font-medium text-theme-text-base">{{ request.user.owned_brand.get_currency_symbol }}{{ order.total_amount }}</span>
+ <span class="text-sm font-medium text-theme-text-primary">{{ request.user.owned_brand.get_currency_symbol }}{{ order.total_amount }}</span>
  </div>
  {% if order.discount_amount > 0 %}
  <div class="flex items-center justify-between bg-emerald-50 p-2 rounded-lg -mx-2">
@@ -333,16 +333,16 @@
  {% if order.shipping_cost %}
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Shipping</span>
- <span class="text-sm font-medium text-theme-text-base">{{ request.user.owned_brand.get_currency_symbol }}{{ order.shipping_cost }}</span>
+ <span class="text-sm font-medium text-theme-text-primary">{{ request.user.owned_brand.get_currency_symbol }}{{ order.shipping_cost }}</span>
  </div>
  {% endif %}
- <div class="flex justify-between border-t border-theme-border-base pt-2 mt-2">
- <span class="text-sm font-bold text-theme-text-base">Grand Total</span>
- <span class="text-lg font-extrabold text-theme-text-base">{{ request.user.owned_brand.get_currency_symbol }}{{ order.grand_total }}</span>
+ <div class="flex justify-between border-t border-theme-border pt-2 mt-2">
+ <span class="text-sm font-bold text-theme-text-primary">Grand Total</span>
+ <span class="text-lg font-extrabold text-theme-text-primary">{{ request.user.owned_brand.get_currency_symbol }}{{ order.grand_total }}</span>
  </div>
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Payment Method</span>
- <span class="text-sm font-bold text-theme-text-base">
+ <span class="text-sm font-bold text-theme-text-primary">
  {% if order.payment_provider == 'CUSTOM_MANUAL' %}
  COD / Bank / QR
  {% else %}
@@ -363,20 +363,20 @@
  {% elif order.status == 'COURIER_PROCESSING' %}
  <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-50 text-purple-600 border border-purple-100">Courier Processing</span>
  {% elif order.status == 'DELIVERED' %}
- <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base">Delivered</span>
+ <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border">Delivered</span>
  {% elif order.status == 'COMPLETED' %}
- <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base">Completed</span>
+ <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border">Completed</span>
  {% elif order.status == 'DRAFT' %}
  <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">Draft</span>
  {% elif order.status == 'CANCELLED' %}
  <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-rose-50 text-rose-600 border border-rose-100">Cancelled</span>
  {% else %}
- <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-theme-text-muted border border-theme-border-base">{{ order.status }}</span>
+ <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-theme-bg-secondary text-theme-text-muted border border-theme-border">{{ order.status }}</span>
  {% endif %}
  </div>
  <div class="flex justify-between">
  <span class="text-sm text-theme-text-muted">Date</span>
- <span class="text-sm font-bold text-theme-text-base">{{ order.created_at|date:"M d, Y h:i A" }}</span>
+ <span class="text-sm font-bold text-theme-text-primary">{{ order.created_at|date:"M d, Y h:i A" }}</span>
  </div>
  </div>
  </div>
@@ -385,7 +385,7 @@
  {% if order.payment_proof %}
  <div>
  <h3 class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-3">Payment Proof</h3>
- <div class="bg-theme-bg-base rounded-xl p-3 border border-theme-border-divider">
+ <div class="bg-theme-bg rounded-xl p-3 border border-theme-border-subtle">
  <img src="{{ order.payment_proof.url }}" alt="Payment proof" class="rounded-lg w-full max-h-60 object-contain">
  </div>
  </div>

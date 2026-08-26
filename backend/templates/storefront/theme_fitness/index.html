@@ -8,7 +8,7 @@
  <img src="{{ brand.banner.url }}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover opacity-60">
  {% else %}
  <div class="w-full h-full flex items-center justify-center bg-gray-900">
- <span class="text-gray-700 font-display text-4xl font-bold tracking-widest">{{ brand.name }}</span>
+ <span class="text-theme-text-secondary font-display text-4xl font-bold tracking-widest">{{ brand.name }}</span>
  </div>
  {% endif %}
  </div>
@@ -18,7 +18,7 @@
 </section>
 
 <!-- Product Grid -->
-<section id="shop" class="py-24 bg-theme-bg-surface">
+<section id="shop" class="py-24 bg-theme-surface">
  <div class="max-w-7xl mx-auto px-6">
  <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b-8 border-black pb-4">
  <h2 class="text-6xl font-display font-bold text-black">NEW GEAR</h2>
@@ -27,12 +27,12 @@
  {% if products %}
  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
  {% for product in products|slice:":4" %}
- <div class="group bg-theme-bg-surface border-4 border-black p-4 flex flex-col hard-shadow">
- <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-[4/5] bg-gray-100 mb-6 overflow-hidden border-2 border-black">
+ <div class="group bg-theme-surface border-4 border-black p-4 flex flex-col hard-shadow">
+ <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-[4/5] bg-theme-bg-secondary mb-6 overflow-hidden border-2 border-black">
  {% if product.variants.first.image %}
  <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
  {% else %}
- <div class="w-full h-full flex flex-col items-center justify-center text-gray-400">
+ <div class="w-full h-full flex flex-col items-center justify-center text-theme-text-disabled">
  <i class="fa-solid fa-dumbbell text-6xl mb-4"></i>
  </div>
  {% endif %}
@@ -58,9 +58,9 @@
  </div>
 
  {% else %}
- <div class="bg-gray-100 border-4 border-black p-20 text-center">
+ <div class="bg-theme-bg-secondary border-4 border-black p-20 text-center">
  <h3 class="text-6xl font-display font-bold text-black mb-4">RESTOCKING SOON</h3>
- <p class="text-xl font-medium text-gray-600">The armory is currently empty. Check back for the next drop.</p>
+ <p class="text-xl font-medium text-theme-text-secondary">The armory is currently empty. Check back for the next drop.</p>
  </div>
  {% endif %}
  </div>

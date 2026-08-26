@@ -9,9 +9,9 @@
  <ol class="inline-flex items-center space-x-1 md:space-x-3">
  <li aria-current="page">
  <div class="flex items-center">
- <i class="fa-solid fa-gear text-slate-400 dark:text-slate-500 mr-2"></i>
- <span class="text-sm font-bold text-theme-text-base">Configuration</span>
- <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+ <i class="fa-solid fa-gear text-theme-text-disabled mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-primary">Configuration</span>
+ <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
  <span class="text-sm font-medium text-theme-text-muted">Add-ons</span>
  </div>
  </li>
@@ -21,38 +21,38 @@
  <!-- Header & Actions -->
  <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
  <div>
- <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Add-ons <span class="text-indigo-600 font-light">& Integrations</span></h1>
+ <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Add-ons <span class="text-indigo-600 font-light">& Integrations</span></h1>
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Extend your store's functionality with powerful third-party tools.</p>
  </div>
  <div class="flex space-x-3">
  <div class="relative w-full md:w-64">
  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
- <i class="fa-solid fa-magnifying-glass text-slate-400 dark:text-slate-500"></i>
+ <i class="fa-solid fa-magnifying-glass text-theme-text-disabled"></i>
  </div>
- <input type="text" x-model="searchTerm" class="block w-full pl-10 pr-3 py-2 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl leading-5 bg-theme-bg-surface dark:bg-slate-800/50/80 shadow-sm placeholder-theme-input-placeholder focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors" placeholder="Search add-ons...">
+ <input type="text" x-model="searchTerm" class="block w-full pl-10 pr-3 py-2 border border-theme-border dark:border-slate-600/50/50 rounded-xl leading-5 bg-theme-surface shadow-sm placeholder-theme-placeholder focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors" placeholder="Search add-ons...">
  </div>
  </div>
  </div>
 
  <!-- Categories -->
  <div class="flex space-x-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
- <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-bg-surface dark:bg-slate-800/50/80 text-theme-text-muted hover:bg-theme-bg-hover hover:text-slate-900 border-theme-border-base dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">All Add-ons</button>
- <button @click="activeTab = 'PAYMENT'" :class="activeTab === 'PAYMENT' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-bg-surface dark:bg-slate-800/50/80 text-theme-text-muted hover:bg-theme-bg-hover hover:text-slate-900 border-theme-border-base dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Payments</button>
- <button @click="activeTab = 'SHIPPING'" :class="activeTab === 'SHIPPING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-bg-surface dark:bg-slate-800/50/80 text-theme-text-muted hover:bg-theme-bg-hover hover:text-slate-900 border-theme-border-base dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Shipping</button>
- <button @click="activeTab = 'MARKETING'" :class="activeTab === 'MARKETING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-bg-surface dark:bg-slate-800/50/80 text-theme-text-muted hover:bg-theme-bg-hover hover:text-slate-900 border-theme-border-base dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Marketing & Analytics</button>
- <button @click="activeTab = 'OTHER'" :class="activeTab === 'OTHER' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-bg-surface dark:bg-slate-800/50/80 text-theme-text-muted hover:bg-theme-bg-hover hover:text-slate-900 border-theme-border-base dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Other</button>
+ <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-surface text-theme-text-muted hover:bg-theme-surface-hover hover:text-slate-900 border-theme-border dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">All Add-ons</button>
+ <button @click="activeTab = 'PAYMENT'" :class="activeTab === 'PAYMENT' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-surface text-theme-text-muted hover:bg-theme-surface-hover hover:text-slate-900 border-theme-border dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Payments</button>
+ <button @click="activeTab = 'SHIPPING'" :class="activeTab === 'SHIPPING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-surface text-theme-text-muted hover:bg-theme-surface-hover hover:text-slate-900 border-theme-border dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Shipping</button>
+ <button @click="activeTab = 'MARKETING'" :class="activeTab === 'MARKETING' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-surface text-theme-text-muted hover:bg-theme-surface-hover hover:text-slate-900 border-theme-border dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Marketing & Analytics</button>
+ <button @click="activeTab = 'OTHER'" :class="activeTab === 'OTHER' ? 'bg-slate-900 text-white border-slate-900' : 'bg-theme-surface text-theme-text-muted hover:bg-theme-surface-hover hover:text-slate-900 border-theme-border dark:border-slate-600/50/50'" class="whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl border shadow-sm transition-all">Other</button>
  </div>
 
  <!-- Add-ons Grid -->
  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
  {% for item in addons_data %}
- <div x-show="(activeTab === 'all' || activeTab === '{{ item.addon.category }}') && (searchTerm === '' || '{{ item.addon.name|lower }}'.includes(searchTerm.toLowerCase()) || '{{ item.addon.description|lower|truncatewords:20 }}'.includes(searchTerm.toLowerCase()))" x-transition class="addon-card bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-3xl p-6 border border-theme-border-base dark:border-slate-600/50/50 shadow-sm hover:shadow-md transition-all group flex flex-col h-full" data-category="{{ item.addon.category }}">
+ <div x-show="(activeTab === 'all' || activeTab === '{{ item.addon.category }}') && (searchTerm === '' || '{{ item.addon.name|lower }}'.includes(searchTerm.toLowerCase()) || '{{ item.addon.description|lower|truncatewords:20 }}'.includes(searchTerm.toLowerCase()))" x-transition class="addon-card bg-theme-surface rounded-3xl p-6 border border-theme-border dark:border-slate-600/50/50 shadow-sm hover:shadow-md transition-all group flex flex-col h-full" data-category="{{ item.addon.category }}">
  <div class="flex justify-between items-start mb-4">
- <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-divider dark:border-slate-600/50/50 overflow-hidden">
+ <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-theme-bg border border-theme-border-subtle dark:border-slate-600/50/50 overflow-hidden">
  {% if item.addon.logo %}
  <img src="{{ item.addon.logo.url }}" alt="{{ item.addon.name }} logo" class="w-full h-full object-contain p-2">
  {% else %}
- <i class="fa-solid fa-puzzle-piece text-slate-300 dark:text-slate-600 text-xl"></i>
+ <i class="fa-solid fa-puzzle-piece text-slate-300 text-xl"></i>
  {% endif %}
  </div>
  
@@ -61,19 +61,19 @@
  <i class="fa-solid fa-check mr-1"></i> Active
  </span>
  {% elif item.is_configured %}
- <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-theme-text-muted border border-theme-border-base dark:border-slate-600/50/50">
+ <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-theme-bg-secondary text-theme-text-muted border border-theme-border dark:border-slate-600/50/50">
  Inactive
  </span>
  {% else %}
- <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-theme-text-muted border border-theme-border-base dark:border-slate-600/50/50">
+ <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-theme-bg-secondary text-theme-text-muted border border-theme-border dark:border-slate-600/50/50">
  Requires Setup
  </span>
  {% endif %}
  </div>
- <h3 class="text-lg font-bold text-theme-text-base mb-1">{{ item.addon.name }}</h3>
+ <h3 class="text-lg font-bold text-theme-text-primary mb-1">{{ item.addon.name }}</h3>
  <p class="text-sm font-medium text-theme-text-muted flex-1 mb-6">{{ item.addon.description }}</p>
- <div class="pt-4 border-t border-theme-border-divider dark:border-slate-600/50/50 flex items-center justify-between mt-auto">
- <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ item.addon.get_category_display }}</span>
+ <div class="pt-4 border-t border-theme-border-subtle dark:border-slate-600/50/50 flex items-center justify-between mt-auto">
+ <span class="text-xs font-bold text-theme-text-disabled uppercase tracking-wider">{{ item.addon.get_category_display }}</span>
  
  <button onclick="openAddonModal('{{ item.addon.id }}', '{{ item.addon.name|escapejs }}', '{{ item.addon.provider_code }}', '{{ item.is_active }}', '{{ item.credentials_json|escapejs }}')" 
  class="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
@@ -82,9 +82,9 @@
  </div>
  </div>
  {% empty %}
- <div class="col-span-full py-12 text-center border-2 border-dashed border-theme-border-base dark:border-slate-600/50/50 rounded-3xl bg-slate-50/50">
- <i class="fa-solid fa-puzzle-piece text-4xl text-slate-300 dark:text-slate-600 mb-4"></i>
- <h3 class="text-lg font-bold text-theme-text-base">No Integrations Available</h3>
+ <div class="col-span-full py-12 text-center border-2 border-dashed border-theme-border dark:border-slate-600/50/50 rounded-3xl bg-slate-50/50">
+ <i class="fa-solid fa-puzzle-piece text-4xl text-slate-300 mb-4"></i>
+ <h3 class="text-lg font-bold text-theme-text-primary">No Integrations Available</h3>
  <p class="text-sm text-theme-text-muted mt-1">The platform administrator has not enabled any add-ons yet.</p>
  </div>
  {% endfor %}
@@ -98,14 +98,14 @@
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
  <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="closeAddonModal()"></div>
  <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
- <div class="inline-block align-bottom bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
- <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+ <div class="inline-block align-bottom bg-theme-surface rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+ <div class="bg-theme-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
  <div class="sm:flex sm:items-start">
  <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 dark:bg-indigo-500/20 sm:mx-0 sm:h-10 sm:w-10">
  <i class="fa-solid fa-plug text-indigo-600"></i>
  </div>
  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
- <h3 class="text-xl leading-6 font-extrabold text-theme-text-base " id="modal-addon-name">Configure Add-on</h3>
+ <h3 class="text-xl leading-6 font-extrabold text-theme-text-primary " id="modal-addon-name">Configure Add-on</h3>
  <div class="mt-4">
  <form id="addon-config-form" method="POST" action="{% url 'addons' %}" enctype="multipart/form-data">
  {% csrf_token %}
@@ -119,19 +119,19 @@
  <!-- Custom Payment Fields (Still needed statically for toggle logic, though we can manage via JS) -->
  <div id="field-custom-type" class="hidden space-y-4 mt-2">
  <div>
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Payment Type</label>
- <select id="input-custom-type" name="custom_payment_type" onchange="toggleCustomFields()" class="block w-full bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Payment Type</label>
+ <select id="input-custom-type" name="custom_payment_type" onchange="toggleCustomFields()" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  <option value="BANK_TRANSFER">Direct Bank Transfer</option>
  <option value="QR_CODE">QR Code (Fonepay, etc.)</option>
  <option value="COD">Cash on Delivery</option>
  </select>
  </div>
  <div id="field-instructions" class="hidden">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Instructions / Details</label>
- <textarea id="input-instructions" name="instructions" rows="3" placeholder="e.g. Bank Name: Nabil Bank&#10;Account Name: Acme Corp&#10;Account No: 123456789" class="block w-full bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"></textarea>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Instructions / Details</label>
+ <textarea id="input-instructions" name="instructions" rows="3" placeholder="e.g. Bank Name: Nabil Bank&#10;Account Name: Acme Corp&#10;Account No: 123456789" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"></textarea>
  </div>
  <div id="field-qr-image" class="hidden">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">QR Code Image</label>
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">QR Code Image</label>
  <div class="mt-1 flex items-center">
  <input type="file" id="input-qr-image" name="qr_code_image" accept="image/*" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
  </div>
@@ -139,7 +139,7 @@
  </div>
  </div>
  
- <p class="text-xs text-theme-text-muted mt-2 font-medium"><i class="fa-solid fa-lock text-slate-400 dark:text-slate-500 mr-1"></i> Your credentials are securely encrypted and stored.</p>
+ <p class="text-xs text-theme-text-muted mt-2 font-medium"><i class="fa-solid fa-lock text-theme-text-disabled mr-1"></i> Your credentials are securely encrypted and stored.</p>
  </div>
  </form>
  
@@ -152,14 +152,14 @@
  </div>
  </div>
  </div>
- <div class="bg-theme-bg-base dark:bg-slate-800/50/80 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-theme-border-divider dark:border-slate-600/50/50">
+ <div class="bg-theme-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-theme-border-subtle dark:border-slate-600/50/50">
  <button type="button" onclick="document.getElementById('addon-config-form').submit()" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-5 py-3 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
  Save Configuration
  </button>
  <button type="button" id="disable-btn" onclick="document.getElementById('disable-form').submit()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-rose-200 shadow-sm px-5 py-3 bg-rose-50 text-base font-bold text-rose-600 hover:bg-rose-100 hover:text-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors hidden">
  Disable Add-on
  </button>
- <button type="button" onclick="closeAddonModal()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-5 py-3 bg-theme-bg-surface dark:bg-slate-800/50/80 text-base font-bold text-slate-700 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-auto sm:w-auto sm:text-sm transition-colors">
+ <button type="button" onclick="closeAddonModal()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-theme-input-border shadow-sm px-5 py-3 bg-theme-surface text-base font-bold text-theme-text-secondary hover:bg-theme-surface-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-auto sm:w-auto sm:text-sm transition-colors">
  Cancel
  </button>
  </div>
@@ -301,8 +301,8 @@ function openAddonModal(id, name, providerCode, isActive, credentialsJson) {
  
  const html = `
  <div class="mb-4">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">${field.label} ${ast}</label>
- <input type="${field.type}" name="${field.key}" value="${val}" ${req} class="block w-full bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">${field.label} ${ast}</label>
+ <input type="${field.type}" name="${field.key}" value="${val}" ${req} class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
  `;
  container.innerHTML += html;
@@ -312,8 +312,8 @@ function openAddonModal(id, name, providerCode, isActive, credentialsJson) {
  if (schema.length === 0) {
  container.innerHTML = `
  <div class="mb-4">
- <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">API Key / Token</label>
- <input type="text" name="api_key" value="${creds['api_key'] || ''}" class="block w-full bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">API Key / Token</label>
+ <input type="text" name="api_key" value="${creds['api_key'] || ''}" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
  `;
  }
