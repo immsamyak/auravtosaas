@@ -2,73 +2,73 @@
 {% block title %}{{ post.title }} | {{ cms.hero_headline|default:"Aura SaaS" }}{% endblock %}
 
 {% block content %}
-<div class="bg-white min-h-screen pt-32 pb-24 relative overflow-hidden">
-    <!-- Hero Image Area -->
-    <div class="max-w-4xl mx-auto px-6 lg:px-8 mb-12 relative z-10 text-center">
-        <a href="{% url 'landing_blog_list' %}" class="inline-flex items-center text-indigo-600 font-bold hover:text-indigo-700 transition-colors mb-8 text-sm uppercase tracking-wider">
-            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Blog
-        </a>
-        <div class="flex items-center justify-center gap-4 text-sm font-bold text-slate-500 uppercase tracking-widest mb-6">
-            <span>{{ post.published_at|date:"F d, Y" }}</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-            <span>By {{ post.author_name }}</span>
-        </div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-8 leading-[1.1]">{{ post.title }}</h1>
-    </div>
+<div class="bg-theme-bg-surface min-h-screen pt-32 pb-24 relative overflow-hidden">
+ <!-- Hero Image Area -->
+ <div class="max-w-4xl mx-auto px-6 lg:px-8 mb-12 relative z-10 text-center">
+ <a href="{% url 'landing_blog_list' %}" class="inline-flex items-center text-indigo-600 font-bold hover:text-indigo-700 transition-colors mb-8 text-sm uppercase tracking-wider">
+ <i class="fa-solid fa-arrow-left mr-2"></i> Back to Blog
+ </a>
+ <div class="flex items-center justify-center gap-4 text-sm font-bold text-theme-text-muted uppercase tracking-widest mb-6">
+ <span>{{ post.published_at|date:"F d, Y" }}</span>
+ <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+ <span>By {{ post.author_name }}</span>
+ </div>
+ <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-theme-text-base tracking-tight mb-8 leading-[1.1]">{{ post.title }}</h1>
+ </div>
 
-    {% if post.featured_image %}
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 relative z-10">
-        <div class="rounded-[2.5rem] overflow-hidden shadow-2xl relative aspect-[21/9]">
-            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">
-        </div>
-    </div>
-    {% endif %}
+ {% if post.featured_image %}
+ <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 relative z-10">
+ <div class="rounded-[2.5rem] overflow-hidden shadow-2xl relative aspect-[21/9]">
+ <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">
+ </div>
+ </div>
+ {% endif %}
 
-    <!-- Article Content -->
-    <div class="max-w-3xl mx-auto px-6 lg:px-8 relative z-10">
-        <div class="prose prose-lg md:prose-xl prose-indigo mx-auto text-slate-600">
-            {{ post.content|safe }}
-        </div>
-        
-        <!-- Share & Author -->
-        <div class="mt-16 pt-8 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 text-xl font-bold">
-                    {{ post.author_name|slice:":1" }}
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500 font-bold uppercase tracking-wider mb-0.5">Written by</p>
-                    <p class="text-lg font-bold text-slate-900">{{ post.author_name }}</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <span class="text-sm font-bold text-slate-500 uppercase tracking-wider mr-2">Share</span>
-                <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-[#0A66C2] hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors"><i class="fa-solid fa-link"></i></a>
-            </div>
-        </div>
-    </div>
+ <!-- Article Content -->
+ <div class="max-w-3xl mx-auto px-6 lg:px-8 relative z-10">
+ <div class="prose prose-lg md:prose-xl prose-indigo mx-auto text-theme-text-muted">
+ {{ post.content|safe }}
+ </div>
+ 
+ <!-- Share & Author -->
+ <div class="mt-16 pt-8 border-t border-theme-border-base flex flex-col sm:flex-row justify-between items-center gap-6">
+ <div class="flex items-center gap-4">
+ <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 text-xl font-bold">
+ {{ post.author_name|slice:":1" }}
+ </div>
+ <div>
+ <p class="text-sm text-theme-text-muted font-bold uppercase tracking-wider mb-0.5">Written by</p>
+ <p class="text-lg font-bold text-theme-text-base">{{ post.author_name }}</p>
+ </div>
+ </div>
+ 
+ <div class="flex items-center gap-3">
+ <span class="text-sm font-bold text-theme-text-muted uppercase tracking-wider mr-2">Share</span>
+ <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-theme-text-muted flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+ <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-theme-text-muted flex items-center justify-center hover:bg-[#0A66C2] hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+ <a href="#" class="w-10 h-10 rounded-full bg-slate-100 text-theme-text-muted flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors"><i class="fa-solid fa-link"></i></a>
+ </div>
+ </div>
+ </div>
 
-    <!-- Related Posts -->
-    {% if recent_posts %}
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-24 pt-24 border-t border-slate-100 relative z-10">
-        <h3 class="text-3xl font-extrabold text-slate-900 mb-10 text-center">More from our blog</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {% for recent in recent_posts %}
-            <a href="{% url 'landing_blog_detail' recent.slug %}" class="group">
-                {% if recent.featured_image %}
-                <div class="h-48 rounded-[2rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-lg transition-all relative">
-                    <img src="{{ recent.featured_image.url }}" alt="{{ recent.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                {% endif %}
-                <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors leading-tight">{{ recent.title }}</h4>
-                <p class="text-slate-500 font-medium text-sm">{{ recent.published_at|date:"F d, Y" }}</p>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
+ <!-- Related Posts -->
+ {% if recent_posts %}
+ <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-24 pt-24 border-t border-theme-border-divider relative z-10">
+ <h3 class="text-3xl font-extrabold text-theme-text-base mb-10 text-center">More from our blog</h3>
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+ {% for recent in recent_posts %}
+ <a href="{% url 'landing_blog_detail' recent.slug %}" class="group">
+ {% if recent.featured_image %}
+ <div class="h-48 rounded-[2rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-lg transition-all relative">
+ <img src="{{ recent.featured_image.url }}" alt="{{ recent.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+ </div>
+ {% endif %}
+ <h4 class="text-xl font-bold text-theme-text-base mb-2 group-hover:text-indigo-600 transition-colors leading-tight">{{ recent.title }}</h4>
+ <p class="text-theme-text-muted font-medium text-sm">{{ recent.published_at|date:"F d, Y" }}</p>
+ </a>
+ {% endfor %}
+ </div>
+ </div>
+ {% endif %}
 </div>
 {% endblock %}

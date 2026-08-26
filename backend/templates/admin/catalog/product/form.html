@@ -1,139 +1,139 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    {% include "components/breadcrumb.html" with current="Product Details" %}
-    <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Product <span class="text-indigo-600 font-light">Details</span></h1>
-        <p class="text-slate-500 mt-1">Fill out the fields below.</p>
-    </div>
-    
-    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-        
-        {% if object and object.images.exists or object and object.variants.exists %}
-        <div class="mb-8 p-6 bg-slate-50 rounded-2xl border border-slate-200">
-            <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">Product & Variant Images</h3>
-            
-            {% if object.images.exists %}
-            <div class="flex flex-wrap gap-4 mb-6">
-                {% for img in object.images.all %}
-                    <div class="relative w-32 h-32 rounded-xl overflow-hidden border-2 {% if img.is_primary %}border-indigo-500 shadow-md{% else %}border-slate-200{% endif %}">
-                        <img src="{{ img.image.url }}" alt="Product Image" class="w-full h-full object-cover">
-                        {% if img.is_primary %}
-                            <div class="absolute top-2 right-2 bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Primary</div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-            {% endif %}
+ {% include "components/breadcrumb.html" with current="Product Details" %}
+ <div class="mb-8">
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Product <span class="text-indigo-600 font-light">Details</span></h1>
+ <p class="text-theme-text-muted mt-1">Fill out the fields below.</p>
+ </div>
+ 
+ <div class="bg-theme-bg-surface p-8 rounded-2xl shadow-sm border border-theme-border-divider">
+ 
+ {% if object and object.images.exists or object and object.variants.exists %}
+ <div class="mb-8 p-6 bg-theme-bg-base rounded-2xl border border-theme-border-base">
+ <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">Product & Variant Images</h3>
+ 
+ {% if object.images.exists %}
+ <div class="flex flex-wrap gap-4 mb-6">
+ {% for img in object.images.all %}
+ <div class="relative w-32 h-32 rounded-xl overflow-hidden border-2 {% if img.is_primary %}border-indigo-500 shadow-md{% else %}border-slate-200{% endif %}">
+ <img src="{{ img.image.url }}" alt="Product Image" class="w-full h-full object-cover">
+ {% if img.is_primary %}
+ <div class="absolute top-2 right-2 bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">Primary</div>
+ {% endif %}
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
 
-            {% if object.variants.exists %}
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {% for variant in object.variants.all %}
-                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm flex flex-col">
-                    {% if variant.image %}
-                        <div class="aspect-square bg-slate-100 overflow-hidden relative">
-                            <img src="{{ variant.image.url }}" alt="Variant Image" class="w-full h-full object-cover">
-                            <div class="absolute bottom-1 right-1 bg-white/90 backdrop-blur text-slate-800 text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">{{ variant.size.code }}</div>
-                        </div>
-                    {% else %}
-                        <div class="aspect-square bg-slate-100 flex items-center justify-center">
-                            <i class="fa-solid fa-image text-slate-300 text-2xl"></i>
-                        </div>
-                    {% endif %}
-                    <div class="p-2 flex items-center justify-between bg-slate-50 border-t border-slate-100">
-                        <div class="flex items-center gap-1.5">
-                            <div class="w-3 h-3 rounded-full border border-slate-200 shadow-inner" style="background-color: {{ variant.color.hex_code }};"></div>
-                            <span class="text-[10px] font-bold text-slate-700 uppercase">{{ variant.color.name }}</span>
-                        </div>
-                        <span class="text-[10px] font-bold text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded-md">{{ variant.total_stock }}</span>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
+ {% if object.variants.exists %}
+ <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+ {% for variant in object.variants.all %}
+ <div class="bg-theme-bg-surface rounded-xl overflow-hidden border border-theme-border-base shadow-sm flex flex-col">
+ {% if variant.image %}
+ <div class="aspect-square bg-slate-100 overflow-hidden relative">
+ <img src="{{ variant.image.url }}" alt="Variant Image" class="w-full h-full object-cover">
+ <div class="absolute bottom-1 right-1 bg-white/90 backdrop-blur text-theme-text-base text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">{{ variant.size.code }}</div>
+ </div>
+ {% else %}
+ <div class="aspect-square bg-slate-100 flex items-center justify-center">
+ <i class="fa-solid fa-image text-slate-300 text-2xl"></i>
+ </div>
+ {% endif %}
+ <div class="p-2 flex items-center justify-between bg-theme-bg-base border-t border-theme-border-divider">
+ <div class="flex items-center gap-1.5">
+ <div class="w-3 h-3 rounded-full border border-theme-border-base shadow-inner" style="background-color: {{ variant.color.hex_code }};"></div>
+ <span class="text-[10px] font-bold text-slate-700 uppercase">{{ variant.color.name }}</span>
+ </div>
+ <span class="text-[10px] font-bold text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded-md">{{ variant.total_stock }}</span>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
 
-            <p class="text-xs font-medium text-slate-500 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> Note: Base images and variants are managed in the dedicated Inventory sections, not here.</p>
-        </div>
-        {% endif %}
+ <p class="text-xs font-medium text-theme-text-muted mt-4"><i class="fa-solid fa-circle-info mr-1"></i> Note: Base images and variants are managed in the dedicated Inventory sections, not here.</p>
+ </div>
+ {% endif %}
 
-        <form method="post" enctype="multipart/form-data" class="space-y-6">
+ <form method="post" enctype="multipart/form-data" class="space-y-6">
 
-            {% csrf_token %}
-            <div x-data="{ activeTab: 'general' }">
-                
-                <!-- Tab Navigation -->
-                <div class="flex border-b border-slate-200 mb-8 space-x-8">
-                    <button type="button" @click="activeTab = 'general'" 
-                            :class="activeTab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'" 
-                            class="pb-3 border-b-2 font-bold px-2 transition-colors">
-                        General Information
-                    </button>
-                    
-                    <!-- Only show Advanced tab if there are more than 6 visible fields -->
-                    {% if form.visible_fields|length > 6 %}
-                    <button type="button" @click="activeTab = 'advanced'" 
-                            :class="activeTab === 'advanced' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700'" 
-                            class="pb-3 border-b-2 font-bold px-2 transition-colors">
-                        Advanced Settings
-                    </button>
-                    {% endif %}
-                </div>
+ {% csrf_token %}
+ <div x-data="{ activeTab: 'general' }">
+ 
+ <!-- Tab Navigation -->
+ <div class="flex border-b border-theme-border-base mb-8 space-x-8">
+ <button type="button" @click="activeTab = 'general'" 
+ :class="activeTab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-theme-text-muted hover:text-slate-700'" 
+ class="pb-3 border-b-2 font-bold px-2 transition-colors">
+ General Information
+ </button>
+ 
+ <!-- Only show Advanced tab if there are more than 6 visible fields -->
+ {% if form.visible_fields|length > 6 %}
+ <button type="button" @click="activeTab = 'advanced'" 
+ :class="activeTab === 'advanced' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-theme-text-muted hover:text-slate-700'" 
+ class="pb-3 border-b-2 font-bold px-2 transition-colors">
+ Advanced Settings
+ </button>
+ {% endif %}
+ </div>
 
-                <!-- General Tab Content (Fields 1-6) -->
-                <div x-show="activeTab === 'general'" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    {% for field in form %}
-                        {% if forloop.counter <= 6 or form.visible_fields|length <= 6 %}
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                            </label>
-                            {{ field }}
-                            {% if field.help_text %}
-                                <p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>
-                            {% endif %}
-                            {% for error in field.errors %}
-                                <p class="text-xs text-rose-500 mt-2 font-bold flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+ <!-- General Tab Content (Fields 1-6) -->
+ <div x-show="activeTab === 'general'" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if forloop.counter <= 6 or form.visible_fields|length <= 6 %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}
+ <p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>
+ {% endif %}
+ {% for error in field.errors %}
+ <p class="text-xs text-rose-500 mt-2 font-bold flex items-center">
+ <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+ {{ error }}
+ </p>
+ {% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
 
-                <!-- Advanced Tab Content (Fields 7+) -->
-                {% if form.visible_fields|length > 6 %}
-                <div x-show="activeTab === 'advanced'" style="display: none;" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    {% for field in form %}
-                        {% if forloop.counter > 6 %}
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                            </label>
-                            {{ field }}
-                            {% if field.help_text %}
-                                <p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>
-                            {% endif %}
-                            {% for error in field.errors %}
-                                <p class="text-xs text-rose-500 mt-2 font-bold flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                {% endif %}
-                
-            </div>
+ <!-- Advanced Tab Content (Fields 7+) -->
+ {% if form.visible_fields|length > 6 %}
+ <div x-show="activeTab === 'advanced'" style="display: none;" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if forloop.counter > 6 %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}
+ <p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>
+ {% endif %}
+ {% for error in field.errors %}
+ <p class="text-xs text-rose-500 mt-2 font-bold flex items-center">
+ <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+ {{ error }}
+ </p>
+ {% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ {% endif %}
+ 
+ </div>
 
-            <div class="pt-6 border-t border-slate-100 flex justify-end gap-4">
-                <a href="{% url 'admin:product_list' %}" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Cancel</a>
-                <button type="submit" class="px-5 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">Save Product</button>
-            </div>
-        </form>
-    </div>
+ <div class="pt-6 border-t border-theme-border-divider flex justify-end gap-4">
+ <a href="{% url 'admin:product_list' %}" class="px-5 py-2.5 rounded-xl font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 transition">Cancel</a>
+ <button type="submit" class="px-5 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">Save Product</button>
+ </div>
+ </form>
+ </div>
 </div>
 {% endblock %}

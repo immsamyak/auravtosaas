@@ -3,8 +3,8 @@ Usage:
 {% include 'components/badge.html' with text="Active" color="emerald" icon="check" %}
 {% endcomment %}
 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-{{ color|default:'slate' }}-100 text-{{ color|default:'slate' }}-700 uppercase tracking-widest border border-{{ color|default:'slate' }}-200/50 whitespace-nowrap {% if classes %}{{ classes }}{% endif %}">
-    {% if icon %}
-        <i class="fa-solid fa-{{ icon }} mr-1.5 text-[10px]"></i>
-    {% endif %}
-    {{ text }}
+ {% if icon %}
+ <i class="fa-solid fa-{{ icon }} mr-1.5 text-[10px]"></i>
+ {% endif %}
+ {{ text }}
 </span>

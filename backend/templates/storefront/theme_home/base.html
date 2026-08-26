@@ -4,9 +4,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- AIO SEO META TAGS -->
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!-- AIO SEO META TAGS -->
 <title>{% if product and product.seo_title %}{{ product.seo_title }}{% elif brand and brand.seo_title %}{{ brand.seo_title }}{% else %}{{ brand.name }}{% endif %}</title>
 <meta name="description" content="{% if product and product.seo_description %}{{ product.seo_description }}{% elif brand and brand.seo_description %}{{ brand.seo_description }}{% else %}{{ brand.description|default:'' }}{% endif %}">
 <meta name="keywords" content="{% if product and product.seo_keywords %}{{ product.seo_keywords }}{% elif brand and brand.seo_keywords %}{{ brand.seo_keywords }}{% endif %}">
@@ -15,230 +15,230 @@
 <meta property="og:image" content="{% if product and product.seo_og_image %}{{ product.seo_og_image.url }}{% elif brand and brand.seo_og_image %}{{ brand.seo_og_image.url }}{% elif brand and brand.logo %}{{ brand.logo.url }}{% endif %}">
 <meta name="twitter:card" content="summary_large_image">
 <!-- END SEO META TAGS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'hab-wood': '#4a3b32',
-                        'hab-sand': '#f5f2eb',
-                        'hab-stone': '#8c877d',
-                        'hab-white': '#fdfcfb',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Outfit', sans-serif; background-color: #fdfcfb; color: #4a3b32; }
-        .font-serif { font-family: 'DM Serif Display', serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(74, 59, 50, 0.1); }
-    </style>
+ <script src="https://cdn.tailwindcss.com"></script>
+ <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+ <script>
+ tailwind.config = {
+ theme: {
+ extend: {
+ colors: {
+ 'hab-wood': '#4a3b32',
+ 'hab-sand': '#f5f2eb',
+ 'hab-stone': '#8c877d',
+ 'hab-white': '#fdfcfb',
+ }
+ }
+ }
+ }
+ </script>
+ <style>
+ body { font-family: 'Outfit', sans-serif; background-color: #fdfcfb; color: #4a3b32; }
+ .font-serif { font-family: 'DM Serif Display', serif; }
+ .no-scrollbar::-webkit-scrollbar { display: none; }
+ .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+ .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+ .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(74, 59, 50, 0.1); }
+ </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
 
 
-    <!-- Header -->
-    <header class="bg-hab-white border-b border-[#e5e0d8] sticky top-0 z-50">
+ <!-- Header -->
+ <header class="bg-hab-white border-b border-[#e5e0d8] sticky top-0 z-50">
 <div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
-    
-    <!-- Navigation Links -->
-    <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
-    </nav>
+ 
+ <!-- Navigation Links -->
+ <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+ </nav>
 
-    <!-- Logo -->
-    <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
-        {% if brand.logo %}
-            <a href="{% url 'storefront' brand.slug %}" class="inline-block">
-                <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
-            </a>
-        {% else %}
-            <a class="inline-block" href="{% url 'storefront' brand.slug %}">
-                <span class="text-3xl font-serif tracking-tight text-hab-wood">{{ brand.name }}</span>
-            </a>
-        {% endif %}
-    </div>
+ <!-- Logo -->
+ <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
+ {% if brand.logo %}
+ <a href="{% url 'storefront' brand.slug %}" class="inline-block">
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
+ </a>
+ {% else %}
+ <a class="inline-block" href="{% url 'storefront' brand.slug %}">
+ <span class="text-3xl font-serif tracking-tight text-hab-wood">{{ brand.name }}</span>
+ </a>
+ {% endif %}
+ </div>
 
-    <!-- Right Icons -->
-    <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
-        <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
-            <i class="fa-solid fa-bars text-lg"></i>
-        </button>
-        <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
-            <i class="fa-solid fa-magnifying-glass text-lg"></i>
-        </button>
-        <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
-            <i class="fa-regular fa-user text-lg"></i>
-        </a>
-        <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
-            <i class="fa-solid fa-bag-shopping text-lg"></i>
-            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
-        </button>
-    </div>
+ <!-- Right Icons -->
+ <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
+ <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
+ <i class="fa-solid fa-bars text-lg"></i>
+ </button>
+ <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
+ <i class="fa-solid fa-magnifying-glass text-lg"></i>
+ </button>
+ <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
+ <i class="fa-regular fa-user text-lg"></i>
+ </a>
+ <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
+ <i class="fa-solid fa-bag-shopping text-lg"></i>
+ <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
+ </button>
+ </div>
 
 </div>
 </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow">
-        {% block content %}{% endblock %}
-    </main>
+ <!-- Main Content -->
+ <main class="flex-grow">
+ {% block content %}{% endblock %}
+ </main>
 
-    <!-- Footer -->
-    <footer class="bg-hab-wood text-hab-sand pt-20 pb-10 mt-auto">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div class="md:col-span-1">
-                {% if brand.logo %}
-                    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 object-contain mb-6 filter invert opacity-90">
-                {% else %}
-                    {% if brand.logo %}
-    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+ <!-- Footer -->
+ <footer class="bg-hab-wood text-hab-sand pt-20 pb-10 mt-auto">
+ <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+ <div class="md:col-span-1">
+ {% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 object-contain mb-6 filter invert opacity-90">
+ {% else %}
+ {% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
 {% else %}
-    <h3 class="text-3xl font-serif mb-6 text-white">{{ brand.name }}</h3>
+ <h3 class="text-3xl font-serif mb-6 text-white">{{ brand.name }}</h3>
 {% endif %}
-                {% endif %}
-                {% if brand.description %}
-                    <p class="text-hab-sand/70 text-sm leading-relaxed mb-6">{{ brand.description }}</p>
-                {% endif %}
-                <div class="flex space-x-4">
-                    {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
-                    {% if brand.pinterest_url %}<a href="{{ brand.pinterest_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>{% endif %}
-                    {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
-                </div>
-            </div>
-            
-            <div>
-                <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Categories</h4>
-                <ul class="space-y-3">
-                    {% for category in categories %}
-                        <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">{{ category.name }}</a></li>
-                    {% empty %}
-                        <li><span class="text-hab-sand/70 text-sm">All Products</span></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            
-            <div>
-                <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Collections</h4>
-                <ul class="space-y-3">
-                    {% for collection in collections %}
-                        <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">{{ collection.name }}</a></li>
-                    {% empty %}
-                        <li><span class="text-hab-sand/70 text-sm">Main Collection</span></li>
-                    {% endfor %}
-                </ul>
-            </div>
+ {% endif %}
+ {% if brand.description %}
+ <p class="text-hab-sand/70 text-sm leading-relaxed mb-6">{{ brand.description }}</p>
+ {% endif %}
+ <div class="flex space-x-4">
+ {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+ {% if brand.pinterest_url %}<a href="{{ brand.pinterest_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
+ </div>
+ </div>
+ 
+ <div>
+ <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Categories</h4>
+ <ul class="space-y-3">
+ {% for category in categories %}
+ <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">{{ category.name }}</a></li>
+ {% empty %}
+ <li><span class="text-hab-sand/70 text-sm">All Products</span></li>
+ {% endfor %}
+ </ul>
+ </div>
+ 
+ <div>
+ <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Collections</h4>
+ <ul class="space-y-3">
+ {% for collection in collections %}
+ <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">{{ collection.name }}</a></li>
+ {% empty %}
+ <li><span class="text-hab-sand/70 text-sm">Main Collection</span></li>
+ {% endfor %}
+ </ul>
+ </div>
 
-            <div>
-                <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Contact</h4>
-                <ul class="space-y-3">
-                    {% if brand.contact_email %}
-                    <li><a href="mailto:{{ brand.contact_email }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">Email Us</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-        
-        <div class="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-hab-sand/50">
-            <p>&copy; {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
-            <p class="mt-4 md:mt-0">Powered by Aura</p>
-        </div>
-    
-        <div class="max-w-7xl mx-auto px-6 pb-8">
-            <div class="text-center mb-6">
-                <h4 class="text-sm font-medium uppercase tracking-widest text-stone-700 mb-2">Stay Inspired</h4>
-                <p class="text-stone-400 text-sm">Design ideas and deals in your inbox.</p>
-            </div>
-            <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border border-stone-300 rounded-full overflow-hidden">
-                <input type="email" name="email" placeholder="Your email address" required class="flex-1 px-5 py-3 bg-transparent outline-none text-sm text-stone-800 placeholder-stone-400">
-                <button type="submit" class="px-6 py-3 bg-stone-800 text-white text-sm font-medium hover:bg-stone-700 transition-colors">Subscribe</button>
-            </form>
-        </div>
+ <div>
+ <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Contact</h4>
+ <ul class="space-y-3">
+ {% if brand.contact_email %}
+ <li><a href="mailto:{{ brand.contact_email }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">Email Us</a></li>
+ {% endif %}
+ </ul>
+ </div>
+ </div>
+ 
+ <div class="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-hab-sand/50">
+ <p>&copy; {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
+ <p class="mt-4 md:mt-0">Powered by Aura</p>
+ </div>
+ 
+ <div class="max-w-7xl mx-auto px-6 pb-8">
+ <div class="text-center mb-6">
+ <h4 class="text-sm font-medium uppercase tracking-widest text-stone-700 mb-2">Stay Inspired</h4>
+ <p class="text-stone-400 text-sm">Design ideas and deals in your inbox.</p>
+ </div>
+ <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border border-stone-300 rounded-full overflow-hidden">
+ <input type="email" name="email" placeholder="Your email address" required class="flex-1 px-5 py-3 bg-transparent outline-none text-sm text-stone-800 placeholder-stone-400">
+ <button type="submit" class="px-6 py-3 bg-stone-800 text-white text-sm font-medium hover:bg-stone-700 transition-colors">Subscribe</button>
+ </form>
+ </div>
 
-    </footer>
+ </footer>
 
-    {% if whatsapp_addon and whatsapp_addon.is_active %}
-    <a href="https://wa.me/{{ whatsapp_addon.whatsapp_number|urlencode }}?text={% if whatsapp_message %}{{ whatsapp_message|urlencode }}{% else %}{{ whatsapp_addon.whatsapp_instructions|urlencode }}{% endif %}" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-[#128C7E] hover:scale-110 transition-all z-50">
-        <i class="fa-brands fa-whatsapp text-3xl"></i>
-    </a>
-    {% endif %}
-    {% block extra_modals %}{% endblock %}
-    
+ {% if whatsapp_addon and whatsapp_addon.is_active %}
+ <a href="https://wa.me/{{ whatsapp_addon.whatsapp_number|urlencode }}?text={% if whatsapp_message %}{{ whatsapp_message|urlencode }}{% else %}{{ whatsapp_addon.whatsapp_instructions|urlencode }}{% endif %}" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-[#128C7E] hover:scale-110 transition-all z-50">
+ <i class="fa-brands fa-whatsapp text-3xl"></i>
+ </a>
+ {% endif %}
+ {% block extra_modals %}{% endblock %}
+ 
 
 <!-- Newsletter Subscribe JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('newsletter-subscribe-form');
-    if (!form) return;
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const emailInput = form.querySelector('input[type="email"]');
-        const email = emailInput.value.trim();
-        if (!email) return;
-        const btn = form.querySelector('button[type="submit"]');
-        const origHTML = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-        btn.disabled = true;
-        fetch(form.action, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'email=' + encodeURIComponent(email)
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (typeof showToast === 'function') {
-                showToast(data.message, data.success ? 'success' : 'error');
-            } else {
-                alert(data.message);
-            }
-            if (data.success) emailInput.value = '';
-        })
-        .catch(() => {
-            if (typeof showToast === 'function') {
-                showToast('Something went wrong. Please try again.', 'error');
-            }
-        })
-        .finally(() => {
-            btn.innerHTML = origHTML;
-            btn.disabled = false;
-        });
-    });
+ const form = document.getElementById('newsletter-subscribe-form');
+ if (!form) return;
+ form.addEventListener('submit', function(e) {
+ e.preventDefault();
+ const emailInput = form.querySelector('input[type="email"]');
+ const email = emailInput.value.trim();
+ if (!email) return;
+ const btn = form.querySelector('button[type="submit"]');
+ const origHTML = btn.innerHTML;
+ btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+ btn.disabled = true;
+ fetch(form.action, {
+ method: 'POST',
+ headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+ body: 'email=' + encodeURIComponent(email)
+ })
+ .then(r => r.json())
+ .then(data => {
+ if (typeof showToast === 'function') {
+ showToast(data.message, data.success ? 'success' : 'error');
+ } else {
+ alert(data.message);
+ }
+ if (data.success) emailInput.value = '';
+ })
+ .catch(() => {
+ if (typeof showToast === 'function') {
+ showToast('Something went wrong. Please try again.', 'error');
+ }
+ })
+ .finally(() => {
+ btn.innerHTML = origHTML;
+ btn.disabled = false;
+ });
+ });
 });
 </script>
 
-    {% render_brand_analytics brand %}
+ {% render_brand_analytics brand %}
 
 <!-- Mobile Menu Modal -->
 <div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
-    <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-    <div @click.stop="" class="relative w-64 max-w-sm bg-white h-full shadow-2xl transform transition-all flex flex-col"
-         x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
-         x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
-        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-            <span class="font-bold text-lg text-black">Menu</span>
-            <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-        </div>
-        <div class="p-6 flex flex-col space-y-6 text-black flex-1 overflow-y-auto">
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
-        </div>
-    </div>
+ <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+ <div @click.stop="" class="relative w-64 max-w-sm bg-theme-bg-surface h-full shadow-2xl transform transition-all flex flex-col"
+ x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
+ x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
+ <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+ <span class="font-bold text-lg text-black">Menu</span>
+ <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+ <i class="fa-solid fa-xmark text-xl"></i>
+ </button>
+ </div>
+ <div class="p-6 flex flex-col space-y-6 text-black flex-1 overflow-y-auto">
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+ </div>
+ </div>
 </div>
 </body>
 </html>

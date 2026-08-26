@@ -6,17 +6,17 @@
 <p>Great news! Your <strong>{{ brand.name }}</strong> brand subscription has been successfully upgraded to the <strong>{{ subscription.plan.name }}</strong> plan.</p>
 
 <div style="background-color: #f8fafc; border-radius: 8px; padding: 20px; margin: 24px 0;">
-    <h3 style="margin-top: 0;">Plan Details</h3>
-    <ul style="margin-bottom: 0; padding-left: 20px;">
-        <li><strong>Plan:</strong> {{ subscription.plan.name }}</li>
-        <li><strong>Status:</strong> Active</li>
-        <li><strong>Next Billing Date:</strong> {{ subscription.current_period_end|date:"F j, Y" }}</li>
-    </ul>
+ <h3 style="margin-top: 0;">Plan Details</h3>
+ <ul style="margin-bottom: 0; padding-left: 20px;">
+ <li><strong>Plan:</strong> {{ subscription.plan.name }}</li>
+ <li><strong>Status:</strong> Active</li>
+ <li><strong>Next Billing Date:</strong> {{ subscription.current_period_end|date:"F j, Y" }}</li>
+ </ul>
 </div>
 
 <p>You now have access to all the features included in your new tier. Head over to your dashboard to start utilizing them.</p>
 
 <div style="text-align: center; margin-top: 30px;">
-    <a href="{{ platform_settings.site_url|default:'http://localhost:8000' }}/dashboard/settings/billing/" class="button">View Billing Details</a>
+ <a href="{{ platform_settings.site_url|default:'http://localhost:8000' }}/dashboard/settings/billing/" class="button">View Billing Details</a>
 </div>
 {% endblock %}

@@ -2,475 +2,435 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA. Dashboard | {% block title %}Overview{% endblock %}</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="{% static 'js/tailwind.config.js' %}"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
-    
-    <!-- Google Fonts: Plus Jakarta Sans for a premium modern look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f8fafc; /* Slate-50 */
-        }
-        
-        /* Custom Scrollbar for a polished feel */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        .sidebar-link { 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-            border-left: 3px solid transparent;
-        }
-        .sidebar-link:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-        }
-        .sidebar-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border-left: 3px solid #6366f1; /* Indigo-500 */
-            font-weight: 600;
-        }
-    </style>
-    <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    </script>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AURA. Dashboard | {% block title %}Overview{% endblock %}</title>
+ 
+ <!-- Tailwind CSS -->
+ <script src="{% static 'js/tailwind.config.js' %}"></script>
+ <script src="https://cdn.tailwindcss.com"></script>
+ <link rel="stylesheet" href="{% static 'css/app.css' %}">
+ 
+ <!-- Google Fonts: Plus Jakarta Sans for a premium modern look -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+ 
+ <!-- FontAwesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <!-- Alpine.js -->
+ <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+ 
+ <style>
+ body { 
+ font-family: 'Plus Jakarta Sans', sans-serif; 
+ background-color: #f8fafc; /* Slate-50 */
+ }
+ 
+ /* Custom Scrollbar for a polished feel */
+ ::-webkit-scrollbar { width: 6px; height: 6px; }
+ ::-webkit-scrollbar-track { background: transparent; }
+ ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+ ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+ 
+ .sidebar-link { 
+ transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+ border-left: 3px solid transparent;
+ }
+ .sidebar-link:hover {
+ background-color: rgba(255, 255, 255, 0.05);
+ color: #ffffff;
+ }
+ .sidebar-link.active {
+ background-color: rgba(255, 255, 255, 0.1);
+ color: #ffffff;
+ border-left: 3px solid #6366f1; /* Indigo-500 */
+ font-weight: 600;
+ }
+ </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-800/50/80 text-slate-800 dark:text-slate-300 antialiased selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300" x-data="{ sidebarOpen: false }">
+<body class="bg-theme-bg-base dark:bg-slate-800/50/80 text-theme-text-base antialiased selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300" x-data="{ sidebarOpen: false }">
 <div class="flex h-screen overflow-hidden w-full relative">
 
-    <!-- Mobile sidebar overlay -->
-    <div x-show="sidebarOpen" class="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm md:hidden" 
-         x-transition:enter="transition-opacity ease-linear duration-300"
-         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-         x-transition:leave="transition-opacity ease-linear duration-300"
-         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-         @click="sidebarOpen = false" style="display: none;"></div>
+ <!-- Mobile sidebar overlay -->
+ <div x-show="sidebarOpen" class="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm md:hidden" 
+ x-transition:enter="transition-opacity ease-linear duration-300"
+ x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+ x-transition:leave="transition-opacity ease-linear duration-300"
+ x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+ @click="sidebarOpen = false" style="display: none;"></div>
 
-    <!-- Premium Dark Sidebar -->
-    <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 flex-shrink-0 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex"
-           :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
-        
-        <!-- Mobile Close Button -->
-        <button @click="sidebarOpen = false" class="md:hidden absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
-            <i class="fa-solid fa-xmark text-2xl"></i>
-        </button>
-        
-        <!-- Logo Area -->
-        <div class="h-20 flex items-center px-6 border-b border-slate-800/50">
-            <a href="{% url 'index' %}" class="flex items-center space-x-2 transition-transform hover:scale-105">
-                <span class="text-2xl font-extrabold tracking-tighter">
-                    <span class="text-white">AU</span><span class="text-indigo-500">RA.</span>
-                </span>
-            </a>
-        </div>
+ <!-- Premium Dark Sidebar -->
+ <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 flex-shrink-0 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex"
+ :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
+ 
+ <!-- Mobile Close Button -->
+ <button @click="sidebarOpen = false" class="md:hidden absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+ <i class="fa-solid fa-xmark text-2xl"></i>
+ </button>
+ 
+ <!-- Logo Area -->
+ <div class="h-20 flex items-center px-6 border-b border-slate-800/50">
+ <a href="{% url 'index' %}" class="flex items-center space-x-2 transition-transform hover:scale-105">
+ <span class="text-2xl font-extrabold tracking-tighter">
+ <span class="text-white">AU</span><span class="text-indigo-500">RA.</span>
+ </span>
+ </a>
+ </div>
 
-        <!-- Navigation -->
-        <nav class="flex-1 overflow-y-auto py-6 space-y-1">
-            {% if user.is_superuser %}
-            <div class="px-6 mb-2 mt-2 text-xs font-bold text-slate-500 uppercase tracking-widest">System</div>
-            <a href="/admin/" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group">
-                <i class="fa-solid fa-shield-halved w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors"></i> Admin Panel
-            </a>
-            <div class="my-6 border-t border-slate-800/50 mx-4"></div>
-            {% endif %}
+ <!-- Navigation -->
+ <nav class="flex-1 overflow-y-auto py-6 space-y-1">
+ {% if user.is_superuser %}
+ <div class="px-6 mb-2 mt-2 text-xs font-bold text-theme-text-muted uppercase tracking-widest">System</div>
+ <a href="/admin/" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group">
+ <i class="fa-solid fa-shield-halved w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors"></i> Admin Panel
+ </a>
+ <div class="my-6 border-t border-slate-800/50 mx-4"></div>
+ {% endif %}
 
-            <div class="px-6 mb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Analytics</div>
-            <a href="{% url 'dashboard' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                <i class="fa-solid fa-chart-pie w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'dashboard' %}text-indigo-400{% endif %}"></i> Overview
-            </a>
-            <a href="{% url 'finance' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'finance' %}active{% endif %}">
-                <i class="fa-solid fa-wallet w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'finance' %}text-indigo-400{% endif %}"></i> Finance
-            </a>
-            <a href="{% url 'reports' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
-                <i class="fa-solid fa-file-invoice w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'reports' %}text-indigo-400{% endif %}"></i> Reports
-            </a>
+ <div class="px-6 mb-2 text-xs font-bold text-theme-text-muted uppercase tracking-widest">Analytics</div>
+ <a href="{% url 'dashboard' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+ <i class="fa-solid fa-chart-pie w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'dashboard' %}text-indigo-400{% endif %}"></i> Overview
+ </a>
+ <a href="{% url 'finance' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'finance' %}active{% endif %}">
+ <i class="fa-solid fa-wallet w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'finance' %}text-indigo-400{% endif %}"></i> Finance
+ </a>
+ <a href="{% url 'reports' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
+ <i class="fa-solid fa-file-invoice w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'reports' %}text-indigo-400{% endif %}"></i> Reports
+ </a>
 
-            <div class="px-6 mt-8 mb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Store</div>
-            <a href="{% url 'manage_products' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'product' in request.resolver_match.url_name or 'variant' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-box-open w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'product' in request.resolver_match.url_name or 'variant' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Catalog
-            </a>
-            <a href="{% url 'manage_collections' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'collection' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-layer-group w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'collection' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Collections
-            </a>
-            <a href="{% url 'catalog_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'catalog_settings' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-tags w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'catalog_settings' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Catalog Settings
-            </a>
-            <a href="{% url 'manage_orders' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'order' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-cart-shopping w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'order' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Orders
-            </a>
-            <a href="{% url 'returns_list' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'returns' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-rotate-left w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'returns' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Returns & Exchanges
-            </a>
-            <a href="{% url 'abandoned_carts' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'abandoned' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-cart-arrow-down w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'abandoned' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Abandoned Carts
-            </a>
-            <a href="{% url 'manage_customers' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'customer' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-users w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'customer' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Customers
-            </a>
-            <a href="{% url 'pos_terminal' %}" target="_blank" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group hover:text-emerald-400">
-                <i class="fa-solid fa-cash-register w-6 text-center mr-3 text-slate-500 group-hover:text-emerald-400 transition-colors"></i> Point of Sale (POS) <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-xs text-slate-600"></i>
-            </a>
-            <a href="{% url 'manage_warehouses' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'warehouse' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-warehouse w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'warehouse' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Warehouses
-            </a>
-            <a href="{% url 'shipping_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'shipping' in request.resolver_match.url_name %}active{% endif %}">
-                <i class="fa-solid fa-truck w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'shipping' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Shipping
-            </a>
-            <a href="{% url 'media_gallery' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'media_gallery' %}active{% endif %}">
-                <i class="fa-solid fa-images w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'media_gallery' %}text-indigo-400{% endif %}"></i> Media Gallery
-            </a>
-            
-            <div x-data="{ marketingOpen: {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}true{% else %}false{% endif %} }">
-                <button @click="marketingOpen = !marketingOpen" class="w-full text-left sidebar-link flex items-center justify-between px-6 py-3 text-sm text-slate-400 group {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}active{% endif %}">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-bullhorn w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Marketing
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" :class="marketingOpen ? 'rotate-180' : ''"></i>
-                </button>
-                <div x-show="marketingOpen" x-transition.opacity class="bg-slate-900/30 py-2 border-y border-slate-800/30">
-                    <a href="{% url 'popup_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'popup' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
-                        Popup Banners
-                    </a>
-                    <a href="{% url 'coupon_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'coupon' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
-                        Coupons
-                    </a>
-                    <a href="{% url 'subscriber_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'subscriber' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
-                        Subscribers
-                    </a>
-                    <a href="{% url 'campaign_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'campaign' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
-                        Email Campaigns
-                    </a>
-                </div>
-            </div>
+ <div class="px-6 mt-8 mb-2 text-xs font-bold text-theme-text-muted uppercase tracking-widest">Store</div>
+ <a href="{% url 'manage_products' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'product' in request.resolver_match.url_name or 'variant' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-box-open w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'product' in request.resolver_match.url_name or 'variant' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Catalog
+ </a>
+ <a href="{% url 'manage_collections' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'collection' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-layer-group w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'collection' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Collections
+ </a>
+ <a href="{% url 'catalog_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'catalog_settings' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-tags w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'catalog_settings' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Catalog Settings
+ </a>
+ <a href="{% url 'manage_orders' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'order' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-cart-shopping w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'order' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Orders
+ </a>
+ <a href="{% url 'returns_list' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'returns' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-rotate-left w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'returns' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Returns & Exchanges
+ </a>
+ <a href="{% url 'abandoned_carts' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'abandoned' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-cart-arrow-down w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'abandoned' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Abandoned Carts
+ </a>
+ <a href="{% url 'manage_customers' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'customer' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-users w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'customer' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Customers
+ </a>
+ <a href="{% url 'pos_terminal' %}" target="_blank" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group hover:text-emerald-400">
+ <i class="fa-solid fa-cash-register w-6 text-center mr-3 text-theme-text-muted group-hover:text-emerald-400 transition-colors"></i> Point of Sale (POS) <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-xs text-theme-text-muted"></i>
+ </a>
+ <a href="{% url 'manage_warehouses' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'warehouse' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-warehouse w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'warehouse' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Warehouses
+ </a>
+ <a href="{% url 'shipping_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'shipping' in request.resolver_match.url_name %}active{% endif %}">
+ <i class="fa-solid fa-truck w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'shipping' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Shipping
+ </a>
+ <a href="{% url 'media_gallery' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'media_gallery' %}active{% endif %}">
+ <i class="fa-solid fa-images w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'media_gallery' %}text-indigo-400{% endif %}"></i> Media Gallery
+ </a>
+ 
+ <div x-data="{ marketingOpen: {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}true{% else %}false{% endif %} }">
+ <button @click="marketingOpen = !marketingOpen" class="w-full text-left sidebar-link flex items-center justify-between px-6 py-3 text-sm text-slate-400 group {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}active{% endif %}">
+ <div class="flex items-center">
+ <i class="fa-solid fa-bullhorn w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Marketing
+ </div>
+ <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" :class="marketingOpen ? 'rotate-180' : ''"></i>
+ </button>
+ <div x-show="marketingOpen" x-transition.opacity class="bg-slate-900/30 py-2 border-y border-slate-800/30">
+ <a href="{% url 'popup_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'popup' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
+ Popup Banners
+ </a>
+ <a href="{% url 'coupon_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'coupon' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
+ Coupons
+ </a>
+ <a href="{% url 'subscriber_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'subscriber' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
+ Subscribers
+ </a>
+ <a href="{% url 'campaign_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'campaign' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
+ Email Campaigns
+ </a>
+ </div>
+ </div>
 
-            <div class="px-6 mt-8 mb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Configuration</div>
-            <a href="{% url 'brand_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'brand_settings' %}active{% endif %}">
-                <i class="fa-solid fa-sliders w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'brand_settings' %}text-indigo-400{% endif %}"></i> Brand Settings
-            </a>
-            <a href="{% url 'team_management' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'team_management' %}active{% endif %}">
-                <i class="fa-solid fa-users w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'team_management' %}text-indigo-400{% endif %}"></i> Team Management
-            </a>
-            <a href="{% url 'owner_billing' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'owner_billing' %}active{% endif %}">
-                <i class="fa-solid fa-file-invoice-dollar w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'owner_billing' %}text-indigo-400{% endif %}"></i> Billing & Subscriptions
-            </a>
-            <a href="{% url 'theme_gallery' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'theme_gallery' %}active{% endif %}">
-                <i class="fa-solid fa-palette w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'theme_gallery' %}text-indigo-400{% endif %}"></i> Theme Gallery
-            </a>
-            <a href="{% url 'addons' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'addons' %}active{% endif %}">
-                <i class="fa-solid fa-puzzle-piece w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'addons' %}text-indigo-400{% endif %}"></i> Add-ons
-            </a>
-            <a href="{% url 'developer_api' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'developer_api' %}active{% endif %}">
-                <i class="fa-solid fa-code w-6 text-center mr-3 text-slate-500 group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'developer_api' %}text-indigo-400{% endif %}"></i> Developer API
-            </a>
-        </nav>
+ <div class="px-6 mt-8 mb-2 text-xs font-bold text-theme-text-muted uppercase tracking-widest">Configuration</div>
+ <a href="{% url 'brand_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'brand_settings' %}active{% endif %}">
+ <i class="fa-solid fa-sliders w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'brand_settings' %}text-indigo-400{% endif %}"></i> Brand Settings
+ </a>
+ <a href="{% url 'team_management' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'team_management' %}active{% endif %}">
+ <i class="fa-solid fa-users w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'team_management' %}text-indigo-400{% endif %}"></i> Team Management
+ </a>
+ <a href="{% url 'owner_billing' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'owner_billing' %}active{% endif %}">
+ <i class="fa-solid fa-file-invoice-dollar w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'owner_billing' %}text-indigo-400{% endif %}"></i> Billing & Subscriptions
+ </a>
+ <a href="{% url 'theme_gallery' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'theme_gallery' %}active{% endif %}">
+ <i class="fa-solid fa-palette w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'theme_gallery' %}text-indigo-400{% endif %}"></i> Theme Gallery
+ </a>
+ <a href="{% url 'addons' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'addons' %}active{% endif %}">
+ <i class="fa-solid fa-puzzle-piece w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'addons' %}text-indigo-400{% endif %}"></i> Add-ons
+ </a>
+ <a href="{% url 'developer_api' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'developer_api' %}active{% endif %}">
+ <i class="fa-solid fa-code w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'developer_api' %}text-indigo-400{% endif %}"></i> Developer API
+ </a>
+ </nav>
 
-        <!-- User Area -->
-        <div class="p-5 border-t border-slate-800/50 bg-slate-900/50">
-            <div class="flex items-center group cursor-pointer">
-                {% if request.user.owned_brand and request.user.owned_brand.logo %}
-                <img src="{{ request.user.owned_brand.logo.url }}" alt="Brand Logo" class="w-10 h-10 rounded-xl object-cover shadow-lg border border-slate-700">
-                {% else %}
-                <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-lg border border-slate-700 transition-all">
-                    {{ user.first_name|default:user.username|make_list|first|upper }}
-                </div>
-                {% endif %}
-                <div class="ml-3 flex-1 overflow-hidden">
-                    <p class="text-sm font-semibold text-white truncate">{{ user.get_full_name|default:user.username }}</p>
-                    <a href="{% url 'logout' %}" class="text-xs font-medium text-slate-400 hover:text-indigo-400 transition-colors block mt-0.5">Sign Out <i class="fa-solid fa-arrow-right-from-bracket ml-1 text-[10px]"></i></a>
-                </div>
-            </div>
-        </div>
-    </aside>
+ <!-- User Area -->
+ <div class="p-5 border-t border-slate-800/50 bg-slate-900/50">
+ <div class="flex items-center group cursor-pointer">
+ {% if request.user.owned_brand and request.user.owned_brand.logo %}
+ <img src="{{ request.user.owned_brand.logo.url }}" alt="Brand Logo" class="w-10 h-10 rounded-xl object-cover shadow-lg border border-slate-700">
+ {% else %}
+ <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-lg border border-slate-700 transition-all">
+ {{ user.first_name|default:user.username|make_list|first|upper }}
+ </div>
+ {% endif %}
+ <div class="ml-3 flex-1 overflow-hidden">
+ <p class="text-sm font-semibold text-white truncate">{{ user.get_full_name|default:user.username }}</p>
+ <a href="{% url 'logout' %}" class="text-xs font-medium text-slate-400 hover:text-indigo-400 transition-colors block mt-0.5">Sign Out <i class="fa-solid fa-arrow-right-from-bracket ml-1 text-[10px]"></i></a>
+ </div>
+ </div>
+ </div>
+ </aside>
 
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden relative">
-        
-        <!-- Mobile Header -->
-        <header class="md:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md h-16 border-b border-slate-200 dark:border-slate-700/50 flex items-center justify-between px-4 z-30 sticky top-0 flex-shrink-0">
-            <a href="{% url 'index' %}" class="flex items-center space-x-2">
-                <span class="text-xl font-extrabold tracking-tighter">
-                    <span class="text-slate-900 dark:text-white">AU</span><span class="text-indigo-600">RA.</span>
-                </span>
-            </a>
-            <div class="flex items-center space-x-2">
-                <button id="theme-toggle-mobile" type="button" class="text-slate-500 hover:text-indigo-600 transition-colors p-2" title="Toggle Theme">
-                    <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
-                    <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
-                </button>
-                <button @click="sidebarOpen = true" class="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors p-2">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-            </div>
-        </header>
+ <!-- Main Content -->
+ <div class="flex-1 flex flex-col overflow-hidden relative">
+ 
+ <!-- Mobile Header -->
+ <header class="md:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md h-16 border-b border-theme-border-base flex items-center justify-between px-4 z-30 sticky top-0 flex-shrink-0">
+ <a href="{% url 'index' %}" class="flex items-center space-x-2">
+ <span class="text-xl font-extrabold tracking-tighter">
+ <span class="text-theme-text-base dark:text-white">AU</span><span class="text-indigo-600">RA.</span>
+ </span>
+ </a>
+ <div class="flex items-center space-x-2">
+ <button id="theme-toggle-mobile" type="button" class="text-theme-text-muted hover:text-indigo-600 transition-colors p-2" title="Toggle Theme">
+ <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
+ <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
+ </button>
+ <button @click="sidebarOpen = true" class="text-theme-text-muted hover:text-slate-900 dark:hover:text-white transition-colors p-2">
+ <i class="fa-solid fa-bars text-xl"></i>
+ </button>
+ </div>
+ </header>
 
-        <!-- Top Navigation Bar (Desktop) -->
-        <header class="hidden md:flex h-20 items-center justify-between px-8 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-[40]">
-            <!-- Global Search Form -->
-            <form action="{% url 'global_search' %}" method="GET" class="flex-1 max-w-lg relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
-                </div>
-                <input type="text" name="q" id="global-search-input" required value="{{ request.GET.q|default:'' }}" class="block w-full pl-11 pr-4 py-2.5 border-transparent bg-slate-100 rounded-2xl text-sm placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all" placeholder="Search orders, products, or customers... (Press '/' to focus)">
-                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded shadow-sm border border-slate-200">/</span>
-                </div>
-            </form>
-            <script>
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-                        e.preventDefault();
-                        document.getElementById('global-search-input').focus();
-                    }
-                });
-            </script>
+ <!-- Top Navigation Bar (Desktop) -->
+ <header class="hidden md:flex h-20 items-center justify-between px-8 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-[40]">
+ <!-- Global Search Form -->
+ <form action="{% url 'global_search' %}" method="GET" class="flex-1 max-w-lg relative group">
+ <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+ <i class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
+ </div>
+ <input type="text" name="q" id="global-search-input" required value="{{ request.GET.q|default:'' }}" class="block w-full pl-11 pr-4 py-2.5 border-transparent bg-slate-100 rounded-2xl text-sm placeholder-theme-input-placeholder focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all" placeholder="Search orders, products, or customers... (Press '/' to focus)">
+ <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+ <span class="text-xs font-bold text-slate-400 bg-theme-bg-surface px-2 py-1 rounded shadow-sm border border-theme-border-base">/</span>
+ </div>
+ </form>
+ <script>
+ document.addEventListener('keydown', function(e) {
+ if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+ e.preventDefault();
+ document.getElementById('global-search-input').focus();
+ }
+ });
+ </script>
 
-            <div class="flex items-center space-x-6 ml-8">
-                
-                <!-- Theme Toggle Button -->
-                <button id="theme-toggle" type="button" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 md:mr-2" title="Toggle Theme">
-                    <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
-                    <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
-                </button>
+ <div class="flex items-center space-x-6 ml-8">
+ 
+ <!-- Theme Toggle Button -->
+ <button id="theme-toggle" type="button" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 md:mr-2" title="Toggle Theme">
+ <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
+ <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
+ </button>
 
-                <!-- Fullscreen Button -->
-                <button onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 hidden md:block" title="Toggle Fullscreen">
-                    <i class="fa-solid fa-expand text-xl"></i>
-                </button>
+ <!-- Fullscreen Button -->
+ <button onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 hidden md:block" title="Toggle Fullscreen">
+ <i class="fa-solid fa-expand text-xl"></i>
+ </button>
 
-                <!-- POS Terminal Button -->
-                <a href="{% url 'pos_terminal' %}" class="hidden md:flex items-center justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-[0_0_15px_rgba(79,70,229,0.3)]">
-                    <i class="fa-solid fa-cash-register mr-2"></i> POS Point of Sale
-                </a>
-                
-                <!-- Quick Actions Dropdown -->
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" @click.away="open = false" class="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 transition-all border border-indigo-100 shadow-sm">
-                        <i class="fa-solid fa-plus text-sm"></i>
-                    </button>
-                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2" class="absolute right-0 mt-3 w-56 rounded-2xl bg-white shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden py-2" style="display: none;">
-                        <div class="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 mb-2">Create New</div>
-                        <a href="{% url 'manage_products' %}?action=add" class="flex items-center px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors">
-                            <i class="fa-solid fa-box-open w-5 text-center mr-3 text-slate-400"></i> Product
-                        </a>
-                        <a href="{% url 'manage_collections' %}?action=add" class="flex items-center px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors">
-                            <i class="fa-solid fa-layer-group w-5 text-center mr-3 text-slate-400"></i> Collection
-                        </a>
-                    </div>
-                </div>
+ <!-- POS Terminal Button -->
+ <a href="{% url 'pos_terminal' %}" class="hidden md:flex items-center justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-[0_0_15px_rgba(79,70,229,0.3)]">
+ <i class="fa-solid fa-cash-register mr-2"></i> POS Point of Sale
+ </a>
+ 
+ <!-- Quick Actions Dropdown -->
+ <div class="relative" x-data="{ open: false }">
+ <button @click="open = !open" @click.away="open = false" class="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 transition-all border border-indigo-100 shadow-sm">
+ <i class="fa-solid fa-plus text-sm"></i>
+ </button>
+ <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2" class="absolute right-0 mt-3 w-56 rounded-2xl bg-theme-bg-surface shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-theme-border-divider overflow-hidden py-2" style="display: none;">
+ <div class="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 mb-2">Create New</div>
+ <a href="{% url 'manage_products' %}?action=add" class="flex items-center px-4 py-2.5 text-sm text-theme-text-muted hover:bg-theme-bg-hover hover:text-indigo-600 transition-colors">
+ <i class="fa-solid fa-box-open w-5 text-center mr-3 text-slate-400"></i> Product
+ </a>
+ <a href="{% url 'manage_collections' %}?action=add" class="flex items-center px-4 py-2.5 text-sm text-theme-text-muted hover:bg-theme-bg-hover hover:text-indigo-600 transition-colors">
+ <i class="fa-solid fa-layer-group w-5 text-center mr-3 text-slate-400"></i> Collection
+ </a>
+ </div>
+ </div>
 
-                <!-- Notifications Dropdown -->
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" @click.away="open = false" class="text-slate-400 hover:text-indigo-600 transition-colors relative p-2">
-                        <i class="fa-regular fa-bell text-xl"></i>
-                        {% if unread_notifications_count > 0 %}
-                        <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 ring-2 ring-white"></span>
-                        </span>
-                        {% endif %}
-                    </button>
-                    
-                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2" class="absolute right-0 mt-3 w-80 rounded-2xl bg-white shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden" style="display: none;">
-                        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                            <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Notifications</h3>
-                            {% if unread_notifications_count > 0 %}
-                            <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 text-xs font-bold">{{ unread_notifications_count }} New</span>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="max-h-80 overflow-y-auto">
-                            {% for notif in unread_notifications %}
-                            <a href="{{ notif.action_url|default:'#' }}" class="block px-5 py-4 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 relative group">
-                                {% if not notif.is_read %}
-                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500"></div>
-                                {% endif %}
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 mt-0.5">
-                                        <i class="{{ notif.icon_class }} text-sm"></i>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{{ notif.title }}</p>
-                                        <p class="text-xs text-slate-500 mt-0.5 line-clamp-2 leading-relaxed">{{ notif.message }}</p>
-                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">{{ notif.created_at|timesince }} ago</p>
-                                    </div>
-                                </div>
-                            </a>
-                            {% empty %}
-                            <div class="p-8 text-center">
-                                <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                                    <i class="fa-solid fa-bell-slash text-slate-300 text-lg"></i>
-                                </div>
-                                <p class="text-sm font-bold text-slate-600">You're all caught up!</p>
-                                <p class="text-xs text-slate-400 mt-1">No new notifications.</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        
-                        <a href="{% url 'notifications' %}" class="block px-5 py-3 text-center text-xs font-bold text-indigo-600 bg-slate-50 hover:bg-slate-100 transition-colors border-t border-slate-100">
-                            View All Notifications
-                        </a>
-                    </div>
-                </div>
-                
-            </div>
-        </header>
+ <!-- Notifications Dropdown -->
+ <div class="relative" x-data="{ open: false }">
+ <button @click="open = !open" @click.away="open = false" class="text-slate-400 hover:text-indigo-600 transition-colors relative p-2">
+ <i class="fa-regular fa-bell text-xl"></i>
+ {% if unread_notifications_count > 0 %}
+ <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
+ <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+ <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 ring-2 ring-white"></span>
+ </span>
+ {% endif %}
+ </button>
+ 
+ <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2" class="absolute right-0 mt-3 w-80 rounded-2xl bg-theme-bg-surface shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-theme-border-divider overflow-hidden" style="display: none;">
+ <div class="px-5 py-4 border-b border-theme-border-divider flex items-center justify-between bg-slate-50/50">
+ <h3 class="text-sm font-extrabold text-theme-text-base tracking-tight">Notifications</h3>
+ {% if unread_notifications_count > 0 %}
+ <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 text-xs font-bold">{{ unread_notifications_count }} New</span>
+ {% endif %}
+ </div>
+ 
+ <div class="max-h-80 overflow-y-auto">
+ {% for notif in unread_notifications %}
+ <a href="{{ notif.action_url|default:'#' }}" class="block px-5 py-4 hover:bg-theme-bg-hover transition-colors border-b border-slate-50 last:border-0 relative group">
+ {% if not notif.is_read %}
+ <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500"></div>
+ {% endif %}
+ <div class="flex items-start">
+ <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 mt-0.5">
+ <i class="{{ notif.icon_class }} text-sm"></i>
+ </div>
+ <div class="ml-3">
+ <p class="text-sm font-bold text-theme-text-base group-hover:text-indigo-600 transition-colors">{{ notif.title }}</p>
+ <p class="text-xs text-theme-text-muted mt-0.5 line-clamp-2 leading-relaxed">{{ notif.message }}</p>
+ <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">{{ notif.created_at|timesince }} ago</p>
+ </div>
+ </div>
+ </a>
+ {% empty %}
+ <div class="p-8 text-center">
+ <div class="w-12 h-12 bg-theme-bg-base rounded-full flex items-center justify-center mx-auto mb-3">
+ <i class="fa-solid fa-bell-slash text-slate-300 text-lg"></i>
+ </div>
+ <p class="text-sm font-bold text-theme-text-muted">You're all caught up!</p>
+ <p class="text-xs text-slate-400 mt-1">No new notifications.</p>
+ </div>
+ {% endfor %}
+ </div>
+ 
+ <a href="{% url 'notifications' %}" class="block px-5 py-3 text-center text-xs font-bold text-indigo-600 bg-theme-bg-base hover:bg-theme-bg-hover transition-colors border-t border-theme-border-divider">
+ View All Notifications
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+ </header>
 
-        <!-- Main Scrollable Area -->
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative z-0">
-            
-            {% include 'components/toast.html' %}
+ <!-- Main Scrollable Area -->
+ <main class="flex-1 overflow-y-auto p-4 md:p-8 relative z-0">
+ 
+ {% include 'components/toast.html' %}
 
-            {% if request.session.impersonator_id %}
-            <div class="mx-auto max-w-7xl animate-fade-in-up mb-6">
-                <div class="bg-indigo-600 rounded-2xl shadow-lg border border-indigo-500 overflow-hidden text-white flex items-center justify-between px-6 py-4">
-                    <div class="flex items-center space-x-3">
-                        <i class="fa-solid fa-user-secret text-2xl text-indigo-200"></i>
-                        <div>
-                            <p class="font-bold">You are impersonating {{ brand.name|default:"a brand owner" }}</p>
-                            <p class="text-sm text-indigo-200">Any actions you take will be logged under this brand.</p>
-                        </div>
-                    </div>
-                    <a href="{% url 'admin:impersonate_revert' %}" class="bg-white text-indigo-600 px-4 py-2 rounded-xl font-bold shadow-sm hover:bg-slate-50 transition-colors">
-                        Revert to Admin
-                    </a>
-                </div>
-            </div>
-            {% endif %}
+ {% if request.session.impersonator_id %}
+ <div class="mx-auto max-w-7xl animate-fade-in-up mb-6">
+ <div class="bg-indigo-600 rounded-2xl shadow-lg border border-indigo-500 overflow-hidden text-white flex items-center justify-between px-6 py-4">
+ <div class="flex items-center space-x-3">
+ <i class="fa-solid fa-user-secret text-2xl text-indigo-200"></i>
+ <div>
+ <p class="font-bold">You are impersonating {{ brand.name|default:"a brand owner" }}</p>
+ <p class="text-sm text-indigo-200">Any actions you take will be logged under this brand.</p>
+ </div>
+ </div>
+ <a href="{% url 'admin:impersonate_revert' %}" class="bg-theme-bg-surface text-indigo-600 px-4 py-2 rounded-xl font-bold shadow-sm hover:bg-theme-bg-hover transition-colors">
+ Revert to Admin
+ </a>
+ </div>
+ </div>
+ {% endif %}
 
-            <div class="mx-auto max-w-7xl animate-fade-in-up">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </main>
+ <div class="mx-auto max-w-7xl animate-fade-in-up">
+ {% block content %}
+ {% endblock %}
+ </div>
+ </main>
 
-        <!-- Modals block: rendered OUTSIDE main to avoid overflow clipping -->
-        {% block extra_modals %}{% endblock %}
-        
-        <!-- Global Confirm Modal -->
-        <div id="confirm-modal" class="relative z-[9999] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <div class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-slate-100">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-rose-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
-                            </div>
-                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                <h3 class="text-lg font-bold leading-6 text-slate-900" id="modal-title">Confirm Action</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-slate-500" id="confirm-message">Are you sure you want to do this?</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-6 sm:mt-6 sm:flex sm:flex-row-reverse">
-                            <button type="button" id="confirm-yes-btn" class="inline-flex w-full justify-center rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:ml-3 sm:w-auto transition-all">Confirm</button>
-                            <button type="button" id="confirm-no-btn" onclick="document.getElementById('confirm-modal').classList.add('hidden')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 sm:mt-0 sm:w-auto transition-all">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+ <!-- Modals block: rendered OUTSIDE main to avoid overflow clipping -->
+ {% block extra_modals %}{% endblock %}
+ 
+ <!-- Global Confirm Modal -->
+ <div id="confirm-modal" class="relative z-[9999] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+ <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"></div>
+ <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+ <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+ <div class="relative transform overflow-hidden rounded-2xl bg-theme-bg-surface p-6 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-theme-border-divider">
+ <div class="sm:flex sm:items-start">
+ <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-rose-100 sm:mx-0 sm:h-10 sm:w-10">
+ <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+ </div>
+ <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+ <h3 class="text-lg font-bold leading-6 text-theme-text-base" id="modal-title">Confirm Action</h3>
+ <div class="mt-2">
+ <p class="text-sm text-theme-text-muted" id="confirm-message">Are you sure you want to do this?</p>
+ </div>
+ </div>
+ </div>
+ <div class="mt-6 sm:mt-6 sm:flex sm:flex-row-reverse">
+ <button type="button" id="confirm-yes-btn" class="inline-flex w-full justify-center rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 sm:ml-3 sm:w-auto transition-all">Confirm</button>
+ <button type="button" id="confirm-no-btn" onclick="document.getElementById('confirm-modal').classList.add('hidden')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-theme-bg-surface px-4 py-2.5 text-sm font-semibold text-theme-text-base shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-theme-bg-hover sm:mt-0 sm:w-auto transition-all">Cancel</button>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    </div>
+ </div>
 
 
-    <!-- Additional Animations CSS -->
-    <style>
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.4s ease-out forwards;
-        }
-    </style>
+ <!-- Additional Animations CSS -->
+ <style>
+ @keyframes fadeInUp {
+ from { opacity: 0; transform: translateY(10px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+ .animate-fade-in-up {
+ animation: fadeInUp 0.4s ease-out forwards;
+ }
+ </style>
 
-    <!-- FontAwesome setup -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+ <!-- FontAwesome setup -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
-    <!-- Alpine JS for Dropdowns and interactive components -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        // Custom Confirm Trigger
-        function confirmAction(event, message) {
-            event.preventDefault();
-            const form = event.currentTarget;
-            const modal = document.getElementById('confirm-modal');
-            const msgEl = document.getElementById('confirm-message');
-            const yesBtn = document.getElementById('confirm-yes-btn');
-            
-            msgEl.textContent = message;
-            modal.classList.remove('hidden');
-            
-            yesBtn.onclick = function() {
-                modal.classList.add('hidden');
-                form.submit();
-            };
-        }
-    </script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function handleThemeToggle() {
-                if (localStorage.theme) {
-                    if (localStorage.theme === 'light') {
-                        document.documentElement.classList.add('dark');
-                        localStorage.theme = 'dark';
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.theme = 'light';
-                    }
-                } else {
-                    if (document.documentElement.classList.contains('dark')) {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.theme = 'light';
-                    } else {
-                        document.documentElement.classList.add('dark');
-                        localStorage.theme = 'dark';
-                    }
-                }
-            }
+ <!-- Alpine JS for Dropdowns and interactive components -->
+ <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+ 
+ <script>
+ // Custom Confirm Trigger
+ function confirmAction(event, message) {
+ event.preventDefault();
+ const form = event.currentTarget;
+ const modal = document.getElementById('confirm-modal');
+ const msgEl = document.getElementById('confirm-message');
+ const yesBtn = document.getElementById('confirm-yes-btn');
+ 
+ msgEl.textContent = message;
+ modal.classList.remove('hidden');
+ 
+ yesBtn.onclick = function() {
+ modal.classList.add('hidden');
+ form.submit();
+ };
+ }
+ </script>
 
-            const desktopToggle = document.getElementById('theme-toggle');
-            if (desktopToggle) {
-                desktopToggle.addEventListener('click', handleThemeToggle);
-            }
 
-            const mobileToggle = document.getElementById('theme-toggle-mobile');
-            if (mobileToggle) {
-                mobileToggle.addEventListener('click', handleThemeToggle);
-            }
-        });
-    </script>
-
-    {% block extra_scripts %}
-    {% endblock %}
-    
-    <script src="{% static 'js/app.js' %}"></script>
+ {% block extra_scripts %}
+ {% endblock %}
+ 
+ <script src="{% static 'js/app.js' %}"></script>
 </div>
 </body>
 </html>

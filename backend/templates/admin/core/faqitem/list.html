@@ -1,42 +1,42 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    {% include "components/breadcrumb.html" with current="FAQ Item Management" %}
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">FAQ Item <span class="text-indigo-600 font-light">Management</span></h1>
-        </div>
-        <a href="{% url 'admin:faqitem_create' %}" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">
-            <i class="fa-solid fa-plus mr-2"></i> Add FAQ Item
-        </a>
-    </div>
-    
-    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200 text-sm font-bold text-slate-600 uppercase tracking-wider">
-                        <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">question</th>
-                        <th class="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    {% for obj in objects %}
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 text-slate-500 font-medium">{{ obj.id }}</td>
-                        <td class="px-6 py-4 text-slate-900 font-bold">{{ obj.question }}</td>
-                        <td class="px-6 py-4 text-right space-x-2">
-                            <a href="{% url 'admin:faqitem_update' obj.pk %}" class="text-indigo-600 hover:text-indigo-800 font-medium bg-indigo-50 px-3 py-1.5 rounded-lg"><i class="fa-solid fa-pen"></i></a>
-                            <a href="{% url 'admin:faqitem_delete' obj.pk %}" class="text-rose-600 hover:text-rose-800 font-medium bg-rose-50 px-3 py-1.5 rounded-lg"><i class="fa-solid fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="3" class="px-6 py-8 text-center text-slate-500">No FAQ Items found.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ {% include "components/breadcrumb.html" with current="FAQ Item Management" %}
+ <div class="flex justify-between items-center mb-8">
+ <div>
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">FAQ Item <span class="text-indigo-600 font-light">Management</span></h1>
+ </div>
+ <a href="{% url 'admin:faqitem_create' %}" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">
+ <i class="fa-solid fa-plus mr-2"></i> Add FAQ Item
+ </a>
+ </div>
+ 
+ <div class="bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm overflow-hidden">
+ <div class="overflow-x-auto">
+ <table class="w-full text-left border-collapse">
+ <thead>
+ <tr class="bg-theme-bg-base border-b border-theme-border-base text-sm font-bold text-theme-text-muted uppercase tracking-wider">
+ <th class="px-6 py-4">ID</th>
+ <th class="px-6 py-4">question</th>
+ <th class="px-6 py-4 text-right">Actions</th>
+ </tr>
+ </thead>
+ <tbody class="divide-y divide-slate-100">
+ {% for obj in objects %}
+ <tr class="hover:bg-theme-bg-hover transition">
+ <td class="px-6 py-4 text-theme-text-muted font-medium">{{ obj.id }}</td>
+ <td class="px-6 py-4 text-theme-text-base font-bold">{{ obj.question }}</td>
+ <td class="px-6 py-4 text-right space-x-2">
+ <a href="{% url 'admin:faqitem_update' obj.pk %}" class="text-indigo-600 hover:text-indigo-800 font-medium bg-indigo-50 px-3 py-1.5 rounded-lg"><i class="fa-solid fa-pen"></i></a>
+ <a href="{% url 'admin:faqitem_delete' obj.pk %}" class="text-rose-600 hover:text-rose-800 font-medium bg-rose-50 px-3 py-1.5 rounded-lg"><i class="fa-solid fa-trash"></i></a>
+ </td>
+ </tr>
+ {% empty %}
+ <tr><td colspan="3" class="px-6 py-8 text-center text-theme-text-muted">No FAQ Items found.</td></tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
 </div>
 {% endblock %}

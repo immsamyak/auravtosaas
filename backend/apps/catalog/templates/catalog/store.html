@@ -2,49 +2,49 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-        <h1 class="text-4xl font-extrabold tracking-tight text-primary sm:text-5xl">{{ brand.name }} Virtual Store</h1>
-        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-            Browse our collection and see exactly how it looks on you.
-        </p>
-    </div>
+ <div class="text-center mb-12">
+ <h1 class="text-4xl font-extrabold tracking-tight text-primary sm:text-5xl">{{ brand.name }} Virtual Store</h1>
+ <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+ Browse our collection and see exactly how it looks on you.
+ </p>
+ </div>
 
-    <!-- Product Grid -->
-    <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-        {% for product in products %}
-            {% for variant in product.variants.all %}
-            <a href="{% url 'try_on' variant.product.brand.slug variant.slug %}" class="group relative bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                <div class="aspect-[4/5] w-full bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-96">
-                    {% if variant.image %}
-                    <img src="{{ variant.image.url }}" alt="{{ product.name }}" class="w-full h-full object-center object-cover sm:w-full sm:h-full">
-                    {% else %}
-                    <div class="w-full h-full flex items-center justify-center text-gray-400">
-                        <i class="fa-solid fa-shirt text-6xl"></i>
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="flex-1 p-4 space-y-2 flex flex-col">
-                    <h3 class="text-sm font-medium text-gray-900">
-                        {{ product.name }}
-                    </h3>
-                    <div class="flex-1 flex flex-col justify-end">
-                        <p class="text-sm italic text-gray-500">{{ variant.color.name }}</p>
-                        <p class="text-base font-medium text-gray-900 mt-2">{{ brand.get_currency_symbol }}{{ product.price }}</p>
-                    </div>
-                </div>
-                <div class="absolute bottom-0 inset-x-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div class="w-full bg-accent text-white py-2 px-4 rounded-md font-semibold flex items-center justify-center space-x-2 shadow-sm">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>Try On Virtually</span>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
-        {% empty %}
-            <div class="col-span-full text-center py-12">
-                <p class="text-gray-500">No products available for {{ brand.name }}.</p>
-            </div>
-        {% endfor %}
-    </div>
+ <!-- Product Grid -->
+ <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+ {% for product in products %}
+ {% for variant in product.variants.all %}
+ <a href="{% url 'try_on' variant.product.brand.slug variant.slug %}" class="group relative bg-theme-bg-surface border border-gray-200 rounded-lg shadow-sm flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
+ <div class="aspect-[4/5] w-full bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-96">
+ {% if variant.image %}
+ <img src="{{ variant.image.url }}" alt="{{ product.name }}" class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center text-gray-400">
+ <i class="fa-solid fa-shirt text-6xl"></i>
+ </div>
+ {% endif %}
+ </div>
+ <div class="flex-1 p-4 space-y-2 flex flex-col">
+ <h3 class="text-sm font-medium text-gray-900">
+ {{ product.name }}
+ </h3>
+ <div class="flex-1 flex flex-col justify-end">
+ <p class="text-sm italic text-gray-500">{{ variant.color.name }}</p>
+ <p class="text-base font-medium text-gray-900 mt-2">{{ brand.get_currency_symbol }}{{ product.price }}</p>
+ </div>
+ </div>
+ <div class="absolute bottom-0 inset-x-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+ <div class="w-full bg-accent text-white py-2 px-4 rounded-md font-semibold flex items-center justify-center space-x-2 shadow-sm">
+ <i class="fa-solid fa-wand-magic-sparkles"></i>
+ <span>Try On Virtually</span>
+ </div>
+ </div>
+ </a>
+ {% endfor %}
+ {% empty %}
+ <div class="col-span-full text-center py-12">
+ <p class="text-gray-500">No products available for {{ brand.name }}.</p>
+ </div>
+ {% endfor %}
+ </div>
 </div>
 {% endblock %}

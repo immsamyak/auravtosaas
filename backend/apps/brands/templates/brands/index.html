@@ -4,641 +4,641 @@
 {% block content %}
 
 <!-- Hero Section -->
-<div class="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80">
-    <div class="absolute inset-0 pointer-events-none">
-        <!-- Modern Mesh Gradients -->
-        <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-indigo-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-pulse"></div>
-        <div class="absolute top-20 -right-20 w-[500px] h-[500px] bg-rose-200/40 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-pulse" style="animation-delay: 2s;"></div>
-        <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-200/40 rounded-full mix-blend-multiply filter blur-[120px] opacity-60"></div>
-    </div>
-    
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10" data-aos="zoom-y-out">
-        
-        <h1 class="text-6xl md:text-8xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tighter mb-8 leading-[1.1]" data-aos="zoom-y-out" data-aos-delay="150">
-            {% if cms.hero_headline %}
-                {{ cms.hero_headline|highlight:"AI fitting room" }}
-            {% else %}
-                The <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 italic pr-2" style="font-family: 'Playfair Display', serif; font-weight: 600;">Generative AI</span> <br class="hidden md:block"/> Fitting Room.
-            {% endif %}
-        </h1>
-        <p class="mt-4 max-w-2xl text-xl text-slate-600 dark:text-slate-400 dark:text-slate-400 mx-auto mb-12 font-medium" data-aos="zoom-y-out" data-aos-delay="300">
-            {{ cms.hero_subheadline|default:"Instantly map your catalog onto any shopper's body. Drastically increase conversions and eliminate size-related returns." }}
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4" data-aos="zoom-y-out" data-aos-delay="450">
-            <a href="{% url 'signup' %}" class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white text-lg font-bold rounded-2xl hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/30 transform hover:-translate-y-1 flex items-center justify-center">
-                {{ cms.hero_primary_cta|default:"Start building for free" }} <i class="fa-solid fa-arrow-right ml-2"></i>
-            </a>
-            <a href="#demo" class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 text-slate-900 dark:text-slate-300 dark:text-slate-300 text-lg font-bold rounded-2xl border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 hover:border-slate-300 dark:hover:border-slate-600 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:bg-slate-800 transition-all shadow-sm flex items-center justify-center group">
-                <i class="fa-solid fa-play text-indigo-600 mr-2 group-hover:scale-110 transition-transform"></i> {{ cms.hero_secondary_cta|default:"View Interactive Demo" }}
-            </a>
-        </div>
-        <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 dark:text-slate-500 mt-6 uppercase tracking-widest" data-aos="zoom-y-out" data-aos-delay="600">No credit card required • 14-day free trial</p>
-    </div>
+<div class="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80">
+ <div class="absolute inset-0 pointer-events-none">
+ <!-- Modern Mesh Gradients -->
+ <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-indigo-200/50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-pulse"></div>
+ <div class="absolute top-20 -right-20 w-[500px] h-[500px] bg-rose-200/40 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-pulse" style="animation-delay: 2s;"></div>
+ <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-200/40 rounded-full mix-blend-multiply filter blur-[120px] opacity-60"></div>
+ </div>
+ 
+ <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10" data-aos="zoom-y-out">
+ 
+ <h1 class="text-6xl md:text-8xl font-extrabold text-theme-text-base tracking-tighter mb-8 leading-[1.1]" data-aos="zoom-y-out" data-aos-delay="150">
+ {% if cms.hero_headline %}
+ {{ cms.hero_headline|highlight:"AI fitting room" }}
+ {% else %}
+ The <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 italic pr-2" style="font-family: 'Playfair Display', serif; font-weight: 600;">Generative AI</span> <br class="hidden md:block"/> Fitting Room.
+ {% endif %}
+ </h1>
+ <p class="mt-4 max-w-2xl text-xl text-theme-text-muted mx-auto mb-12 font-medium" data-aos="zoom-y-out" data-aos-delay="300">
+ {{ cms.hero_subheadline|default:"Instantly map your catalog onto any shopper's body. Drastically increase conversions and eliminate size-related returns." }}
+ </p>
+ <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4" data-aos="zoom-y-out" data-aos-delay="450">
+ <a href="{% url 'signup' %}" class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white text-lg font-bold rounded-2xl hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/30 transform hover:-translate-y-1 flex items-center justify-center">
+ {{ cms.hero_primary_cta|default:"Start building for free" }} <i class="fa-solid fa-arrow-right ml-2"></i>
+ </a>
+ <a href="#demo" class="w-full sm:w-auto px-8 py-4 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 text-theme-text-base text-lg font-bold rounded-2xl border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 hover:border-slate-300 dark:hover:border-slate-600 dark:hover:border-slate-600 hover:bg-theme-bg-hover transition-all shadow-sm flex items-center justify-center group">
+ <i class="fa-solid fa-play text-indigo-600 mr-2 group-hover:scale-110 transition-transform"></i> {{ cms.hero_secondary_cta|default:"View Interactive Demo" }}
+ </a>
+ </div>
+ <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 dark:text-slate-500 mt-6 uppercase tracking-widest" data-aos="zoom-y-out" data-aos-delay="600">No credit card required • 14-day free trial</p>
+ </div>
 
 </div>
 
 <!-- Modern Floating Metrics Banner -->
 <div class="relative z-30 -mt-16 max-w-5xl mx-auto px-4" data-aos="fade-up" data-aos-delay="800">
-    <div class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden relative">
-        <!-- Subtle glow effect inside the banner -->
-        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-rose-500/10 mix-blend-overlay"></div>
-        
-        <!-- Fix grid and borders for mobile wrap -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 text-center relative z-10">
-            {% for metric in metrics %}
-            <div class="flex flex-col items-center justify-center group px-4 {% if not forloop.last %}md:border-r border-white/10{% endif %} {% if forloop.counter == 2 %}border-l md:border-l-0 border-white/10{% endif %} {% if forloop.counter > 2 %}pt-8 md:pt-0 border-t md:border-t-0 border-white/10{% endif %} {% if forloop.counter == 4 %}border-l md:border-l-0 border-white/10{% endif %}">
-                <p class="text-3xl md:text-4xl font-extrabold {% if forloop.counter <= 2 %}text-white{% elif forloop.counter == 3 %}text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400{% else %}text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400{% endif %} mb-2 group-hover:scale-110 transition-transform duration-300">{{ metric.value }}</p>
-                <p class="text-xs font-bold text-indigo-300 uppercase tracking-widest">{{ metric.label }}</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+ <div class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden relative">
+ <!-- Subtle glow effect inside the banner -->
+ <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-rose-500/10 mix-blend-overlay"></div>
+ 
+ <!-- Fix grid and borders for mobile wrap -->
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 text-center relative z-10">
+ {% for metric in metrics %}
+ <div class="flex flex-col items-center justify-center group px-4 {% if not forloop.last %}md:border-r border-white/10{% endif %} {% if forloop.counter == 2 %}border-l md:border-l-0 border-white/10{% endif %} {% if forloop.counter > 2 %}pt-8 md:pt-0 border-t md:border-t-0 border-white/10{% endif %} {% if forloop.counter == 4 %}border-l md:border-l-0 border-white/10{% endif %}">
+ <p class="text-3xl md:text-4xl font-extrabold {% if forloop.counter <= 2 %}text-white{% elif forloop.counter == 3 %}text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400{% else %}text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400{% endif %} mb-2 group-hover:scale-110 transition-transform duration-300">{{ metric.value }}</p>
+ <p class="text-xs font-bold text-indigo-300 uppercase tracking-widest">{{ metric.label }}</p>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
 </div>
 
 <!-- Extra Interactive Demo / How It Works Section -->
-<section id="demo" class="pt-40 pb-32 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 relative border-y border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50" x-data="{ 
-    activeStep: 1, 
-    init() { 
-        setInterval(() => { 
-            this.activeStep = this.activeStep === 3 ? 1 : this.activeStep + 1 
-        }, 4000);
-    } 
+<section id="demo" class="pt-40 pb-32 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 relative border-y border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50" x-data="{ 
+ activeStep: 1, 
+ init() { 
+ setInterval(() => { 
+ this.activeStep = this.activeStep === 3 ? 1 : this.activeStep + 1 
+ }, 4000);
+ } 
 }">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center mb-20">
-            <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-xs mb-4">Pipeline</h2>
-            <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight">How Aura Works</h3>
-            <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 mt-4 max-w-2xl mx-auto text-lg">A seamless process that handles identity and apparel diffusion in real-time.</p>
-        </div>
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+ <div class="text-center mb-20">
+ <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-xs mb-4">Pipeline</h2>
+ <h3 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight">How Aura Works</h3>
+ <p class="text-theme-text-muted mt-4 max-w-2xl mx-auto text-lg">A seamless process that handles identity and apparel diffusion in real-time.</p>
+ </div>
 
-        <div class="flex flex-col lg:flex-row gap-16 items-center">
-            
-            <!-- Left: Text Steps -->
-            <div class="w-full lg:w-1/2 space-y-8">
-                <!-- Step 1 -->
-                <div class="relative pl-8 transition-all duration-300 cursor-pointer" 
-                     @click="activeStep = 1"
-                     :class="activeStep === 1 ? 'opacity-100' : 'opacity-40 hover:opacity-70'">
-                    <div class="absolute left-0 top-1.5 w-1 h-full bg-slate-100 dark:bg-slate-800/50 dark:bg-slate-800/50 rounded-full overflow-hidden">
-                        <div class="w-full bg-indigo-600 rounded-full transition-all duration-[4000ms] ease-linear"
-                             :class="activeStep === 1 ? 'h-full' : 'h-0'"></div>
-                    </div>
-                    <div class="w-12 h-12 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center mb-4 transition-all duration-300"
-                         :class="activeStep === 1 ? 'border-indigo-500 shadow-indigo-500/20 text-indigo-600' : 'text-slate-400 dark:text-slate-500 dark:text-slate-500'">
-                        <span class="font-bold">01</span>
-                    </div>
-                    <h4 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-2">Upload Identity</h4>
-                    <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 leading-relaxed text-lg">Shoppers take a quick selfie or full-body shot. Our neural network instantly isolates the subject.</p>
-                </div>
+ <div class="flex flex-col lg:flex-row gap-16 items-center">
+ 
+ <!-- Left: Text Steps -->
+ <div class="w-full lg:w-1/2 space-y-8">
+ <!-- Step 1 -->
+ <div class="relative pl-8 transition-all duration-300 cursor-pointer" 
+ @click="activeStep = 1"
+ :class="activeStep === 1 ? 'opacity-100' : 'opacity-40 hover:opacity-70'">
+ <div class="absolute left-0 top-1.5 w-1 h-full bg-slate-100 rounded-full overflow-hidden">
+ <div class="w-full bg-indigo-600 rounded-full transition-all duration-[4000ms] ease-linear"
+ :class="activeStep === 1 ? 'h-full' : 'h-0'"></div>
+ </div>
+ <div class="w-12 h-12 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center mb-4 transition-all duration-300"
+ :class="activeStep === 1 ? 'border-indigo-500 shadow-indigo-500/20 text-indigo-600' : 'text-slate-400 dark:text-slate-500 dark:text-slate-500'">
+ <span class="font-bold">01</span>
+ </div>
+ <h4 class="text-2xl font-bold text-theme-text-base mb-2">Upload Identity</h4>
+ <p class="text-theme-text-muted leading-relaxed text-lg">Shoppers take a quick selfie or full-body shot. Our neural network instantly isolates the subject.</p>
+ </div>
 
-                <!-- Step 2 -->
-                <div class="relative pl-8 transition-all duration-300 cursor-pointer" 
-                     @click="activeStep = 2"
-                     :class="activeStep === 2 ? 'opacity-100' : 'opacity-40 hover:opacity-70'">
-                    <div class="absolute left-0 top-1.5 w-1 h-full bg-slate-100 dark:bg-slate-800/50 dark:bg-slate-800/50 rounded-full overflow-hidden">
-                        <div class="w-full bg-indigo-600 rounded-full transition-all duration-[4000ms] ease-linear"
-                             :class="activeStep === 2 ? 'h-full' : 'h-0'"></div>
-                    </div>
-                    <div class="w-12 h-12 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center mb-4 transition-all duration-300"
-                         :class="activeStep === 2 ? 'border-indigo-500 shadow-indigo-500/20 text-indigo-600' : 'text-slate-400 dark:text-slate-500 dark:text-slate-500'">
-                        <span class="font-bold">02</span>
-                    </div>
-                    <h4 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-2">Select Apparel</h4>
-                    <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 leading-relaxed text-lg">Users browse your catalog and select any garment. The API extracts the clothing's structural data.</p>
-                </div>
+ <!-- Step 2 -->
+ <div class="relative pl-8 transition-all duration-300 cursor-pointer" 
+ @click="activeStep = 2"
+ :class="activeStep === 2 ? 'opacity-100' : 'opacity-40 hover:opacity-70'">
+ <div class="absolute left-0 top-1.5 w-1 h-full bg-slate-100 rounded-full overflow-hidden">
+ <div class="w-full bg-indigo-600 rounded-full transition-all duration-[4000ms] ease-linear"
+ :class="activeStep === 2 ? 'h-full' : 'h-0'"></div>
+ </div>
+ <div class="w-12 h-12 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center mb-4 transition-all duration-300"
+ :class="activeStep === 2 ? 'border-indigo-500 shadow-indigo-500/20 text-indigo-600' : 'text-slate-400 dark:text-slate-500 dark:text-slate-500'">
+ <span class="font-bold">02</span>
+ </div>
+ <h4 class="text-2xl font-bold text-theme-text-base mb-2">Select Apparel</h4>
+ <p class="text-theme-text-muted leading-relaxed text-lg">Users browse your catalog and select any garment. The API extracts the clothing's structural data.</p>
+ </div>
 
-                <!-- Step 3 -->
-                <div class="relative pl-8 transition-all duration-300 cursor-pointer" 
-                     @click="activeStep = 3"
-                     :class="activeStep === 3 ? 'opacity-100' : 'opacity-40 hover:opacity-70'">
-                    <div class="absolute left-0 top-1.5 w-1 h-full bg-slate-100 dark:bg-slate-800/50 dark:bg-slate-800/50 rounded-full overflow-hidden">
-                        <div class="w-full bg-indigo-600 rounded-full transition-all duration-[4000ms] ease-linear"
-                             :class="activeStep === 3 ? 'h-full' : 'h-0'"></div>
-                    </div>
-                    <div class="w-12 h-12 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center mb-4 transition-all duration-300"
-                         :class="activeStep === 3 ? 'border-indigo-500 shadow-indigo-500/20 text-indigo-600' : 'text-slate-400 dark:text-slate-500 dark:text-slate-500'">
-                        <span class="font-bold">03</span>
-                    </div>
-                    <h4 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-2">Diffusion Synthesis</h4>
-                    <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 leading-relaxed text-lg">Aura flawlessly synthesizes the garment onto the user, adjusting for lighting, drape, and pose.</p>
-                </div>
-            </div>
+ <!-- Step 3 -->
+ <div class="relative pl-8 transition-all duration-300 cursor-pointer" 
+ @click="activeStep = 3"
+ :class="activeStep === 3 ? 'opacity-100' : 'opacity-40 hover:opacity-70'">
+ <div class="absolute left-0 top-1.5 w-1 h-full bg-slate-100 rounded-full overflow-hidden">
+ <div class="w-full bg-indigo-600 rounded-full transition-all duration-[4000ms] ease-linear"
+ :class="activeStep === 3 ? 'h-full' : 'h-0'"></div>
+ </div>
+ <div class="w-12 h-12 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center mb-4 transition-all duration-300"
+ :class="activeStep === 3 ? 'border-indigo-500 shadow-indigo-500/20 text-indigo-600' : 'text-slate-400 dark:text-slate-500 dark:text-slate-500'">
+ <span class="font-bold">03</span>
+ </div>
+ <h4 class="text-2xl font-bold text-theme-text-base mb-2">Diffusion Synthesis</h4>
+ <p class="text-theme-text-muted leading-relaxed text-lg">Aura flawlessly synthesizes the garment onto the user, adjusting for lighting, drape, and pose.</p>
+ </div>
+ </div>
 
-            <!-- Right: Interactive Canvas -->
-            <div class="w-full lg:w-1/2">
-                <div class="bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2.5rem] p-6 sm:p-10 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-xl shadow-slate-200/50 relative overflow-hidden aspect-square sm:aspect-[4/3] flex items-center justify-center">
-                    
-                    <!-- Top Window Controls (Mock UI) -->
-                    <div class="absolute top-6 left-6 flex space-x-2">
-                        <div class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 dark:bg-slate-700"></div>
-                        <div class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 dark:bg-slate-700"></div>
-                        <div class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 dark:bg-slate-700"></div>
-                    </div>
+ <!-- Right: Interactive Canvas -->
+ <div class="w-full lg:w-1/2">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2.5rem] p-6 sm:p-10 border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-xl shadow-slate-200/50 relative overflow-hidden aspect-square sm:aspect-[4/3] flex items-center justify-center">
+ 
+ <!-- Top Window Controls (Mock UI) -->
+ <div class="absolute top-6 left-6 flex space-x-2">
+ <div class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 dark:bg-slate-700"></div>
+ <div class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 dark:bg-slate-700"></div>
+ <div class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 dark:bg-slate-700"></div>
+ </div>
 
-                    <!-- Scene 1: Upload -->
-                    <div x-show="activeStep === 1" 
-                         x-transition:enter="transition ease-out duration-500 delay-100"
-                         x-transition:enter-start="opacity-0 translate-y-4"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-300"
-                         x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0 absolute"
-                         class="w-full flex flex-col items-center">
-                        <div class="w-48 h-64 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex flex-col items-center justify-center relative overflow-hidden">
-                            <i class="fa-solid fa-user text-6xl text-slate-300 dark:text-slate-600 dark:text-slate-600 mb-4 z-10"></i>
-                            <div class="w-24 h-2 bg-slate-100 dark:bg-slate-800/50 dark:bg-slate-800/50 rounded-full z-10"></div>
-                            
-                            <!-- Scanner animation -->
-                            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-indigo-500/10 to-transparent border-b-2 border-indigo-500 animate-[scan_2s_ease-in-out_infinite] z-20"></div>
-                            <!-- Background grid fade in -->
-                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjAzLDIxMywyMjUsMC40KSIvPjwvc3ZnPg==')] opacity-0 animate-[fadeIn_2s_forwards_1s]"></div>
-                        </div>
-                        <div class="mt-8 bg-indigo-50 dark:bg-indigo-500/10 dark:bg-indigo-500/10 text-indigo-600 px-4 py-2 rounded-full text-sm font-bold animate-[slideUp_0.5s_forwards_0.5s] opacity-0">
-                            Isolating Subject...
-                        </div>
-                    </div>
+ <!-- Scene 1: Upload -->
+ <div x-show="activeStep === 1" 
+ x-transition:enter="transition ease-out duration-500 delay-100"
+ x-transition:enter-start="opacity-0 translate-y-4"
+ x-transition:enter-end="opacity-100 translate-y-0"
+ x-transition:leave="transition ease-in duration-300"
+ x-transition:leave-start="opacity-100"
+ x-transition:leave-end="opacity-0 absolute"
+ class="w-full flex flex-col items-center">
+ <div class="w-48 h-64 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex flex-col items-center justify-center relative overflow-hidden">
+ <i class="fa-solid fa-user text-6xl text-slate-300 dark:text-slate-600 dark:text-slate-600 mb-4 z-10"></i>
+ <div class="w-24 h-2 bg-slate-100 rounded-full z-10"></div>
+ 
+ <!-- Scanner animation -->
+ <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-indigo-500/10 to-transparent border-b-2 border-indigo-500 animate-[scan_2s_ease-in-out_infinite] z-20"></div>
+ <!-- Background grid fade in -->
+ <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjAzLDIxMywyMjUsMC40KSIvPjwvc3ZnPg==')] opacity-0 animate-[fadeIn_2s_forwards_1s]"></div>
+ </div>
+ <div class="mt-8 bg-indigo-50 dark:bg-indigo-500/10 dark:bg-indigo-500/10 text-indigo-600 px-4 py-2 rounded-full text-sm font-bold animate-[slideUp_0.5s_forwards_0.5s] opacity-0">
+ Isolating Subject...
+ </div>
+ </div>
 
-                    <!-- Scene 2: Select Apparel -->
-                    <div x-show="activeStep === 2" 
-                         x-transition:enter="transition ease-out duration-500 delay-100"
-                         x-transition:enter-start="opacity-0 translate-y-4"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-300"
-                         x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0 absolute"
-                         class="w-full flex flex-col items-center relative">
-                        <div class="flex gap-4 items-end">
-                            <div class="w-20 h-28 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center"><i class="fa-solid fa-shirt text-3xl text-slate-300 dark:text-slate-600 dark:text-slate-600"></i></div>
-                            <div class="w-24 h-32 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center relative" id="target-shirt">
-                                <i class="fa-solid fa-shirt text-4xl text-slate-300 dark:text-slate-600 dark:text-slate-600 transition-all duration-500 animate-[pulseColor_2s_forwards_1.5s]"></i>
-                                <div class="absolute inset-0 border-2 border-indigo-500 rounded-xl opacity-0 animate-[fadeIn_0.2s_forwards_1.5s]"></div>
-                            </div>
-                            <div class="w-20 h-28 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center"><i class="fa-solid fa-shirt text-3xl text-slate-300 dark:text-slate-600 dark:text-slate-600"></i></div>
-                        </div>
-                        
-                        <!-- Animated Cursor -->
-                        <div class="absolute top-32 left-10 text-2xl text-slate-800 dark:text-slate-300 dark:text-slate-300 drop-shadow-md animate-[moveCursor_2s_forwards_0.5s]">
-                            <i class="fa-solid fa-arrow-pointer"></i>
-                            <div class="absolute -top-1 -left-1 w-6 h-6 bg-indigo-500/30 rounded-full animate-[ping_0.5s_forwards_1.5s] opacity-0"></div>
-                        </div>
-                    </div>
+ <!-- Scene 2: Select Apparel -->
+ <div x-show="activeStep === 2" 
+ x-transition:enter="transition ease-out duration-500 delay-100"
+ x-transition:enter-start="opacity-0 translate-y-4"
+ x-transition:enter-end="opacity-100 translate-y-0"
+ x-transition:leave="transition ease-in duration-300"
+ x-transition:leave-start="opacity-100"
+ x-transition:leave-end="opacity-0 absolute"
+ class="w-full flex flex-col items-center relative">
+ <div class="flex gap-4 items-end">
+ <div class="w-20 h-28 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center"><i class="fa-solid fa-shirt text-3xl text-slate-300 dark:text-slate-600 dark:text-slate-600"></i></div>
+ <div class="w-24 h-32 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center relative" id="target-shirt">
+ <i class="fa-solid fa-shirt text-4xl text-slate-300 dark:text-slate-600 dark:text-slate-600 transition-all duration-500 animate-[pulseColor_2s_forwards_1.5s]"></i>
+ <div class="absolute inset-0 border-2 border-indigo-500 rounded-xl opacity-0 animate-[fadeIn_0.2s_forwards_1.5s]"></div>
+ </div>
+ <div class="w-20 h-28 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center"><i class="fa-solid fa-shirt text-3xl text-slate-300 dark:text-slate-600 dark:text-slate-600"></i></div>
+ </div>
+ 
+ <!-- Animated Cursor -->
+ <div class="absolute top-32 left-10 text-2xl text-theme-text-base drop-shadow-md animate-[moveCursor_2s_forwards_0.5s]">
+ <i class="fa-solid fa-arrow-pointer"></i>
+ <div class="absolute -top-1 -left-1 w-6 h-6 bg-indigo-500/30 rounded-full animate-[ping_0.5s_forwards_1.5s] opacity-0"></div>
+ </div>
+ </div>
 
-                    <!-- Scene 3: Synthesis -->
-                    <div x-show="activeStep === 3" 
-                         x-transition:enter="transition ease-out duration-500 delay-100"
-                         x-transition:enter-start="opacity-0 translate-y-4"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-300"
-                         x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0 absolute"
-                         class="w-full flex flex-col items-center">
-                        <div class="relative w-48 h-64 flex items-center justify-center">
-                            <!-- Loading Ring -->
-                            <svg class="absolute inset-0 w-full h-full animate-[spin_3s_linear_infinite] text-slate-200" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2" />
-                                <circle cx="50" cy="50" r="45" fill="none" stroke="#6366f1" stroke-width="3" stroke-dasharray="70 200" class="animate-[drawRing_2s_forwards]" stroke-linecap="round" />
-                            </svg>
-                            
-                            <div class="w-32 h-48 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-lg border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center relative overflow-hidden">
-                                <!-- Base user -->
-                                <i class="fa-solid fa-user text-5xl text-slate-300 dark:text-slate-600 dark:text-slate-600 absolute transition-opacity duration-500 animate-[fadeOut_0.5s_forwards_2s]"></i>
-                                <!-- Success user with shirt -->
-                                <div class="absolute opacity-0 flex flex-col items-center animate-[fadeIn_0.5s_forwards_2s]">
-                                    <i class="fa-solid fa-user-check text-5xl text-indigo-600 mb-2"></i>
-                                    <div class="w-16 h-1.5 bg-indigo-100 dark:bg-indigo-500/20 dark:bg-indigo-500/20 rounded-full"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+ <!-- Scene 3: Synthesis -->
+ <div x-show="activeStep === 3" 
+ x-transition:enter="transition ease-out duration-500 delay-100"
+ x-transition:enter-start="opacity-0 translate-y-4"
+ x-transition:enter-end="opacity-100 translate-y-0"
+ x-transition:leave="transition ease-in duration-300"
+ x-transition:leave-start="opacity-100"
+ x-transition:leave-end="opacity-0 absolute"
+ class="w-full flex flex-col items-center">
+ <div class="relative w-48 h-64 flex items-center justify-center">
+ <!-- Loading Ring -->
+ <svg class="absolute inset-0 w-full h-full animate-[spin_3s_linear_infinite] text-slate-200" viewBox="0 0 100 100">
+ <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2" />
+ <circle cx="50" cy="50" r="45" fill="none" stroke="#6366f1" stroke-width="3" stroke-dasharray="70 200" class="animate-[drawRing_2s_forwards]" stroke-linecap="round" />
+ </svg>
+ 
+ <div class="w-32 h-48 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-xl shadow-lg border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center relative overflow-hidden">
+ <!-- Base user -->
+ <i class="fa-solid fa-user text-5xl text-slate-300 dark:text-slate-600 dark:text-slate-600 absolute transition-opacity duration-500 animate-[fadeOut_0.5s_forwards_2s]"></i>
+ <!-- Success user with shirt -->
+ <div class="absolute opacity-0 flex flex-col items-center animate-[fadeIn_0.5s_forwards_2s]">
+ <i class="fa-solid fa-user-check text-5xl text-indigo-600 mb-2"></i>
+ <div class="w-16 h-1.5 bg-indigo-100 dark:bg-indigo-500/20 dark:bg-indigo-500/20 rounded-full"></div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-                </div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
+ </div>
 </section>
 
 <!-- Custom CSS for Minimal Animations -->
 <style>
-    @keyframes scan {
-        0% { transform: translateY(-100%); }
-        100% { transform: translateY(100%); }
-    }
-    @keyframes fadeIn {
-        to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-        to { opacity: 0; }
-    }
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes moveCursor {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(90px, -20px); }
-    }
-    @keyframes pulseColor {
-        100% { color: #6366f1; transform: scale(1.1); }
-    }
-    @keyframes drawRing {
-        0% { stroke-dasharray: 0 300; }
-        100% { stroke-dasharray: 280 300; }
-    }
+ @keyframes scan {
+ 0% { transform: translateY(-100%); }
+ 100% { transform: translateY(100%); }
+ }
+ @keyframes fadeIn {
+ to { opacity: 1; }
+ }
+ @keyframes fadeOut {
+ to { opacity: 0; }
+ }
+ @keyframes slideUp {
+ from { opacity: 0; transform: translateY(10px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+ @keyframes moveCursor {
+ 0% { transform: translate(0, 0); }
+ 100% { transform: translate(90px, -20px); }
+ }
+ @keyframes pulseColor {
+ 100% { color: #6366f1; transform: scale(1.1); }
+ }
+ @keyframes drawRing {
+ 0% { stroke-dasharray: 0 300; }
+ 100% { stroke-dasharray: 280 300; }
+ }
 </style>
 
 <!-- Integrations Section -->
-<section id="integrations" class="py-32 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">Seamless Integrations</h2>
-            <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight">Works with your tech stack</h3>
-            <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 mt-4 max-w-2xl mx-auto text-lg">Connect Aura to your existing e-commerce platform in minutes with our one-click plugins and robust API.</p>
-        </div>
-        
-        <div class="flex flex-wrap justify-center gap-8 items-center" data-aos="zoom-in" data-aos-delay="200">
-            {% for integration in integrations %}
-            <div class="w-24 h-24 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-2xl shadow-md border border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center group hover:scale-110 transition-transform">
-                <i class="{{ integration.icon_class }} text-4xl {{ integration.icon_color }} {{ integration.hover_color }}"></i>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<section id="integrations" class="py-32 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 relative overflow-hidden">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+ <div class="text-center mb-16" data-aos="fade-up">
+ <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">Seamless Integrations</h2>
+ <h3 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight">Works with your tech stack</h3>
+ <p class="text-theme-text-muted mt-4 max-w-2xl mx-auto text-lg">Connect Aura to your existing e-commerce platform in minutes with our one-click plugins and robust API.</p>
+ </div>
+ 
+ <div class="flex flex-wrap justify-center gap-8 items-center" data-aos="zoom-in" data-aos-delay="200">
+ {% for integration in integrations %}
+ <div class="w-24 h-24 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-2xl shadow-md border border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50 flex items-center justify-center group hover:scale-110 transition-transform">
+ <i class="{{ integration.icon_class }} text-4xl {{ integration.icon_color }} {{ integration.hover_color }}"></i>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
 </section>
 
 <!-- Advanced Bento Box Benefits Section -->
-<section id="benefits" class="py-32 bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 relative" data-aos="fade-up">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="text-center mb-20">
-            <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">{{ cms.features_subtitle|default:"Enterprise Grade" }}</h2>
-            <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight">{{ cms.features_title|default:"Built for modern commerce." }}</h3>
-        </div>
+<section id="benefits" class="py-32 bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 relative" data-aos="fade-up">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ 
+ <div class="text-center mb-20">
+ <h2 class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3">{{ cms.features_subtitle|default:"Enterprise Grade" }}</h2>
+ <h3 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight">{{ cms.features_title|default:"Built for modern commerce." }}</h3>
+ </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {% for feature in brand_features %}
-                {% if forloop.counter0|divisibleby:4 %}
-                <!-- Large Feature -->
-                <div class="md:col-span-2 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-50 dark:bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full mix-blend-multiply filter blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-500/20 dark:bg-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-600 text-2xl mb-6">
-                            <i class="{{ feature.icon_class|default:'fa-solid fa-chart-line' }}"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-4">{{ feature.title }}</h3>
-                        <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-medium text-lg max-w-md">{{ feature.description }}</p>
-                    </div>
-                </div>
-                {% elif forloop.counter0|add:"-1"|divisibleby:4 %}
-                <!-- Square Feature 1 -->
-                <div class="bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all flex flex-col justify-between">
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-rose-100 dark:bg-rose-500/20 dark:bg-rose-500/20 rounded-2xl flex items-center justify-center text-rose-600 text-2xl mb-6">
-                            <i class="{{ feature.icon_class|default:'fa-solid fa-bolt' }}"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-4">{{ feature.title }}</h3>
-                        <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-medium">{{ feature.description }}</p>
-                    </div>
-                </div>
-                {% elif forloop.counter0|add:"-2"|divisibleby:4 %}
-                <!-- Square Feature 2 -->
-                <div class="bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all">
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-500/20 dark:bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-600 text-2xl mb-6">
-                            <i class="{{ feature.icon_class|default:'fa-solid fa-shield-halved' }}"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-4">{{ feature.title }}</h3>
-                        <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-medium">{{ feature.description }}</p>
-                    </div>
-                </div>
-                {% else %}
-                <!-- Large Feature 2 -->
-                <div class="md:col-span-2 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all flex flex-col md:flex-row items-center gap-8">
-                    <div class="relative z-10 flex-1">
-                        <div class="w-14 h-14 bg-purple-100 dark:bg-purple-500/20 dark:bg-purple-500/20 rounded-2xl flex items-center justify-center text-purple-600 text-2xl mb-6">
-                            <i class="{{ feature.icon_class|default:'fa-solid fa-laptop-code' }}"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-4">{{ feature.title }}</h3>
-                        <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-medium text-lg">{{ feature.description }}</p>
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+ 
+ {% for feature in brand_features %}
+ {% if forloop.counter0|divisibleby:4 %}
+ <!-- Large Feature -->
+ <div class="md:col-span-2 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all">
+ <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-50 dark:bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full mix-blend-multiply filter blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+ <div class="relative z-10">
+ <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-500/20 dark:bg-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-600 text-2xl mb-6">
+ <i class="{{ feature.icon_class|default:'fa-solid fa-chart-line' }}"></i>
+ </div>
+ <h3 class="text-2xl font-bold text-theme-text-base mb-4">{{ feature.title }}</h3>
+ <p class="text-theme-text-muted font-medium text-lg max-w-md">{{ feature.description }}</p>
+ </div>
+ </div>
+ {% elif forloop.counter0|add:"-1"|divisibleby:4 %}
+ <!-- Square Feature 1 -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all flex flex-col justify-between">
+ <div class="relative z-10">
+ <div class="w-14 h-14 bg-rose-100 dark:bg-rose-500/20 dark:bg-rose-500/20 rounded-2xl flex items-center justify-center text-rose-600 text-2xl mb-6">
+ <i class="{{ feature.icon_class|default:'fa-solid fa-bolt' }}"></i>
+ </div>
+ <h3 class="text-2xl font-bold text-theme-text-base mb-4">{{ feature.title }}</h3>
+ <p class="text-theme-text-muted font-medium">{{ feature.description }}</p>
+ </div>
+ </div>
+ {% elif forloop.counter0|add:"-2"|divisibleby:4 %}
+ <!-- Square Feature 2 -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all">
+ <div class="relative z-10">
+ <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-500/20 dark:bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-600 text-2xl mb-6">
+ <i class="{{ feature.icon_class|default:'fa-solid fa-shield-halved' }}"></i>
+ </div>
+ <h3 class="text-2xl font-bold text-theme-text-base mb-4">{{ feature.title }}</h3>
+ <p class="text-theme-text-muted font-medium">{{ feature.description }}</p>
+ </div>
+ </div>
+ {% else %}
+ <!-- Large Feature 2 -->
+ <div class="md:col-span-2 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all flex flex-col md:flex-row items-center gap-8">
+ <div class="relative z-10 flex-1">
+ <div class="w-14 h-14 bg-purple-100 dark:bg-purple-500/20 dark:bg-purple-500/20 rounded-2xl flex items-center justify-center text-purple-600 text-2xl mb-6">
+ <i class="{{ feature.icon_class|default:'fa-solid fa-laptop-code' }}"></i>
+ </div>
+ <h3 class="text-2xl font-bold text-theme-text-base mb-4">{{ feature.title }}</h3>
+ <p class="text-theme-text-muted font-medium text-lg">{{ feature.description }}</p>
+ </div>
+ </div>
+ {% endif %}
+ {% endfor %}
 
-            <!-- Shopper Features Appended as Squares -->
-            {% for feature in shopper_features %}
-                <div class="bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all flex flex-col justify-between">
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-amber-100 dark:bg-amber-500/20 dark:bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-600 text-2xl mb-6">
-                            <i class="{{ feature.icon_class|default:'fa-solid fa-star' }}"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-4">{{ feature.title }}</h3>
-                        <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-medium">{{ feature.description }}</p>
-                    </div>
-                </div>
-            {% endfor %}
+ <!-- Shopper Features Appended as Squares -->
+ {% for feature in shopper_features %}
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-10 border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all flex flex-col justify-between">
+ <div class="relative z-10">
+ <div class="w-14 h-14 bg-amber-100 dark:bg-amber-500/20 dark:bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-600 text-2xl mb-6">
+ <i class="{{ feature.icon_class|default:'fa-solid fa-star' }}"></i>
+ </div>
+ <h3 class="text-2xl font-bold text-theme-text-base mb-4">{{ feature.title }}</h3>
+ <p class="text-theme-text-muted font-medium">{{ feature.description }}</p>
+ </div>
+ </div>
+ {% endfor %}
 
-        </div>
-    </div>
+ </div>
+ </div>
 </section>
 
 <!-- Trusted Brands / Showcase -->
-<section id="brands" class="py-32 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-20">
-            <h2 class="text-sm font-bold text-indigo-600 tracking-widest uppercase mb-3">
-                {{ cms.demo_subtitle|default:"Our Partners" }}
-            </h2>
-            <p class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight">
-                {{ cms.demo_title|default:"Trusted by forward-thinking brands." }}
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for brand in brands %}
-            <a href="{% url 'store' brand.slug %}" class="bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 p-10 border border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50 block text-center group transform hover:-translate-y-2">
-                {% if brand.logo %}
-                    <div class="h-24 flex items-center justify-center mb-8">
-                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition duration-500">
-                    </div>
-                {% else %}
-                    <div class="h-20 w-20 mx-auto mb-8 bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-2xl flex items-center justify-center group-hover:bg-indigo-50 transition border border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50 group-hover:border-indigo-100">
-                        <i class="fa-solid fa-store text-3xl text-slate-300 dark:text-slate-600 dark:text-slate-600 group-hover:text-indigo-600 transition"></i>
-                    </div>
-                {% endif %}
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300">{{ brand.name }}</h2>
-                <div class="mt-6 flex items-center justify-center text-sm font-bold text-indigo-600 opacity-0 group-hover:opacity-100 transition transform translate-y-4 group-hover:translate-y-0">
-                    Visit Virtual Storefront <i class="fa-solid fa-arrow-right ml-2"></i>
-                </div>
-            </a>
-            {% empty %}
-            <div class="col-span-full">
-                <div class="bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-16 text-center border border-dashed border-slate-300 dark:border-slate-600/50 dark:border-slate-600/50">
-                    <i class="fa-solid fa-store-slash text-5xl text-slate-300 dark:text-slate-600 dark:text-slate-600 mb-6"></i>
-                    <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-bold text-lg">No brands registered yet.</p>
-                    <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 mt-2">Be the first to launch your virtual storefront.</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<section id="brands" class="py-32 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div class="text-center mb-20">
+ <h2 class="text-sm font-bold text-indigo-600 tracking-widest uppercase mb-3">
+ {{ cms.demo_subtitle|default:"Our Partners" }}
+ </h2>
+ <p class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight">
+ {{ cms.demo_title|default:"Trusted by forward-thinking brands." }}
+ </p>
+ </div>
+ 
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+ {% for brand in brands %}
+ <a href="{% url 'store' brand.slug %}" class="bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 p-10 border border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50 block text-center group transform hover:-translate-y-2">
+ {% if brand.logo %}
+ <div class="h-24 flex items-center justify-center mb-8">
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition duration-500">
+ </div>
+ {% else %}
+ <div class="h-20 w-20 mx-auto mb-8 bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-2xl flex items-center justify-center group-hover:bg-indigo-50 transition border border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50 group-hover:border-indigo-100">
+ <i class="fa-solid fa-store text-3xl text-slate-300 dark:text-slate-600 dark:text-slate-600 group-hover:text-indigo-600 transition"></i>
+ </div>
+ {% endif %}
+ <h2 class="text-2xl font-bold text-theme-text-base">{{ brand.name }}</h2>
+ <div class="mt-6 flex items-center justify-center text-sm font-bold text-indigo-600 opacity-0 group-hover:opacity-100 transition transform translate-y-4 group-hover:translate-y-0">
+ Visit Virtual Storefront <i class="fa-solid fa-arrow-right ml-2"></i>
+ </div>
+ </a>
+ {% empty %}
+ <div class="col-span-full">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-3xl p-16 text-center border border-dashed border-theme-input-border">
+ <i class="fa-solid fa-store-slash text-5xl text-slate-300 dark:text-slate-600 dark:text-slate-600 mb-6"></i>
+ <p class="text-theme-text-muted font-bold text-lg">No brands registered yet.</p>
+ <p class="text-theme-text-muted mt-2">Be the first to launch your virtual storefront.</p>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
 </section>
 
 <!-- Custom CSS for Scanning Animation -->
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-24 bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16 max-w-3xl mx-auto">
-                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">Simple Pricing</span>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight mb-6">Scale your Virtual Fitting Room</h2>
-                <p class="text-xl text-slate-600 dark:text-slate-400 dark:text-slate-400 leading-relaxed">Start with a free trial and upgrade as your store grows. Pay only for the compute you need.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                {% for plan in plans %}
-                <div class="bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2rem] shadow-xl shadow-slate-200/50 p-10 relative flex flex-col {% if plan.is_popular %}border-2 border-indigo-600 ring-4 ring-indigo-600/10 scale-105 z-10{% else %}border border-slate-200{% endif %}">
-                    {% if plan.is_popular %}
-                    <div class="absolute -top-5 left-1/2 -translate-x-1/2">
-                        <span class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold tracking-widest uppercase shadow-md">Most Popular</span>
-                    </div>
-                    {% endif %}
-                    
-                    <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-2">{{ plan.name }}</h3>
-                    <div class="flex items-baseline mb-6">
-                        <span class="text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight">${{ plan.monthly_price|floatformat:0 }}</span>
-                        <span class="text-lg text-slate-500 dark:text-slate-400 dark:text-slate-400 ml-2 font-medium">/mo</span>
-                    </div>
-                    
-                    <ul class="space-y-4 mb-8 flex-grow">
-                        {% for feature in plan.features %}
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-circle-check text-indigo-500 mt-1 mr-3 text-lg"></i>
-                            <span class="text-slate-600 dark:text-slate-400 dark:text-slate-400 font-medium">{{ feature }}</span>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    
-                    <a href="{% url 'signup' %}" class="w-full text-center block {% if plan.is_popular %}bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/30{% else %}bg-slate-900 hover:bg-slate-800 text-white shadow-md{% endif %} font-bold py-4 px-6 rounded-2xl transition-all">
-                        Get Started
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    <!-- Testimonials Section -->
-    {% if testimonials %}
-    <section id="testimonials" class="py-24 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16 max-w-3xl mx-auto">
-                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.testimonials_subtitle|default:"What our clients say" }}</span>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight mb-6">{{ cms.testimonials_title|default:"Trusted by leading fashion brands worldwide." }}</h2>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {% for testimonial in testimonials %}
-                <div class="bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group">
-                    <div class="flex items-center gap-4 mb-6">
-                        {% if testimonial.avatar %}
-                        <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="w-16 h-16 rounded-full object-cover shadow-sm">
-                        {% else %}
-                        <div class="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-500/20 dark:bg-indigo-500/20 text-indigo-600 flex items-center justify-center font-bold text-xl">
-                            {{ testimonial.name|slice:":1" }}
-                        </div>
-                        {% endif %}
-                        <div>
-                            <h4 class="font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 text-lg">{{ testimonial.name }}</h4>
-                            <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 text-sm font-medium">{{ testimonial.role }}</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-1 mb-4 text-amber-400 text-sm">
-                        {% for i in "12345" %}
-                        <i class="fa-{% if forloop.counter <= testimonial.rating %}solid{% else %}regular{% endif %} fa-star"></i>
-                        {% endfor %}
-                    </div>
-                    <p class="text-slate-700 dark:text-slate-300 italic leading-relaxed text-lg">"{{ testimonial.content }}"</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% endif %}
+ <!-- Pricing Section -->
+ <section id="pricing" class="py-24 bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
+ <div class="max-w-7xl mx-auto px-6 lg:px-8">
+ <div class="text-center mb-16 max-w-3xl mx-auto">
+ <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">Simple Pricing</span>
+ <h2 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight mb-6">Scale your Virtual Fitting Room</h2>
+ <p class="text-xl text-theme-text-muted leading-relaxed">Start with a free trial and upgrade as your store grows. Pay only for the compute you need.</p>
+ </div>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+ {% for plan in plans %}
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2rem] shadow-xl shadow-slate-200/50 p-10 relative flex flex-col {% if plan.is_popular %}border-2 border-indigo-600 ring-4 ring-indigo-600/10 scale-105 z-10{% else %}border border-slate-200{% endif %}">
+ {% if plan.is_popular %}
+ <div class="absolute -top-5 left-1/2 -translate-x-1/2">
+ <span class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold tracking-widest uppercase shadow-md">Most Popular</span>
+ </div>
+ {% endif %}
+ 
+ <h3 class="text-2xl font-bold text-theme-text-base mb-2">{{ plan.name }}</h3>
+ <div class="flex items-baseline mb-6">
+ <span class="text-5xl font-extrabold text-theme-text-base tracking-tight">${{ plan.monthly_price|floatformat:0 }}</span>
+ <span class="text-lg text-theme-text-muted ml-2 font-medium">/mo</span>
+ </div>
+ 
+ <ul class="space-y-4 mb-8 flex-grow">
+ {% for feature in plan.features %}
+ <li class="flex items-start">
+ <i class="fa-solid fa-circle-check text-indigo-500 mt-1 mr-3 text-lg"></i>
+ <span class="text-theme-text-muted font-medium">{{ feature }}</span>
+ </li>
+ {% endfor %}
+ </ul>
+ 
+ <a href="{% url 'signup' %}" class="w-full text-center block {% if plan.is_popular %}bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/30{% else %}bg-slate-900 hover:bg-slate-800 text-white shadow-md{% endif %} font-bold py-4 px-6 rounded-2xl transition-all">
+ Get Started
+ </a>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </section>
+ <!-- Testimonials Section -->
+ {% if testimonials %}
+ <section id="testimonials" class="py-24 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
+ <div class="max-w-7xl mx-auto px-6 lg:px-8">
+ <div class="text-center mb-16 max-w-3xl mx-auto">
+ <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.testimonials_subtitle|default:"What our clients say" }}</span>
+ <h2 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight mb-6">{{ cms.testimonials_title|default:"Trusted by leading fashion brands worldwide." }}</h2>
+ </div>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+ {% for testimonial in testimonials %}
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2rem] p-8 border border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50 shadow-sm relative overflow-hidden group">
+ <div class="flex items-center gap-4 mb-6">
+ {% if testimonial.avatar %}
+ <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="w-16 h-16 rounded-full object-cover shadow-sm">
+ {% else %}
+ <div class="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-500/20 dark:bg-indigo-500/20 text-indigo-600 flex items-center justify-center font-bold text-xl">
+ {{ testimonial.name|slice:":1" }}
+ </div>
+ {% endif %}
+ <div>
+ <h4 class="font-bold text-theme-text-base text-lg">{{ testimonial.name }}</h4>
+ <p class="text-theme-text-muted text-sm font-medium">{{ testimonial.role }}</p>
+ </div>
+ </div>
+ <div class="flex gap-1 mb-4 text-amber-400 text-sm">
+ {% for i in "12345" %}
+ <i class="fa-{% if forloop.counter <= testimonial.rating %}solid{% else %}regular{% endif %} fa-star"></i>
+ {% endfor %}
+ </div>
+ <p class="text-slate-700 italic leading-relaxed text-lg">"{{ testimonial.content }}"</p>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </section>
+ {% endif %}
 
-    <!-- FAQ Section -->
-    {% if faqs %}
-    <section id="faq" class="py-24 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
-        <div class="max-w-4xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.faq_subtitle }}</span>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight">{{ cms.faq_title }}</h2>
-            </div>
-            
-            <div class="space-y-4" x-data="{ active: null }">
-                {% for faq in faqs %}
-                <div class="border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 rounded-2xl overflow-hidden transition-all duration-300" :class="active === {{ faq.id }} ? 'bg-indigo-50/50 border-indigo-200 ring-4 ring-indigo-50' : 'bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 hover:border-slate-300 dark:hover:border-slate-600 dark:hover:border-slate-600'">
-                    <button @click="active = (active === {{ faq.id }} ? null : {{ faq.id }})" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 text-lg focus:outline-none">
-                        <span>{{ faq.question }}</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-indigo-500" :class="active === {{ faq.id }} ? 'rotate-180' : ''"></i>
-                    </button>
-                    <div x-show="active === {{ faq.id }}" x-collapse x-cloak>
-                        <div class="px-6 pb-6 text-slate-600 dark:text-slate-400 dark:text-slate-400 text-lg leading-relaxed">
-                            {{ faq.answer }}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% endif %}
+ <!-- FAQ Section -->
+ {% if faqs %}
+ <section id="faq" class="py-24 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
+ <div class="max-w-4xl mx-auto px-6 lg:px-8">
+ <div class="text-center mb-16">
+ <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.faq_subtitle }}</span>
+ <h2 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight">{{ cms.faq_title }}</h2>
+ </div>
+ 
+ <div class="space-y-4" x-data="{ active: null }">
+ {% for faq in faqs %}
+ <div class="border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 rounded-2xl overflow-hidden transition-all duration-300" :class="active === {{ faq.id }} ? 'bg-indigo-50/50 border-indigo-200 ring-4 ring-indigo-50' : 'bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 hover:border-slate-300 dark:hover:border-slate-600 dark:hover:border-slate-600'">
+ <button @click="active = (active === {{ faq.id }} ? null : {{ faq.id }})" class="w-full px-6 py-5 text-left flex justify-between items-center font-bold text-theme-text-base text-lg focus:outline-none">
+ <span>{{ faq.question }}</span>
+ <i class="fa-solid fa-chevron-down transition-transform duration-300 text-indigo-500" :class="active === {{ faq.id }} ? 'rotate-180' : ''"></i>
+ </button>
+ <div x-show="active === {{ faq.id }}" x-collapse x-cloak>
+ <div class="px-6 pb-6 text-theme-text-muted text-lg leading-relaxed">
+ {{ faq.answer }}
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </section>
+ {% endif %}
 
-    <!-- Latest Blog Section -->
-    {% if latest_blogs %}
-    <section id="blog" class="py-24 bg-slate-50 dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16 max-w-3xl mx-auto">
-                <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.blog_subtitle|default:"News, tips, and insights" }}</span>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-300 dark:text-slate-300 tracking-tight mb-6">{{ cms.blog_title|default:"Latest from our blog" }}</h2>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {% for post in latest_blogs %}
-                <a href="{% url 'landing_blog_detail' post.slug %}" class="bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-600/50/50 dark:border-slate-600/50/50 group flex flex-col">
-                    {% if post.featured_image %}
-                    <div class="h-48 overflow-hidden relative">
-                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
-                    </div>
-                    {% else %}
-                    <div class="h-48 bg-slate-100 dark:bg-slate-800/50 dark:bg-slate-800/50 flex items-center justify-center relative overflow-hidden">
-                        <i class="fa-solid fa-newspaper text-5xl text-slate-300 dark:text-slate-600 dark:text-slate-600"></i>
-                    </div>
-                    {% endif %}
-                    <div class="p-8 flex flex-col flex-1">
-                        <div class="flex items-center gap-3 text-xs font-bold text-slate-400 dark:text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-4">
-                            <span>{{ post.published_at|date:"M d, Y" }}</span>
-                            <span>•</span>
-                            <span>{{ post.author_name }}</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-300 dark:text-slate-300 mb-3 group-hover:text-indigo-600 transition-colors">{{ post.title }}</h3>
-                        <p class="text-slate-500 dark:text-slate-400 dark:text-slate-400 font-medium line-clamp-3 mb-6">{{ post.excerpt|default:post.content|striptags|truncatewords:20 }}</p>
-                        <div class="mt-auto font-bold text-indigo-600 text-sm flex items-center">
-                            Read Article <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-            
-            <div class="mt-12 text-center">
-                <a href="{% url 'landing_blog_list' %}" class="inline-flex items-center px-6 py-3 rounded-xl font-bold text-slate-600 dark:text-slate-400 dark:text-slate-400 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 hover:bg-slate-100 border border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 transition-colors shadow-sm">
-                    View All Articles
-                </a>
-            </div>
-        </div>
-    </section>
-    {% endif %}
+ <!-- Latest Blog Section -->
+ {% if latest_blogs %}
+ <section id="blog" class="py-24 bg-theme-bg-base dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50" data-aos="fade-up">
+ <div class="max-w-7xl mx-auto px-6 lg:px-8">
+ <div class="text-center mb-16 max-w-3xl mx-auto">
+ <span class="text-indigo-600 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.blog_subtitle|default:"News, tips, and insights" }}</span>
+ <h2 class="text-4xl md:text-5xl font-extrabold text-theme-text-base tracking-tight mb-6">{{ cms.blog_title|default:"Latest from our blog" }}</h2>
+ </div>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+ {% for post in latest_blogs %}
+ <a href="{% url 'landing_blog_detail' post.slug %}" class="bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-theme-border-divider dark:border-slate-600/50/50 dark:border-slate-600/50/50 group flex flex-col">
+ {% if post.featured_image %}
+ <div class="h-48 overflow-hidden relative">
+ <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+ <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
+ </div>
+ {% else %}
+ <div class="h-48 bg-slate-100 flex items-center justify-center relative overflow-hidden">
+ <i class="fa-solid fa-newspaper text-5xl text-slate-300 dark:text-slate-600 dark:text-slate-600"></i>
+ </div>
+ {% endif %}
+ <div class="p-8 flex flex-col flex-1">
+ <div class="flex items-center gap-3 text-xs font-bold text-slate-400 dark:text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-4">
+ <span>{{ post.published_at|date:"M d, Y" }}</span>
+ <span>•</span>
+ <span>{{ post.author_name }}</span>
+ </div>
+ <h3 class="text-xl font-bold text-theme-text-base mb-3 group-hover:text-indigo-600 transition-colors">{{ post.title }}</h3>
+ <p class="text-theme-text-muted font-medium line-clamp-3 mb-6">{{ post.excerpt|default:post.content|striptags|truncatewords:20 }}</p>
+ <div class="mt-auto font-bold text-indigo-600 text-sm flex items-center">
+ Read Article <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+ </div>
+ </div>
+ </a>
+ {% endfor %}
+ </div>
+ 
+ <div class="mt-12 text-center">
+ <a href="{% url 'landing_blog_list' %}" class="inline-flex items-center px-6 py-3 rounded-xl font-bold text-theme-text-muted bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 hover:bg-theme-bg-hover border border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 transition-colors shadow-sm">
+ View All Articles
+ </a>
+ </div>
+ </div>
+ </section>
+ {% endif %}
 
-    <!-- Final CTA Banner -->
-    <section class="py-20 bg-indigo-600 relative overflow-hidden" data-aos="zoom-in">
-        <div class="absolute inset-0">
-            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
-            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
-        </div>
-        <div class="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6">{{ cms.cta_title }}</h2>
-            <p class="text-xl text-indigo-100 mb-10">{{ cms.cta_subtitle }}</p>
-            <a href="{% url 'signup' %}" class="inline-block bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 text-indigo-600 hover:bg-indigo-50 font-bold px-10 py-5 rounded-full shadow-xl transition transform hover:-translate-y-1 text-lg">
-                {{ cms.cta_button_text }}
-            </a>
-        </div>
-    </section>
+ <!-- Final CTA Banner -->
+ <section class="py-20 bg-indigo-600 relative overflow-hidden" data-aos="zoom-in">
+ <div class="absolute inset-0">
+ <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+ <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+ </div>
+ <div class="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+ <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-6">{{ cms.cta_title }}</h2>
+ <p class="text-xl text-indigo-100 mb-10">{{ cms.cta_subtitle }}</p>
+ <a href="{% url 'signup' %}" class="inline-block bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 text-indigo-600 hover:bg-indigo-50 font-bold px-10 py-5 rounded-full shadow-xl transition transform hover:-translate-y-1 text-lg">
+ {{ cms.cta_button_text }}
+ </a>
+ </div>
+ </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-white dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-slate-200 dark:border-slate-600/50/50 dark:border-slate-600/50/50 relative overflow-hidden" data-aos="fade-up">
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-50 dark:bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-            <div class="bg-slate-900 rounded-[3rem] p-10 md:p-16 lg:p-20 shadow-2xl overflow-hidden relative">
-                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
-                
-                <div class="flex flex-col lg:flex-row gap-12 lg:gap-24 relative z-10">
-                    <div class="flex-1">
-                        <span class="text-indigo-400 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.contact_subtitle|default:"We'd love to hear from you." }}</span>
-                        <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-8">{{ cms.contact_title|default:"Get in touch" }}</h2>
-                        
-                        <div class="space-y-6">
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
-                                    <i class="fa-solid fa-envelope"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-400 dark:text-slate-500 dark:text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Email</p>
-                                    <a href="mailto:{{ cms.contact_email }}" class="text-white font-medium text-lg hover:text-indigo-400 transition-colors">{{ cms.contact_email|default:"contact@auravto.com" }}</a>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-400 dark:text-slate-500 dark:text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Phone</p>
-                                    <a href="tel:{{ cms.contact_phone }}" class="text-white font-medium text-lg hover:text-indigo-400 transition-colors">{{ cms.contact_phone|default:"+1 (555) 123-4567" }}</a>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-400 dark:text-slate-500 dark:text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Address</p>
-                                    <p class="text-white font-medium text-lg">{{ cms.contact_address|default:"123 Fashion Ave, NY 10001" }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-1 bg-white/5 backdrop-blur-xl rounded-[2rem] p-8 border border-white/10">
-                        <form method="POST" action="{% url 'index' %}#contact" class="space-y-4">
-                            {% csrf_token %}
-                            <input type="hidden" name="contact_form" value="1">
-                            <div>
-                                <label class="block text-slate-300 dark:text-slate-600 dark:text-slate-600 text-sm font-bold mb-2">Name</label>
-                                <input type="text" name="name" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-indigo-500" placeholder="John Doe">
-                            </div>
-                            <div>
-                                <label class="block text-slate-300 dark:text-slate-600 dark:text-slate-600 text-sm font-bold mb-2">Email</label>
-                                <input type="email" name="email" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-indigo-500" placeholder="john@example.com">
-                            </div>
-                            <div>
-                                <label class="block text-slate-300 dark:text-slate-600 dark:text-slate-600 text-sm font-bold mb-2">Message</label>
-                                <textarea name="message" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 h-32 resize-none" placeholder="How can we help?"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-indigo-500/30">
-                                Send Message
-                            </button>
-                            
-                            {% if messages %}
-                            <div class="mt-4">
-                                {% for message in messages %}
-                                <div class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-xl text-sm font-bold">
-                                    {{ message }}
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Contact Section -->
+ <section id="contact" class="py-24 bg-theme-bg-surface dark:bg-slate-800/50/80 dark:bg-slate-800/50/80 border-t border-theme-border-base dark:border-slate-600/50/50 dark:border-slate-600/50/50 relative overflow-hidden" data-aos="fade-up">
+ <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-50 dark:bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+ <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+ <div class="bg-slate-900 rounded-[3rem] p-10 md:p-16 lg:p-20 shadow-2xl overflow-hidden relative">
+ <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
+ 
+ <div class="flex flex-col lg:flex-row gap-12 lg:gap-24 relative z-10">
+ <div class="flex-1">
+ <span class="text-indigo-400 font-bold tracking-widest uppercase text-sm mb-3 block">{{ cms.contact_subtitle|default:"We'd love to hear from you." }}</span>
+ <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-8">{{ cms.contact_title|default:"Get in touch" }}</h2>
+ 
+ <div class="space-y-6">
+ <div class="flex items-start gap-4">
+ <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
+ <i class="fa-solid fa-envelope"></i>
+ </div>
+ <div>
+ <p class="text-slate-400 dark:text-slate-500 dark:text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Email</p>
+ <a href="mailto:{{ cms.contact_email }}" class="text-white font-medium text-lg hover:text-indigo-400 transition-colors">{{ cms.contact_email|default:"contact@auravto.com" }}</a>
+ </div>
+ </div>
+ 
+ <div class="flex items-start gap-4">
+ <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
+ <i class="fa-solid fa-phone"></i>
+ </div>
+ <div>
+ <p class="text-slate-400 dark:text-slate-500 dark:text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Phone</p>
+ <a href="tel:{{ cms.contact_phone }}" class="text-white font-medium text-lg hover:text-indigo-400 transition-colors">{{ cms.contact_phone|default:"+1 (555) 123-4567" }}</a>
+ </div>
+ </div>
+ 
+ <div class="flex items-start gap-4">
+ <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 backdrop-blur-sm border border-white/10">
+ <i class="fa-solid fa-location-dot"></i>
+ </div>
+ <div>
+ <p class="text-slate-400 dark:text-slate-500 dark:text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Address</p>
+ <p class="text-white font-medium text-lg">{{ cms.contact_address|default:"123 Fashion Ave, NY 10001" }}</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="flex-1 bg-white/5 backdrop-blur-xl rounded-[2rem] p-8 border border-white/10">
+ <form method="POST" action="{% url 'index' %}#contact" class="space-y-4">
+ {% csrf_token %}
+ <input type="hidden" name="contact_form" value="1">
+ <div>
+ <label class="block text-slate-300 dark:text-slate-600 dark:text-slate-600 text-sm font-bold mb-2">Name</label>
+ <input type="text" name="name" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-theme-input-placeholder focus:ring-2 focus:ring-indigo-500" placeholder="John Doe">
+ </div>
+ <div>
+ <label class="block text-slate-300 dark:text-slate-600 dark:text-slate-600 text-sm font-bold mb-2">Email</label>
+ <input type="email" name="email" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-theme-input-placeholder focus:ring-2 focus:ring-indigo-500" placeholder="john@example.com">
+ </div>
+ <div>
+ <label class="block text-slate-300 dark:text-slate-600 dark:text-slate-600 text-sm font-bold mb-2">Message</label>
+ <textarea name="message" required class="w-full bg-white/10 border-0 rounded-xl px-4 py-3 text-white placeholder-theme-input-placeholder focus:ring-2 focus:ring-indigo-500 h-32 resize-none" placeholder="How can we help?"></textarea>
+ </div>
+ <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-indigo-500/30">
+ Send Message
+ </button>
+ 
+ {% if messages %}
+ <div class="mt-4">
+ {% for message in messages %}
+ <div class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-xl text-sm font-bold">
+ {{ message }}
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
+ </form>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
 <style>
-        0% { transform: translateY(-100%); }
-        100% { transform: translateY(100%); }
-    }
+ 0% { transform: translateY(-100%); }
+ 100% { transform: translateY(100%); }
+ }
 </style>
 
 {% endblock %}

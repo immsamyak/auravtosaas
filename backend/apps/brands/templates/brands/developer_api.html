@@ -4,367 +4,367 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    <!-- Breadcrumb -->
-    <nav class="flex mb-8" aria-label="Breadcrumb">
-        <ol class="inline-flex items-center space-x-1 md:space-x-3">
-            <li aria-current="page">
-                <div class="flex items-center">
-                    <i class="fa-solid fa-gear text-slate-400 dark:text-slate-500 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800 dark:text-slate-300">Configuration</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
-                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Developer API</span>
-                </div>
-            </li>
-        </ol>
-    </nav>
+ <!-- Breadcrumb -->
+ <nav class="flex mb-8" aria-label="Breadcrumb">
+ <ol class="inline-flex items-center space-x-1 md:space-x-3">
+ <li aria-current="page">
+ <div class="flex items-center">
+ <i class="fa-solid fa-gear text-slate-400 dark:text-slate-500 mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-base">Configuration</span>
+ <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+ <span class="text-sm font-medium text-theme-text-muted">Developer API</span>
+ </div>
+ </li>
+ </ol>
+ </nav>
 
-    <!-- Header -->
-    <div class="mb-10">
-        <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-300 tracking-tight">Developer <span class="text-indigo-600 font-light">API</span></h1>
-        <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Manage your API keys and webhook endpoints for custom integrations.</p>
-    </div>
+ <!-- Header -->
+ <div class="mb-10">
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Developer <span class="text-indigo-600 font-light">API</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">Manage your API keys and webhook endpoints for custom integrations.</p>
+ </div>
 
-    <div class="space-y-8">
-        
-        <!-- API Keys Section -->
-        <div class="bg-white dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 overflow-hidden">
-            <div class="px-6 py-6 border-b border-slate-100 dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-300">API Keys</h2>
-                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Keys allow external apps to access your store data programmatically.</p>
-                </div>
-                <button onclick="document.getElementById('api-key-modal').classList.remove('hidden')" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-600/50/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/50/80 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
-                    <i class="fa-solid fa-plus mr-2 text-slate-400 dark:text-slate-500"></i> Generate Key
-                </button>
-            </div>
-            
-            <div class="p-0">
-                <ul class="divide-y divide-slate-100">
-                    {% for key in api_keys %}
-                    <li class="px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-between group">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-600/50/50">
-                                <i class="fa-solid fa-key text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-900 dark:text-slate-300">{{ key.name }}</h4>
-                                <div class="flex items-center mt-1 space-x-3">
-                                    <code class="text-xs font-mono font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 px-2 py-0.5 rounded">{{ key.prefix }}******************</code>
-                                    <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Created: {{ key.created_at|date:"M d, Y" }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            {% if key.is_active %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">Active</span>
-                            {% else %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-800 border border-rose-200">Revoked</span>
-                            {% endif %}
-                            
-                            <!-- Copy API Key Field -->
-                            <div class="flex">
-                                <input type="hidden" value="{{ key.key_hash }}" id="api-key-{{ key.id }}">
-                                <button onclick="copyApiKey('{{ key.id }}')" class="p-2 text-indigo-600 hover:bg-indigo-50 transition-colors rounded-lg" title="Copy to clipboard">
-                                    <i class="fa-regular fa-copy" id="copy-icon-{{ key.id }}"></i>
-                                </button>
-                            </div>
-                            
-                            <form method="POST" action="{% url 'developer_api' %}" onsubmit="return confirm('Are you sure you want to delete this API Key? Any integrations using it will immediately stop working.');">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete_key">
-                                <input type="hidden" name="key_id" value="{{ key.id }}">
-                                <button type="submit" class="p-2 text-slate-400 dark:text-slate-500 hover:text-rose-600 transition-colors rounded-lg hover:bg-rose-50" title="Delete Key">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                    {% empty %}
-                    <li class="px-6 py-8 text-center">
-                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">No API keys generated yet.</p>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+ <div class="space-y-8">
+ 
+ <!-- API Keys Section -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 overflow-hidden">
+ <div class="px-6 py-6 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <div>
+ <h2 class="text-lg font-bold text-theme-text-base">API Keys</h2>
+ <p class="text-xs font-medium text-theme-text-muted mt-1">Keys allow external apps to access your store data programmatically.</p>
+ </div>
+ <button onclick="document.getElementById('api-key-modal').classList.remove('hidden')" class="inline-flex items-center justify-center px-4 py-2 border border-theme-border-base dark:border-slate-600/50/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 bg-theme-bg-surface dark:bg-slate-800/50/80 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
+ <i class="fa-solid fa-plus mr-2 text-slate-400 dark:text-slate-500"></i> Generate Key
+ </button>
+ </div>
+ 
+ <div class="p-0">
+ <ul class="divide-y divide-slate-100">
+ {% for key in api_keys %}
+ <li class="px-6 py-4 hover:bg-theme-bg-hover transition-colors flex items-center justify-between group">
+ <div class="flex items-center space-x-4">
+ <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-theme-text-muted border border-theme-border-base dark:border-slate-600/50/50">
+ <i class="fa-solid fa-key text-sm"></i>
+ </div>
+ <div>
+ <h4 class="text-sm font-bold text-theme-text-base">{{ key.name }}</h4>
+ <div class="flex items-center mt-1 space-x-3">
+ <code class="text-xs font-mono font-bold text-theme-text-muted bg-slate-100 px-2 py-0.5 rounded">{{ key.prefix }}******************</code>
+ <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Created: {{ key.created_at|date:"M d, Y" }}</span>
+ </div>
+ </div>
+ </div>
+ <div class="flex items-center space-x-4">
+ {% if key.is_active %}
+ <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">Active</span>
+ {% else %}
+ <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-800 border border-rose-200">Revoked</span>
+ {% endif %}
+ 
+ <!-- Copy API Key Field -->
+ <div class="flex">
+ <input type="hidden" value="{{ key.key_hash }}" id="api-key-{{ key.id }}">
+ <button onclick="copyApiKey('{{ key.id }}')" class="p-2 text-indigo-600 hover:bg-indigo-50 transition-colors rounded-lg" title="Copy to clipboard">
+ <i class="fa-regular fa-copy" id="copy-icon-{{ key.id }}"></i>
+ </button>
+ </div>
+ 
+ <form method="POST" action="{% url 'developer_api' %}" onsubmit="return confirm('Are you sure you want to delete this API Key? Any integrations using it will immediately stop working.');">
+ {% csrf_token %}
+ <input type="hidden" name="action" value="delete_key">
+ <input type="hidden" name="key_id" value="{{ key.id }}">
+ <button type="submit" class="p-2 text-slate-400 dark:text-slate-500 hover:text-rose-600 transition-colors rounded-lg hover:bg-rose-50" title="Delete Key">
+ <i class="fa-solid fa-trash-can"></i>
+ </button>
+ </form>
+ </div>
+ </li>
+ {% empty %}
+ <li class="px-6 py-8 text-center">
+ <p class="text-sm font-medium text-theme-text-muted">No API keys generated yet.</p>
+ </li>
+ {% endfor %}
+ </ul>
+ </div>
+ </div>
 
-        <!-- Webhooks Section -->
-        <div class="bg-white dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 overflow-hidden mt-8">
-            <div class="px-6 py-6 border-b border-slate-100 dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-300">Webhooks</h2>
-                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Receive real-time HTTP POST notifications when events occur.</p>
-                </div>
-                <button onclick="document.getElementById('webhook-modal').classList.remove('hidden')" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-600/50/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/50/80 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
-                    <i class="fa-solid fa-plus mr-2 text-slate-400 dark:text-slate-500"></i> Add Endpoint
-                </button>
-            </div>
-            
-            <div class="p-0">
-                <ul class="divide-y divide-slate-100">
-                    {% for webhook in webhooks %}
-                    <li class="px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-between group">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-600/50/50">
-                                <i class="fa-solid fa-plug text-sm"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-900 dark:text-slate-300">{{ webhook.url }}</h4>
-                                <div class="flex items-center mt-1 space-x-3">
-                                    <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Secret: {{ webhook.secret_key|truncatechars:15 }}</span>
-                                    <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Created: {{ webhook.created_at|date:"M d, Y" }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            {% if webhook.is_active %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">Active</span>
-                            {% else %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-800 border border-amber-200">Inactive</span>
-                            {% endif %}
-                            
-                            <form method="POST" action="{% url 'developer_api' %}" onsubmit="return confirm('Are you sure you want to delete this Webhook endpoint?');">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete_webhook">
-                                <input type="hidden" name="webhook_id" value="{{ webhook.id }}">
-                                <button type="submit" class="p-2 text-slate-400 dark:text-slate-500 hover:text-rose-600 transition-colors rounded-lg hover:bg-rose-50" title="Delete Webhook">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                    {% empty %}
-                    <li class="px-6 py-8 text-center">
-                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">No webhooks configured yet.</p>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+ <!-- Webhooks Section -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 overflow-hidden mt-8">
+ <div class="px-6 py-6 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <div>
+ <h2 class="text-lg font-bold text-theme-text-base">Webhooks</h2>
+ <p class="text-xs font-medium text-theme-text-muted mt-1">Receive real-time HTTP POST notifications when events occur.</p>
+ </div>
+ <button onclick="document.getElementById('webhook-modal').classList.remove('hidden')" class="inline-flex items-center justify-center px-4 py-2 border border-theme-border-base dark:border-slate-600/50/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 bg-theme-bg-surface dark:bg-slate-800/50/80 hover:bg-theme-bg-hover focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
+ <i class="fa-solid fa-plus mr-2 text-slate-400 dark:text-slate-500"></i> Add Endpoint
+ </button>
+ </div>
+ 
+ <div class="p-0">
+ <ul class="divide-y divide-slate-100">
+ {% for webhook in webhooks %}
+ <li class="px-6 py-4 hover:bg-theme-bg-hover transition-colors flex items-center justify-between group">
+ <div class="flex items-center space-x-4">
+ <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-theme-text-muted border border-theme-border-base dark:border-slate-600/50/50">
+ <i class="fa-solid fa-plug text-sm"></i>
+ </div>
+ <div>
+ <h4 class="text-sm font-bold text-theme-text-base">{{ webhook.url }}</h4>
+ <div class="flex items-center mt-1 space-x-3">
+ <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Secret: {{ webhook.secret_key|truncatechars:15 }}</span>
+ <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Created: {{ webhook.created_at|date:"M d, Y" }}</span>
+ </div>
+ </div>
+ </div>
+ <div class="flex items-center space-x-4">
+ {% if webhook.is_active %}
+ <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">Active</span>
+ {% else %}
+ <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-800 border border-amber-200">Inactive</span>
+ {% endif %}
+ 
+ <form method="POST" action="{% url 'developer_api' %}" onsubmit="return confirm('Are you sure you want to delete this Webhook endpoint?');">
+ {% csrf_token %}
+ <input type="hidden" name="action" value="delete_webhook">
+ <input type="hidden" name="webhook_id" value="{{ webhook.id }}">
+ <button type="submit" class="p-2 text-slate-400 dark:text-slate-500 hover:text-rose-600 transition-colors rounded-lg hover:bg-rose-50" title="Delete Webhook">
+ <i class="fa-solid fa-trash-can"></i>
+ </button>
+ </form>
+ </div>
+ </li>
+ {% empty %}
+ <li class="px-6 py-8 text-center">
+ <p class="text-sm font-medium text-theme-text-muted">No webhooks configured yet.</p>
+ </li>
+ {% endfor %}
+ </ul>
+ </div>
+ </div>
 
-        <!-- API Documentation Section -->
-        <div class="bg-white dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 overflow-hidden mt-8">
-            <div class="px-6 py-6 border-b border-slate-100 dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-300">API Documentation</h2>
-                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Use these endpoints to integrate Aura with your custom storefronts.</p>
-                </div>
-            </div>
-            
-            <div class="p-6">
-                <!-- Fetch Products Endpoint -->
-                <div class="mb-8 border border-slate-200 dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
-                    <div class="bg-slate-50 dark:bg-slate-800/50/80 border-b border-slate-200 dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
-                            <code class="text-sm font-mono text-slate-700 dark:text-slate-300 font-bold">/api/v1/brand/products/</code>
-                        </div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">List all active products</span>
-                    </div>
-                    <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
+ <!-- API Documentation Section -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 overflow-hidden mt-8">
+ <div class="px-6 py-6 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <div>
+ <h2 class="text-lg font-bold text-theme-text-base">API Documentation</h2>
+ <p class="text-xs font-medium text-theme-text-muted mt-1">Use these endpoints to integrate Aura with your custom storefronts.</p>
+ </div>
+ </div>
+ 
+ <div class="p-6">
+ <!-- Fetch Products Endpoint -->
+ <div class="mb-8 border border-theme-border-base dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 border-b border-theme-border-base dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
+ <div class="flex items-center space-x-3">
+ <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
+ <code class="text-sm font-mono text-slate-700 font-bold">/api/v1/brand/products/</code>
+ </div>
+ <span class="text-xs text-theme-text-muted font-medium">List all active products</span>
+ </div>
+ <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
 <pre><code>curl -X GET "{{ request.scheme }}://{{ request.get_host }}/api/v1/brand/products/" \
-  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
-                    </div>
-                </div>
+ -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+ </div>
+ </div>
 
-                <!-- Create Order Endpoint -->
-                <div class="border border-slate-200 dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
-                    <div class="bg-slate-50 dark:bg-slate-800/50/80 border-b border-slate-200 dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 font-bold text-xs rounded">POST</span>
-                            <code class="text-sm font-mono text-slate-700 dark:text-slate-300 font-bold">/api/v1/brand/orders/</code>
-                        </div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Create a new order</span>
-                    </div>
-                    <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
+ <!-- Create Order Endpoint -->
+ <div class="border border-theme-border-base dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 border-b border-theme-border-base dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
+ <div class="flex items-center space-x-3">
+ <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 font-bold text-xs rounded">POST</span>
+ <code class="text-sm font-mono text-slate-700 font-bold">/api/v1/brand/orders/</code>
+ </div>
+ <span class="text-xs text-theme-text-muted font-medium">Create a new order</span>
+ </div>
+ <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
 <pre><code>curl -X POST "{{ request.scheme }}://{{ request.get_host }}/api/v1/brand/orders/" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customer_phone": "+1234567890",
-    "items": [
-      { "product_id": 1042, "quantity": 1 }
-    ]
-  }'</code></pre>
-                    </div>
-                </div>
+ -H "Authorization: Bearer YOUR_API_KEY" \
+ -H "Content-Type: application/json" \
+ -d '{
+ "customer_phone": "+1234567890",
+ "items": [
+ { "product_id": 1042, "quantity": 1 }
+ ]
+ }'</code></pre>
+ </div>
+ </div>
 
-                <!-- Get Single Product -->
-                <div class="mt-8 border border-slate-200 dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
-                    <div class="bg-slate-50 dark:bg-slate-800/50/80 border-b border-slate-200 dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
-                            <code class="text-sm font-mono text-slate-700 dark:text-slate-300 font-bold">/api/v1/brand/products/{id}/</code>
-                        </div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Get single product details</span>
-                    </div>
-                    <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
+ <!-- Get Single Product -->
+ <div class="mt-8 border border-theme-border-base dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 border-b border-theme-border-base dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
+ <div class="flex items-center space-x-3">
+ <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
+ <code class="text-sm font-mono text-slate-700 font-bold">/api/v1/brand/products/{id}/</code>
+ </div>
+ <span class="text-xs text-theme-text-muted font-medium">Get single product details</span>
+ </div>
+ <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
 <pre><code>curl -X GET "{{ request.scheme }}://{{ request.get_host }}/api/v1/brand/products/1/" \
-  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
-                    </div>
-                </div>
+ -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+ </div>
+ </div>
 
-                <!-- Get Collections -->
-                <div class="mt-8 border border-slate-200 dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
-                    <div class="bg-slate-50 dark:bg-slate-800/50/80 border-b border-slate-200 dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
-                            <code class="text-sm font-mono text-slate-700 dark:text-slate-300 font-bold">/api/v1/brand/collections/</code>
-                        </div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">List all active collections</span>
-                    </div>
-                    <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
+ <!-- Get Collections -->
+ <div class="mt-8 border border-theme-border-base dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 border-b border-theme-border-base dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
+ <div class="flex items-center space-x-3">
+ <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
+ <code class="text-sm font-mono text-slate-700 font-bold">/api/v1/brand/collections/</code>
+ </div>
+ <span class="text-xs text-theme-text-muted font-medium">List all active collections</span>
+ </div>
+ <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
 <pre><code>curl -X GET "{{ request.scheme }}://{{ request.get_host }}/api/v1/brand/collections/" \
-  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
-                    </div>
-                </div>
+ -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+ </div>
+ </div>
 
-                <!-- Get Order History -->
-                <div class="mt-8 border border-slate-200 dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
-                    <div class="bg-slate-50 dark:bg-slate-800/50/80 border-b border-slate-200 dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
-                            <code class="text-sm font-mono text-slate-700 dark:text-slate-300 font-bold">/api/v1/brand/orders/history/</code>
-                        </div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">View recent order history</span>
-                    </div>
-                    <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
+ <!-- Get Order History -->
+ <div class="mt-8 border border-theme-border-base dark:border-slate-600/50/50 rounded-2xl overflow-hidden">
+ <div class="bg-theme-bg-base dark:bg-slate-800/50/80 border-b border-theme-border-base dark:border-slate-600/50/50 px-4 py-3 flex items-center justify-between">
+ <div class="flex items-center space-x-3">
+ <span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 font-bold text-xs rounded">GET</span>
+ <code class="text-sm font-mono text-slate-700 font-bold">/api/v1/brand/orders/history/</code>
+ </div>
+ <span class="text-xs text-theme-text-muted font-medium">View recent order history</span>
+ </div>
+ <div class="p-4 bg-slate-900 text-slate-300 dark:text-slate-600 font-mono text-sm overflow-x-auto">
 <pre><code>curl -X GET "{{ request.scheme }}://{{ request.get_host }}/api/v1/brand/orders/history/" \
-  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
+ -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+ </div>
+ </div>
+ </div>
+ </div>
 
-        <!-- API Logs Section -->
-        <div class="bg-white dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 overflow-hidden mt-8">
-            <div class="px-6 py-6 border-b border-slate-100 dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-300">API Request Logs</h2>
-                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Real-time log of the last 50 API requests made using your keys.</p>
-                </div>
-                <button class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-600/50/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/50/80 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none transition-all">
-                    <i class="fa-solid fa-arrow-rotate-right mr-2 text-slate-400 dark:text-slate-500"></i> Refresh
-                </button>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50/80 border-b border-slate-200 dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4">Method & Endpoint</th>
-                            <th class="px-6 py-4">IP Address</th>
-                            <th class="px-6 py-4">Latency</th>
-                            <th class="px-6 py-4 text-right">Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 text-sm font-mono">
-                        {% for log in api_logs %}
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-3">
-                                {% if log.status_code >= 200 and log.status_code < 300 %}
-                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">{{ log.status_code }}</span>
-                                {% elif log.status_code >= 400 and log.status_code < 500 %}
-                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-800 border border-amber-200">{{ log.status_code }}</span>
-                                {% else %}
-                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-800 border border-rose-200">{{ log.status_code }}</span>
-                                {% endif %}
-                            </td>
-                            <td class="px-6 py-3">
-                                <span class="font-bold {% if log.method == 'GET' %}text-emerald-600{% elif log.method == 'POST' %}text-indigo-600{% elif log.method == 'DELETE' %}text-rose-600{% else %}text-slate-600{% endif %} mr-2">{{ log.method }}</span>
-                                <span class="text-slate-600 dark:text-slate-400">{{ log.endpoint }}</span>
-                            </td>
-                            <td class="px-6 py-3 text-slate-500 dark:text-slate-400">
-                                {{ log.ip_address|default:"127.0.0.1" }}
-                            </td>
-                            <td class="px-6 py-3 text-slate-500 dark:text-slate-400">
-                                {{ log.latency_ms }}ms
-                            </td>
-                            <td class="px-6 py-3 text-right text-slate-500 dark:text-slate-400 text-xs">
-                                {{ log.created_at|date:"M d, H:i:s" }}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center">
-                                <i class="fa-solid fa-server text-3xl text-slate-300 dark:text-slate-600 mb-3"></i>
-                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400">No API requests logged yet.</p>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+ <!-- API Logs Section -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-3xl shadow-sm border border-theme-border-base dark:border-slate-600/50/50 overflow-hidden mt-8">
+ <div class="px-6 py-6 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <div>
+ <h2 class="text-lg font-bold text-theme-text-base">API Request Logs</h2>
+ <p class="text-xs font-medium text-theme-text-muted mt-1">Real-time log of the last 50 API requests made using your keys.</p>
+ </div>
+ <button class="inline-flex items-center justify-center px-4 py-2 border border-theme-border-base dark:border-slate-600/50/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 bg-theme-bg-surface dark:bg-slate-800/50/80 hover:bg-theme-bg-hover focus:outline-none transition-all">
+ <i class="fa-solid fa-arrow-rotate-right mr-2 text-slate-400 dark:text-slate-500"></i> Refresh
+ </button>
+ </div>
+ 
+ <div class="overflow-x-auto">
+ <table class="w-full text-left border-collapse">
+ <thead>
+ <tr class="bg-slate-50/80 border-b border-theme-border-base dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-theme-text-muted font-bold">
+ <th class="px-6 py-4">Status</th>
+ <th class="px-6 py-4">Method & Endpoint</th>
+ <th class="px-6 py-4">IP Address</th>
+ <th class="px-6 py-4">Latency</th>
+ <th class="px-6 py-4 text-right">Timestamp</th>
+ </tr>
+ </thead>
+ <tbody class="divide-y divide-slate-100 text-sm font-mono">
+ {% for log in api_logs %}
+ <tr class="hover:bg-slate-50/50 transition-colors">
+ <td class="px-6 py-3">
+ {% if log.status_code >= 200 and log.status_code < 300 %}
+ <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">{{ log.status_code }}</span>
+ {% elif log.status_code >= 400 and log.status_code < 500 %}
+ <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-800 border border-amber-200">{{ log.status_code }}</span>
+ {% else %}
+ <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-800 border border-rose-200">{{ log.status_code }}</span>
+ {% endif %}
+ </td>
+ <td class="px-6 py-3">
+ <span class="font-bold {% if log.method == 'GET' %}text-emerald-600{% elif log.method == 'POST' %}text-indigo-600{% elif log.method == 'DELETE' %}text-rose-600{% else %}text-slate-600{% endif %} mr-2">{{ log.method }}</span>
+ <span class="text-theme-text-muted">{{ log.endpoint }}</span>
+ </td>
+ <td class="px-6 py-3 text-theme-text-muted">
+ {{ log.ip_address|default:"127.0.0.1" }}
+ </td>
+ <td class="px-6 py-3 text-theme-text-muted">
+ {{ log.latency_ms }}ms
+ </td>
+ <td class="px-6 py-3 text-right text-theme-text-muted text-xs">
+ {{ log.created_at|date:"M d, H:i:s" }}
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="5" class="px-6 py-12 text-center">
+ <i class="fa-solid fa-server text-3xl text-slate-300 dark:text-slate-600 mb-3"></i>
+ <p class="text-sm font-medium text-theme-text-muted">No API requests logged yet.</p>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
 </div>
 {% endblock %}
 
 {% block extra_modals %}
 <!-- Generate Key Modal -->
 <div id="api-key-modal" class="fixed inset-0 z-[100000] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('api-key-modal').classList.add('hidden')"></div>
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white dark:bg-slate-800/50/80 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-100 dark:border-slate-600/50/50">
-            <div class="px-6 pt-6 pb-4 border-b border-slate-100 dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
-                <h3 class="text-lg font-extrabold text-slate-900 dark:text-slate-300" id="modal-title">Generate New API Key</h3>
-                <button type="button" onclick="document.getElementById('api-key-modal').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            
-            <form action="{% url 'developer_api' %}" method="POST" class="p-6">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="create_key">
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide mb-2">Key Name</label>
-                        <input type="text" name="name" required placeholder="e.g. Mobile App Integration" class="block w-full bg-slate-50 dark:bg-slate-800/50/80 border border-slate-200 dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                    </div>
-                </div>
-                
-                <div class="mt-8 sm:flex sm:flex-row-reverse gap-3">
-                    <button type="submit" class="inline-flex w-full justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 transition-all sm:w-auto">Generate Key</button>
-                    <button type="button" onclick="document.getElementById('api-key-modal').classList.add('hidden')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white dark:bg-slate-800/50/80 px-5 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 sm:mt-0 sm:w-auto transition-all">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+ <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+ <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('api-key-modal').classList.add('hidden')"></div>
+ <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+ <div class="inline-block align-bottom bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-theme-border-divider dark:border-slate-600/50/50">
+ <div class="px-6 pt-6 pb-4 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <h3 class="text-lg font-extrabold text-theme-text-base " id="modal-title">Generate New API Key</h3>
+ <button type="button" onclick="document.getElementById('api-key-modal').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 transition-colors">
+ <i class="fa-solid fa-xmark text-xl"></i>
+ </button>
+ </div>
+ 
+ <form action="{% url 'developer_api' %}" method="POST" class="p-6">
+ {% csrf_token %}
+ <input type="hidden" name="action" value="create_key">
+ 
+ <div class="space-y-4">
+ <div>
+ <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Key Name</label>
+ <input type="text" name="name" required placeholder="e.g. Mobile App Integration" class="block w-full bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ </div>
+ </div>
+ 
+ <div class="mt-8 sm:flex sm:flex-row-reverse gap-3">
+ <button type="submit" class="inline-flex w-full justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 transition-all sm:w-auto">Generate Key</button>
+ <button type="button" onclick="document.getElementById('api-key-modal').classList.add('hidden')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-theme-bg-surface dark:bg-slate-800/50/80 px-5 py-3 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-theme-bg-hover sm:mt-0 sm:w-auto transition-all">Cancel</button>
+ </div>
+ </form>
+ </div>
+ </div>
 </div>
 
 <!-- Webhook Modal -->
 <div id="webhook-modal" class="fixed inset-0 z-[100000] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('webhook-modal').classList.add('hidden')"></div>
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white dark:bg-slate-800/50/80 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-100 dark:border-slate-600/50/50">
-            <div class="px-6 pt-6 pb-4 border-b border-slate-100 dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
-                <h3 class="text-lg font-extrabold text-slate-900 dark:text-slate-300" id="modal-title">Add Webhook Endpoint</h3>
-                <button type="button" onclick="document.getElementById('webhook-modal').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            
-            <form action="{% url 'developer_api' %}" method="POST" class="p-6">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="create_webhook">
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide mb-2">Endpoint URL</label>
-                        <input type="url" name="url" required placeholder="https://your-domain.com/webhook/" class="block w-full bg-slate-50 dark:bg-slate-800/50/80 border border-slate-200 dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                    </div>
-                </div>
-                
-                <div class="mt-8 sm:flex sm:flex-row-reverse gap-3">
-                    <button type="submit" class="inline-flex w-full justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 transition-all sm:w-auto">Add Endpoint</button>
-                    <button type="button" onclick="document.getElementById('webhook-modal').classList.add('hidden')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white dark:bg-slate-800/50/80 px-5 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 sm:mt-0 sm:w-auto transition-all">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+ <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+ <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('webhook-modal').classList.add('hidden')"></div>
+ <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+ <div class="inline-block align-bottom bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-theme-border-divider dark:border-slate-600/50/50">
+ <div class="px-6 pt-6 pb-4 border-b border-theme-border-divider dark:border-slate-600/50/50 flex justify-between items-center bg-slate-50/50">
+ <h3 class="text-lg font-extrabold text-theme-text-base " id="modal-title">Add Webhook Endpoint</h3>
+ <button type="button" onclick="document.getElementById('webhook-modal').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 transition-colors">
+ <i class="fa-solid fa-xmark text-xl"></i>
+ </button>
+ </div>
+ 
+ <form action="{% url 'developer_api' %}" method="POST" class="p-6">
+ {% csrf_token %}
+ <input type="hidden" name="action" value="create_webhook">
+ 
+ <div class="space-y-4">
+ <div>
+ <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Endpoint URL</label>
+ <input type="url" name="url" required placeholder="https://your-domain.com/webhook/" class="block w-full bg-theme-bg-base dark:bg-slate-800/50/80 border border-theme-border-base dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ </div>
+ </div>
+ 
+ <div class="mt-8 sm:flex sm:flex-row-reverse gap-3">
+ <button type="submit" class="inline-flex w-full justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 transition-all sm:w-auto">Add Endpoint</button>
+ <button type="button" onclick="document.getElementById('webhook-modal').classList.add('hidden')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-theme-bg-surface dark:bg-slate-800/50/80 px-5 py-3 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-theme-bg-hover sm:mt-0 sm:w-auto transition-all">Cancel</button>
+ </div>
+ </form>
+ </div>
+ </div>
 </div>
 {% endblock %}
 
@@ -373,33 +373,33 @@
 {% block extra_scripts %}
 <script>
 function copyApiKey(keyId) {
-    const input = document.getElementById('api-key-' + keyId);
-    const icon = document.getElementById('copy-icon-' + keyId);
-    
-    // We don't need to select() hidden inputs, just use the value directly
-    navigator.clipboard.writeText(input.value).then(function() {
-        // Show the global toast!
-        if (typeof showToast === 'function') {
-            showToast('API Key copied to clipboard!', 'success');
-        } else {
-            alert('API Key copied to clipboard!'); // Fallback if toast isn't loaded
-        }
-        
-        // Change icon to checkmark
-        icon.classList.remove('fa-copy');
-        icon.classList.remove('fa-regular');
-        icon.classList.add('fa-solid');
-        icon.classList.add('fa-check');
-        icon.classList.add('text-emerald-500');
-        
-        // Change back after 2 seconds
-        setTimeout(function() {
-            icon.classList.add('fa-copy');
-            icon.classList.add('fa-regular');
-            icon.classList.remove('fa-solid');
-            icon.classList.remove('fa-check');
-            icon.classList.remove('text-emerald-500');
-        }, 2000);
-    });
+ const input = document.getElementById('api-key-' + keyId);
+ const icon = document.getElementById('copy-icon-' + keyId);
+ 
+ // We don't need to select() hidden inputs, just use the value directly
+ navigator.clipboard.writeText(input.value).then(function() {
+ // Show the global toast!
+ if (typeof showToast === 'function') {
+ showToast('API Key copied to clipboard!', 'success');
+ } else {
+ alert('API Key copied to clipboard!'); // Fallback if toast isn't loaded
+ }
+ 
+ // Change icon to checkmark
+ icon.classList.remove('fa-copy');
+ icon.classList.remove('fa-regular');
+ icon.classList.add('fa-solid');
+ icon.classList.add('fa-check');
+ icon.classList.add('text-emerald-500');
+ 
+ // Change back after 2 seconds
+ setTimeout(function() {
+ icon.classList.add('fa-copy');
+ icon.classList.add('fa-regular');
+ icon.classList.remove('fa-solid');
+ icon.classList.remove('fa-check');
+ icon.classList.remove('text-emerald-500');
+ }, 2000);
+ });
 </script>
 {% endblock %}

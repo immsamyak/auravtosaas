@@ -6,31 +6,31 @@
 <p>We've received your order <strong>#{{ order.id }}</strong> and we're getting it ready for you. Below is a summary of your purchase.</p>
 
 <table class="data-table">
-    <thead>
-        <tr>
-            <th>Item</th>
-            <th>Qty</th>
-            <th style="text-align: right;">Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in order.items.all %}
-        <tr>
-            <td>
-                <strong>{{ item.product_variant.product.name }}</strong><br>
-                <span class="text-sm">Color: {{ item.product_variant.color.name }}, Size: {{ item.product_variant.size.name }}</span>
-            </td>
-            <td>{{ item.quantity }}</td>
-            <td style="text-align: right;">${{ item.price_at_purchase }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="2" style="text-align: right; padding-top: 20px;"><strong>Total:</strong></td>
-            <td style="text-align: right; padding-top: 20px;"><strong>${{ order.total_amount }}</strong></td>
-        </tr>
-    </tfoot>
+ <thead>
+ <tr>
+ <th>Item</th>
+ <th>Qty</th>
+ <th style="text-align: right;">Price</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for item in order.items.all %}
+ <tr>
+ <td>
+ <strong>{{ item.product_variant.product.name }}</strong><br>
+ <span class="text-sm">Color: {{ item.product_variant.color.name }}, Size: {{ item.product_variant.size.name }}</span>
+ </td>
+ <td>{{ item.quantity }}</td>
+ <td style="text-align: right;">${{ item.price_at_purchase }}</td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ <tfoot>
+ <tr>
+ <td colspan="2" style="text-align: right; padding-top: 20px;"><strong>Total:</strong></td>
+ <td style="text-align: right; padding-top: 20px;"><strong>${{ order.total_amount }}</strong></td>
+ </tr>
+ </tfoot>
 </table>
 
 <p class="text-sm">You will receive another notification when your order ships.</p>

@@ -5,107 +5,107 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-300 tracking-tight">Email <span class="text-indigo-600 font-light">Campaigns</span></h1>
-            <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Send marketing emails and notifications to your subscribers and customers.</p>
-        </div>
-        <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 hover:scale-[1.02] active:scale-100 transition-all shadow-lg shadow-indigo-200">
-            <i class="fa-solid fa-plus mr-2"></i> New Campaign
-        </a>
-    </div>
+ <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+ <div>
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Email <span class="text-indigo-600 font-light">Campaigns</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">Send marketing emails and notifications to your subscribers and customers.</p>
+ </div>
+ <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 hover:scale-[1.02] active:scale-100 transition-all shadow-lg shadow-indigo-200">
+ <i class="fa-solid fa-plus mr-2"></i> New Campaign
+ </a>
+ </div>
 
-    <!-- Campaigns List -->
-    <div class="bg-white dark:bg-slate-800/50/80 rounded-2xl border border-slate-200 dark:border-slate-600/50/50 shadow-sm overflow-hidden relative">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50/80 border-b border-slate-200 dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
-                        <th class="px-6 py-4">Campaign Name</th>
-                        <th class="px-6 py-4">Subject</th>
-                        <th class="px-6 py-4">Audience</th>
-                        <th class="px-6 py-4 text-center">Status</th>
-                        <th class="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-sm">
-                    {% for campaign in campaigns %}
-                    <tr class="hover:bg-slate-50/50 transition-colors group">
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-slate-900 dark:text-slate-300">{{ campaign.name }}</div>
-                            <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">Created {{ campaign.created_at|date:"M d, Y" }}</div>
-                        </td>
-                        <td class="px-6 py-4 text-slate-600 dark:text-slate-400 max-w-xs truncate" title="{{ campaign.subject }}">
-                            {{ campaign.subject }}
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300">
-                                {% if campaign.target_audience == 'SUBSCRIBERS' %}
-                                    <i class="fa-solid fa-envelope-open-text mr-1.5 text-slate-400 dark:text-slate-500"></i> Subscribers
-                                {% elif campaign.target_audience == 'CUSTOMERS' %}
-                                    <i class="fa-solid fa-users mr-1.5 text-slate-400 dark:text-slate-500"></i> Customers
-                                {% else %}
-                                    <i class="fa-solid fa-globe mr-1.5 text-slate-400 dark:text-slate-500"></i> Everyone
-                                {% endif %}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            {% if campaign.status == 'DRAFT' %}
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-500/20 text-amber-700">
-                                    <i class="fa-solid fa-file-pen mr-1.5"></i> Draft
-                                </span>
-                            {% elif campaign.status == 'SCHEDULED' %}
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
-                                    <i class="fa-solid fa-calendar-check mr-1.5"></i> Scheduled
-                                </span>
-                            {% elif campaign.status == 'SENT' %}
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700">
-                                    <i class="fa-solid fa-paper-plane mr-1.5"></i> Sent
-                                </span>
-                                <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{{ campaign.sent_at|date:"M d, Y H:i" }}</div>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {% if campaign.status == 'DRAFT' %}
-                                    <a href="{% url 'campaign_edit' campaign.id %}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" title="Edit">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    
-                                    <form method="POST" action="{% url 'campaign_send' campaign.id %}" onsubmit="return confirm('Are you sure you want to send this campaign now? This action cannot be undone.');">
-                                        {% csrf_token %}
-                                        <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:text-white hover:bg-emerald-500 transition-colors" title="Send Now">
-                                            <i class="fa-solid fa-paper-plane"></i>
-                                        </button>
-                                    </form>
-                                {% endif %}
-                                
-                                <form method="POST" action="{% url 'campaign_delete' campaign.id %}" onsubmit="return confirm('Delete this campaign?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="px-6 py-16 text-center text-slate-500 dark:text-slate-400">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 dark:bg-slate-800/50/80 mb-4">
-                                <i class="fa-solid fa-envelope-open-text text-2xl text-slate-400 dark:text-slate-500"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-300 mb-1">No campaigns yet</h3>
-                            <p class="text-sm">Create your first email campaign to engage with your audience.</p>
-                            <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-4 py-2 mt-4 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors">
-                                <i class="fa-solid fa-plus mr-2"></i> Create Campaign
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ <!-- Campaigns List -->
+ <div class="bg-theme-bg-surface dark:bg-slate-800/50/80 rounded-2xl border border-theme-border-base dark:border-slate-600/50/50 shadow-sm overflow-hidden relative">
+ <div class="overflow-x-auto">
+ <table class="w-full text-left border-collapse">
+ <thead>
+ <tr class="bg-slate-50/80 border-b border-theme-border-base dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-theme-text-muted font-bold">
+ <th class="px-6 py-4">Campaign Name</th>
+ <th class="px-6 py-4">Subject</th>
+ <th class="px-6 py-4">Audience</th>
+ <th class="px-6 py-4 text-center">Status</th>
+ <th class="px-6 py-4 text-right">Actions</th>
+ </tr>
+ </thead>
+ <tbody class="divide-y divide-slate-100 text-sm">
+ {% for campaign in campaigns %}
+ <tr class="hover:bg-slate-50/50 transition-colors group">
+ <td class="px-6 py-4">
+ <div class="font-bold text-theme-text-base">{{ campaign.name }}</div>
+ <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">Created {{ campaign.created_at|date:"M d, Y" }}</div>
+ </td>
+ <td class="px-6 py-4 text-theme-text-muted max-w-xs truncate" title="{{ campaign.subject }}">
+ {{ campaign.subject }}
+ </td>
+ <td class="px-6 py-4">
+ <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+ {% if campaign.target_audience == 'SUBSCRIBERS' %}
+ <i class="fa-solid fa-envelope-open-text mr-1.5 text-slate-400 dark:text-slate-500"></i> Subscribers
+ {% elif campaign.target_audience == 'CUSTOMERS' %}
+ <i class="fa-solid fa-users mr-1.5 text-slate-400 dark:text-slate-500"></i> Customers
+ {% else %}
+ <i class="fa-solid fa-globe mr-1.5 text-slate-400 dark:text-slate-500"></i> Everyone
+ {% endif %}
+ </span>
+ </td>
+ <td class="px-6 py-4 text-center">
+ {% if campaign.status == 'DRAFT' %}
+ <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-500/20 text-amber-700">
+ <i class="fa-solid fa-file-pen mr-1.5"></i> Draft
+ </span>
+ {% elif campaign.status == 'SCHEDULED' %}
+ <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+ <i class="fa-solid fa-calendar-check mr-1.5"></i> Scheduled
+ </span>
+ {% elif campaign.status == 'SENT' %}
+ <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700">
+ <i class="fa-solid fa-paper-plane mr-1.5"></i> Sent
+ </span>
+ <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{{ campaign.sent_at|date:"M d, Y H:i" }}</div>
+ {% endif %}
+ </td>
+ <td class="px-6 py-4 text-right">
+ <div class="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+ {% if campaign.status == 'DRAFT' %}
+ <a href="{% url 'campaign_edit' campaign.id %}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" title="Edit">
+ <i class="fa-solid fa-pen-to-square"></i>
+ </a>
+ 
+ <form method="POST" action="{% url 'campaign_send' campaign.id %}" onsubmit="return confirm('Are you sure you want to send this campaign now? This action cannot be undone.');">
+ {% csrf_token %}
+ <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-500 hover:text-white hover:bg-emerald-500 transition-colors" title="Send Now">
+ <i class="fa-solid fa-paper-plane"></i>
+ </button>
+ </form>
+ {% endif %}
+ 
+ <form method="POST" action="{% url 'campaign_delete' campaign.id %}" onsubmit="return confirm('Delete this campaign?');">
+ {% csrf_token %}
+ <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete">
+ <i class="fa-solid fa-trash-can"></i>
+ </button>
+ </form>
+ </div>
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="5" class="px-6 py-16 text-center text-theme-text-muted">
+ <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-theme-bg-base dark:bg-slate-800/50/80 mb-4">
+ <i class="fa-solid fa-envelope-open-text text-2xl text-slate-400 dark:text-slate-500"></i>
+ </div>
+ <h3 class="text-lg font-bold text-theme-text-base mb-1">No campaigns yet</h3>
+ <p class="text-sm">Create your first email campaign to engage with your audience.</p>
+ <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-4 py-2 mt-4 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors">
+ <i class="fa-solid fa-plus mr-2"></i> Create Campaign
+ </a>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
 </div>
 {% endblock %}

@@ -5,107 +5,107 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    <!-- Breadcrumb -->
-    <nav class="flex mb-8" aria-label="Breadcrumb">
-        <ol class="inline-flex items-center space-x-1 md:space-x-3">
-            <li aria-current="page">
-                <div class="flex items-center">
-                    <i class="fa-solid fa-gear text-slate-400 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800">Configuration</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
-                    <span class="text-sm font-medium text-slate-500">Billing & Subscription</span>
-                </div>
-            </li>
-        </ol>
-    </nav>
+ <!-- Breadcrumb -->
+ <nav class="flex mb-8" aria-label="Breadcrumb">
+ <ol class="inline-flex items-center space-x-1 md:space-x-3">
+ <li aria-current="page">
+ <div class="flex items-center">
+ <i class="fa-solid fa-gear text-slate-400 mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-base">Configuration</span>
+ <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+ <span class="text-sm font-medium text-theme-text-muted">Billing & Subscription</span>
+ </div>
+ </li>
+ </ol>
+ </nav>
 
-    <!-- Header -->
-    <div class="mb-10">
-        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Billing &amp; <span class="text-indigo-600 font-light">Subscription</span></h1>
-        <p class="text-slate-500 mt-2 text-sm font-medium">Manage your Aura API usage and plans.</p>
-    </div>
+ <!-- Header -->
+ <div class="mb-10">
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Billing &amp; <span class="text-indigo-600 font-light">Subscription</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">Manage your Aura API usage and plans.</p>
+ </div>
 
-    {% if messages %}
-    <div class="mb-8">
-        {% for message in messages %}
-            <div class="px-4 py-3 rounded-xl text-sm font-bold flex items-center {% if message.tags == 'error' %}bg-rose-50 border border-rose-200 text-rose-600{% else %}bg-indigo-50 border border-indigo-200 text-indigo-600{% endif %}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    
-    <!-- Current Plan Status -->
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 mb-12">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div>
-                <p class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-1">Current Plan</p>
-                <div class="flex items-center">
-                    <h2 class="text-3xl font-extrabold text-slate-900 mr-4">
-                        {% if subscription.plan %}{{ subscription.plan.name }}{% else %}Free Trial{% endif %}
-                    </h2>
-                    <span class="bg-{% if subscription.status == 'active' %}emerald{% elif subscription.status == 'trialing' %}indigo{% else %}rose{% endif %}-100 text-{% if subscription.status == 'active' %}emerald{% elif subscription.status == 'trialing' %}indigo{% else %}rose{% endif %}-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                        {{ subscription.status }}
-                    </span>
-                </div>
-            </div>
-            {% if subscription.plan and subscription.plan.try_on_quota != -1 %}
-            <div class="w-full md:w-1/3">
-                <div class="flex justify-between text-sm font-bold text-slate-700 mb-2">
-                    <span>Try-Ons Used</span>
-                    <span>{{ subscription.try_ons_used|intcomma }} / {{ subscription.plan.try_on_quota|intcomma }}</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5">
-                    <!-- Basic percentage width simulation -->
-                    <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {% widthratio subscription.try_ons_used subscription.plan.try_on_quota 100 %}%"></div>
-                </div>
-            </div>
-            {% elif subscription.plan and subscription.plan.try_on_quota == -1 %}
-            <div class="w-full md:w-1/3 text-right">
-                <p class="text-sm font-bold text-slate-500"><i class="fa-solid fa-infinity text-indigo-500 mr-2"></i>Unlimited Quota</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    
-    <!-- Available Plans -->
-    <h3 class="text-xl font-bold text-slate-900 mb-6">Available Plans</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {% for plan in plans %}
-        <div class="bg-white rounded-3xl shadow-sm border {% if plan.is_popular %}border-indigo-500 ring-2 ring-indigo-500/20 relative{% else %}border-slate-200{% endif %} p-8 flex flex-col">
-            {% if plan.is_popular %}
-            <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase">Most Popular</span>
-            {% endif %}
-            
-            <h4 class="text-2xl font-bold text-slate-900 mb-2">{{ plan.name }}</h4>
-            <div class="mb-6">
-                <span class="text-4xl font-extrabold text-slate-900">${{ plan.monthly_price|floatformat:0 }}</span>
-                <span class="text-slate-500 font-medium">/month</span>
-            </div>
-            
-            <ul class="space-y-4 mb-8 flex-grow">
-                {% for feature in plan.features %}
-                <li class="flex items-start">
-                    <i class="fa-solid fa-check text-emerald-500 mt-1 mr-3"></i>
-                    <span class="text-slate-600 text-sm font-medium">{{ feature }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-            
-            {% if subscription.plan == plan and subscription.status == 'active' %}
-            <button disabled class="w-full bg-emerald-50 text-emerald-600 font-bold py-3 px-4 rounded-xl border border-emerald-200 cursor-not-allowed">
-                Current Plan
-            </button>
-            {% else %}
-            <form action="{% url 'create_checkout_session' plan.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="w-full {% if plan.is_popular %}bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/25{% else %}bg-slate-900 hover:bg-slate-800 text-white shadow-md{% endif %} font-bold py-3 px-4 rounded-xl transition-all">
-                    Upgrade to {{ plan.name }}
-                </button>
-            </form>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
+ {% if messages %}
+ <div class="mb-8">
+ {% for message in messages %}
+ <div class="px-4 py-3 rounded-xl text-sm font-bold flex items-center {% if message.tags == 'error' %}bg-rose-50 border border-rose-200 text-rose-600{% else %}bg-indigo-50 border border-indigo-200 text-indigo-600{% endif %}">
+ {{ message }}
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
+ 
+ <!-- Current Plan Status -->
+ <div class="bg-theme-bg-surface rounded-3xl shadow-sm border border-theme-border-base p-8 mb-12">
+ <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+ <div>
+ <p class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-1">Current Plan</p>
+ <div class="flex items-center">
+ <h2 class="text-3xl font-extrabold text-theme-text-base mr-4">
+ {% if subscription.plan %}{{ subscription.plan.name }}{% else %}Free Trial{% endif %}
+ </h2>
+ <span class="bg-{% if subscription.status == 'active' %}emerald{% elif subscription.status == 'trialing' %}indigo{% else %}rose{% endif %}-100 text-{% if subscription.status == 'active' %}emerald{% elif subscription.status == 'trialing' %}indigo{% else %}rose{% endif %}-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+ {{ subscription.status }}
+ </span>
+ </div>
+ </div>
+ {% if subscription.plan and subscription.plan.try_on_quota != -1 %}
+ <div class="w-full md:w-1/3">
+ <div class="flex justify-between text-sm font-bold text-slate-700 mb-2">
+ <span>Try-Ons Used</span>
+ <span>{{ subscription.try_ons_used|intcomma }} / {{ subscription.plan.try_on_quota|intcomma }}</span>
+ </div>
+ <div class="w-full bg-slate-100 rounded-full h-2.5">
+ <!-- Basic percentage width simulation -->
+ <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {% widthratio subscription.try_ons_used subscription.plan.try_on_quota 100 %}%"></div>
+ </div>
+ </div>
+ {% elif subscription.plan and subscription.plan.try_on_quota == -1 %}
+ <div class="w-full md:w-1/3 text-right">
+ <p class="text-sm font-bold text-theme-text-muted"><i class="fa-solid fa-infinity text-indigo-500 mr-2"></i>Unlimited Quota</p>
+ </div>
+ {% endif %}
+ </div>
+ </div>
+ 
+ <!-- Available Plans -->
+ <h3 class="text-xl font-bold text-theme-text-base mb-6">Available Plans</h3>
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+ {% for plan in plans %}
+ <div class="bg-theme-bg-surface rounded-3xl shadow-sm border {% if plan.is_popular %}border-indigo-500 ring-2 ring-indigo-500/20 relative{% else %}border-slate-200{% endif %} p-8 flex flex-col">
+ {% if plan.is_popular %}
+ <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase">Most Popular</span>
+ {% endif %}
+ 
+ <h4 class="text-2xl font-bold text-theme-text-base mb-2">{{ plan.name }}</h4>
+ <div class="mb-6">
+ <span class="text-4xl font-extrabold text-theme-text-base">${{ plan.monthly_price|floatformat:0 }}</span>
+ <span class="text-theme-text-muted font-medium">/month</span>
+ </div>
+ 
+ <ul class="space-y-4 mb-8 flex-grow">
+ {% for feature in plan.features %}
+ <li class="flex items-start">
+ <i class="fa-solid fa-check text-emerald-500 mt-1 mr-3"></i>
+ <span class="text-theme-text-muted text-sm font-medium">{{ feature }}</span>
+ </li>
+ {% endfor %}
+ </ul>
+ 
+ {% if subscription.plan == plan and subscription.status == 'active' %}
+ <button disabled class="w-full bg-emerald-50 text-emerald-600 font-bold py-3 px-4 rounded-xl border border-emerald-200 cursor-not-allowed">
+ Current Plan
+ </button>
+ {% else %}
+ <form action="{% url 'create_checkout_session' plan.id %}" method="POST">
+ {% csrf_token %}
+ <button type="submit" class="w-full {% if plan.is_popular %}bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/25{% else %}bg-slate-900 hover:bg-slate-800 text-white shadow-md{% endif %} font-bold py-3 px-4 rounded-xl transition-all">
+ Upgrade to {{ plan.name }}
+ </button>
+ </form>
+ {% endif %}
+ </div>
+ {% endfor %}
+ </div>
 </div>
 {% endblock %}

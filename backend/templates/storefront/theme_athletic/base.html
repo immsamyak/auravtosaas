@@ -22,152 +22,152 @@
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        display: ['Teko', 'sans-serif'],
-                        sans: ['Rajdhani', 'sans-serif'],
-                    },
-                    colors: {
-                        tech: {
-                            dark: '#0f172a', /* slate-900 */
-                            darker: '#020617', /* slate-950 */
-                            accent: '#0ea5e9', /* sky-500 */
-                            neon: '#06b6d4', /* cyan-500 */
-                        }
-                    },
-                    transformOrigin: {
-                        'skew': 'bottom left',
-                    }
-                }
-            }
-        }
-    </script>
+ tailwind.config = {
+ theme: {
+ extend: {
+ fontFamily: {
+ display: ['Teko', 'sans-serif'],
+ sans: ['Rajdhani', 'sans-serif'],
+ },
+ colors: {
+ tech: {
+ dark: '#0f172a', /* slate-900 */
+ darker: '#020617', /* slate-950 */
+ accent: '#0ea5e9', /* sky-500 */
+ neon: '#06b6d4', /* cyan-500 */
+ }
+ },
+ transformOrigin: {
+ 'skew': 'bottom left',
+ }
+ }
+ }
+ }
+ </script>
 <style>
-        .skew-x-custom {
-            transform: skewX(-10deg);
-        }
-        .unskew-x-custom {
-            transform: skewX(10deg);
-        }
-        
-        .clip-path-angled {
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-        }
-    </style>
+ .skew-x-custom {
+ transform: skewX(-10deg);
+ }
+ .unskew-x-custom {
+ transform: skewX(10deg);
+ }
+ 
+ .clip-path-angled {
+ clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+ }
+ </style>
 <!-- Alpine.js & Cart Store -->
 <script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('cart', {
-                items: JSON.parse(localStorage.getItem('aura_cart') || '[]'),
-                add(item) {
-                    // Check if already in cart
-                    const existing = this.items.find(i => i.id === item.id);
-                    if (existing) {
-                        existing.quantity += item.quantity || 1;
-                    } else {
-                        item.quantity = item.quantity || 1;
-                        this.items.push(item);
-                    }
-                    this.save();
-                },
-                remove(index) {
-                    this.items.splice(index, 1);
-                    this.save();
-                },
-                get count() { 
-                    return this.items.reduce((sum, item) => sum + item.quantity, 0); 
-                },
-                get total() { 
-                    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); 
-                },
-                
-                checkout() {
-                    if (this.items.length === 0) return;
-                    const variantId = this.items[0].id;
-                    window.location.href = `/checkout/{{ brand.slug }}/`;
-                },
-                save() { 
-                    localStorage.setItem('aura_cart', JSON.stringify(this.items)); 
-                }
-            });
-        });
-    </script>
+ document.addEventListener('alpine:init', () => {
+ Alpine.store('cart', {
+ items: JSON.parse(localStorage.getItem('aura_cart') || '[]'),
+ add(item) {
+ // Check if already in cart
+ const existing = this.items.find(i => i.id === item.id);
+ if (existing) {
+ existing.quantity += item.quantity || 1;
+ } else {
+ item.quantity = item.quantity || 1;
+ this.items.push(item);
+ }
+ this.save();
+ },
+ remove(index) {
+ this.items.splice(index, 1);
+ this.save();
+ },
+ get count() { 
+ return this.items.reduce((sum, item) => sum + item.quantity, 0); 
+ },
+ get total() { 
+ return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); 
+ },
+ 
+ checkout() {
+ if (this.items.length === 0) return;
+ const variantId = this.items[0].id;
+ window.location.href = `/checkout/{{ brand.slug }}/`;
+ },
+ save() { 
+ localStorage.setItem('aura_cart', JSON.stringify(this.items)); 
+ }
+ });
+ });
+ </script>
 <style>[x-cloak] { display: none !important; }</style>
 </head>
 <body class="flex flex-col min-h-screen antialiased text-white bg-tech-darker selection:bg-tech-accent selection:text-white" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
 
-    {% if brand.top_announcement_text %}
-    <div class="bg-black text-white text-center py-2 text-xs md:text-sm font-sans tracking-wider w-full">
-        {{ brand.top_announcement_text }}
-    </div>
-    {% endif %}
+ {% if brand.top_announcement_text %}
+ <div class="bg-black text-white text-center py-2 text-xs md:text-sm font-sans tracking-wider w-full">
+ {{ brand.top_announcement_text }}
+ </div>
+ {% endif %}
 <!-- Header -->
 <header class="fixed w-full top-0 z-50 transition-all duration-300 bg-tech-darker/90 backdrop-blur-md border-b border-white/10">
 <div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
-    
-    <!-- Navigation Links -->
-    <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
-        <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
-    </nav>
+ 
+ <!-- Navigation Links -->
+ <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+ </nav>
 
-    <!-- Logo -->
-    <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
-        {% if brand.logo %}
-            <a href="{% url 'storefront' brand.slug %}" class="inline-block">
-                <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
-            </a>
-        {% else %}
-            <a class="inline-block" href="{% url 'storefront' brand.slug %}">
-                <span class="text-3xl font-bold tracking-tight">{{ brand.name }}</span>
-            </a>
-        {% endif %}
-    </div>
+ <!-- Logo -->
+ <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
+ {% if brand.logo %}
+ <a href="{% url 'storefront' brand.slug %}" class="inline-block">
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
+ </a>
+ {% else %}
+ <a class="inline-block" href="{% url 'storefront' brand.slug %}">
+ <span class="text-3xl font-bold tracking-tight">{{ brand.name }}</span>
+ </a>
+ {% endif %}
+ </div>
 
-    <!-- Right Icons -->
-    <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
-        <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
-            <i class="fa-solid fa-bars text-lg"></i>
-        </button>
-        <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
-            <i class="fa-solid fa-magnifying-glass text-lg"></i>
-        </button>
-        <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
-            <i class="fa-regular fa-user text-lg"></i>
-        </a>
-        <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
-            <i class="fa-solid fa-bag-shopping text-lg"></i>
-            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
-        </button>
-    </div>
+ <!-- Right Icons -->
+ <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
+ <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
+ <i class="fa-solid fa-bars text-lg"></i>
+ </button>
+ <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
+ <i class="fa-solid fa-magnifying-glass text-lg"></i>
+ </button>
+ <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
+ <i class="fa-regular fa-user text-lg"></i>
+ </a>
+ <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
+ <i class="fa-solid fa-bag-shopping text-lg"></i>
+ <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
+ </button>
+ </div>
 
 </div>
 </header>
 <main class="flex-grow pt-20">
-        {% block content %}{% endblock %}
-    </main>
+ {% block content %}{% endblock %}
+ </main>
 <footer class="bg-black pt-20 pb-10 border-t-4 border-tech-accent">
 <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
 <div class="col-span-1 md:col-span-2">
 {% if brand.logo %}
-    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
 {% else %}
-    <h2 class="font-display font-bold text-5xl uppercase italic tracking-wider mb-4">{{ brand.name }}</h2>
+ <h2 class="font-display font-bold text-5xl uppercase italic tracking-wider mb-4">{{ brand.name }}</h2>
 {% endif %}
 <p class="font-sans text-gray-400 font-semibold text-lg max-w-md">{% if brand.description %}{{ brand.description }}{% else %}Engineered for peak performance. Push your limits with technologically advanced sportswear.{% endif %}</p>
 <div class="flex space-x-4 mt-6">
-                {% if brand.instagram_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
-                {% if brand.facebook_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
-                {% if brand.twitter_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
-                {% if brand.tiktok_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
-                {% if brand.pinterest_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
-            </div>
+ {% if brand.instagram_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
+ {% if brand.pinterest_url %}<a class="text-gray-400 hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+ </div>
 
 </div>
 <div>
@@ -188,8 +188,8 @@
 </div>
 </div>
 <div class="text-center font-sans font-semibold text-gray-600 text-sm">
-            {% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }} Performance. All rights reserved.{% endif %}
-        </div>
+ {% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }} Performance. All rights reserved.{% endif %}
+ </div>
 <div class="max-w-7xl mx-auto px-6 py-12 text-center">
 <h4 class="text-xl font-bold mb-4">Subscribe to our Newsletter</h4>
 <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex justify-center max-w-md mx-auto">
@@ -201,14 +201,14 @@
 <!-- Search Modal -->
 <div class="fixed inset-0 z-[100] flex items-start justify-center pt-20" style="display: none;" x-show="isSearchOpen" x-transition.opacity="">
 <div @click="isSearchOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-<div @click.stop="" class="relative w-full max-w-3xl bg-white p-8 rounded-2xl shadow-2xl mx-4 transform transition-all">
+<div @click.stop="" class="relative w-full max-w-3xl bg-theme-bg-surface p-8 rounded-2xl shadow-2xl mx-4 transform transition-all">
 <button @click="isSearchOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black">
 <i class="fa-solid fa-xmark text-xl"></i>
 </button>
 <h2 class="text-2xl font-bold mb-6 text-black">Search</h2>
 <form action="{% url 'storefront_shop' brand.slug %}" id="globalSearchForm" method="POST">
-                    {% csrf_token %}
-                <div class="relative">
+ {% csrf_token %}
+ <div class="relative">
 <input class="w-full text-black bg-gray-100 border-none rounded-xl px-6 py-4 text-lg focus:ring-2 focus:ring-black outline-none" id="globalSearchInput" name="search" placeholder="Search for products, collections..." required="" type="text"/>
 <button class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black" type="submit">
 <i class="fa-solid fa-magnifying-glass text-xl"></i>
@@ -228,23 +228,23 @@
 <!-- Profile Modal -->
 <div class="fixed inset-0 z-[100] flex items-center justify-center" style="display: none;" x-show="isProfileOpen" x-transition.opacity="">
 <div @click="isProfileOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-<div @click.stop="" class="relative w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl mx-4 text-center text-black" x-data="{ mode: 'login' }">
+<div @click.stop="" class="relative w-full max-w-md bg-theme-bg-surface p-8 rounded-2xl shadow-2xl mx-4 text-center text-black" x-data="{ mode: 'login' }">
 <button @click="isProfileOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black">
 <i class="fa-solid fa-xmark text-xl"></i>
 </button>
-            
-            {% if user.is_authenticated %}
-            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+ 
+ {% if user.is_authenticated %}
+ <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
 <i class="fa-solid fa-user-check text-2xl text-green-500"></i>
 </div>
 <h2 class="text-2xl font-bold mb-2">Welcome, {{ user.first_name|default:user.username }}</h2>
 <p class="text-gray-500 mb-8">{{ user.email }}</p>
 <a class="block w-full bg-gray-100 text-black py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors mb-4" href="{% url 'storefront_account' brand.slug %}">View Orders</a>
 <a class="block w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors" href="{% url 'storefront_logout' brand.slug %}">Sign Out</a>
-            
-            {% else %}
-            
-            <!-- Login Form -->
+ 
+ {% else %}
+ 
+ <!-- Login Form -->
 <div x-show="mode === 'login'">
 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
 <i class="fa-regular fa-user text-2xl text-gray-500"></i>
@@ -252,8 +252,8 @@
 <h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
 <p class="text-gray-500 mb-6">Sign in to view your orders and profile.</p>
 <form action="{% url 'storefront_login' brand.slug %}" class="space-y-4 text-left" method="POST">
-                    {% csrf_token %}
-                    <div>
+ {% csrf_token %}
+ <div>
 <label class="block text-sm font-medium text-gray-700">Email</label>
 <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="email" required="" type="email"/>
 </div>
@@ -275,8 +275,8 @@
 <h2 class="text-2xl font-bold mb-2">Create Account</h2>
 <p class="text-gray-500 mb-6">Join us for a seamless shopping experience.</p>
 <form action="{% url 'storefront_register' brand.slug %}" class="space-y-4 text-left" method="POST">
-                    {% csrf_token %}
-                    <div>
+ {% csrf_token %}
+ <div>
 <label class="block text-sm font-medium text-gray-700">Full Name</label>
 <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black px-4 py-2 bg-gray-50" name="name" required="" type="text"/>
 </div>
@@ -294,16 +294,16 @@
 <button @click="mode = 'login'" class="text-sm text-gray-500 hover:text-black">Already have an account? Sign in.</button>
 </div>
 </div>
-            
-            {% endif %}
-        </div>
+ 
+ {% endif %}
+ </div>
 </div>
 <!-- Cart Slide-over -->
 <div aria-labelledby="slide-over-title" aria-modal="true" class="fixed inset-0 z-[100] overflow-hidden" role="dialog" style="display: none;" x-show="isCartOpen">
 <div @click="isCartOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" x-show="isCartOpen" x-transition.opacity=""></div>
 <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
 <div @click.stop="" class="w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700" x-show="isCartOpen" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:enter-start="translate-x-full" x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-full" x-transition:leave-start="translate-x-0">
-<div class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll text-black">
+<div class="h-full flex flex-col bg-theme-bg-surface shadow-xl overflow-y-scroll text-black">
 <!-- Cart Header -->
 <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
 <div class="flex items-start justify-between">
@@ -362,7 +362,7 @@
 </div>
 <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
 <p>
-                                or <button @click="isCartOpen = false" class="text-black font-bold hover:underline" type="button">Continue Shopping<span aria-hidden="true"> →</span></button>
+ or <button @click="isCartOpen = false" class="text-black font-bold hover:underline" type="button">Continue Shopping<span aria-hidden="true"> →</span></button>
 </p>
 </div>
 </div>
@@ -372,70 +372,70 @@
 </div>
 
 {% include 'components/toast.html' %}
-    
+ 
 
 <!-- Newsletter Subscribe JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('newsletter-subscribe-form');
-    if (!form) return;
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const emailInput = form.querySelector('input[type="email"]');
-        const email = emailInput.value.trim();
-        if (!email) return;
-        const btn = form.querySelector('button[type="submit"]');
-        const origHTML = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-        btn.disabled = true;
-        fetch(form.action, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'email=' + encodeURIComponent(email)
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (typeof showToast === 'function') {
-                showToast(data.message, data.success ? 'success' : 'error');
-            } else {
-                alert(data.message);
-            }
-            if (data.success) emailInput.value = '';
-        })
-        .catch(() => {
-            if (typeof showToast === 'function') {
-                showToast('Something went wrong. Please try again.', 'error');
-            }
-        })
-        .finally(() => {
-            btn.innerHTML = origHTML;
-            btn.disabled = false;
-        });
-    });
+ const form = document.getElementById('newsletter-subscribe-form');
+ if (!form) return;
+ form.addEventListener('submit', function(e) {
+ e.preventDefault();
+ const emailInput = form.querySelector('input[type="email"]');
+ const email = emailInput.value.trim();
+ if (!email) return;
+ const btn = form.querySelector('button[type="submit"]');
+ const origHTML = btn.innerHTML;
+ btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+ btn.disabled = true;
+ fetch(form.action, {
+ method: 'POST',
+ headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+ body: 'email=' + encodeURIComponent(email)
+ })
+ .then(r => r.json())
+ .then(data => {
+ if (typeof showToast === 'function') {
+ showToast(data.message, data.success ? 'success' : 'error');
+ } else {
+ alert(data.message);
+ }
+ if (data.success) emailInput.value = '';
+ })
+ .catch(() => {
+ if (typeof showToast === 'function') {
+ showToast('Something went wrong. Please try again.', 'error');
+ }
+ })
+ .finally(() => {
+ btn.innerHTML = origHTML;
+ btn.disabled = false;
+ });
+ });
 });
 </script>
 
-    {% render_brand_analytics brand %}
+ {% render_brand_analytics brand %}
 
 <!-- Mobile Menu Modal -->
 <div class="fixed inset-0 z-[100] flex" style="display: none;" x-show="isMenuOpen" x-transition.opacity="">
-    <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-    <div @click.stop="" class="relative w-64 max-w-sm bg-white h-full shadow-2xl transform transition-all flex flex-col"
-         x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
-         x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
-        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-            <span class="font-bold text-lg text-black">Menu</span>
-            <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-        </div>
-        <div class="p-6 flex flex-col space-y-6 text-black flex-1 overflow-y-auto">
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
-            <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
-        </div>
-    </div>
+ <div @click="isMenuOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+ <div @click.stop="" class="relative w-64 max-w-sm bg-theme-bg-surface h-full shadow-2xl transform transition-all flex flex-col"
+ x-show="isMenuOpen" x-transition:enter="translate-x-[-100%]" x-transition:enter-end="translate-x-0" 
+ x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-[-100%]">
+ <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+ <span class="font-bold text-lg text-black">Menu</span>
+ <button @click="isMenuOpen = false" class="text-gray-400 hover:text-black">
+ <i class="fa-solid fa-xmark text-xl"></i>
+ </button>
+ </div>
+ <div class="p-6 flex flex-col space-y-6 text-black flex-1 overflow-y-auto">
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+ <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+ </div>
+ </div>
 </div>
 </body>
 </html>

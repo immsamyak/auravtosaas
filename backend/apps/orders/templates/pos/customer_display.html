@@ -1,215 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Display - {{ brand.name }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Customer Display - {{ brand.name }}</title>
+ <script src="https://cdn.tailwindcss.com"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+ <!-- Alpine.js -->
+ <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 </head>
-<body class="bg-white h-screen overflow-hidden text-slate-800 flex" x-data="customerDisplayApp()">
+<body class="bg-theme-bg-surface h-screen overflow-hidden text-theme-text-base flex" x-data="customerDisplayApp()">
 
-    <!-- LEFT PANEL: Promotional / Branding -->
-    <div class="flex-1 bg-indigo-900 text-white flex flex-col items-center justify-center relative overflow-hidden">
-        <!-- Abstract Background -->
-        <div class="absolute inset-0 opacity-20">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full">
-                <path d="M0,0 C30,40 70,60 100,0 L100,100 L0,100 Z" fill="currentColor" class="text-indigo-500"></path>
-                <path d="M0,100 C20,80 80,80 100,100 Z" fill="currentColor" class="text-indigo-400"></path>
-            </svg>
-        </div>
-        
-        <div class="z-10 text-center px-12">
-            <h1 class="text-6xl font-black mb-6 tracking-tight">{{ brand.name }}</h1>
-            <p class="text-2xl text-indigo-200 font-light max-w-lg mx-auto leading-relaxed">Thank you for shopping with us today. Please review your order on the screen.</p>
-            
-            <div class="mt-16 inline-flex flex-col items-center justify-center w-80 p-6 bg-white rounded-3xl shadow-2xl relative overflow-hidden transition-all min-h-[350px]">
-                
-                <!-- Store Link QR (Default) -->
-                <div x-show="activeQrType === 'STORE'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center">
-                    <img src="{{ store_qr_url }}" alt="Scan to Shop Online" class="w-56 h-56 object-contain rounded-xl">
-                    <p class="mt-4 text-sm text-indigo-900 font-bold uppercase tracking-widest text-center">Scan to Shop Online</p>
-                </div>
-                
-                <!-- Payment QR -->
-                {% if payment_qr_url %}
-                <div x-show="activeQrType === 'PAYMENT'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center" style="display: none;">
-                    <img src="{{ payment_qr_url }}" alt="Scan to Pay" class="w-56 h-56 object-contain rounded-xl border-4 border-fuchsia-500">
-                    <p class="mt-4 text-sm text-white font-bold uppercase tracking-widest bg-fuchsia-600 py-2 px-6 rounded-full inline-block animate-pulse">Scan to Pay</p>
-                </div>
-                {% endif %}
-                
-                <!-- Google Review QR -->
-                {% if review_qr_url %}
-                <div x-show="activeQrType === 'REVIEW'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center" style="display: none;">
-                    <i class="fa-brands fa-google text-amber-500 text-4xl mb-4"></i>
-                    <img src="{{ review_qr_url }}" alt="Scan to Review" class="w-48 h-48 object-contain rounded-xl border-4 border-amber-400">
-                    <p class="mt-4 text-sm text-white font-bold uppercase tracking-widest bg-amber-500 py-2 px-6 rounded-full inline-block">Review Us!</p>
-                </div>
-                {% endif %}
-                
-                <!-- WiFi QR -->
-                {% if wifi_qr_url %}
-                <div x-show="activeQrType === 'WIFI'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center" style="display: none;">
-                    <i class="fa-solid fa-wifi text-sky-500 text-4xl mb-4"></i>
-                    <img src="{{ wifi_qr_url }}" alt="Scan for WiFi" class="w-48 h-48 object-contain rounded-xl border-4 border-sky-400">
-                    <p class="mt-4 text-sm text-white font-bold uppercase tracking-widest bg-sky-500 py-2 px-6 rounded-full inline-block">Free WiFi</p>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+ <!-- LEFT PANEL: Promotional / Branding -->
+ <div class="flex-1 bg-indigo-900 text-white flex flex-col items-center justify-center relative overflow-hidden">
+ <!-- Abstract Background -->
+ <div class="absolute inset-0 opacity-20">
+ <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full">
+ <path d="M0,0 C30,40 70,60 100,0 L100,100 L0,100 Z" fill="currentColor" class="text-indigo-500"></path>
+ <path d="M0,100 C20,80 80,80 100,100 Z" fill="currentColor" class="text-indigo-400"></path>
+ </svg>
+ </div>
+ 
+ <div class="z-10 text-center px-12">
+ <h1 class="text-6xl font-black mb-6 tracking-tight">{{ brand.name }}</h1>
+ <p class="text-2xl text-indigo-200 font-light max-w-lg mx-auto leading-relaxed">Thank you for shopping with us today. Please review your order on the screen.</p>
+ 
+ <div class="mt-16 inline-flex flex-col items-center justify-center w-80 p-6 bg-theme-bg-surface rounded-3xl shadow-2xl relative overflow-hidden transition-all min-h-[350px]">
+ 
+ <!-- Store Link QR (Default) -->
+ <div x-show="activeQrType === 'STORE'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center">
+ <img src="{{ store_qr_url }}" alt="Scan to Shop Online" class="w-56 h-56 object-contain rounded-xl">
+ <p class="mt-4 text-sm text-indigo-900 font-bold uppercase tracking-widest text-center">Scan to Shop Online</p>
+ </div>
+ 
+ <!-- Payment QR -->
+ {% if payment_qr_url %}
+ <div x-show="activeQrType === 'PAYMENT'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center" style="display: none;">
+ <img src="{{ payment_qr_url }}" alt="Scan to Pay" class="w-56 h-56 object-contain rounded-xl border-4 border-fuchsia-500">
+ <p class="mt-4 text-sm text-white font-bold uppercase tracking-widest bg-fuchsia-600 py-2 px-6 rounded-full inline-block animate-pulse">Scan to Pay</p>
+ </div>
+ {% endif %}
+ 
+ <!-- Google Review QR -->
+ {% if review_qr_url %}
+ <div x-show="activeQrType === 'REVIEW'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center" style="display: none;">
+ <i class="fa-brands fa-google text-amber-500 text-4xl mb-4"></i>
+ <img src="{{ review_qr_url }}" alt="Scan to Review" class="w-48 h-48 object-contain rounded-xl border-4 border-amber-400">
+ <p class="mt-4 text-sm text-white font-bold uppercase tracking-widest bg-amber-500 py-2 px-6 rounded-full inline-block">Review Us!</p>
+ </div>
+ {% endif %}
+ 
+ <!-- WiFi QR -->
+ {% if wifi_qr_url %}
+ <div x-show="activeQrType === 'WIFI'" x-transition.opacity class="flex flex-col items-center w-full h-full justify-center" style="display: none;">
+ <i class="fa-solid fa-wifi text-sky-500 text-4xl mb-4"></i>
+ <img src="{{ wifi_qr_url }}" alt="Scan for WiFi" class="w-48 h-48 object-contain rounded-xl border-4 border-sky-400">
+ <p class="mt-4 text-sm text-white font-bold uppercase tracking-widest bg-sky-500 py-2 px-6 rounded-full inline-block">Free WiFi</p>
+ </div>
+ {% endif %}
+ </div>
+ </div>
+ </div>
 
-    <!-- RIGHT PANEL: Live Cart Summary -->
-    <div class="w-[500px] bg-white border-l border-slate-200 flex flex-col shadow-2xl z-10">
-        
-        <div class="p-6 bg-slate-50 border-b border-slate-200 text-center">
-            <h2 class="text-2xl font-bold text-slate-800">Your Order</h2>
-            {% if brand.settings.show_tax_on_receipt and brand.settings.tax_id_number %}
-            <p class="text-xs text-slate-500 font-bold mt-1">{{ brand.settings.tax_id_type }}: {{ brand.settings.tax_id_number }}</p>
-            {% endif %}
-        </div>
+ <!-- RIGHT PANEL: Live Cart Summary -->
+ <div class="w-[500px] bg-theme-bg-surface border-l border-theme-border-base flex flex-col shadow-2xl z-10">
+ 
+ <div class="p-6 bg-theme-bg-base border-b border-theme-border-base text-center">
+ <h2 class="text-2xl font-bold text-theme-text-base">Your Order</h2>
+ {% if brand.settings.show_tax_on_receipt and brand.settings.tax_id_number %}
+ <p class="text-xs text-theme-text-muted font-bold mt-1">{{ brand.settings.tax_id_type }}: {{ brand.settings.tax_id_number }}</p>
+ {% endif %}
+ </div>
 
-        <!-- Cart Items / Success State -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4 relative">
-            
-            <!-- Welcome / Empty State -->
-            <template x-if="cart.length === 0 && orderStatus !== 'SUCCESS'">
-                <div class="h-full flex flex-col items-center justify-center text-slate-400">
-                    <i class="fa-solid fa-store text-6xl mb-6 text-slate-200"></i>
-                    <p class="text-xl font-medium">Welcome to {{ brand.name }}!</p>
-                    <p class="text-sm mt-2">Next customer please...</p>
-                </div>
-            </template>
-            
-            <!-- Success State -->
-            <template x-if="orderStatus === 'SUCCESS'">
-                <div class="absolute inset-6 flex flex-col items-center justify-center text-center p-6 bg-emerald-50 rounded-3xl border border-emerald-100 z-20">
-                    <div class="w-24 h-24 bg-emerald-500 text-white rounded-full flex items-center justify-center text-5xl mb-6 shadow-xl shadow-emerald-500/30">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <h2 class="text-3xl font-black text-slate-800 mb-2">Checkout Complete!</h2>
-                    <p class="text-slate-500 mb-8 font-medium">Thank you for your purchase.</p>
-                    
-                    <div class="bg-white p-3 rounded-2xl border-2 border-slate-900 inline-block shadow-sm">
-                        <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(window.location.origin + '/track/' + lastOrderId)" alt="Receipt QR" class="w-48 h-48 opacity-90">
-                    </div>
-                    <p class="text-xs text-slate-500 mt-4 font-bold uppercase tracking-widest">Scan for Digital Receipt</p>
-                </div>
-            </template>
-            
-            <!-- Items -->
-            <template x-for="item in cart" :key="item.id">
-                <div class="flex gap-4 items-center bg-white border border-slate-100 p-4 rounded-2xl shadow-sm">
-                    <!-- Image -->
-                    <div class="w-16 h-16 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0">
-                        <img x-show="item.image" :src="item.image" class="w-full h-full object-cover">
-                        <div x-show="!item.image" class="w-full h-full flex items-center justify-center text-slate-400">
-                            <i class="fa-solid fa-shirt"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Details -->
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg text-slate-800 leading-tight" x-text="item.name"></h3>
-                        <p class="text-slate-500 mt-1">Qty: <span class="font-bold text-slate-700" x-text="item.quantity"></span></p>
-                    </div>
-                    
-                    <!-- Price -->
-                    <div class="text-right">
-                        <div class="font-bold text-xl text-slate-800">{{ currency_symbol }}<span x-text="(item.price * item.quantity).toFixed(2)"></span></div>
-                    </div>
-                </div>
-            </template>
-        </div>
-        
-        <!-- Totals -->
-        <div class="bg-slate-900 text-white p-8 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.3)] z-10">
-            <div class="space-y-3 mb-6 border-b border-slate-700 pb-6">
-                <div class="flex justify-between text-lg text-slate-300">
-                    <span>Subtotal</span>
-                    <span>{{ currency_symbol }}<span x-text="subtotal.toFixed(2)"></span></span>
-                </div>
-                <template x-if="discount > 0">
-                    <div class="flex justify-between text-lg text-rose-400 font-bold">
-                        <span>Discount</span>
-                        <span>- {{ currency_symbol }}<span x-text="discount.toFixed(2)"></span></span>
-                    </div>
-                </template>
-                <template x-if="taxRate > 0">
-                    <div class="flex justify-between text-lg text-slate-300">
-                        <span>Tax (<span x-text="taxRate"></span>%)</span>
-                        <span>{{ currency_symbol }}<span x-text="taxAmount.toFixed(2)"></span></span>
-                    </div>
-                </template>
-            </div>
-            
-            <div class="flex justify-between items-end">
-                <span class="text-2xl font-bold text-slate-300">Total to Pay</span>
-                <span class="text-6xl font-black text-emerald-400">{{ currency_symbol }}<span x-text="total.toFixed(2)"></span></span>
-            </div>
-        </div>
-    </div>
+ <!-- Cart Items / Success State -->
+ <div class="flex-1 overflow-y-auto p-6 space-y-4 relative">
+ 
+ <!-- Welcome / Empty State -->
+ <template x-if="cart.length === 0 && orderStatus !== 'SUCCESS'">
+ <div class="h-full flex flex-col items-center justify-center text-slate-400">
+ <i class="fa-solid fa-store text-6xl mb-6 text-slate-200"></i>
+ <p class="text-xl font-medium">Welcome to {{ brand.name }}!</p>
+ <p class="text-sm mt-2">Next customer please...</p>
+ </div>
+ </template>
+ 
+ <!-- Success State -->
+ <template x-if="orderStatus === 'SUCCESS'">
+ <div class="absolute inset-6 flex flex-col items-center justify-center text-center p-6 bg-emerald-50 rounded-3xl border border-emerald-100 z-20">
+ <div class="w-24 h-24 bg-emerald-500 text-white rounded-full flex items-center justify-center text-5xl mb-6 shadow-xl shadow-emerald-500/30">
+ <i class="fa-solid fa-check"></i>
+ </div>
+ <h2 class="text-3xl font-black text-theme-text-base mb-2">Checkout Complete!</h2>
+ <p class="text-theme-text-muted mb-8 font-medium">Thank you for your purchase.</p>
+ 
+ <div class="bg-theme-bg-surface p-3 rounded-2xl border-2 border-slate-900 inline-block shadow-sm">
+ <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(window.location.origin + '/track/' + lastOrderId)" alt="Receipt QR" class="w-48 h-48 opacity-90">
+ </div>
+ <p class="text-xs text-theme-text-muted mt-4 font-bold uppercase tracking-widest">Scan for Digital Receipt</p>
+ </div>
+ </template>
+ 
+ <!-- Items -->
+ <template x-for="item in cart" :key="item.id">
+ <div class="flex gap-4 items-center bg-theme-bg-surface border border-theme-border-divider p-4 rounded-2xl shadow-sm">
+ <!-- Image -->
+ <div class="w-16 h-16 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0">
+ <img x-show="item.image" :src="item.image" class="w-full h-full object-cover">
+ <div x-show="!item.image" class="w-full h-full flex items-center justify-center text-slate-400">
+ <i class="fa-solid fa-shirt"></i>
+ </div>
+ </div>
+ 
+ <!-- Details -->
+ <div class="flex-1">
+ <h3 class="font-bold text-lg text-theme-text-base leading-tight" x-text="item.name"></h3>
+ <p class="text-theme-text-muted mt-1">Qty: <span class="font-bold text-slate-700" x-text="item.quantity"></span></p>
+ </div>
+ 
+ <!-- Price -->
+ <div class="text-right">
+ <div class="font-bold text-xl text-theme-text-base">{{ currency_symbol }}<span x-text="(item.price * item.quantity).toFixed(2)"></span></div>
+ </div>
+ </div>
+ </template>
+ </div>
+ 
+ <!-- Totals -->
+ <div class="bg-slate-900 text-white p-8 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.3)] z-10">
+ <div class="space-y-3 mb-6 border-b border-slate-700 pb-6">
+ <div class="flex justify-between text-lg text-slate-300">
+ <span>Subtotal</span>
+ <span>{{ currency_symbol }}<span x-text="subtotal.toFixed(2)"></span></span>
+ </div>
+ <template x-if="discount > 0">
+ <div class="flex justify-between text-lg text-rose-400 font-bold">
+ <span>Discount</span>
+ <span>- {{ currency_symbol }}<span x-text="discount.toFixed(2)"></span></span>
+ </div>
+ </template>
+ <template x-if="taxRate > 0">
+ <div class="flex justify-between text-lg text-slate-300">
+ <span>Tax (<span x-text="taxRate"></span>%)</span>
+ <span>{{ currency_symbol }}<span x-text="taxAmount.toFixed(2)"></span></span>
+ </div>
+ </template>
+ </div>
+ 
+ <div class="flex justify-between items-end">
+ <span class="text-2xl font-bold text-slate-300">Total to Pay</span>
+ <span class="text-6xl font-black text-emerald-400">{{ currency_symbol }}<span x-text="total.toFixed(2)"></span></span>
+ </div>
+ </div>
+ </div>
 
-    <script>
-        function customerDisplayApp() {
-            return {
-                cart: [],
-                discount: 0,
-                subtotal: 0,
-                taxRate: 0,
-                taxAmount: 0,
-                total: 0,
-                activeQrType: 'STORE',
-                orderStatus: 'ACTIVE',
-                lastOrderId: null,
-                
-                init() {
-                    // Initial load from storage just in case it was refreshed
-                    this.loadFromStorage();
-                    
-                    // Listen for storage events from the Cashier Terminal window!
-                    // This is instantly fired across tabs/windows on the same machine.
-                    window.addEventListener('storage', (e) => {
-                        if (e.key === 'pos_cart') {
-                            this.loadFromStorage();
-                        }
-                    });
-                },
-                
-                loadFromStorage() {
-                    const saved = localStorage.getItem('pos_cart');
-                    if (saved) {
-                        try {
-                            const data = JSON.parse(saved);
-                            this.cart = data.items || [];
-                            this.discount = data.discount || 0;
-                            this.subtotal = data.subtotal || 0;
-                            this.taxRate = data.taxRate || 0;
-                            this.taxAmount = data.taxAmount || 0;
-                            this.total = data.total || 0;
-                            this.activeQrType = data.activeQrType || 'STORE';
-                            this.orderStatus = data.status || 'ACTIVE';
-                            this.lastOrderId = data.order_id || null;
-                        } catch (e) {
-                            console.error("Storage parse error", e);
-                        }
-                    } else {
-                        this.cart = [];
-                        this.discount = 0;
-                        this.subtotal = 0;
-                        this.taxRate = 0;
-                        this.taxAmount = 0;
-                        this.total = 0;
-                        this.activeQrType = 'STORE';
-                        this.orderStatus = 'ACTIVE';
-                        this.lastOrderId = null;
-                    }
-                }
-            }
-        }
-    </script>
+ <script>
+ function customerDisplayApp() {
+ return {
+ cart: [],
+ discount: 0,
+ subtotal: 0,
+ taxRate: 0,
+ taxAmount: 0,
+ total: 0,
+ activeQrType: 'STORE',
+ orderStatus: 'ACTIVE',
+ lastOrderId: null,
+ 
+ init() {
+ // Initial load from storage just in case it was refreshed
+ this.loadFromStorage();
+ 
+ // Listen for storage events from the Cashier Terminal window!
+ // This is instantly fired across tabs/windows on the same machine.
+ window.addEventListener('storage', (e) => {
+ if (e.key === 'pos_cart') {
+ this.loadFromStorage();
+ }
+ });
+ },
+ 
+ loadFromStorage() {
+ const saved = localStorage.getItem('pos_cart');
+ if (saved) {
+ try {
+ const data = JSON.parse(saved);
+ this.cart = data.items || [];
+ this.discount = data.discount || 0;
+ this.subtotal = data.subtotal || 0;
+ this.taxRate = data.taxRate || 0;
+ this.taxAmount = data.taxAmount || 0;
+ this.total = data.total || 0;
+ this.activeQrType = data.activeQrType || 'STORE';
+ this.orderStatus = data.status || 'ACTIVE';
+ this.lastOrderId = data.order_id || null;
+ } catch (e) {
+ console.error("Storage parse error", e);
+ }
+ } else {
+ this.cart = [];
+ this.discount = 0;
+ this.subtotal = 0;
+ this.taxRate = 0;
+ this.taxAmount = 0;
+ this.total = 0;
+ this.activeQrType = 'STORE';
+ this.orderStatus = 'ACTIVE';
+ this.lastOrderId = null;
+ }
+ }
+ }
+ }
+ </script>
 </body>
 </html>

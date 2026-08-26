@@ -1,230 +1,230 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    {% include "components/breadcrumb.html" with current="Landing Page Config" %}
-    <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Landing Page <span class="text-indigo-600 font-light">Config</span></h1>
-        <p class="text-slate-500 mt-1">Configure the public facing SaaS landing page sections.</p>
-    </div>
-    
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <form method="post" enctype="multipart/form-data" class="flex flex-col md:flex-row min-h-[600px]">
-            {% csrf_token %}
-            
-            <div x-data="{ activeTab: 'hero' }" class="flex flex-col md:flex-row w-full">
-                
-                <!-- Vertical Tab Navigation -->
-                <div class="w-full md:w-64 bg-slate-50 border-r border-slate-100 p-6 flex flex-col gap-2 shrink-0">
-                    <button type="button" @click="activeTab = 'hero'" 
-                            :class="activeTab === 'hero' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-flag w-5 text-center"></i>
-                        Hero Section
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'demo'" 
-                            :class="activeTab === 'demo' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-laptop w-5 text-center"></i>
-                        Demo Section
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'features'" 
-                            :class="activeTab === 'features' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-list-check w-5 text-center"></i>
-                        Features Section
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'testimonials'" 
-                            :class="activeTab === 'testimonials' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-comment-dots w-5 text-center"></i>
-                        Testimonials Section
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'blog'" 
-                            :class="activeTab === 'blog' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-newspaper w-5 text-center"></i>
-                        Blog Section
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'contact'" 
-                            :class="activeTab === 'contact' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-envelope w-5 text-center"></i>
-                        Contact Section
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'footer'" 
-                            :class="activeTab === 'footer' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <i class="fa-solid fa-shoe-prints w-5 text-center"></i>
-                        Footer & Status
-                    </button>
-                </div>
-                
-                <!-- Tab Content Area -->
-                <div class="flex-1 p-8 pb-24 relative">
-                    
-                    <!-- Form Errors (Global) -->
-                    {% if form.non_field_errors %}
-                        <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl">
-                            {% for error in form.non_field_errors %}
-                                <p class="text-sm font-bold text-rose-600 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+ {% include "components/breadcrumb.html" with current="Landing Page Config" %}
+ <div class="mb-8">
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Landing Page <span class="text-indigo-600 font-light">Config</span></h1>
+ <p class="text-theme-text-muted mt-1">Configure the public facing SaaS landing page sections.</p>
+ </div>
+ 
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-divider overflow-hidden">
+ <form method="post" enctype="multipart/form-data" class="flex flex-col md:flex-row min-h-[600px]">
+ {% csrf_token %}
+ 
+ <div x-data="{ activeTab: 'hero' }" class="flex flex-col md:flex-row w-full">
+ 
+ <!-- Vertical Tab Navigation -->
+ <div class="w-full md:w-64 bg-theme-bg-base border-r border-theme-border-divider p-6 flex flex-col gap-2 shrink-0">
+ <button type="button" @click="activeTab = 'hero'" 
+ :class="activeTab === 'hero' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-flag w-5 text-center"></i>
+ Hero Section
+ </button>
+ 
+ <button type="button" @click="activeTab = 'demo'" 
+ :class="activeTab === 'demo' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-laptop w-5 text-center"></i>
+ Demo Section
+ </button>
+ 
+ <button type="button" @click="activeTab = 'features'" 
+ :class="activeTab === 'features' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-list-check w-5 text-center"></i>
+ Features Section
+ </button>
+ 
+ <button type="button" @click="activeTab = 'testimonials'" 
+ :class="activeTab === 'testimonials' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-comment-dots w-5 text-center"></i>
+ Testimonials Section
+ </button>
+ 
+ <button type="button" @click="activeTab = 'blog'" 
+ :class="activeTab === 'blog' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-newspaper w-5 text-center"></i>
+ Blog Section
+ </button>
+ 
+ <button type="button" @click="activeTab = 'contact'" 
+ :class="activeTab === 'contact' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-envelope w-5 text-center"></i>
+ Contact Section
+ </button>
+ 
+ <button type="button" @click="activeTab = 'footer'" 
+ :class="activeTab === 'footer' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <i class="fa-solid fa-shoe-prints w-5 text-center"></i>
+ Footer & Status
+ </button>
+ </div>
+ 
+ <!-- Tab Content Area -->
+ <div class="flex-1 p-8 pb-24 relative">
+ 
+ <!-- Form Errors (Global) -->
+ {% if form.non_field_errors %}
+ <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl">
+ {% for error in form.non_field_errors %}
+ <p class="text-sm font-bold text-rose-600 flex items-center gap-2">
+ <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+ {{ error }}
+ </p>
+ {% endfor %}
+ </div>
+ {% endif %}
 
-                    <!-- Tab: Hero Section -->
-                    <div x-show="activeTab === 'hero'" class="space-y-6" x-transition.opacity>
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Hero Section Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "hero_headline,hero_subheadline,hero_primary_cta,hero_secondary_cta" %}
-                                <div class="{% if field.name == 'hero_subheadline' or field.name == 'hero_headline' %}col-span-full{% endif %}">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+ <!-- Tab: Hero Section -->
+ <div x-show="activeTab === 'hero'" class="space-y-6" x-transition.opacity>
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Hero Section Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "hero_headline,hero_subheadline,hero_primary_cta,hero_secondary_cta" %}
+ <div class="{% if field.name == 'hero_subheadline' or field.name == 'hero_headline' %}col-span-full{% endif %}">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
 
-                    <!-- Tab: Demo Section -->
-                    <div x-show="activeTab === 'demo'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Demo Section Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "demo_title,demo_subtitle" %}
-                                <div class="col-span-full">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    <!-- Tab: Features Section -->
-                    <div x-show="activeTab === 'features'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Features Section Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "features_title,features_subtitle" %}
-                                <div class="col-span-full">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    <!-- Tab: Testimonials Section -->
-                    <div x-show="activeTab === 'testimonials'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Testimonials Section Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "testimonials_title,testimonials_subtitle" %}
-                                <div class="col-span-full">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    <!-- Tab: Blog Section -->
-                    <div x-show="activeTab === 'blog'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Blog Section Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "blog_title,blog_subtitle" %}
-                                <div class="col-span-full">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    <!-- Tab: Contact Section -->
-                    <div x-show="activeTab === 'contact'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Contact Section Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "contact_title,contact_subtitle,contact_email,contact_phone,contact_address" %}
-                                <div class="col-span-full md:col-span-1">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+ <!-- Tab: Demo Section -->
+ <div x-show="activeTab === 'demo'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Demo Section Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "demo_title,demo_subtitle" %}
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Tab: Features Section -->
+ <div x-show="activeTab === 'features'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Features Section Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "features_title,features_subtitle" %}
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Tab: Testimonials Section -->
+ <div x-show="activeTab === 'testimonials'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Testimonials Section Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "testimonials_title,testimonials_subtitle" %}
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Tab: Blog Section -->
+ <div x-show="activeTab === 'blog'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Blog Section Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "blog_title,blog_subtitle" %}
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Tab: Contact Section -->
+ <div x-show="activeTab === 'contact'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Contact Section Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "contact_title,contact_subtitle,contact_email,contact_phone,contact_address" %}
+ <div class="col-span-full md:col-span-1">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
 
-                    <!-- Tab: Footer & Status -->
-                    <div x-show="activeTab === 'footer'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Footer & Status Configuration</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "footer_text,is_active,social_twitter,social_instagram,social_linkedin,social_facebook" %}
-                                <div class="{% if field.name == 'footer_text' %}col-span-full{% else %}col-span-1{% endif %}">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+ <!-- Tab: Footer & Status -->
+ <div x-show="activeTab === 'footer'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Footer & Status Configuration</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "footer_text,is_active,social_twitter,social_instagram,social_linkedin,social_facebook" %}
+ <div class="{% if field.name == 'footer_text' %}col-span-full{% else %}col-span-1{% endif %}">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
 
-                    <!-- Fixed Footer Actions -->
-                    <div class="absolute bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 flex justify-end gap-4 rounded-br-2xl">
-                        <a href="{% url 'admin:dashboard' %}" class="px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition shadow-sm">Cancel</a>
-                        <button type="submit" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            Save Settings
-                        </button>
-                    </div>
-                    
-                </div>
-            </div>
-        </form>
-    </div>
+ <!-- Fixed Footer Actions -->
+ <div class="absolute bottom-0 left-0 right-0 p-6 bg-theme-bg-surface border-t border-theme-border-divider flex justify-end gap-4 rounded-br-2xl">
+ <a href="{% url 'admin:dashboard' %}" class="px-6 py-3 rounded-xl font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 transition shadow-sm">Cancel</a>
+ <button type="submit" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition flex items-center gap-2">
+ <i class="fa-solid fa-floppy-disk"></i>
+ Save Settings
+ </button>
+ </div>
+ 
+ </div>
+ </div>
+ </form>
+ </div>
 </div>
 {% endblock %}

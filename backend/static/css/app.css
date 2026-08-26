@@ -1,10 +1,53 @@
 /* Aura Global Styles */
+:root {
+    /* Light Theme (Default) */
+    --theme-bg-base: #f8fafc; /* slate-50 */
+    --theme-bg-surface: #ffffff; /* white */
+    --theme-bg-elevated: #ffffff;
+    --theme-bg-hover: #f1f5f9; /* slate-100 */
+    
+    --theme-text-base: #1e293b; /* slate-800 */
+    --theme-text-muted: #64748b; /* slate-500 */
+    --theme-text-inverse: #ffffff;
+    
+    --theme-border-base: #e2e8f0; /* slate-200 */
+    --theme-border-divider: #f1f5f9; /* slate-100 */
+    
+    --theme-input-bg: #ffffff;
+    --theme-input-border: #cbd5e1; /* slate-300 */
+    --theme-input-placeholder: #94a3b8; /* slate-400 */
+    
+    --theme-primary-hover: #4f46e5; /* indigo-600 */
+}
+
+html.dark {
+    /* Dark Theme */
+    --theme-bg-base: #020617; /* slate-950 */
+    --theme-bg-surface: #0f172a; /* slate-900 */
+    --theme-bg-elevated: #1e293b; /* slate-800 */
+    --theme-bg-hover: rgba(255, 255, 255, 0.05);
+    
+    --theme-text-base: #f1f5f9; /* slate-100 */
+    --theme-text-muted: #94a3b8; /* slate-400 */
+    --theme-text-inverse: #020617;
+    
+    --theme-border-base: #334155; /* slate-700 */
+    --theme-border-divider: #1e293b; /* slate-800 */
+    
+    --theme-input-bg: #0f172a; /* slate-900 */
+    --theme-input-border: #334155; /* slate-700 */
+    --theme-input-placeholder: #64748b; /* slate-500 */
+    
+    --theme-primary-hover: #6366f1; /* indigo-500 */
+}
+
 @layer base {
     body {
         font-family: 'Inter', sans-serif;
+        background-color: var(--theme-bg-base);
+        color: var(--theme-text-base);
     }
 }
-
 @layer components {
     /* Add reusable component classes here if necessary */
 }

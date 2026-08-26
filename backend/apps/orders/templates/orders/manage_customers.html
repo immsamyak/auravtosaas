@@ -3,128 +3,128 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    <!-- Breadcrumb -->
-    <nav class="flex mb-8" aria-label="Breadcrumb">
-        <ol class="inline-flex items-center space-x-1 md:space-x-3">
-            <li aria-current="page">
-                <div class="flex items-center">
-                    <i class="fa-solid fa-users text-slate-400 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800">Store</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
-                    <span class="text-sm font-medium text-slate-500">Customers</span>
-                </div>
-            </li>
-        </ol>
-    </nav>
+ <!-- Breadcrumb -->
+ <nav class="flex mb-8" aria-label="Breadcrumb">
+ <ol class="inline-flex items-center space-x-1 md:space-x-3">
+ <li aria-current="page">
+ <div class="flex items-center">
+ <i class="fa-solid fa-users text-slate-400 mr-2"></i>
+ <span class="text-sm font-bold text-theme-text-base">Store</span>
+ <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+ <span class="text-sm font-medium text-theme-text-muted">Customers</span>
+ </div>
+ </li>
+ </ol>
+ </nav>
 
-    <!-- Header & Actions -->
-    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Manage <span class="text-indigo-600 font-light">Customers</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Manage and view your top customers across online and POS orders.</p>
-        </div>
-        <div class="flex space-x-3">
-            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold transition-colors">
-                <i class="fa-solid fa-download mr-2"></i> Export CSV
-            </button>
-        </div>
-    </div>
+ <!-- Header & Actions -->
+ <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+ <div>
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Manage <span class="text-indigo-600 font-light">Customers</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">Manage and view your top customers across online and POS orders.</p>
+ </div>
+ <div class="flex space-x-3">
+ <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold transition-colors">
+ <i class="fa-solid fa-download mr-2"></i> Export CSV
+ </button>
+ </div>
+ </div>
 
-    <!-- Stat Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-                <i class="fa-solid fa-users text-xl"></i>
-            </div>
-            <div>
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Customers</p>
-                <p class="text-2xl font-extrabold text-slate-900">{{ customers|length }}</p>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                <i class="fa-solid fa-star text-xl"></i>
-            </div>
-            <div>
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">VIP Customers</p>
-                <p class="text-2xl font-extrabold text-slate-900">
-                    {% with count=0 %}
-                        {% for c in customers %}
-                            {% if c.order_count >= 3 %}{% endif %}
-                        {% endfor %}
-                    {% endwith %}
-                    0
-                </p>
-            </div>
-        </div>
-    </div>
+ <!-- Stat Cards -->
+ <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-5 flex items-center gap-4">
+ <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+ <i class="fa-solid fa-users text-xl"></i>
+ </div>
+ <div>
+ <p class="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Total Customers</p>
+ <p class="text-2xl font-extrabold text-theme-text-base">{{ customers|length }}</p>
+ </div>
+ </div>
+ 
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base p-5 flex items-center gap-4">
+ <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+ <i class="fa-solid fa-star text-xl"></i>
+ </div>
+ <div>
+ <p class="text-xs font-bold text-theme-text-muted uppercase tracking-wider">VIP Customers</p>
+ <p class="text-2xl font-extrabold text-theme-text-base">
+ {% with count=0 %}
+ {% for c in customers %}
+ {% if c.order_count >= 3 %}{% endif %}
+ {% endfor %}
+ {% endwith %}
+ 0
+ </p>
+ </div>
+ </div>
+ </div>
 
-        <!-- Customers Table -->
-        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Contact</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Orders</th>
-                            <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Total Spend</th>
-                            <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Last Order</th>
-                            <th scope="col" class="relative px-6 py-4"><span class="sr-only">Actions</span></th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-slate-100">
-                        {% for customer in customers %}
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-lg">
-                                            {{ customer.name|make_list|first|upper }}
-                                        </div>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-bold text-slate-900">{{ customer.name }}</div>
-                                        <div class="text-xs text-slate-500">ID: #{{ customer.id }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-slate-900"><i class="fa-regular fa-envelope text-slate-400 w-4"></i> {{ customer.email }}</div>
-                                <div class="text-sm text-slate-500 mt-1"><i class="fa-solid fa-phone text-slate-400 w-4"></i> {{ customer.phone|default:"Not provided" }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-indigo-100 text-indigo-800">
-                                    {{ customer.order_count }} Order{{ customer.order_count|pluralize }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <span class="text-sm font-black text-emerald-600">{{ request.user.owned_brand.get_currency_symbol }}{{ customer.total_spend|floatformat:2 }}</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-slate-500">
-                                {{ customer.last_order_date|date:"M d, Y"|default:"Unknown" }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{% url 'customer_detail' customer.id %}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-4 py-2 rounded-lg transition-colors inline-flex items-center">
-                                    <i class="fa-solid fa-eye mr-2"></i> View
-                                </a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-slate-500">
-                                <i class="fa-regular fa-face-frown text-4xl mb-3 text-slate-300"></i>
-                                <p class="text-lg font-medium">No customers yet.</p>
-                                <p class="text-sm">When someone places an order, they will appear here.</p>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-    </div>
+ <!-- Customers Table -->
+ <div class="bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm overflow-hidden">
+ <div class="overflow-x-auto">
+ <table class="min-w-full divide-y divide-slate-200">
+ <thead class="bg-theme-bg-base">
+ <tr>
+ <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-theme-text-muted uppercase tracking-wider">Customer</th>
+ <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-theme-text-muted uppercase tracking-wider">Contact</th>
+ <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-theme-text-muted uppercase tracking-wider">Orders</th>
+ <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-theme-text-muted uppercase tracking-wider">Total Spend</th>
+ <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-theme-text-muted uppercase tracking-wider">Last Order</th>
+ <th scope="col" class="relative px-6 py-4"><span class="sr-only">Actions</span></th>
+ </tr>
+ </thead>
+ <tbody class="bg-theme-bg-surface divide-y divide-slate-100">
+ {% for customer in customers %}
+ <tr class="hover:bg-theme-bg-hover transition-colors">
+ <td class="px-6 py-4 whitespace-nowrap">
+ <div class="flex items-center">
+ <div class="flex-shrink-0 h-10 w-10">
+ <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-lg">
+ {{ customer.name|make_list|first|upper }}
+ </div>
+ </div>
+ <div class="ml-4">
+ <div class="text-sm font-bold text-theme-text-base">{{ customer.name }}</div>
+ <div class="text-xs text-theme-text-muted">ID: #{{ customer.id }}</div>
+ </div>
+ </div>
+ </td>
+ <td class="px-6 py-4 whitespace-nowrap">
+ <div class="text-sm text-theme-text-base"><i class="fa-regular fa-envelope text-slate-400 w-4"></i> {{ customer.email }}</div>
+ <div class="text-sm text-theme-text-muted mt-1"><i class="fa-solid fa-phone text-slate-400 w-4"></i> {{ customer.phone|default:"Not provided" }}</div>
+ </td>
+ <td class="px-6 py-4 whitespace-nowrap">
+ <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-indigo-100 text-indigo-800">
+ {{ customer.order_count }} Order{{ customer.order_count|pluralize }}
+ </span>
+ </td>
+ <td class="px-6 py-4 whitespace-nowrap text-right">
+ <span class="text-sm font-black text-emerald-600">{{ request.user.owned_brand.get_currency_symbol }}{{ customer.total_spend|floatformat:2 }}</span>
+ </td>
+ <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-theme-text-muted">
+ {{ customer.last_order_date|date:"M d, Y"|default:"Unknown" }}
+ </td>
+ <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+ <a href="{% url 'customer_detail' customer.id %}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-4 py-2 rounded-lg transition-colors inline-flex items-center">
+ <i class="fa-solid fa-eye mr-2"></i> View
+ </a>
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="5" class="px-6 py-12 text-center text-theme-text-muted">
+ <i class="fa-regular fa-face-frown text-4xl mb-3 text-slate-300"></i>
+ <p class="text-lg font-medium">No customers yet.</p>
+ <p class="text-sm">When someone places an order, they will appear here.</p>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
+ 
+ </div>
 </div>
 {% endblock %}

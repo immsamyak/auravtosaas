@@ -2,85 +2,85 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto space-y-6">
-    {% include "components/breadcrumb.html" with current="Notification Manager" %}
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Notification <span class="text-indigo-600 font-light">Manager</span></h1>
-            <p class="text-sm text-slate-500 mt-2">Manage, schedule, and send custom email and SMS campaigns.</p>
-        </div>
-        
-        <div class="flex items-center gap-4">
-            <div class="bg-slate-100 p-1 rounded-xl flex shadow-inner">
-                <a href="{% url 'admin:notification_list' %}" class="px-4 py-2 text-sm font-bold bg-white text-indigo-600 shadow-sm rounded-lg">Custom Campaigns</a>
-                <a href="{% url 'admin:notification_template_list' %}" class="px-4 py-2 text-sm font-bold text-slate-500 rounded-lg hover:text-slate-900 transition">System Templates</a>
-            </div>
-            <span class="px-3 py-1 bg-white text-slate-600 rounded-lg text-xs font-bold border border-slate-200 shadow-sm">
+ {% include "components/breadcrumb.html" with current="Notification Manager" %}
+ <div class="flex justify-between items-center mb-8">
+ <div>
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Notification <span class="text-indigo-600 font-light">Manager</span></h1>
+ <p class="text-sm text-theme-text-muted mt-2">Manage, schedule, and send custom email and SMS campaigns.</p>
+ </div>
+ 
+ <div class="flex items-center gap-4">
+ <div class="bg-slate-100 p-1 rounded-xl flex shadow-inner">
+ <a href="{% url 'admin:notification_list' %}" class="px-4 py-2 text-sm font-bold bg-theme-bg-surface text-indigo-600 shadow-sm rounded-lg">Custom Campaigns</a>
+ <a href="{% url 'admin:notification_template_list' %}" class="px-4 py-2 text-sm font-bold text-theme-text-muted rounded-lg hover:text-slate-900 transition">System Templates</a>
+ </div>
+ <span class="px-3 py-1 bg-theme-bg-surface text-theme-text-muted rounded-lg text-xs font-bold border border-theme-border-base shadow-sm">
 
-                Active Provider: <span class="text-indigo-600">{{ provider }}</span>
-            </span>
-            <form action="{% url 'admin:notification_test' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition shadow-sm">
-                    <i class="fa-solid fa-flask mr-2"></i> Send Test
-                </button>
-            </form>
-            <a href="{% url 'admin:notification_create' %}" class="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">
-                <i class="fa-solid fa-plus mr-2"></i> New Campaign
-            </a>
-        </div>
-    </div>
+ Active Provider: <span class="text-indigo-600">{{ provider }}</span>
+ </span>
+ <form action="{% url 'admin:notification_test' %}" method="post">
+ {% csrf_token %}
+ <button type="submit" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition shadow-sm">
+ <i class="fa-solid fa-flask mr-2"></i> Send Test
+ </button>
+ </form>
+ <a href="{% url 'admin:notification_create' %}" class="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">
+ <i class="fa-solid fa-plus mr-2"></i> New Campaign
+ </a>
+ </div>
+ </div>
 
-    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200 text-sm font-bold text-slate-600 uppercase tracking-wider">
-                        <th class="px-6 py-4">Campaign Subject</th>
-                        <th class="px-6 py-4">Target</th>
-                        <th class="px-6 py-4">Status</th>
-                        <th class="px-6 py-4">Scheduled / Sent</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    {% for campaign in campaigns %}
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 font-bold text-slate-900">{{ campaign.subject }}</td>
-                        <td class="px-6 py-4 text-sm text-slate-600">{{ campaign.get_target_audience_display }}</td>
-                        <td class="px-6 py-4">
-                            {% if campaign.status == 'scheduled' %}
-                                <span class="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-xs font-bold border border-amber-200"><i class="fa-regular fa-clock mr-1"></i> Scheduled</span>
-                            {% elif campaign.status == 'sent' %}
-                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-200"><i class="fa-solid fa-check mr-1"></i> Sent</span>
-                            {% elif campaign.status == 'failed' %}
-                                <span class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold border border-rose-200"><i class="fa-solid fa-xmark mr-1"></i> Failed</span>
-                            {% else %}
-                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">{{ campaign.get_status_display }}</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-slate-500 font-medium">
-                            {% if campaign.sent_at %}
-                                {{ campaign.sent_at|date:"M j, Y, g:i a" }}
-                            {% elif campaign.scheduled_for %}
-                                {{ campaign.scheduled_for|date:"M j, Y, g:i a" }}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="px-6 py-12 text-center text-slate-500">
-                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i class="fa-regular fa-envelope-open text-2xl text-slate-300"></i>
-                            </div>
-                            <p class="font-bold text-slate-900">No campaigns yet</p>
-                            <p class="text-sm mt-1">Create your first custom notification campaign.</p>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ <div class="bg-theme-bg-surface border border-theme-border-base rounded-2xl shadow-sm overflow-hidden">
+ <div class="overflow-x-auto">
+ <table class="w-full text-left border-collapse">
+ <thead>
+ <tr class="bg-theme-bg-base border-b border-theme-border-base text-sm font-bold text-theme-text-muted uppercase tracking-wider">
+ <th class="px-6 py-4">Campaign Subject</th>
+ <th class="px-6 py-4">Target</th>
+ <th class="px-6 py-4">Status</th>
+ <th class="px-6 py-4">Scheduled / Sent</th>
+ </tr>
+ </thead>
+ <tbody class="divide-y divide-slate-100">
+ {% for campaign in campaigns %}
+ <tr class="hover:bg-theme-bg-hover transition-colors">
+ <td class="px-6 py-4 font-bold text-theme-text-base">{{ campaign.subject }}</td>
+ <td class="px-6 py-4 text-sm text-theme-text-muted">{{ campaign.get_target_audience_display }}</td>
+ <td class="px-6 py-4">
+ {% if campaign.status == 'scheduled' %}
+ <span class="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-xs font-bold border border-amber-200"><i class="fa-regular fa-clock mr-1"></i> Scheduled</span>
+ {% elif campaign.status == 'sent' %}
+ <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-200"><i class="fa-solid fa-check mr-1"></i> Sent</span>
+ {% elif campaign.status == 'failed' %}
+ <span class="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold border border-rose-200"><i class="fa-solid fa-xmark mr-1"></i> Failed</span>
+ {% else %}
+ <span class="px-3 py-1 bg-slate-100 text-theme-text-muted rounded-lg text-xs font-bold border border-theme-border-base">{{ campaign.get_status_display }}</span>
+ {% endif %}
+ </td>
+ <td class="px-6 py-4 text-sm text-theme-text-muted font-medium">
+ {% if campaign.sent_at %}
+ {{ campaign.sent_at|date:"M j, Y, g:i a" }}
+ {% elif campaign.scheduled_for %}
+ {{ campaign.scheduled_for|date:"M j, Y, g:i a" }}
+ {% else %}
+ -
+ {% endif %}
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="4" class="px-6 py-12 text-center text-theme-text-muted">
+ <div class="w-16 h-16 bg-theme-bg-base rounded-full flex items-center justify-center mx-auto mb-3">
+ <i class="fa-regular fa-envelope-open text-2xl text-slate-300"></i>
+ </div>
+ <p class="font-bold text-theme-text-base">No campaigns yet</p>
+ <p class="text-sm mt-1">Create your first custom notification campaign.</p>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
 </div>
 {% endblock %}

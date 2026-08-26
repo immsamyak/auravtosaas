@@ -1,83 +1,83 @@
 {% extends "brands/store_base.html" %}
 
 {% block content %}
-<div class="min-h-screen bg-white">
-    <!-- Studio Navigation -->
-    <div class="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
-            <a href="/" class="group text-xs font-bold text-gray-900 tracking-widest uppercase hover:text-gray-500 transition-colors flex items-center">
-                <i class="fa-solid fa-arrow-left mr-3 group-hover:-translate-x-1 transition-transform"></i> Store
-            </a>
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-wand-magic-sparkles text-gray-400"></i>
-                <span class="text-xs font-black text-gray-900 uppercase tracking-widest">Virtual Wardrobe</span>
-            </div>
-            <div></div>
-        </div>
-    </div>
+<div class="min-h-screen bg-theme-bg-surface">
+ <!-- Studio Navigation -->
+ <div class="bg-theme-bg-surface border-b border-gray-100 sticky top-0 z-50">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+ <a href="/" class="group text-xs font-bold text-gray-900 tracking-widest uppercase hover:text-gray-500 transition-colors flex items-center">
+ <i class="fa-solid fa-arrow-left mr-3 group-hover:-translate-x-1 transition-transform"></i> Store
+ </a>
+ <div class="flex items-center space-x-2">
+ <i class="fa-solid fa-wand-magic-sparkles text-gray-400"></i>
+ <span class="text-xs font-black text-gray-900 uppercase tracking-widest">Virtual Wardrobe</span>
+ </div>
+ <div></div>
+ </div>
+ </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="mb-12">
-            <h1 class="text-3xl font-black text-gray-900 tracking-tight uppercase mb-2">Your Saved Looks</h1>
-            <p class="text-gray-500 text-sm">Review your previous AI Try-Ons and build your perfect outfit.</p>
-        </div>
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+ <div class="mb-12">
+ <h1 class="text-3xl font-black text-gray-900 tracking-tight uppercase mb-2">Your Saved Looks</h1>
+ <p class="text-gray-500 text-sm">Review your previous AI Try-Ons and build your perfect outfit.</p>
+ </div>
 
-        {% if try_ons %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {% for try_on in try_ons %}
-            <div class="group flex flex-col bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300">
-                
-                <!-- Image Container -->
-                <div class="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
-                    {% if try_on.generated_image %}
-                        <img src="{{ try_on.generated_image.url }}" alt="Saved Look" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    {% else %}
-                        <div class="absolute inset-0 flex items-center justify-center text-gray-400">
-                            <i class="fa-solid fa-image text-3xl"></i>
-                        </div>
-                    {% endif %}
-                    
-                    <!-- Date Badge -->
-                    <div class="absolute top-4 left-4 z-10">
-                        <span class="bg-white/90 backdrop-blur px-2.5 py-1.5 rounded-lg text-[9px] font-black text-gray-900 uppercase tracking-widest shadow-sm">
-                            {{ try_on.processing_completed_at|date:"M d, Y" }}
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- Content -->
-                <div class="p-5 flex flex-col flex-1">
-                    <h3 class="text-sm font-black text-gray-900 uppercase tracking-wide mb-1 line-clamp-1">
-                        {{ try_on.product_variant.product.name }}
-                    </h3>
-                    <p class="text-xs font-bold text-gray-500 mb-4">
-                        {{ try_on.product_variant.color.name }} &middot; Size {{ try_on.product_variant.size.code }}
-                    </p>
-                    
-                    <div class="mt-auto flex space-x-2">
-                        <a href="{% url 'storefront_checkout' try_on.product_variant.product.brand.slug try_on.product_variant.id %}" class="flex-1 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-800 transition-all text-center flex items-center justify-center">
-                            <i class="fa-solid fa-bag-shopping mr-2"></i> Buy
-                        </a>
-                        <a href="{% url 'try_on' try_on.product_variant.product.brand.slug try_on.product_variant.slug %}" class="flex-1 bg-white border border-gray-200 text-gray-900 text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-50 transition-all text-center flex items-center justify-center shadow-sm">
-                            <i class="fa-solid fa-wand-magic-sparkles mr-2 text-gray-400"></i> Retry
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-[2rem] border border-gray-100 border-dashed">
-            <div class="w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center mb-6">
-                <i class="fa-solid fa-shirt text-2xl text-gray-300"></i>
-            </div>
-            <h2 class="text-xl font-black text-gray-900 uppercase tracking-widest mb-3">Your Wardrobe is Empty</h2>
-            <p class="text-gray-500 text-sm max-w-md mx-auto mb-8">You haven't saved any AI Try-On looks yet. Explore the store and test some outfits to build your wardrobe.</p>
-            <a href="/" class="bg-gray-900 text-white text-xs font-black uppercase tracking-widest px-8 py-4 rounded-xl hover:bg-gray-800 transition-all shadow-lg">
-                Explore Store
-            </a>
-        </div>
-        {% endif %}
-    </div>
+ {% if try_ons %}
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+ {% for try_on in try_ons %}
+ <div class="group flex flex-col bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300">
+ 
+ <!-- Image Container -->
+ <div class="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
+ {% if try_on.generated_image %}
+ <img src="{{ try_on.generated_image.url }}" alt="Saved Look" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+ {% else %}
+ <div class="absolute inset-0 flex items-center justify-center text-gray-400">
+ <i class="fa-solid fa-image text-3xl"></i>
+ </div>
+ {% endif %}
+ 
+ <!-- Date Badge -->
+ <div class="absolute top-4 left-4 z-10">
+ <span class="bg-white/90 backdrop-blur px-2.5 py-1.5 rounded-lg text-[9px] font-black text-gray-900 uppercase tracking-widest shadow-sm">
+ {{ try_on.processing_completed_at|date:"M d, Y" }}
+ </span>
+ </div>
+ </div>
+ 
+ <!-- Content -->
+ <div class="p-5 flex flex-col flex-1">
+ <h3 class="text-sm font-black text-gray-900 uppercase tracking-wide mb-1 line-clamp-1">
+ {{ try_on.product_variant.product.name }}
+ </h3>
+ <p class="text-xs font-bold text-gray-500 mb-4">
+ {{ try_on.product_variant.color.name }} &middot; Size {{ try_on.product_variant.size.code }}
+ </p>
+ 
+ <div class="mt-auto flex space-x-2">
+ <a href="{% url 'storefront_checkout' try_on.product_variant.product.brand.slug try_on.product_variant.id %}" class="flex-1 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-800 transition-all text-center flex items-center justify-center">
+ <i class="fa-solid fa-bag-shopping mr-2"></i> Buy
+ </a>
+ <a href="{% url 'try_on' try_on.product_variant.product.brand.slug try_on.product_variant.slug %}" class="flex-1 bg-theme-bg-surface border border-gray-200 text-gray-900 text-[10px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-gray-50 transition-all text-center flex items-center justify-center shadow-sm">
+ <i class="fa-solid fa-wand-magic-sparkles mr-2 text-gray-400"></i> Retry
+ </a>
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% else %}
+ <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-[2rem] border border-gray-100 border-dashed">
+ <div class="w-20 h-20 bg-theme-bg-surface rounded-full shadow-sm flex items-center justify-center mb-6">
+ <i class="fa-solid fa-shirt text-2xl text-gray-300"></i>
+ </div>
+ <h2 class="text-xl font-black text-gray-900 uppercase tracking-widest mb-3">Your Wardrobe is Empty</h2>
+ <p class="text-gray-500 text-sm max-w-md mx-auto mb-8">You haven't saved any AI Try-On looks yet. Explore the store and test some outfits to build your wardrobe.</p>
+ <a href="/" class="bg-gray-900 text-white text-xs font-black uppercase tracking-widest px-8 py-4 rounded-xl hover:bg-gray-800 transition-all shadow-lg">
+ Explore Store
+ </a>
+ </div>
+ {% endif %}
+ </div>
 </div>
 {% endblock %}

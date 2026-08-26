@@ -11,6 +11,31 @@ tailwind.config = {
                     500: '#8b5cf6',
                     600: '#7c3aed',
                     DEFAULT: '#F3F4F6'
+                },
+                theme: {
+                    bg: {
+                        base: 'var(--theme-bg-base)',
+                        surface: 'var(--theme-bg-surface)',
+                        elevated: 'var(--theme-bg-elevated)',
+                        hover: 'var(--theme-bg-hover)',
+                    },
+                    text: {
+                        base: 'var(--theme-text-base)',
+                        muted: 'var(--theme-text-muted)',
+                        inverse: 'var(--theme-text-inverse)',
+                    },
+                    border: {
+                        base: 'var(--theme-border-base)',
+                        divider: 'var(--theme-border-divider)',
+                    },
+                    input: {
+                        bg: 'var(--theme-input-bg)',
+                        border: 'var(--theme-input-border)',
+                        placeholder: 'var(--theme-input-placeholder)',
+                    },
+                    primary: {
+                        hover: 'var(--theme-primary-hover)',
+                    }
                 }
             },
             fontFamily: {

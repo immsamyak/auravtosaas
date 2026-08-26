@@ -3,15 +3,15 @@
 {% block content %}
 <!-- Editorial Hero Section -->
 <section class="h-[80vh] relative flex items-center justify-center overflow-hidden">
-    {% if brand.banner %}
-        <img alt="{{ brand.name }} Collection" class="absolute inset-0 w-full h-full object-cover scale-105 transform hover:scale-100 transition-transform duration-[10s]" src="{{ brand.banner.url }}"/>
-    {% else %}
-        <div class="absolute inset-0 bg-[#333333] w-full h-full flex items-center justify-center">
+ {% if brand.banner %}
+ <img alt="{{ brand.name }} Collection" class="absolute inset-0 w-full h-full object-cover scale-105 transform hover:scale-100 transition-transform duration-[10s]" src="{{ brand.banner.url }}"/>
+ {% else %}
+ <div class="absolute inset-0 bg-[#333333] w-full h-full flex items-center justify-center">
 <span class="text-white/20 font-serif text-6xl">{{ brand.name|upper }}</span>
 </div>
-    {% endif %}
-    
-    <div class="absolute inset-0 bg-black/20"></div>
+ {% endif %}
+ 
+ <div class="absolute inset-0 bg-black/20"></div>
 <div class="relative z-10 text-center text-white px-4 mt-20">
 {% if brand.banner_badge_text %}
 <span class="text-xs uppercase tracking-[0.3em] font-medium block mb-4">{{ brand.banner_badge_text }}</span>
@@ -20,12 +20,12 @@
 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
 <a class="inline-block border border-white px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-white hover:text-black transition-colors duration-300" href="{{ brand.banner_cta_link|default:'#collection' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Explore the Campaign{% endif %}</a>
 
-            {% if brand.banner_secondary_cta_text %}
-            <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
-                {{ brand.banner_secondary_cta_text }}
-            </a>
-            {% endif %}
-            
+ {% if brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+ {{ brand.banner_secondary_cta_text }}
+ </a>
+ {% endif %}
+ 
 </div>
 </div>
 </section>
@@ -39,22 +39,22 @@
 <a class="hidden md:block text-xs uppercase tracking-widest border-b border-black pb-1 hover:text-[#c5a059] hover:border-[#c5a059] transition-all" href="{% url 'storefront_shop' brand.slug %}">View All</a>
 </div>
 
-    {% if products %}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {% for product in products|slice:":4" %}
-                <div class="group cursor-pointer">
+ {% if products %}
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+ {% for product in products|slice:":4" %}
+ <div class="group cursor-pointer">
 <div class="aspect-[2/3] overflow-hidden bg-gray-100 mb-6 relative">
 <a class="block w-full h-full" href="{% url 'store_product_detail' brand.slug product.slug %}">
-                            {% if product.images.first %}
-                                <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
-                            {% elif product.variants.first.image %}
-                                <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
-                            {% else %}
-                                <div class="w-full h-full flex items-center justify-center text-gray-300">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center text-gray-300">
 <i class="fa-solid fa-shirt text-4xl"></i>
 </div>
-                            {% endif %}
-                        </a>
+ {% endif %}
+ </a>
 <!-- Quick Add overlay -->
 <div class="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <button @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" class="w-full bg-black/80 backdrop-blur text-white text-xs uppercase tracking-widest py-3 hover:bg-[#c5a059] transition-colors">Add to Cart</button>
@@ -65,19 +65,19 @@
 <p class="text-sm font-light text-gray-600">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
 </div>
 </div>
-            {% endfor %}
-        </div>
-        <div class="mt-12 text-center w-full flex justify-center">
-            <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
-                View All Products
-            </a>
-        </div>
+ {% endfor %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
 
-    {% else %}
-        <div class="text-center py-20 bg-white luxury-border border">
+ {% else %}
+ <div class="text-center py-20 bg-theme-bg-surface luxury-border border">
 <span class="font-serif italic text-2xl text-gray-400">The collection is currently being prepared.</span>
 </div>
-    {% endif %}
+ {% endif %}
 </section>
 <!-- Editorial Block -->
 <section class="py-20 bg-black text-white">
@@ -100,50 +100,50 @@
 <div class="mb-10 text-center">
 <h2 class="text-4xl font-serif">Curated Collections</h2>
 </div>
-    {% if collections %}
-        <div class="flex flex-col space-y-12">
-            {% for collection in collections %}
-                <div class="flex flex-col md:flex-row gap-8 items-center {% if forloop.counter|divisibleby:2 %}md:flex-row-reverse{% endif %}">
+ {% if collections %}
+ <div class="flex flex-col space-y-12">
+ {% for collection in collections %}
+ <div class="flex flex-col md:flex-row gap-8 items-center {% if forloop.counter|divisibleby:2 %}md:flex-row-reverse{% endif %}">
 <div class="flex-1 w-full aspect-video relative overflow-hidden border border-gray-200/20">
-                        {% if collection.image %}
-                            <img alt="{{ collection.name }}" class="w-full h-full object-cover" src="{{ collection.image.url }}"/>
-                        {% else %}
-                            <div class="w-full h-full bg-gray-200"></div>
-                        {% endif %}
-                    </div>
+ {% if collection.image %}
+ <img alt="{{ collection.name }}" class="w-full h-full object-cover" src="{{ collection.image.url }}"/>
+ {% else %}
+ <div class="w-full h-full bg-gray-200"></div>
+ {% endif %}
+ </div>
 <div class="flex-1 text-center md:text-left px-6">
 <h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
 <p class="text-gray-600 mb-6">{{ collection.description|truncatewords:20 }}</p>
 <a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
 </div>
 </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+ {% endfor %}
+ </div>
+ {% endif %}
 </section>
 <!-- Categories Section -->
 <section class="py-16 max-w-7xl mx-auto px-6">
 <div class="mb-10 text-center">
 <h2 class="text-4xl font-serif">Shop by Category</h2>
 </div>
-    {% if categories %}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {% for category in categories %}
-                <a class="group block relative overflow-hidden aspect-square border border-gray-200/20" href="{% url 'storefront_shop' brand.slug %}?category={{ category.id }}">
-                    {% if category.image %}
-                        <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
-                    {% else %}
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+ {% if categories %}
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+ {% for category in categories %}
+ <a class="group block relative overflow-hidden aspect-square border border-gray-200/20" href="{% url 'storefront_shop' brand.slug %}?category={{ category.id }}">
+ {% if category.image %}
+ <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
+ {% else %}
+ <div class="w-full h-full bg-gray-100 flex items-center justify-center">
 <i class="fa-solid fa-tags text-4xl text-gray-300"></i>
 </div>
-                    {% endif %}
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+ {% endif %}
+ <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <h3 class="text-white font-bold text-2xl uppercase tracking-wider">{{ category.name }}</h3>
 </div>
 </a>
-            {% endfor %}
-        </div>
-    {% endif %}
+ {% endfor %}
+ </div>
+ {% endif %}
 </section>
 
 {% endblock %}

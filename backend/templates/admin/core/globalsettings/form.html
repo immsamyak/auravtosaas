@@ -1,391 +1,391 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    {% include "components/breadcrumb.html" with current="Globalsettings Details" %}
-    <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Globalsettings <span class="text-indigo-600 font-light">Details</span></h1>
-        <p class="text-slate-500 mt-1">Configure platform-wide core settings, integrations, and branding.</p>
-    </div>
-    
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <form method="post" enctype="multipart/form-data" class="flex flex-col md:flex-row min-h-[600px]">
-            {% csrf_token %}
-            
-            <div x-data="{ activeTab: 'general' }" class="flex flex-col md:flex-row w-full">
-                
-                <!-- Vertical Tab Navigation -->
-                <div class="w-full md:w-64 bg-slate-50 border-r border-slate-100 p-6 flex flex-col gap-2 shrink-0">
-                    <button type="button" @click="activeTab = 'general'" 
-                            :class="activeTab === 'general' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        General Info
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'branding'" 
-                            :class="activeTab === 'branding' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                        Branding & Currency
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'payment'" 
-                            :class="activeTab === 'payment' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                        Payment (Stripe)
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'smtp'" 
-                            :class="activeTab === 'smtp' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        Email (SMTP)
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'sms'" 
-                            :class="activeTab === 'sms' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        SMS (Twilio)
-                    </button>
-                    
-                    <button type="button" @click="activeTab = 'vto'" 
-                            :class="activeTab === 'vto' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-100 font-medium'" 
-                            class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
-                        VTO AI Engine
-                    </button>
-                </div>
-                
-                <!-- Tab Content Area -->
-                <div class="flex-1 p-8 pb-24 relative">
-                    
-                    <!-- Form Errors (Global) -->
-                    {% if form.non_field_errors %}
-                        <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl">
-                            {% for error in form.non_field_errors %}
-                                <p class="text-sm font-bold text-rose-600 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+ {% include "components/breadcrumb.html" with current="Globalsettings Details" %}
+ <div class="mb-8">
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Globalsettings <span class="text-indigo-600 font-light">Details</span></h1>
+ <p class="text-theme-text-muted mt-1">Configure platform-wide core settings, integrations, and branding.</p>
+ </div>
+ 
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-divider overflow-hidden">
+ <form method="post" enctype="multipart/form-data" class="flex flex-col md:flex-row min-h-[600px]">
+ {% csrf_token %}
+ 
+ <div x-data="{ activeTab: 'general' }" class="flex flex-col md:flex-row w-full">
+ 
+ <!-- Vertical Tab Navigation -->
+ <div class="w-full md:w-64 bg-theme-bg-base border-r border-theme-border-divider p-6 flex flex-col gap-2 shrink-0">
+ <button type="button" @click="activeTab = 'general'" 
+ :class="activeTab === 'general' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+ General Info
+ </button>
+ 
+ <button type="button" @click="activeTab = 'branding'" 
+ :class="activeTab === 'branding' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+ Branding & Currency
+ </button>
+ 
+ <button type="button" @click="activeTab = 'payment'" 
+ :class="activeTab === 'payment' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+ Payment (Stripe)
+ </button>
+ 
+ <button type="button" @click="activeTab = 'smtp'" 
+ :class="activeTab === 'smtp' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+ Email (SMTP)
+ </button>
+ 
+ <button type="button" @click="activeTab = 'sms'" 
+ :class="activeTab === 'sms' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+ SMS (Twilio)
+ </button>
+ 
+ <button type="button" @click="activeTab = 'vto'" 
+ :class="activeTab === 'vto' ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-theme-text-muted hover:bg-theme-bg-hover font-medium'" 
+ class="px-4 py-3 rounded-xl text-sm transition-colors text-left flex items-center gap-3">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+ VTO AI Engine
+ </button>
+ </div>
+ 
+ <!-- Tab Content Area -->
+ <div class="flex-1 p-8 pb-24 relative">
+ 
+ <!-- Form Errors (Global) -->
+ {% if form.non_field_errors %}
+ <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl">
+ {% for error in form.non_field_errors %}
+ <p class="text-sm font-bold text-rose-600 flex items-center gap-2">
+ <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+ {{ error }}
+ </p>
+ {% endfor %}
+ </div>
+ {% endif %}
 
-                    <!-- Tab: General Info -->
-                    <div x-show="activeTab === 'general'" class="space-y-6" x-transition.opacity>
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">General Information</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "site_name,support_email,site_logo,site_favicon" %}
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+ <!-- Tab: General Info -->
+ <div x-show="activeTab === 'general'" class="space-y-6" x-transition.opacity>
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">General Information</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "site_name,support_email,site_logo,site_favicon" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
 
-                    <!-- Tab: Branding & Currency -->
-                    <div x-show="activeTab === 'branding'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6">Branding & Currency</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "primary_color,secondary_color" %}
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    <div x-data="{ color: '{{ field.value|default:"#000000" }}' }" class="relative flex items-center">
-                                        <div class="absolute left-1.5 flex items-center justify-center z-10 overflow-hidden rounded-lg shadow-sm border border-slate-200 w-8 h-8">
-                                            <input type="color" x-model="color" class="absolute -top-2 -left-2 w-16 h-16 cursor-pointer border-0 p-0">
-                                        </div>
-                                        <input type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" x-model="color" class="w-full pl-12 pr-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-bold font-mono uppercase text-slate-800 placeholder-slate-400" {% if field.field.required %}required{% endif %} maxlength="7">
-                                    </div>
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
+ <!-- Tab: Branding & Currency -->
+ <div x-show="activeTab === 'branding'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6">Branding & Currency</h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "primary_color,secondary_color" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ <div x-data="{ color: '{{ field.value|default:"#000000" }}' }" class="relative flex items-center">
+ <div class="absolute left-1.5 flex items-center justify-center z-10 overflow-hidden rounded-lg shadow-sm border border-theme-border-base w-8 h-8">
+ <input type="color" x-model="color" class="absolute -top-2 -left-2 w-16 h-16 cursor-pointer border-0 p-0">
+ </div>
+ <input type="text" name="{{ field.html_name }}" id="{{ field.id_for_label }}" x-model="color" class="w-full pl-12 pr-4 py-2.5 rounded-xl border border-theme-border-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-bold font-mono uppercase text-theme-text-base placeholder-theme-input-placeholder" {% if field.field.required %}required{% endif %} maxlength="7">
+ </div>
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
 
-                            <!-- Custom Country / Currency Selector -->
-                            <div class="col-span-full border-t border-slate-100 pt-6 mt-2">
-                                <h3 class="font-bold text-slate-700 uppercase tracking-wider text-xs mb-4">Currency Configuration</h3>
-                                
-                                <div x-data="{
-                                    search: '',
-                                    open: false,
-                                    countries: [],
-                                    filteredCountries: [],
-                                    init() {
-                                        fetch('/static/data/countries.json')
-                                            .then(res => res.json())
-                                            .then(data => {
-                                                this.countries = data;
-                                                this.filteredCountries = data;
-                                            })
-                                            .catch(err => console.error('Failed to load countries', err));
-                                    },
-                                    filter() {
-                                        this.filteredCountries = this.countries.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || (c.code && c.code.toLowerCase().includes(this.search.toLowerCase())));
-                                    },
-                                    selectCountry(c) {
-                                        document.getElementById('id_currency').value = c.code || '';
-                                        document.getElementById('id_currency_symbol').value = c.symbol || '';
-                                        this.search = c.name + (c.code ? ' (' + c.code + ')' : '');
-                                        this.open = false;
-                                    }
-                                }" class="mb-6 relative">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">Select Country to Auto-fill Currency</label>
-                                    <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <i class="fa-solid fa-globe text-slate-400"></i>
-                                        </div>
-                                        <input type="text" x-model="search" @input="filter(); open = true" @focus="open = true" @click.away="open = false" placeholder="Search countries... (e.g. Nepal, USA, UK)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-slate-800">
-                                    </div>
-                                    
-                                    <!-- Dropdown list -->
-                                    <div x-show="open && filteredCountries.length > 0" class="absolute z-50 mt-2 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto" x-cloak>
-                                        <template x-for="c in filteredCountries" :key="c.name">
-                                            <button type="button" @click="selectCountry(c)" class="w-full text-left px-4 py-3 hover:bg-slate-50 flex items-center justify-between border-b border-slate-100 last:border-0 transition-colors">
-                                                <div class="flex items-center gap-3">
-                                                    <span class="text-xl" x-text="c.flag"></span>
-                                                    <span class="text-sm font-bold text-slate-700" x-text="c.name"></span>
-                                                </div>
-                                                <div class="flex items-center gap-2 text-xs font-mono">
-                                                    <span class="text-slate-500 bg-slate-100 px-2 py-1 rounded" x-text="c.code"></span>
-                                                    <span class="text-indigo-600 font-bold bg-indigo-50 px-2 py-1 rounded" x-text="c.symbol"></span>
-                                                </div>
-                                            </button>
-                                        </template>
-                                        <div x-show="filteredCountries.length === 0" class="p-4 text-center text-sm text-slate-500">No countries found.</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                                    {% for field in form %}
-                                        {% if field.name in "currency,currency_symbol" %}
-                                        <div>
-                                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                                {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                            </label>
-                                            {{ field }}
-                                            {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                            {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                        </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+ <!-- Custom Country / Currency Selector -->
+ <div class="col-span-full border-t border-theme-border-divider pt-6 mt-2">
+ <h3 class="font-bold text-slate-700 uppercase tracking-wider text-xs mb-4">Currency Configuration</h3>
+ 
+ <div x-data="{
+ search: '',
+ open: false,
+ countries: [],
+ filteredCountries: [],
+ init() {
+ fetch('/static/data/countries.json')
+ .then(res => res.json())
+ .then(data => {
+ this.countries = data;
+ this.filteredCountries = data;
+ })
+ .catch(err => console.error('Failed to load countries', err));
+ },
+ filter() {
+ this.filteredCountries = this.countries.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || (c.code && c.code.toLowerCase().includes(this.search.toLowerCase())));
+ },
+ selectCountry(c) {
+ document.getElementById('id_currency').value = c.code || '';
+ document.getElementById('id_currency_symbol').value = c.symbol || '';
+ this.search = c.name + (c.code ? ' (' + c.code + ')' : '');
+ this.open = false;
+ }
+ }" class="mb-6 relative">
+ <label class="block text-sm font-bold text-slate-700 mb-1">Select Country to Auto-fill Currency</label>
+ <div class="relative">
+ <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+ <i class="fa-solid fa-globe text-slate-400"></i>
+ </div>
+ <input type="text" x-model="search" @input="filter(); open = true" @focus="open = true" @click.away="open = false" placeholder="Search countries... (e.g. Nepal, USA, UK)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-theme-border-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm font-medium text-theme-text-base">
+ </div>
+ 
+ <!-- Dropdown list -->
+ <div x-show="open && filteredCountries.length > 0" class="absolute z-50 mt-2 w-full bg-theme-bg-surface border border-theme-border-base rounded-xl shadow-lg max-h-60 overflow-y-auto" x-cloak>
+ <template x-for="c in filteredCountries" :key="c.name">
+ <button type="button" @click="selectCountry(c)" class="w-full text-left px-4 py-3 hover:bg-theme-bg-hover flex items-center justify-between border-b border-theme-border-divider last:border-0 transition-colors">
+ <div class="flex items-center gap-3">
+ <span class="text-xl" x-text="c.flag"></span>
+ <span class="text-sm font-bold text-slate-700" x-text="c.name"></span>
+ </div>
+ <div class="flex items-center gap-2 text-xs font-mono">
+ <span class="text-theme-text-muted bg-slate-100 px-2 py-1 rounded" x-text="c.code"></span>
+ <span class="text-indigo-600 font-bold bg-indigo-50 px-2 py-1 rounded" x-text="c.symbol"></span>
+ </div>
+ </button>
+ </template>
+ <div x-show="filteredCountries.length === 0" class="p-4 text-center text-sm text-theme-text-muted">No countries found.</div>
+ </div>
+ </div>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "currency,currency_symbol" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ </div>
+ </div>
 
-                    <!-- Tab: Stripe Payment -->
-                    <div x-show="activeTab === 'payment'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                            Stripe Integration
-                        </h2>
-                        
-                        <div class="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
-                            {% for field in form %}
-                                {% if field.name == "stripe_environment" %}
-                                    <label class="block text-sm font-extrabold text-slate-900 mb-2">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+ <!-- Tab: Stripe Payment -->
+ <div x-show="activeTab === 'payment'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+ Stripe Integration
+ </h2>
+ 
+ <div class="mb-8 p-6 bg-theme-bg-base border border-theme-border-base rounded-xl">
+ {% for field in form %}
+ {% if field.name == "stripe_environment" %}
+ <label class="block text-sm font-extrabold text-theme-text-base mb-2">{{ field.label }}</label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% endif %}
+ {% endfor %}
+ </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            <div class="col-span-full border-b border-slate-100 pb-2 mb-2">
-                                <h3 class="font-bold text-slate-700 uppercase tracking-wider text-xs">Test Credentials</h3>
-                            </div>
-                            {% for field in form %}
-                                {% if field.name in "stripe_test_public_key,stripe_test_secret_key,stripe_test_webhook_secret" %}
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            <div class="col-span-full border-b border-slate-100 pb-2 mb-2 mt-4">
-                                <h3 class="font-bold text-rose-600 uppercase tracking-wider text-xs">Live Credentials (Production)</h3>
-                            </div>
-                            {% for field in form %}
-                                {% if field.name in "stripe_live_public_key,stripe_live_secret_key,stripe_live_webhook_secret" %}
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ <div class="col-span-full border-b border-theme-border-divider pb-2 mb-2">
+ <h3 class="font-bold text-slate-700 uppercase tracking-wider text-xs">Test Credentials</h3>
+ </div>
+ {% for field in form %}
+ {% if field.name in "stripe_test_public_key,stripe_test_secret_key,stripe_test_webhook_secret" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">{{ field.label }}</label>
+ {{ field }}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ 
+ <div class="col-span-full border-b border-theme-border-divider pb-2 mb-2 mt-4">
+ <h3 class="font-bold text-rose-600 uppercase tracking-wider text-xs">Live Credentials (Production)</h3>
+ </div>
+ {% for field in form %}
+ {% if field.name in "stripe_live_public_key,stripe_live_secret_key,stripe_live_webhook_secret" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">{{ field.label }}</label>
+ {{ field }}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
 
-                                        <!-- Tab: SMTP Settings -->
-                    <div x-show="activeTab === 'smtp'" class="space-y-6" x-transition.opacity style="display: none;" x-data="{ provider: '{{ form.instance.email_provider|default:"smtp" }}' }">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            Email Provider & Configuration
-                        </h2>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            <div class="col-span-full">
-                                <label class="block text-sm font-bold text-slate-700 mb-1">
-                                    {{ form.email_provider.label }} <span class="text-rose-500">*</span>
-                                </label>
-                                <!-- We apply x-model to a hidden input or manually handle the select if needed, but x-model works on select too. -->
-                                <div @change="provider = $event.target.value">
-                                    {{ form.email_provider }}
-                                </div>
-                                {% if form.email_provider.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.email_provider.help_text }}</p>{% endif %}
-                            </div>
-                            
-                            
-                            <!-- Resend -->
-                            <div class="col-span-full" x-show="provider === 'resend'">
-                                <label class="block text-sm font-bold text-slate-700 mb-1">
-                                    {{ form.resend_api_key.label }}
-                                </label>
-                                {{ form.resend_api_key }}
-                                {% if form.resend_api_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.resend_api_key.help_text }}</p>{% endif %}
-                            </div>
-                            
-                            <!-- SendGrid -->
-                            <div class="col-span-full" x-show="provider === 'sendgrid'">
-                                <label class="block text-sm font-bold text-slate-700 mb-1">
-                                    {{ form.sendgrid_api_key.label }}
-                                </label>
-                                {{ form.sendgrid_api_key }}
-                                {% if form.sendgrid_api_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.sendgrid_api_key.help_text }}</p>{% endif %}
-                            </div>
+ <!-- Tab: SMTP Settings -->
+ <div x-show="activeTab === 'smtp'" class="space-y-6" x-transition.opacity style="display: none;" x-data="{ provider: '{{ form.instance.email_provider|default:"smtp" }}' }">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+ Email Provider & Configuration
+ </h2>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.email_provider.label }} <span class="text-rose-500">*</span>
+ </label>
+ <!-- We apply x-model to a hidden input or manually handle the select if needed, but x-model works on select too. -->
+ <div @change="provider = $event.target.value">
+ {{ form.email_provider }}
+ </div>
+ {% if form.email_provider.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.email_provider.help_text }}</p>{% endif %}
+ </div>
+ 
+ 
+ <!-- Resend -->
+ <div class="col-span-full" x-show="provider === 'resend'">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.resend_api_key.label }}
+ </label>
+ {{ form.resend_api_key }}
+ {% if form.resend_api_key.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.resend_api_key.help_text }}</p>{% endif %}
+ </div>
+ 
+ <!-- SendGrid -->
+ <div class="col-span-full" x-show="provider === 'sendgrid'">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.sendgrid_api_key.label }}
+ </label>
+ {{ form.sendgrid_api_key }}
+ {% if form.sendgrid_api_key.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.sendgrid_api_key.help_text }}</p>{% endif %}
+ </div>
 
-                            <!-- Mailgun -->
-                            <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" x-show="provider === 'mailgun'">
-                                <div class="col-span-full">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ form.mailgun_api_key.label }}
-                                    </label>
-                                    {{ form.mailgun_api_key }}
-                                    {% if form.mailgun_api_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.mailgun_api_key.help_text }}</p>{% endif %}
-                                </div>
-                                <div class="col-span-full">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ form.smtp_username.label }} (Domain Name)
-                                    </label>
-                                    {{ form.smtp_username }}
-                                    <p class="text-xs text-slate-500 mt-2 font-medium">For Mailgun, enter your Domain Username here.</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Amazon SES -->
-                            <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" x-show="provider === 'ses'">
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ form.ses_access_key_id.label }}
-                                    </label>
-                                    {{ form.ses_access_key_id }}
-                                    {% if form.ses_access_key_id.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.ses_access_key_id.help_text }}</p>{% endif %}
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ form.ses_secret_access_key.label }}
-                                    </label>
-                                    {{ form.ses_secret_access_key }}
-                                    {% if form.ses_secret_access_key.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.ses_secret_access_key.help_text }}</p>{% endif %}
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ form.ses_region.label }}
-                                    </label>
-                                    {{ form.ses_region }}
-                                    {% if form.ses_region.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ form.ses_region.help_text }}</p>{% endif %}
-                                </div>
-                            </div>
+ <!-- Mailgun -->
+ <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" x-show="provider === 'mailgun'">
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.mailgun_api_key.label }}
+ </label>
+ {{ form.mailgun_api_key }}
+ {% if form.mailgun_api_key.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.mailgun_api_key.help_text }}</p>{% endif %}
+ </div>
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.smtp_username.label }} (Domain Name)
+ </label>
+ {{ form.smtp_username }}
+ <p class="text-xs text-theme-text-muted mt-2 font-medium">For Mailgun, enter your Domain Username here.</p>
+ </div>
+ </div>
+ 
+ <!-- Amazon SES -->
+ <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" x-show="provider === 'ses'">
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.ses_access_key_id.label }}
+ </label>
+ {{ form.ses_access_key_id }}
+ {% if form.ses_access_key_id.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.ses_access_key_id.help_text }}</p>{% endif %}
+ </div>
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.ses_secret_access_key.label }}
+ </label>
+ {{ form.ses_secret_access_key }}
+ {% if form.ses_secret_access_key.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.ses_secret_access_key.help_text }}</p>{% endif %}
+ </div>
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ form.ses_region.label }}
+ </label>
+ {{ form.ses_region }}
+ {% if form.ses_region.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.ses_region.help_text }}</p>{% endif %}
+ </div>
+ </div>
 
-                            <!-- Standard SMTP Fields -->
-                            <div x-show="provider === 'smtp'" class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                                {% for field in form %}
-                                    {% if field.name in "smtp_encryption,smtp_host,smtp_port,smtp_username,smtp_password" %}
-                                    <div>
-                                        <label class="block text-sm font-bold text-slate-700 mb-1">
-                                            {{ field.label }}
-                                        </label>
-                                        {{ field }}
-                                        {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
+ <!-- Standard SMTP Fields -->
+ <div x-show="provider === 'smtp'" class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "smtp_encryption,smtp_host,smtp_port,smtp_username,smtp_password" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ </div>
 
-                    <!-- Tab: Twilio SMS -->
-                    <div x-show="activeTab === 'sms'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                            Twilio SMS Integration
-                        </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "twilio_account_sid,twilio_auth_token,twilio_sender_number" %}
-                                <div class="{% if field.name == 'twilio_account_sid' %}col-span-full{% endif %}">
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    <!-- Tab: VTO AI Engine -->
-                    <div x-show="activeTab === 'vto'" class="space-y-6" x-transition.opacity style="display: none;">
-                        <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
-                            Virtual Try-On (VTO) Settings
-                        </h2>
-                        <div class="grid grid-cols-1 gap-x-8 gap-y-6">
-                            {% for field in form %}
-                                {% if field.name in "vto_engine,replicate_api_key,replicate_model_version,hf_space_id,hf_api_token" %}
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-700 mb-1">
-                                        {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
-                                    </label>
-                                    {{ field }}
-                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
-                                    {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+ <!-- Tab: Twilio SMS -->
+ <div x-show="activeTab === 'sms'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+ Twilio SMS Integration
+ </h2>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "twilio_account_sid,twilio_auth_token,twilio_sender_number" %}
+ <div class="{% if field.name == 'twilio_account_sid' %}col-span-full{% endif %}">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Tab: VTO AI Engine -->
+ <div x-show="activeTab === 'vto'" class="space-y-6" x-transition.opacity style="display: none;">
+ <h2 class="text-xl font-extrabold text-theme-text-base border-b border-theme-border-divider pb-4 mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+ Virtual Try-On (VTO) Settings
+ </h2>
+ <div class="grid grid-cols-1 gap-x-8 gap-y-6">
+ {% for field in form %}
+ {% if field.name in "vto_engine,replicate_api_key,replicate_model_version,hf_space_id,hf_api_token" %}
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ {{ field.label }} {% if field.field.required %}<span class="text-rose-500">*</span>{% endif %}
+ </label>
+ {{ field }}
+ {% if field.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ field.help_text }}</p>{% endif %}
+ {% for error in field.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
 
-                    <!-- Fixed Footer Actions -->
-                    <div class="absolute bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 flex justify-end gap-4 rounded-br-2xl">
-                        <a href="{% url 'admin:dashboard' %}" class="px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition shadow-sm">Cancel</a>
-                        <button type="submit" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Save Settings
-                        </button>
-                    </div>
-                    
-                </div>
-            </div>
-        </form>
-    </div>
+ <!-- Fixed Footer Actions -->
+ <div class="absolute bottom-0 left-0 right-0 p-6 bg-theme-bg-surface border-t border-theme-border-divider flex justify-end gap-4 rounded-br-2xl">
+ <a href="{% url 'admin:dashboard' %}" class="px-6 py-3 rounded-xl font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 transition shadow-sm">Cancel</a>
+ <button type="submit" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition flex items-center gap-2">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+ Save Settings
+ </button>
+ </div>
+ 
+ </div>
+ </div>
+ </form>
+ </div>
 </div>
 {% endblock %}

@@ -2,116 +2,116 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    {% include "components/breadcrumb.html" with current="System Audit Logs" %}
+ {% include "components/breadcrumb.html" with current="System Audit Logs" %}
 
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">System <span class="text-indigo-600 font-light">Audit Logs</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">A secure record of all CRUD operations and access events.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <button class="px-4 py-2 bg-white border border-slate-200 text-sm font-bold text-slate-700 rounded-xl hover:bg-slate-50 shadow-sm transition"><i class="fa-solid fa-download mr-2"></i> Export CSV</button>
-        </div>
-    </div>
+ <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+ <div>
+ <h1 class="text-3xl font-extrabold text-theme-text-base tracking-tight">System <span class="text-indigo-600 font-light">Audit Logs</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">A secure record of all CRUD operations and access events.</p>
+ </div>
+ <div class="flex items-center gap-3">
+ <button class="px-4 py-2 bg-theme-bg-surface border border-theme-border-base text-sm font-bold text-slate-700 rounded-xl hover:bg-theme-bg-hover shadow-sm transition"><i class="fa-solid fa-download mr-2"></i> Export CSV</button>
+ </div>
+ </div>
 
-    <!-- Filters -->
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex gap-4">
-        <form method="get" class="flex gap-4 w-full">
-            <div class="flex-1">
-                <input type="text" name="model_name" placeholder="Filter by Model Name (e.g. brand, product)" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5" value="{{ request.GET.model_name }}">
-            </div>
-            <div class="w-48">
-                <select name="action" class="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5">
-                    <option value="">All Actions</option>
-                    <option value="CREATE" {% if request.GET.action == 'CREATE' %}selected{% endif %}>Create</option>
-                    <option value="UPDATE" {% if request.GET.action == 'UPDATE' %}selected{% endif %}>Update</option>
-                    <option value="DELETE" {% if request.GET.action == 'DELETE' %}selected{% endif %}>Delete</option>
-                </select>
-            </div>
-            <button type="submit" class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition">Filter</button>
-            <a href="{% url 'admin:audit_log_list' %}" class="px-5 py-2.5 bg-slate-100 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-200 transition">Clear</a>
-        </form>
-    </div>
+ <!-- Filters -->
+ <div class="bg-theme-bg-surface p-4 rounded-xl shadow-sm border border-theme-border-base mb-6 flex gap-4">
+ <form method="get" class="flex gap-4 w-full">
+ <div class="flex-1">
+ <input type="text" name="model_name" placeholder="Filter by Model Name (e.g. brand, product)" class="w-full bg-theme-bg-base border border-theme-border-base text-theme-text-base text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5" value="{{ request.GET.model_name }}">
+ </div>
+ <div class="w-48">
+ <select name="action" class="bg-theme-bg-base border border-theme-border-base text-theme-text-base text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5">
+ <option value="">All Actions</option>
+ <option value="CREATE" {% if request.GET.action == 'CREATE' %}selected{% endif %}>Create</option>
+ <option value="UPDATE" {% if request.GET.action == 'UPDATE' %}selected{% endif %}>Update</option>
+ <option value="DELETE" {% if request.GET.action == 'DELETE' %}selected{% endif %}>Delete</option>
+ </select>
+ </div>
+ <button type="submit" class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition">Filter</button>
+ <a href="{% url 'admin:audit_log_list' %}" class="px-5 py-2.5 bg-slate-100 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-200 transition">Clear</a>
+ </form>
+ </div>
 
-    <!-- Data Table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-slate-500">
-                <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
-                    <tr>
-                        <th scope="col" class="px-6 py-4 font-bold">Timestamp</th>
-                        <th scope="col" class="px-6 py-4 font-bold">Actor</th>
-                        <th scope="col" class="px-6 py-4 font-bold">Action</th>
-                        <th scope="col" class="px-6 py-4 font-bold">Target Model</th>
-                        <th scope="col" class="px-6 py-4 font-bold">IP & Device</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for log in logs %}
-                    <tr class="bg-white border-b border-slate-50 hover:bg-slate-50/50 transition">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="font-medium text-slate-900">{{ log.created_at|date:"M d, Y" }}</span><br>
-                            <span class="text-xs text-slate-500">{{ log.created_at|time:"H:i:s" }}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            {% if log.actor %}
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">{{ log.actor.username|make_list|first|upper }}</div>
-                                <span class="font-bold text-slate-900">{{ log.actor.username }}</span>
-                            </div>
-                            {% else %}
-                            <span class="inline-block px-2 py-1 rounded bg-slate-100 text-slate-500 text-xs font-bold">System/Anonymous</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4">
-                            {% if log.action == 'CREATE' %}
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100"><i class="fa-solid fa-plus text-[10px]"></i> CREATE</span>
-                            {% elif log.action == 'UPDATE' %}
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 text-xs font-bold border border-amber-100"><i class="fa-solid fa-pen text-[10px]"></i> UPDATE</span>
-                            {% elif log.action == 'DELETE' %}
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 text-xs font-bold border border-rose-100"><i class="fa-solid fa-trash text-[10px]"></i> DELETE</span>
-                            {% else %}
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200">{{ log.action }}</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="font-bold text-indigo-600 block">{{ log.model_name|title }}</span>
-                            <span class="text-xs text-slate-500 block truncate max-w-xs" title="{{ log.object_repr }}">ID: {{ log.object_id }} - {{ log.object_repr }}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">{{ log.ip_address }}</span><br>
-                            <span class="text-[10px] text-slate-400 block truncate max-w-[200px]" title="{{ log.user_agent }}">{{ log.user_agent }}</span>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-slate-500">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4 text-slate-400">
-                                <i class="fa-solid fa-shield-halved text-2xl"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">No Audit Logs Found</h3>
-                            <p>There are no system logs matching your current filters.</p>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Pagination -->
-        {% if is_paginated %}
-        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-            <span class="text-sm text-slate-500">Showing page <span class="font-bold text-slate-900">{{ page_obj.number }}</span> of <span class="font-bold text-slate-900">{{ page_obj.paginator.num_pages }}</span></span>
-            <div class="flex gap-2">
-                {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.model_name %}&model_name={{ request.GET.model_name }}{% endif %}" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition text-sm font-medium">Previous</a>
-                {% endif %}
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.model_name %}&model_name={{ request.GET.model_name }}{% endif %}" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition text-sm font-medium">Next</a>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
+ <!-- Data Table -->
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="overflow-x-auto">
+ <table class="w-full text-sm text-left text-theme-text-muted">
+ <thead class="text-xs text-theme-text-muted uppercase bg-theme-bg-base border-b border-theme-border-base">
+ <tr>
+ <th scope="col" class="px-6 py-4 font-bold">Timestamp</th>
+ <th scope="col" class="px-6 py-4 font-bold">Actor</th>
+ <th scope="col" class="px-6 py-4 font-bold">Action</th>
+ <th scope="col" class="px-6 py-4 font-bold">Target Model</th>
+ <th scope="col" class="px-6 py-4 font-bold">IP & Device</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for log in logs %}
+ <tr class="bg-theme-bg-surface border-b border-slate-50 hover:bg-slate-50/50 transition">
+ <td class="px-6 py-4 whitespace-nowrap">
+ <span class="font-medium text-theme-text-base">{{ log.created_at|date:"M d, Y" }}</span><br>
+ <span class="text-xs text-theme-text-muted">{{ log.created_at|time:"H:i:s" }}</span>
+ </td>
+ <td class="px-6 py-4">
+ {% if log.actor %}
+ <div class="flex items-center gap-2">
+ <div class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">{{ log.actor.username|make_list|first|upper }}</div>
+ <span class="font-bold text-theme-text-base">{{ log.actor.username }}</span>
+ </div>
+ {% else %}
+ <span class="inline-block px-2 py-1 rounded bg-slate-100 text-theme-text-muted text-xs font-bold">System/Anonymous</span>
+ {% endif %}
+ </td>
+ <td class="px-6 py-4">
+ {% if log.action == 'CREATE' %}
+ <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100"><i class="fa-solid fa-plus text-[10px]"></i> CREATE</span>
+ {% elif log.action == 'UPDATE' %}
+ <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 text-xs font-bold border border-amber-100"><i class="fa-solid fa-pen text-[10px]"></i> UPDATE</span>
+ {% elif log.action == 'DELETE' %}
+ <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 text-xs font-bold border border-rose-100"><i class="fa-solid fa-trash text-[10px]"></i> DELETE</span>
+ {% else %}
+ <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-theme-bg-base text-slate-700 text-xs font-bold border border-theme-border-base">{{ log.action }}</span>
+ {% endif %}
+ </td>
+ <td class="px-6 py-4">
+ <span class="font-bold text-indigo-600 block">{{ log.model_name|title }}</span>
+ <span class="text-xs text-theme-text-muted block truncate max-w-xs" title="{{ log.object_repr }}">ID: {{ log.object_id }} - {{ log.object_repr }}</span>
+ </td>
+ <td class="px-6 py-4">
+ <span class="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">{{ log.ip_address }}</span><br>
+ <span class="text-[10px] text-slate-400 block truncate max-w-[200px]" title="{{ log.user_agent }}">{{ log.user_agent }}</span>
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="5" class="px-6 py-12 text-center text-theme-text-muted">
+ <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4 text-slate-400">
+ <i class="fa-solid fa-shield-halved text-2xl"></i>
+ </div>
+ <h3 class="text-lg font-bold text-theme-text-base mb-1">No Audit Logs Found</h3>
+ <p>There are no system logs matching your current filters.</p>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ 
+ <!-- Pagination -->
+ {% if is_paginated %}
+ <div class="px-6 py-4 border-t border-theme-border-base bg-theme-bg-base flex items-center justify-between">
+ <span class="text-sm text-theme-text-muted">Showing page <span class="font-bold text-theme-text-base">{{ page_obj.number }}</span> of <span class="font-bold text-theme-text-base">{{ page_obj.paginator.num_pages }}</span></span>
+ <div class="flex gap-2">
+ {% if page_obj.has_previous %}
+ <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.model_name %}&model_name={{ request.GET.model_name }}{% endif %}" class="px-3 py-1.5 bg-theme-bg-surface border border-theme-border-base text-theme-text-muted rounded-lg hover:bg-theme-bg-hover transition text-sm font-medium">Previous</a>
+ {% endif %}
+ {% if page_obj.has_next %}
+ <a href="?page={{ page_obj.next_page_number }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.model_name %}&model_name={{ request.GET.model_name }}{% endif %}" class="px-3 py-1.5 bg-theme-bg-surface border border-theme-border-base text-theme-text-muted rounded-lg hover:bg-theme-bg-hover transition text-sm font-medium">Next</a>
+ {% endif %}
+ </div>
+ </div>
+ {% endif %}
+ </div>
 </div>
 {% endblock %}

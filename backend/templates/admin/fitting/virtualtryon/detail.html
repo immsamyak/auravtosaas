@@ -3,165 +3,165 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    {% include "components/breadcrumb.html" with current="Job Details" parent="VTO Jobs" parent_url="admin:virtualtryon_list" %}
+ {% include "components/breadcrumb.html" with current="Job Details" parent="VTO Jobs" parent_url="admin:virtualtryon_list" %}
 
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Job <span class="text-indigo-600 font-light">#{{ job.id|stringformat:"s"|slice:":8" }}</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Virtual Try-On generation details and audit log.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <a href="{% url 'admin:virtualtryon_list' %}" class="px-5 py-2.5 bg-white text-slate-700 text-sm font-bold border border-slate-200 rounded-xl hover:bg-slate-50 shadow-sm transition">
-                Back to List
-            </a>
-            {% if job.status == 'COMPLETED' and job.qa_status != 'APPROVED' %}
-                <form action="#" method="POST" class="inline">
-                    {% csrf_token %}
-                    <button type="submit" class="px-5 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 shadow-md transition">
-                        <i class="fa-solid fa-check mr-2"></i> Approve QA
-                    </button>
-                </form>
-            {% endif %}
-        </div>
-    </div>
+ <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+ <div>
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Job <span class="text-indigo-600 font-light">#{{ job.id|stringformat:"s"|slice:":8" }}</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">Virtual Try-On generation details and audit log.</p>
+ </div>
+ <div class="flex items-center gap-3">
+ <a href="{% url 'admin:virtualtryon_list' %}" class="px-5 py-2.5 bg-theme-bg-surface text-slate-700 text-sm font-bold border border-theme-border-base rounded-xl hover:bg-theme-bg-hover shadow-sm transition">
+ Back to List
+ </a>
+ {% if job.status == 'COMPLETED' and job.qa_status != 'APPROVED' %}
+ <form action="#" method="POST" class="inline">
+ {% csrf_token %}
+ <button type="submit" class="px-5 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 shadow-md transition">
+ <i class="fa-solid fa-check mr-2"></i> Approve QA
+ </button>
+ </form>
+ {% endif %}
+ </div>
+ </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Content -->
-        <div class="lg:col-span-2 space-y-8">
-            <!-- Images Section -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                    <h2 class="text-lg font-bold text-slate-900">Generation Preview</h2>
-                </div>
-                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Base Photo -->
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Base Photo</span>
-                        <div class="bg-slate-100 rounded-xl border border-slate-200 aspect-[3/4] flex items-center justify-center overflow-hidden">
-                            {% if job.base_photo and job.base_photo.image %}
-                                <img src="{{ job.base_photo.image.url }}" class="w-full h-full object-cover">
-                            {% else %}
-                                <span class="text-slate-400 text-sm">Missing</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <!-- Product Photo -->
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Garment</span>
-                        <div class="bg-slate-100 rounded-xl border border-slate-200 aspect-[3/4] flex items-center justify-center overflow-hidden p-2">
-                            {% if job.product_variant and job.product_variant.primary_image %}
-                                <img src="{{ job.product_variant.primary_image.url }}" class="w-full h-full object-contain mix-blend-multiply">
-                            {% else %}
-                                <span class="text-slate-400 text-sm">Missing</span>
-                            {% endif %}
-                        </div>
-                    </div>
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+ <!-- Main Content -->
+ <div class="lg:col-span-2 space-y-8">
+ <!-- Images Section -->
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="px-6 py-4 border-b border-theme-border-divider bg-theme-bg-base">
+ <h2 class="text-lg font-bold text-theme-text-base">Generation Preview</h2>
+ </div>
+ <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+ <!-- Base Photo -->
+ <div class="flex flex-col">
+ <span class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-3">Base Photo</span>
+ <div class="bg-slate-100 rounded-xl border border-theme-border-base aspect-[3/4] flex items-center justify-center overflow-hidden">
+ {% if job.base_photo and job.base_photo.image %}
+ <img src="{{ job.base_photo.image.url }}" class="w-full h-full object-cover">
+ {% else %}
+ <span class="text-slate-400 text-sm">Missing</span>
+ {% endif %}
+ </div>
+ </div>
+ 
+ <!-- Product Photo -->
+ <div class="flex flex-col">
+ <span class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-3">Garment</span>
+ <div class="bg-slate-100 rounded-xl border border-theme-border-base aspect-[3/4] flex items-center justify-center overflow-hidden p-2">
+ {% if job.product_variant and job.product_variant.primary_image %}
+ <img src="{{ job.product_variant.primary_image.url }}" class="w-full h-full object-contain mix-blend-multiply">
+ {% else %}
+ <span class="text-slate-400 text-sm">Missing</span>
+ {% endif %}
+ </div>
+ </div>
 
-                    <!-- Final Generation -->
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-3">Generated Result</span>
-                        <div class="bg-indigo-50 rounded-xl border-2 border-indigo-200 aspect-[3/4] flex items-center justify-center overflow-hidden relative shadow-inner">
-                            {% if job.generated_image %}
-                                <img src="{{ job.generated_image.url }}" class="w-full h-full object-cover">
-                            {% elif job.status == 'PROCESSING' %}
-                                <div class="flex flex-col items-center">
-                                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600 mb-3"></i>
-                                    <span class="text-indigo-600 font-bold text-sm">{{ job.progress_percent }}%</span>
-                                </div>
-                            {% elif job.status == 'FAILED' %}
-                                <div class="flex flex-col items-center">
-                                    <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 mb-3"></i>
-                                    <span class="text-rose-600 font-bold text-sm">Failed</span>
-                                </div>
-                            {% else %}
-                                <span class="text-indigo-400 text-sm font-medium">Pending</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
+ <!-- Final Generation -->
+ <div class="flex flex-col">
+ <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-3">Generated Result</span>
+ <div class="bg-indigo-50 rounded-xl border-2 border-indigo-200 aspect-[3/4] flex items-center justify-center overflow-hidden relative shadow-inner">
+ {% if job.generated_image %}
+ <img src="{{ job.generated_image.url }}" class="w-full h-full object-cover">
+ {% elif job.status == 'PROCESSING' %}
+ <div class="flex flex-col items-center">
+ <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600 mb-3"></i>
+ <span class="text-indigo-600 font-bold text-sm">{{ job.progress_percent }}%</span>
+ </div>
+ {% elif job.status == 'FAILED' %}
+ <div class="flex flex-col items-center">
+ <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 mb-3"></i>
+ <span class="text-rose-600 font-bold text-sm">Failed</span>
+ </div>
+ {% else %}
+ <span class="text-indigo-400 text-sm font-medium">Pending</span>
+ {% endif %}
+ </div>
+ </div>
+ </div>
+ </div>
 
-            <!-- Error Logs -->
-            {% if job.error_message %}
-            <div class="bg-rose-50 rounded-2xl shadow-sm border border-rose-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-rose-200 bg-rose-100 flex items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
-                    <h2 class="text-lg font-bold text-rose-900">Error Details</h2>
-                </div>
-                <div class="p-6">
-                    <pre class="bg-white p-4 rounded-xl text-sm text-rose-800 font-mono overflow-x-auto border border-rose-100">{{ job.error_message }}</pre>
-                </div>
-            </div>
-            {% endif %}
-        </div>
+ <!-- Error Logs -->
+ {% if job.error_message %}
+ <div class="bg-rose-50 rounded-2xl shadow-sm border border-rose-200 overflow-hidden">
+ <div class="px-6 py-4 border-b border-rose-200 bg-rose-100 flex items-center gap-2">
+ <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+ <h2 class="text-lg font-bold text-rose-900">Error Details</h2>
+ </div>
+ <div class="p-6">
+ <pre class="bg-theme-bg-surface p-4 rounded-xl text-sm text-rose-800 font-mono overflow-x-auto border border-rose-100">{{ job.error_message }}</pre>
+ </div>
+ </div>
+ {% endif %}
+ </div>
 
-        <!-- Sidebar Content -->
-        <div class="space-y-8">
-            <!-- Job Metadata -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                    <h2 class="text-lg font-bold text-slate-900">Job Info</h2>
-                </div>
-                <div class="p-6 space-y-5">
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</span>
-                        {% if job.status == 'COMPLETED' %}
-                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check-circle mr-1.5"></i> Completed</span>
-                        {% elif job.status == 'PROCESSING' %}
-                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200"><i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i> Processing</span>
-                        {% elif job.status == 'FAILED' %}
-                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Failed</span>
-                        {% else %}
-                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200"><i class="fa-regular fa-clock mr-1.5"></i> Pending</span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">QA Status</span>
-                        <span class="text-sm font-bold text-slate-900">{{ job.get_qa_status_display|default:"Unreviewed" }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Engine / Provider</span>
-                        <span class="text-sm font-medium text-slate-900">{{ job.get_provider_display }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Created At</span>
-                        <span class="text-sm font-medium text-slate-900">{{ job.created_at|date:"M d, Y H:i:s" }}</span>
-                    </div>
-                    {% if job.processing_completed_at %}
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Completed At</span>
-                        <span class="text-sm font-medium text-slate-900">{{ job.processing_completed_at|date:"M d, Y H:i:s" }}</span>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+ <!-- Sidebar Content -->
+ <div class="space-y-8">
+ <!-- Job Metadata -->
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="px-6 py-4 border-b border-theme-border-divider bg-theme-bg-base">
+ <h2 class="text-lg font-bold text-theme-text-base">Job Info</h2>
+ </div>
+ <div class="p-6 space-y-5">
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</span>
+ {% if job.status == 'COMPLETED' %}
+ <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check-circle mr-1.5"></i> Completed</span>
+ {% elif job.status == 'PROCESSING' %}
+ <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200"><i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i> Processing</span>
+ {% elif job.status == 'FAILED' %}
+ <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Failed</span>
+ {% else %}
+ <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 border border-theme-border-base"><i class="fa-regular fa-clock mr-1.5"></i> Pending</span>
+ {% endif %}
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">QA Status</span>
+ <span class="text-sm font-bold text-theme-text-base">{{ job.get_qa_status_display|default:"Unreviewed" }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Engine / Provider</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ job.get_provider_display }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Created At</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ job.created_at|date:"M d, Y H:i:s" }}</span>
+ </div>
+ {% if job.processing_completed_at %}
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Completed At</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ job.processing_completed_at|date:"M d, Y H:i:s" }}</span>
+ </div>
+ {% endif %}
+ </div>
+ </div>
 
-            <!-- Context Metadata -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                    <h2 class="text-lg font-bold text-slate-900">Relationships</h2>
-                </div>
-                <div class="p-6 space-y-5">
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Brand</span>
-                        <span class="text-sm font-bold text-indigo-600">{{ job.product_variant.product.brand.name|default:"-" }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Product Variant</span>
-                        <span class="text-sm font-medium text-slate-900">{{ job.product_variant|default:"-" }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Requested By User</span>
-                        <span class="text-sm font-medium text-slate-900">{{ job.session.passport.user.email|default:"Guest Session" }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Session ID</span>
-                        <span class="text-sm font-mono text-slate-600">{{ job.session.id|stringformat:"s"|slice:":8" }}...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+ <!-- Context Metadata -->
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="px-6 py-4 border-b border-theme-border-divider bg-theme-bg-base">
+ <h2 class="text-lg font-bold text-theme-text-base">Relationships</h2>
+ </div>
+ <div class="p-6 space-y-5">
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Brand</span>
+ <span class="text-sm font-bold text-indigo-600">{{ job.product_variant.product.brand.name|default:"-" }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Product Variant</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ job.product_variant|default:"-" }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Requested By User</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ job.session.passport.user.email|default:"Guest Session" }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Session ID</span>
+ <span class="text-sm font-mono text-theme-text-muted">{{ job.session.id|stringformat:"s"|slice:":8" }}...</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 </div>
 {% endblock %}

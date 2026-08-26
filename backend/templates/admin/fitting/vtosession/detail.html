@@ -3,125 +3,125 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto pb-12">
-    {% include "components/breadcrumb.html" with current="Session Details" parent="VTO Sessions" parent_url="admin:vtosession_list" %}
+ {% include "components/breadcrumb.html" with current="Session Details" parent="VTO Sessions" parent_url="admin:vtosession_list" %}
 
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Session <span class="text-indigo-600 font-light">#{{ session.id|stringformat:"s"|slice:":8" }}</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Virtual Try-On session tracking and history.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <a href="{% url 'admin:vtosession_list' %}" class="px-5 py-2.5 bg-white text-slate-700 text-sm font-bold border border-slate-200 rounded-xl hover:bg-slate-50 shadow-sm transition">
-                Back to List
-            </a>
-        </div>
-    </div>
+ <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+ <div>
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Session <span class="text-indigo-600 font-light">#{{ session.id|stringformat:"s"|slice:":8" }}</span></h1>
+ <p class="text-theme-text-muted mt-2 text-sm font-medium">Virtual Try-On session tracking and history.</p>
+ </div>
+ <div class="flex items-center gap-3">
+ <a href="{% url 'admin:vtosession_list' %}" class="px-5 py-2.5 bg-theme-bg-surface text-slate-700 text-sm font-bold border border-theme-border-base rounded-xl hover:bg-theme-bg-hover shadow-sm transition">
+ Back to List
+ </a>
+ </div>
+ </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Content (Job History) -->
-        <div class="lg:col-span-2 space-y-8">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                    <h2 class="text-lg font-bold text-slate-900">Try-On History ({{ session.try_ons.count }})</h2>
-                </div>
-                
-                <div class="divide-y divide-slate-100">
-                    {% for job in session.try_ons.all|dictsortreversed:"created_at" %}
-                    <div class="p-6 flex flex-col sm:flex-row gap-6 hover:bg-slate-50/50 transition">
-                        <!-- Tiny Preview -->
-                        <div class="flex gap-2">
-                            <div class="w-16 h-20 bg-slate-100 rounded-lg border border-slate-200 overflow-hidden shrink-0">
-                                {% if job.base_photo and job.base_photo.image %}
-                                    <img src="{{ job.base_photo.image.url }}" class="w-full h-full object-cover">
-                                {% endif %}
-                            </div>
-                            <div class="w-16 h-20 bg-slate-100 rounded-lg border border-slate-200 overflow-hidden shrink-0">
-                                {% if job.product_variant and job.product_variant.primary_image %}
-                                    <img src="{{ job.product_variant.primary_image.url }}" class="w-full h-full object-cover mix-blend-multiply">
-                                {% endif %}
-                            </div>
-                            <div class="w-16 h-20 bg-indigo-50 rounded-lg border border-indigo-200 overflow-hidden shrink-0 relative">
-                                {% if job.generated_image %}
-                                    <img src="{{ job.generated_image.url }}" class="w-full h-full object-cover">
-                                {% endif %}
-                            </div>
-                        </div>
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+ <!-- Main Content (Job History) -->
+ <div class="lg:col-span-2 space-y-8">
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="px-6 py-4 border-b border-theme-border-divider bg-theme-bg-base flex justify-between items-center">
+ <h2 class="text-lg font-bold text-theme-text-base">Try-On History ({{ session.try_ons.count }})</h2>
+ </div>
+ 
+ <div class="divide-y divide-slate-100">
+ {% for job in session.try_ons.all|dictsortreversed:"created_at" %}
+ <div class="p-6 flex flex-col sm:flex-row gap-6 hover:bg-slate-50/50 transition">
+ <!-- Tiny Preview -->
+ <div class="flex gap-2">
+ <div class="w-16 h-20 bg-slate-100 rounded-lg border border-theme-border-base overflow-hidden shrink-0">
+ {% if job.base_photo and job.base_photo.image %}
+ <img src="{{ job.base_photo.image.url }}" class="w-full h-full object-cover">
+ {% endif %}
+ </div>
+ <div class="w-16 h-20 bg-slate-100 rounded-lg border border-theme-border-base overflow-hidden shrink-0">
+ {% if job.product_variant and job.product_variant.primary_image %}
+ <img src="{{ job.product_variant.primary_image.url }}" class="w-full h-full object-cover mix-blend-multiply">
+ {% endif %}
+ </div>
+ <div class="w-16 h-20 bg-indigo-50 rounded-lg border border-indigo-200 overflow-hidden shrink-0 relative">
+ {% if job.generated_image %}
+ <img src="{{ job.generated_image.url }}" class="w-full h-full object-cover">
+ {% endif %}
+ </div>
+ </div>
 
-                        <div class="flex-1 space-y-2">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="font-bold text-slate-900">{{ job.product_variant.product.brand.name }}</h3>
-                                    <p class="text-sm text-slate-500">{{ job.product_variant }}</p>
-                                </div>
-                                <a href="{% url 'admin:virtualtryon_detail' job.pk %}" class="text-indigo-600 font-bold text-sm hover:text-indigo-800">View Job</a>
-                            </div>
-                            
-                            <div class="flex gap-4 text-xs font-medium text-slate-500">
-                                <span><i class="fa-regular fa-clock mr-1"></i> {{ job.created_at|date:"M d, H:i" }}</span>
-                                {% if job.status == 'COMPLETED' %}
-                                    <span class="text-emerald-600"><i class="fa-solid fa-check mr-1"></i> Completed</span>
-                                {% elif job.status == 'FAILED' %}
-                                    <span class="text-rose-600"><i class="fa-solid fa-xmark mr-1"></i> Failed</span>
-                                {% else %}
-                                    <span class="text-amber-600"><i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Processing</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="p-8 text-center text-slate-500">
-                        <i class="fa-solid fa-inbox text-3xl mb-3 text-slate-300"></i>
-                        <p>No try-ons have been generated in this session.</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+ <div class="flex-1 space-y-2">
+ <div class="flex justify-between items-start">
+ <div>
+ <h3 class="font-bold text-theme-text-base">{{ job.product_variant.product.brand.name }}</h3>
+ <p class="text-sm text-theme-text-muted">{{ job.product_variant }}</p>
+ </div>
+ <a href="{% url 'admin:virtualtryon_detail' job.pk %}" class="text-indigo-600 font-bold text-sm hover:text-indigo-800">View Job</a>
+ </div>
+ 
+ <div class="flex gap-4 text-xs font-medium text-theme-text-muted">
+ <span><i class="fa-regular fa-clock mr-1"></i> {{ job.created_at|date:"M d, H:i" }}</span>
+ {% if job.status == 'COMPLETED' %}
+ <span class="text-emerald-600"><i class="fa-solid fa-check mr-1"></i> Completed</span>
+ {% elif job.status == 'FAILED' %}
+ <span class="text-rose-600"><i class="fa-solid fa-xmark mr-1"></i> Failed</span>
+ {% else %}
+ <span class="text-amber-600"><i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Processing</span>
+ {% endif %}
+ </div>
+ </div>
+ </div>
+ {% empty %}
+ <div class="p-8 text-center text-theme-text-muted">
+ <i class="fa-solid fa-inbox text-3xl mb-3 text-slate-300"></i>
+ <p>No try-ons have been generated in this session.</p>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </div>
 
-        <!-- Sidebar Content -->
-        <div class="space-y-8">
-            <!-- Session Metadata -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                    <h2 class="text-lg font-bold text-slate-900">Session Info</h2>
-                </div>
-                <div class="p-6 space-y-5">
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</span>
-                        {% if session.status == 'ACTIVE' %}
-                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle text-[8px] mr-1.5 pb-0.5"></i> Active</span>
-                        {% else %}
-                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">{{ session.status }}</span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Created At</span>
-                        <span class="text-sm font-medium text-slate-900">{{ session.created_at|date:"M d, Y H:i:s" }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Last Updated</span>
-                        <span class="text-sm font-medium text-slate-900">{{ session.updated_at|date:"M d, Y H:i:s" }}</span>
-                    </div>
-                </div>
-            </div>
+ <!-- Sidebar Content -->
+ <div class="space-y-8">
+ <!-- Session Metadata -->
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="px-6 py-4 border-b border-theme-border-divider bg-theme-bg-base">
+ <h2 class="text-lg font-bold text-theme-text-base">Session Info</h2>
+ </div>
+ <div class="p-6 space-y-5">
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</span>
+ {% if session.status == 'ACTIVE' %}
+ <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle text-[8px] mr-1.5 pb-0.5"></i> Active</span>
+ {% else %}
+ <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 border border-theme-border-base">{{ session.status }}</span>
+ {% endif %}
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Created At</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ session.created_at|date:"M d, Y H:i:s" }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Last Updated</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ session.updated_at|date:"M d, Y H:i:s" }}</span>
+ </div>
+ </div>
+ </div>
 
-            <!-- User Context -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                    <h2 class="text-lg font-bold text-slate-900">User Context</h2>
-                </div>
-                <div class="p-6 space-y-5">
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">User Account</span>
-                        <span class="text-sm font-bold text-indigo-600">{{ session.passport.user.email|default:"Guest" }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Fit Passport</span>
-                        <span class="text-sm font-medium text-slate-900">{{ session.passport.name|default:"Unnamed Passport" }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+ <!-- User Context -->
+ <div class="bg-theme-bg-surface rounded-2xl shadow-sm border border-theme-border-base overflow-hidden">
+ <div class="px-6 py-4 border-b border-theme-border-divider bg-theme-bg-base">
+ <h2 class="text-lg font-bold text-theme-text-base">User Context</h2>
+ </div>
+ <div class="p-6 space-y-5">
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">User Account</span>
+ <span class="text-sm font-bold text-indigo-600">{{ session.passport.user.email|default:"Guest" }}</span>
+ </div>
+ <div>
+ <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Fit Passport</span>
+ <span class="text-sm font-medium text-theme-text-base">{{ session.passport.name|default:"Unnamed Passport" }}</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 </div>
 {% endblock %}

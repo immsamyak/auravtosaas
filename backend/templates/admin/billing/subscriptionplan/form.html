@@ -1,208 +1,208 @@
 {% extends "admin/admin_base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    {% include "components/breadcrumb.html" with current="Plan Details" %}
-    <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Subscription Plan <span class="text-indigo-600 font-light">Details</span></h1>
-        <p class="text-slate-500 mt-1">Configure pricing, quotas, and included features.</p>
-    </div>
-    
-    <form method="post" enctype="multipart/form-data" class="space-y-8">
-        {% csrf_token %}
-        
-        <!-- Form Errors (Global) -->
-        {% if form.non_field_errors %}
-            <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl">
-                {% for error in form.non_field_errors %}
-                    <p class="text-sm font-bold text-rose-600 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                        {{ error }}
-                    </p>
-                {% endfor %}
-            </div>
-        {% endif %}
+ {% include "components/breadcrumb.html" with current="Plan Details" %}
+ <div class="mb-8">
+ <h1 class="text-4xl font-extrabold text-theme-text-base tracking-tight">Subscription Plan <span class="text-indigo-600 font-light">Details</span></h1>
+ <p class="text-theme-text-muted mt-1">Configure pricing, quotas, and included features.</p>
+ </div>
+ 
+ <form method="post" enctype="multipart/form-data" class="space-y-8">
+ {% csrf_token %}
+ 
+ <!-- Form Errors (Global) -->
+ {% if form.non_field_errors %}
+ <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl">
+ {% for error in form.non_field_errors %}
+ <p class="text-sm font-bold text-rose-600 flex items-center gap-2">
+ <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+ {{ error }}
+ </p>
+ {% endfor %}
+ </div>
+ {% endif %}
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Left Column: Core Pricing & Quota (Takes up 2 columns) -->
-            <div class="lg:col-span-2 space-y-6">
-                
-                <!-- Core Settings Card -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                    <h2 class="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        Core Settings
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="col-span-full">
-                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                Plan Name <span class="text-rose-500">*</span>
-                            </label>
-                            {{ form.name }}
-                            {% for error in form.name.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                        </div>
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+ 
+ <!-- Left Column: Core Pricing & Quota (Takes up 2 columns) -->
+ <div class="lg:col-span-2 space-y-6">
+ 
+ <!-- Core Settings Card -->
+ <div class="bg-theme-bg-surface p-8 rounded-3xl shadow-sm border border-theme-border-divider">
+ <h2 class="text-xl font-extrabold text-theme-text-base mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+ Core Settings
+ </h2>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ Plan Name <span class="text-rose-500">*</span>
+ </label>
+ {{ form.name }}
+ {% for error in form.name.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
 
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                Monthly Price (USD) <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <span class="text-slate-500 font-bold">$</span>
-                                </div>
-                                {{ form.monthly_price }}
-                            </div>
-                            {% for error in form.monthly_price.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                        </div>
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ Monthly Price (USD) <span class="text-rose-500">*</span>
+ </label>
+ <div class="relative">
+ <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+ <span class="text-theme-text-muted font-bold">$</span>
+ </div>
+ {{ form.monthly_price }}
+ </div>
+ {% for error in form.monthly_price.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
 
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">
-                                Try-On Quota <span class="text-rose-500">*</span>
-                            </label>
-                            {{ form.try_on_quota }}
-                            <p class="text-xs text-slate-500 mt-2 font-medium">Use <span class="font-bold text-indigo-600">-1</span> for unlimited try-ons.</p>
-                            {% for error in form.try_on_quota.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                        </div>
-                    </div>
-                </div>
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ Try-On Quota <span class="text-rose-500">*</span>
+ </label>
+ {{ form.try_on_quota }}
+ <p class="text-xs text-theme-text-muted mt-2 font-medium">Use <span class="font-bold text-indigo-600">-1</span> for unlimited try-ons.</p>
+ {% for error in form.try_on_quota.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ </div>
+ </div>
 
-                <!-- Features Card -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                    <h2 class="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Included Features
-                    </h2>
-                    
-                    <div x-data="featuresManager()">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">
-                            Plan Features
-                        </label>
-                        
-                        <!-- Dynamic Feature List -->
-                        <div class="space-y-3 mb-4">
-                            <template x-for="(feature, index) in features" :key="index">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 relative">
-                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        </div>
-                                        <input type="text" x-model="features[index]" @input="updateHiddenInput()" placeholder="e.g. 10,000 VTO Try-ons/mo" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
-                                    </div>
-                                    <button type="button" @click="removeFeature(index)" class="p-2 text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Remove Feature">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                    </button>
-                                </div>
-                            </template>
-                            
-                            <div x-show="features.length === 0" class="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-300 text-center">
-                                <p class="text-sm text-slate-500">No features added yet.</p>
-                            </div>
-                        </div>
+ <!-- Features Card -->
+ <div class="bg-theme-bg-surface p-8 rounded-3xl shadow-sm border border-theme-border-divider">
+ <h2 class="text-xl font-extrabold text-theme-text-base mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+ Included Features
+ </h2>
+ 
+ <div x-data="featuresManager()">
+ <label class="block text-sm font-bold text-slate-700 mb-2">
+ Plan Features
+ </label>
+ 
+ <!-- Dynamic Feature List -->
+ <div class="space-y-3 mb-4">
+ <template x-for="(feature, index) in features" :key="index">
+ <div class="flex items-center gap-3">
+ <div class="flex-1 relative">
+ <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+ <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+ </div>
+ <input type="text" x-model="features[index]" @input="updateHiddenInput()" placeholder="e.g. 10,000 VTO Try-ons/mo" class="w-full pl-10 pr-4 py-2 bg-theme-bg-base border border-theme-border-base rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+ </div>
+ <button type="button" @click="removeFeature(index)" class="p-2 text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Remove Feature">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+ </button>
+ </div>
+ </template>
+ 
+ <div x-show="features.length === 0" class="p-4 bg-theme-bg-base rounded-xl border border-dashed border-theme-input-border text-center">
+ <p class="text-sm text-theme-text-muted">No features added yet.</p>
+ </div>
+ </div>
 
-                        <button type="button" @click="addFeature()" class="inline-flex items-center text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            Add Feature
-                        </button>
+ <button type="button" @click="addFeature()" class="inline-flex items-center text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+ <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+ Add Feature
+ </button>
 
-                        <!-- Hidden actual Django field -->
-                        <div class="hidden">
-                            {{ form.features }}
-                        </div>
-                        
-                        {% for error in form.features.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ <!-- Hidden actual Django field -->
+ <div class="hidden">
+ {{ form.features }}
+ </div>
+ 
+ {% for error in form.features.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
 
-                        <script>
-                            function featuresManager() {
-                                // Extract the initial JSON string from the hidden textarea value
-                                let initialFeatures = [];
-                                try {
-                                    const rawVal = document.querySelector('textarea[name="features"]').value;
-                                    initialFeatures = rawVal ? JSON.parse(rawVal) : [];
-                                    if (!Array.isArray(initialFeatures)) initialFeatures = [];
-                                } catch (e) {
-                                    initialFeatures = [];
-                                }
+ <script>
+ function featuresManager() {
+ // Extract the initial JSON string from the hidden textarea value
+ let initialFeatures = [];
+ try {
+ const rawVal = document.querySelector('textarea[name="features"]').value;
+ initialFeatures = rawVal ? JSON.parse(rawVal) : [];
+ if (!Array.isArray(initialFeatures)) initialFeatures = [];
+ } catch (e) {
+ initialFeatures = [];
+ }
 
-                                return {
-                                    features: initialFeatures,
-                                    addFeature() {
-                                        this.features.push('');
-                                        this.updateHiddenInput();
-                                    },
-                                    removeFeature(index) {
-                                        this.features.splice(index, 1);
-                                        this.updateHiddenInput();
-                                    },
-                                    updateHiddenInput() {
-                                        // Clean up empty strings before saving if desired, or keep them. 
-                                        // We will save exactly what is typed.
-                                        document.querySelector('textarea[name="features"]').value = JSON.stringify(this.features);
-                                    }
-                                }
-                            }
-                        </script>
-                    </div>
-                </div>
+ return {
+ features: initialFeatures,
+ addFeature() {
+ this.features.push('');
+ this.updateHiddenInput();
+ },
+ removeFeature(index) {
+ this.features.splice(index, 1);
+ this.updateHiddenInput();
+ },
+ updateHiddenInput() {
+ // Clean up empty strings before saving if desired, or keep them. 
+ // We will save exactly what is typed.
+ document.querySelector('textarea[name="features"]').value = JSON.stringify(this.features);
+ }
+ }
+ }
+ </script>
+ </div>
+ </div>
 
-            </div>
+ </div>
 
-            <!-- Right Column: Integrations & Status -->
-            <div class="space-y-6">
-                
-                <!-- Marketing & Display Card -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-indigo-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4">
-                        <svg class="w-24 h-24 text-indigo-50 opacity-50 transform translate-x-4 -translate-y-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                    </div>
-                    
-                    <h2 class="text-xl font-extrabold text-indigo-900 mb-6 relative z-10">Storefront Display</h2>
-                    
-                    <div class="relative z-10">
-                        <label class="flex items-center gap-3 cursor-pointer p-4 border-2 border-indigo-100 rounded-xl hover:bg-indigo-50 transition-colors">
-                            <div class="flex-1">
-                                <span class="block text-sm font-bold text-indigo-900">Most Popular Plan</span>
-                                <span class="block text-xs text-indigo-600/70 mt-0.5">Highlights this tier on the pricing page</span>
-                            </div>
-                            <div class="relative">
-                                {{ form.is_popular }}
-                                <style>
-                                    /* Quick override for the checkbox to look like a clean toggle or highlighted box */
-                                    input[name="is_popular"] { width: 1.5rem; height: 1.5rem; border-radius: 0.375rem; color: #4f46e5; border-color: #c7d2fe; cursor: pointer; }
-                                </style>
-                            </div>
-                        </label>
-                        {% for error in form.is_popular.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                    </div>
-                </div>
+ <!-- Right Column: Integrations & Status -->
+ <div class="space-y-6">
+ 
+ <!-- Marketing & Display Card -->
+ <div class="bg-theme-bg-surface p-8 rounded-3xl shadow-sm border border-indigo-100 relative overflow-hidden">
+ <div class="absolute top-0 right-0 p-4">
+ <svg class="w-24 h-24 text-indigo-50 opacity-50 transform translate-x-4 -translate-y-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+ </div>
+ 
+ <h2 class="text-xl font-extrabold text-indigo-900 mb-6 relative z-10">Storefront Display</h2>
+ 
+ <div class="relative z-10">
+ <label class="flex items-center gap-3 cursor-pointer p-4 border-2 border-indigo-100 rounded-xl hover:bg-indigo-50 transition-colors">
+ <div class="flex-1">
+ <span class="block text-sm font-bold text-indigo-900">Most Popular Plan</span>
+ <span class="block text-xs text-indigo-600/70 mt-0.5">Highlights this tier on the pricing page</span>
+ </div>
+ <div class="relative">
+ {{ form.is_popular }}
+ <style>
+ /* Quick override for the checkbox to look like a clean toggle or highlighted box */
+ input[name="is_popular"] { width: 1.5rem; height: 1.5rem; border-radius: 0.375rem; color: #4f46e5; border-color: #c7d2fe; cursor: pointer; }
+ </style>
+ </div>
+ </label>
+ {% for error in form.is_popular.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ </div>
 
-                <!-- Stripe Integration Card -->
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                    <h2 class="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-[#635BFF]" viewBox="0 0 40 40" fill="none"><path d="M20 0c11.046 0 20 8.954 20 20s-8.954 20-20 20S0 31.046 0 20 8.954 0 20 0z" fill="currentColor"/><path d="M19.167 12.923c-3.13 0-5.327 1.636-5.327 4.195 0 2.457 1.83 3.655 4.887 4.417 2.164.54 2.89.98 2.89 1.834 0 .914-1.04 1.488-2.584 1.488-1.808 0-3.353-.787-4.225-1.52l-1.008 3.518c1.332.96 3.498 1.53 5.467 1.53 3.502 0 5.626-1.61 5.626-4.304 0-2.313-1.603-3.612-4.72-4.364-2.227-.55-2.858-1.026-2.858-1.782 0-.825 1.007-1.39 2.378-1.39 1.484 0 2.8.563 3.732 1.155l.93-3.327c-.98-.675-2.73-1.45-5.188-1.45z" fill="#fff"/></svg>
-                        Stripe Integration
-                    </h2>
-                    
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">
-                            Price ID
-                        </label>
-                        {{ form.stripe_price_id }}
-                        <p class="text-xs text-slate-500 mt-2 font-medium">The exact Stripe Price ID (starts with <span class="font-mono text-slate-700">price_</span>)</p>
-                        {% for error in form.stripe_price_id.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
-                    </div>
-                </div>
+ <!-- Stripe Integration Card -->
+ <div class="bg-theme-bg-surface p-8 rounded-3xl shadow-sm border border-theme-border-divider">
+ <h2 class="text-xl font-extrabold text-theme-text-base mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-[#635BFF]" viewBox="0 0 40 40" fill="none"><path d="M20 0c11.046 0 20 8.954 20 20s-8.954 20-20 20S0 31.046 0 20 8.954 0 20 0z" fill="currentColor"/><path d="M19.167 12.923c-3.13 0-5.327 1.636-5.327 4.195 0 2.457 1.83 3.655 4.887 4.417 2.164.54 2.89.98 2.89 1.834 0 .914-1.04 1.488-2.584 1.488-1.808 0-3.353-.787-4.225-1.52l-1.008 3.518c1.332.96 3.498 1.53 5.467 1.53 3.502 0 5.626-1.61 5.626-4.304 0-2.313-1.603-3.612-4.72-4.364-2.227-.55-2.858-1.026-2.858-1.782 0-.825 1.007-1.39 2.378-1.39 1.484 0 2.8.563 3.732 1.155l.93-3.327c-.98-.675-2.73-1.45-5.188-1.45z" fill="#fff"/></svg>
+ Stripe Integration
+ </h2>
+ 
+ <div>
+ <label class="block text-sm font-bold text-slate-700 mb-1">
+ Price ID
+ </label>
+ {{ form.stripe_price_id }}
+ <p class="text-xs text-theme-text-muted mt-2 font-medium">The exact Stripe Price ID (starts with <span class="font-mono text-slate-700">price_</span>)</p>
+ {% for error in form.stripe_price_id.errors %}<p class="text-xs text-rose-500 mt-2 font-bold">{{ error }}</p>{% endfor %}
+ </div>
+ </div>
 
-            </div>
-        </div>
+ </div>
+ </div>
 
-        <div class="pt-8 border-t border-slate-100 flex justify-end gap-4">
-            <a href="{% url 'admin:subscriptionplan_list' %}" class="px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition shadow-sm">Cancel</a>
-            <button type="submit" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                Save Subscription Plan
-            </button>
-        </div>
-    </form>
+ <div class="pt-8 border-t border-theme-border-divider flex justify-end gap-4">
+ <a href="{% url 'admin:subscriptionplan_list' %}" class="px-6 py-3 rounded-xl font-bold text-theme-text-muted bg-slate-100 hover:bg-slate-200 transition shadow-sm">Cancel</a>
+ <button type="submit" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition flex items-center gap-2">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+ Save Subscription Plan
+ </button>
+ </div>
+ </form>
 </div>
 {% endblock %}

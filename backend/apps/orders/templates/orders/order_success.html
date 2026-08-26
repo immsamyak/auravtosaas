@@ -2,203 +2,203 @@
 
 {% block content %}
 <div class="min-h-screen pt-28 pb-24 px-4 sm:px-6 lg:px-8 text-current">
-    
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="mb-10 text-center sm:text-left">
-            <h1 class="text-3xl sm:text-4xl font-black tracking-tighter mb-2">Order Successful!</h1>
-            <p class="text-base sm:text-lg opacity-70">Thank you for your purchase from <span class="font-bold">{{ brand.name }}</span>. Your order ID is <span class="font-mono font-bold bg-neutral-500/10 px-2 py-0.5 rounded">{{ order.id }}</span></p>
-        </div>
+ 
+ <div class="max-w-7xl mx-auto">
+ <!-- Header -->
+ <div class="mb-10 text-center sm:text-left">
+ <h1 class="text-3xl sm:text-4xl font-black tracking-tighter mb-2">Order Successful!</h1>
+ <p class="text-base sm:text-lg opacity-70">Thank you for your purchase from <span class="font-bold">{{ brand.name }}</span>. Your order ID is <span class="font-mono font-bold bg-neutral-500/10 px-2 py-0.5 rounded">{{ order.id }}</span></p>
+ </div>
 
-        <div class="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start">
-            
-            <!-- Left Column: Details & Instructions -->
-            <div class="lg:col-span-7 space-y-8">
-                
-                <!-- Status Card -->
-                <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-current opacity-5 rounded-full blur-2xl"></div>
-                    
-                    <div class="flex items-center space-x-6 relative z-10">
-                        <div class="h-16 w-16 rounded-full bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-check text-2xl opacity-90 animate-bounce"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Current Status</p>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-extrabold uppercase tracking-widest border border-current shadow-sm bg-neutral-500/10">
-                                {{ order.get_status_display }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+ <div class="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start">
+ 
+ <!-- Left Column: Details & Instructions -->
+ <div class="lg:col-span-7 space-y-8">
+ 
+ <!-- Status Card -->
+ <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+ <div class="absolute -top-24 -right-24 w-48 h-48 bg-current opacity-5 rounded-full blur-2xl"></div>
+ 
+ <div class="flex items-center space-x-6 relative z-10">
+ <div class="h-16 w-16 rounded-full bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center shrink-0">
+ <i class="fa-solid fa-check text-2xl opacity-90 animate-bounce"></i>
+ </div>
+ <div>
+ <p class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Current Status</p>
+ <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-extrabold uppercase tracking-widest border border-current shadow-sm bg-neutral-500/10">
+ {{ order.get_status_display }}
+ </span>
+ </div>
+ </div>
+ </div>
 
-                <!-- Customer Details -->
-                <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl">
-                    <h2 class="text-lg font-bold mb-6 flex items-center">
-                        <i class="fa-solid fa-address-card mr-3 opacity-60"></i> Delivery Information
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Customer</p>
-                            <p class="font-bold">{{ order.customer_name }}</p>
-                            <p class="opacity-80 text-sm mt-1">{{ order.customer_phone }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Address</p>
-                            <p class="font-medium text-sm leading-relaxed">{{ order.shipping_address }}</p>
-                            {% if order.delivery_city %}
-                            <p class="opacity-80 text-sm mt-1 font-bold">{{ order.delivery_city.name }}, {{ order.delivery_city.district.name }}, {{ order.delivery_city.district.province.name }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+ <!-- Customer Details -->
+ <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl">
+ <h2 class="text-lg font-bold mb-6 flex items-center">
+ <i class="fa-solid fa-address-card mr-3 opacity-60"></i> Delivery Information
+ </h2>
+ 
+ <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div>
+ <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Customer</p>
+ <p class="font-bold">{{ order.customer_name }}</p>
+ <p class="opacity-80 text-sm mt-1">{{ order.customer_phone }}</p>
+ </div>
+ <div>
+ <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Address</p>
+ <p class="font-medium text-sm leading-relaxed">{{ order.shipping_address }}</p>
+ {% if order.delivery_city %}
+ <p class="opacity-80 text-sm mt-1 font-bold">{{ order.delivery_city.name }}, {{ order.delivery_city.district.name }}, {{ order.delivery_city.district.province.name }}</p>
+ {% endif %}
+ </div>
+ </div>
+ </div>
 
-                <!-- Payment Instructions / Proof -->
-                {% if custom_instructions or qr_code_url or order.payment_proof %}
-                <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-current opacity-80"></div>
-                    
-                    <h2 class="text-lg font-bold mb-4 flex items-center">
-                        <i class="fa-solid fa-wallet mr-3 opacity-60"></i> Payment Details
-                    </h2>
-                    
-                    <div class="mb-6 flex items-center space-x-3">
-                        <span class="font-bold border border-neutral-500/30 bg-neutral-500/10 px-3 py-1 rounded-lg text-sm">{{ order.payment_provider }}</span>
-                        {% if order.payment_reference_id %}
-                        <span class="text-sm opacity-70">Ref: <span class="font-mono font-bold">{{ order.payment_reference_id }}</span></span>
-                        {% endif %}
-                    </div>
-                    
-                    {% if custom_instructions %}
-                        <div class="bg-neutral-500/10 rounded-xl p-5 border border-neutral-500/20 shadow-sm mb-6">
-                            <p class="text-sm whitespace-pre-wrap font-mono leading-relaxed opacity-90">{{ custom_instructions }}</p>
-                        </div>
-                    {% endif %}
-                    
-                    {% if qr_code_url %}
-                        <div class="mb-6">
-                            <p class="text-xs font-bold uppercase tracking-wider mb-3 opacity-70">Scan to Pay</p>
-                            <div class="inline-block p-3 bg-white rounded-2xl border border-neutral-500/20 shadow-lg">
-                                <img src="{{ qr_code_url }}" alt="QR Code" class="h-40 w-40 object-contain">
-                            </div>
-                        </div>
-                    {% endif %}
-                    
-                    {% if not order.payment_proof %}
-                        <div class="border-t border-neutral-500/20 pt-6 mt-6">
-                            <h4 class="text-sm font-bold mb-2">Upload Payment Proof</h4>
-                            <p class="text-xs opacity-70 mb-4">Please upload a screenshot of your successful transaction.</p>
-                            <form method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row gap-4">
-                                {% csrf_token %}
-                                <input type="file" name="payment_proof" accept="image/*" required class="flex-1 block w-full text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-neutral-500/20 file:text-current hover:file:bg-neutral-500/30 file:cursor-pointer cursor-pointer border border-dashed border-neutral-500/40 rounded-xl p-2 bg-neutral-500/5 hover:border-current transition-all">
-                                
-                                <button type="submit" class="sm:w-auto w-full inline-flex justify-center items-center py-2 px-6 border border-current rounded-xl shadow-sm text-sm font-bold uppercase tracking-widest bg-current text-white hover:opacity-90 transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
-                                    <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
-                                    <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-upload mr-2"></i> Submit</span>
-                                </button>
-                            </form>
-                        </div>
-                    {% else %}
-                        <div class="border-t border-neutral-500/20 pt-6 mt-6 flex items-center space-x-4">
-                            <div class="h-16 w-16 rounded-lg overflow-hidden border border-neutral-500/20 shadow-inner shrink-0 relative group">
-                                <img src="{{ order.payment_proof.url }}" alt="Proof" class="h-full w-full object-cover">
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold flex items-center">
-                                    <i class="fa-solid fa-circle-check mr-2 opacity-90"></i> Proof Uploaded
-                                </h4>
-                                <p class="text-xs opacity-70 mt-1">Awaiting store verification.</p>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-                {% endif %}
-                
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="{% url 'track_order' brand.slug %}?order_id={{ order.id }}" class="flex-1 inline-flex justify-center items-center px-6 py-4 border border-neutral-500/30 shadow-sm text-sm font-bold rounded-xl bg-neutral-500/10 hover:bg-neutral-500/20 transition-all">
-                        <i class="fa-solid fa-location-dot mr-2 opacity-70"></i> Track / Return Order
-                    </a>
-                    <a href="{% url 'storefront' brand.slug %}" class="flex-1 inline-flex justify-center items-center px-6 py-4 border border-current shadow-md text-sm font-bold rounded-xl bg-current transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
-                        <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
-                        <span class="relative z-10 mix-blend-exclusion text-white flex items-center">
-                            Continue Shopping <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </span>
-                    </a>
-                </div>
-            </div>
+ <!-- Payment Instructions / Proof -->
+ {% if custom_instructions or qr_code_url or order.payment_proof %}
+ <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+ <div class="absolute top-0 left-0 w-1.5 h-full bg-current opacity-80"></div>
+ 
+ <h2 class="text-lg font-bold mb-4 flex items-center">
+ <i class="fa-solid fa-wallet mr-3 opacity-60"></i> Payment Details
+ </h2>
+ 
+ <div class="mb-6 flex items-center space-x-3">
+ <span class="font-bold border border-neutral-500/30 bg-neutral-500/10 px-3 py-1 rounded-lg text-sm">{{ order.payment_provider }}</span>
+ {% if order.payment_reference_id %}
+ <span class="text-sm opacity-70">Ref: <span class="font-mono font-bold">{{ order.payment_reference_id }}</span></span>
+ {% endif %}
+ </div>
+ 
+ {% if custom_instructions %}
+ <div class="bg-neutral-500/10 rounded-xl p-5 border border-neutral-500/20 shadow-sm mb-6">
+ <p class="text-sm whitespace-pre-wrap font-mono leading-relaxed opacity-90">{{ custom_instructions }}</p>
+ </div>
+ {% endif %}
+ 
+ {% if qr_code_url %}
+ <div class="mb-6">
+ <p class="text-xs font-bold uppercase tracking-wider mb-3 opacity-70">Scan to Pay</p>
+ <div class="inline-block p-3 bg-theme-bg-surface rounded-2xl border border-neutral-500/20 shadow-lg">
+ <img src="{{ qr_code_url }}" alt="QR Code" class="h-40 w-40 object-contain">
+ </div>
+ </div>
+ {% endif %}
+ 
+ {% if not order.payment_proof %}
+ <div class="border-t border-neutral-500/20 pt-6 mt-6">
+ <h4 class="text-sm font-bold mb-2">Upload Payment Proof</h4>
+ <p class="text-xs opacity-70 mb-4">Please upload a screenshot of your successful transaction.</p>
+ <form method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row gap-4">
+ {% csrf_token %}
+ <input type="file" name="payment_proof" accept="image/*" required class="flex-1 block w-full text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-neutral-500/20 file:text-current hover:file:bg-neutral-500/30 file:cursor-pointer cursor-pointer border border-dashed border-neutral-500/40 rounded-xl p-2 bg-neutral-500/5 hover:border-current transition-all">
+ 
+ <button type="submit" class="sm:w-auto w-full inline-flex justify-center items-center py-2 px-6 border border-current rounded-xl shadow-sm text-sm font-bold uppercase tracking-widest bg-current text-white hover:opacity-90 transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
+ <span class="absolute inset-0 w-full h-full bg-theme-bg-surface mix-blend-difference pointer-events-none"></span>
+ <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-upload mr-2"></i> Submit</span>
+ </button>
+ </form>
+ </div>
+ {% else %}
+ <div class="border-t border-neutral-500/20 pt-6 mt-6 flex items-center space-x-4">
+ <div class="h-16 w-16 rounded-lg overflow-hidden border border-neutral-500/20 shadow-inner shrink-0 relative group">
+ <img src="{{ order.payment_proof.url }}" alt="Proof" class="h-full w-full object-cover">
+ </div>
+ <div>
+ <h4 class="text-sm font-bold flex items-center">
+ <i class="fa-solid fa-circle-check mr-2 opacity-90"></i> Proof Uploaded
+ </h4>
+ <p class="text-xs opacity-70 mt-1">Awaiting store verification.</p>
+ </div>
+ </div>
+ {% endif %}
+ </div>
+ {% endif %}
+ 
+ <!-- Action Buttons -->
+ <div class="flex flex-col sm:flex-row gap-4 pt-4">
+ <a href="{% url 'track_order' brand.slug %}?order_id={{ order.id }}" class="flex-1 inline-flex justify-center items-center px-6 py-4 border border-neutral-500/30 shadow-sm text-sm font-bold rounded-xl bg-neutral-500/10 hover:bg-neutral-500/20 transition-all">
+ <i class="fa-solid fa-location-dot mr-2 opacity-70"></i> Track / Return Order
+ </a>
+ <a href="{% url 'storefront' brand.slug %}" class="flex-1 inline-flex justify-center items-center px-6 py-4 border border-current shadow-md text-sm font-bold rounded-xl bg-current transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
+ <span class="absolute inset-0 w-full h-full bg-theme-bg-surface mix-blend-difference pointer-events-none"></span>
+ <span class="relative z-10 mix-blend-exclusion text-white flex items-center">
+ Continue Shopping <i class="fa-solid fa-arrow-right ml-2"></i>
+ </span>
+ </a>
+ </div>
+ </div>
 
-            <!-- Right Column: Order Summary -->
-            <div class="lg:col-span-5 mt-10 lg:mt-0">
-                <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl sticky top-8">
-                    <h2 class="text-xl font-extrabold mb-6 tracking-tight">Order Summary</h2>
-                    
-                    <!-- Items -->
-                    <div class="space-y-5 mb-8 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                        {% for item in order.items.all %}
-                        <div class="flex items-start space-x-4 group">
-                            <div class="h-20 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-neutral-500/20 bg-neutral-500/10 relative">
-                                {% if item.product_variant.image %}
-                                    <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
-                                {% else %}
-                                    <div class="h-full w-full flex items-center justify-center">
-                                        <i class="fa-solid fa-image opacity-30 text-2xl"></i>
-                                    </div>
-                                {% endif %}
-                                <div class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-current text-white flex items-center justify-center text-[10px] font-bold shadow-sm" style="color: var(--tw-prose-body);">
-                                    <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none rounded-full"></span>
-                                    <span class="relative z-10 mix-blend-exclusion text-white">{{ item.quantity }}</span>
-                                </div>
-                            </div>
-                            <div class="flex-1 min-w-0 pt-1">
-                                <h3 class="text-sm font-bold leading-tight truncate">{{ item.product_variant.product.name }}</h3>
-                                <p class="mt-1 text-xs font-medium opacity-70">{{ item.product_variant.color.name }} &bull; Size {{ item.product_variant.size.code }}</p>
-                                <p class="mt-2 text-sm font-bold">{{ brand.currency_symbol|default:"$" }}{{ item.price_at_purchase }}</p>
-                            </div>
-                        </div>
-                        {% empty %}
-                        <p class="text-sm opacity-60 italic">No items found in this order.</p>
-                        {% endfor %}
-                    </div>
+ <!-- Right Column: Order Summary -->
+ <div class="lg:col-span-5 mt-10 lg:mt-0">
+ <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl sticky top-8">
+ <h2 class="text-xl font-extrabold mb-6 tracking-tight">Order Summary</h2>
+ 
+ <!-- Items -->
+ <div class="space-y-5 mb-8 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+ {% for item in order.items.all %}
+ <div class="flex items-start space-x-4 group">
+ <div class="h-20 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-neutral-500/20 bg-neutral-500/10 relative">
+ {% if item.product_variant.image %}
+ <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
+ {% else %}
+ <div class="h-full w-full flex items-center justify-center">
+ <i class="fa-solid fa-image opacity-30 text-2xl"></i>
+ </div>
+ {% endif %}
+ <div class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-current text-white flex items-center justify-center text-[10px] font-bold shadow-sm" style="color: var(--tw-prose-body);">
+ <span class="absolute inset-0 w-full h-full bg-theme-bg-surface mix-blend-difference pointer-events-none rounded-full"></span>
+ <span class="relative z-10 mix-blend-exclusion text-white">{{ item.quantity }}</span>
+ </div>
+ </div>
+ <div class="flex-1 min-w-0 pt-1">
+ <h3 class="text-sm font-bold leading-tight truncate">{{ item.product_variant.product.name }}</h3>
+ <p class="mt-1 text-xs font-medium opacity-70">{{ item.product_variant.color.name }} &bull; Size {{ item.product_variant.size.code }}</p>
+ <p class="mt-2 text-sm font-bold">{{ brand.currency_symbol|default:"$" }}{{ item.price_at_purchase }}</p>
+ </div>
+ </div>
+ {% empty %}
+ <p class="text-sm opacity-60 italic">No items found in this order.</p>
+ {% endfor %}
+ </div>
 
-                    <!-- Totals -->
-                    <div class="border-t border-neutral-500/20 pt-6">
-                        <dl class="space-y-4 text-sm font-medium opacity-80">
-                            <div class="flex items-center justify-between">
-                                <dt>Subtotal</dt>
-                                <dd class="font-bold text-base opacity-100">{{ brand.currency_symbol|default:"$" }}{{ order.total_amount }}</dd>
-                            </div>
-                            
-                            {% if order.discount_amount > 0 %}
-                            <div class="flex items-center justify-between">
-                                <dt class="opacity-100 font-bold">Discount</dt>
-                                <dd class="font-extrabold opacity-100 border-b border-current border-opacity-30">-{{ brand.currency_symbol|default:"$" }}{{ order.discount_amount }}</dd>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="flex items-center justify-between">
-                                <dt class="opacity-100 font-bold">Shipping</dt>
-                                <dd class="opacity-100 font-bold text-right">
-                                    {% if order.shipping_cost == 0 %}
-                                        <span class="font-extrabold border border-current border-opacity-40 px-2 py-0.5 rounded uppercase tracking-wider text-[10px] text-emerald-500 border-emerald-500">Free</span>
-                                    {% else %}
-                                        <span>{{ brand.currency_symbol|default:"$" }}{{ order.shipping_cost }}</span>
-                                    {% endif %}
-                                </dd>
-                            </div>
-                            
-                            <div class="flex items-center justify-between border-t border-neutral-500/20 pt-6 mt-6">
-                                <dt class="text-base font-extrabold opacity-100 uppercase tracking-widest">Total</dt>
-                                <dd class="text-3xl font-black opacity-100 tracking-tighter">{{ brand.currency_symbol|default:"$" }}{{ order.grand_total }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-                    
-                </div>
-            </div>
-            
-        </div>
-    </div>
+ <!-- Totals -->
+ <div class="border-t border-neutral-500/20 pt-6">
+ <dl class="space-y-4 text-sm font-medium opacity-80">
+ <div class="flex items-center justify-between">
+ <dt>Subtotal</dt>
+ <dd class="font-bold text-base opacity-100">{{ brand.currency_symbol|default:"$" }}{{ order.total_amount }}</dd>
+ </div>
+ 
+ {% if order.discount_amount > 0 %}
+ <div class="flex items-center justify-between">
+ <dt class="opacity-100 font-bold">Discount</dt>
+ <dd class="font-extrabold opacity-100 border-b border-current border-opacity-30">-{{ brand.currency_symbol|default:"$" }}{{ order.discount_amount }}</dd>
+ </div>
+ {% endif %}
+ 
+ <div class="flex items-center justify-between">
+ <dt class="opacity-100 font-bold">Shipping</dt>
+ <dd class="opacity-100 font-bold text-right">
+ {% if order.shipping_cost == 0 %}
+ <span class="font-extrabold border border-current border-opacity-40 px-2 py-0.5 rounded uppercase tracking-wider text-[10px] text-emerald-500 border-emerald-500">Free</span>
+ {% else %}
+ <span>{{ brand.currency_symbol|default:"$" }}{{ order.shipping_cost }}</span>
+ {% endif %}
+ </dd>
+ </div>
+ 
+ <div class="flex items-center justify-between border-t border-neutral-500/20 pt-6 mt-6">
+ <dt class="text-base font-extrabold opacity-100 uppercase tracking-widest">Total</dt>
+ <dd class="text-3xl font-black opacity-100 tracking-tighter">{{ brand.currency_symbol|default:"$" }}{{ order.grand_total }}</dd>
+ </div>
+ </dl>
+ </div>
+ 
+ </div>
+ </div>
+ 
+ </div>
+ </div>
 </div>
 {% endblock %}
