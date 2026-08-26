@@ -31,16 +31,23 @@
             color: #312e81; /* indigo-900 */
         }
     </style>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col relative selection:bg-indigo-100 selection:text-indigo-900">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 antialiased min-h-screen flex flex-col relative selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300">
     
     <!-- Floating, Rounded Sticky Navigation -->
     {% block navbar %}
     <div class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-        <nav class="pointer-events-auto bg-white/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 border border-white/80 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
+        <nav class="pointer-events-auto bg-white dark:bg-slate-950/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 border border-white/80 dark:border-slate-800 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
             <!-- Brand -->
             <a href="{% url 'index' %}" class="flex items-center space-x-2 group">
-                <span class="text-2xl font-extrabold tracking-tighter text-slate-900 group-hover:text-indigo-600 transition-colors">AURA<span class="text-indigo-500">.</span></span>
+                <span class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">AURA<span class="text-indigo-500">.</span></span>
             </a>
             
             <!-- Desktop Links -->
@@ -57,6 +64,10 @@
             
             <!-- Auth & Actions -->
             <div class="flex items-center space-x-4">
+                <button id="theme-toggle" type="button" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none rounded-lg text-sm p-2.5 transition-colors">
+                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
+                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
+                </button>
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
                         <a href="{% url 'admin:dashboard' %}" class="hidden lg:flex text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors mr-2"><i class="fa-solid fa-shield mr-1.5"></i> Admin</a>
@@ -83,7 +94,7 @@
         {% if messages %}
         <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none">
             {% for message in messages %}
-            <div class="pointer-events-auto bg-white rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
+            <div class="pointer-events-auto bg-white dark:bg-slate-950 rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         {% if message.tags == 'error' %}
@@ -95,7 +106,7 @@
                         {% endif %}
                     </div>
                     <div class="ml-3 w-0 flex-1 pt-0.5">
-                        <p class="text-sm font-medium text-slate-900">{{ message }}</p>
+                        <p class="text-sm font-medium text-slate-900 dark:text-slate-50">{{ message }}</p>
                     </div>
                     <div class="ml-4 flex-shrink-0 flex">
                         <button class="inline-flex text-slate-400 hover:text-slate-500 focus:outline-none" onclick="document.getElementById('toast-{{ forloop.counter }}').style.display='none'">
@@ -207,6 +218,45 @@
                 duration: 800,
                 once: true,
                 offset: 100,
+            });
+
+            // Theme toggle logic
+            var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+            // Change the icons inside the button based on previous settings
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                themeToggleLightIcon.classList.remove('hidden');
+            } else {
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+
+            var themeToggleBtn = document.getElementById('theme-toggle');
+
+            themeToggleBtn.addEventListener('click', function() {
+                // toggle icons
+                themeToggleDarkIcon.classList.toggle('hidden');
+                themeToggleLightIcon.classList.toggle('hidden');
+
+                // if set via local storage previously
+                if (localStorage.theme) {
+                    if (localStorage.theme === 'light') {
+                        document.documentElement.classList.add('dark');
+                        localStorage.theme = 'dark';
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.theme = 'light';
+                    }
+                // if NOT set via local storage previously
+                } else {
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.theme = 'light';
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.theme = 'dark';
+                    }
+                }
             });
         });
     </script>
