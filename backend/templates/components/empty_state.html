@@ -3,11 +3,11 @@ Usage:
 {% include 'components/empty_state.html' with icon="box-open" title="No Items Found" message="Create your first item to get started." action_text="Create Item" action_url="/path/add/" %}
 {% endcomment %}
 <div class="text-center py-16 px-4">
-    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 mb-6 border border-slate-100 shadow-sm">
-        <i class="fa-solid fa-{{ icon|default:'folder-open' }} text-3xl text-slate-300"></i>
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-900 mb-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+        <i class="fa-solid fa-{{ icon|default:'folder-open' }} text-3xl text-slate-300 dark:text-slate-600"></i>
     </div>
-    <h3 class="text-lg font-bold text-slate-900">{{ title|default:"No Data Found" }}</h3>
-    <p class="mt-2 text-sm text-slate-500 max-w-sm mx-auto">{{ message }}</p>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-200">{{ title|default:"No Data Found" }}</h3>
+    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">{{ message }}</p>
     
     {% if action_text and action_url %}
     <div class="mt-8">

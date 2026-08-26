@@ -23,7 +23,7 @@
             <li aria-current="page">
                 <div class="flex items-center">
                     <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
-                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">{% if coupon %}Edit{% else %}Create{% endif %} Coupon</span>
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-300">{% if coupon %}Edit{% else %}Create{% endif %} Coupon</span>
                 </div>
             </li>
         </ol>
@@ -31,12 +31,12 @@
 
     <!-- Header -->
     <div class="mb-10">
-        <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">{% if coupon %}Edit <span class="text-indigo-600 font-light">Coupon</span>{% else %}Create <span class="text-indigo-600 font-light">Coupon</span>{% endif %}</h1>
+        <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-300 tracking-tight">{% if coupon %}Edit <span class="text-indigo-600 font-light">Coupon</span>{% else %}Create <span class="text-indigo-600 font-light">Coupon</span>{% endif %}</h1>
         <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Configure discount codes for your customers.</p>
     </div>
 
     <!-- Form -->
-    <form method="POST" class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <form method="POST" class="bg-white dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 overflow-hidden">
         {% csrf_token %}
         <div class="p-8 space-y-8">
             {{ form.non_field_errors }}
@@ -45,14 +45,14 @@
                 <!-- Basic Info -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Coupon Code <span class="text-rose-500">*</span></label>
-                    <input type="text" name="code" value="{% if coupon %}{{ coupon.code }}{% endif %}" required class="block w-full rounded-xl border-slate-300 dark:border-slate-700 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm uppercase font-mono" placeholder="e.g. SUMMER2026">
+                    <input type="text" name="code" value="{% if coupon %}{{ coupon.code }}{% endif %}" required class="block w-full rounded-xl border-slate-300 dark:border-slate-600/50 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm uppercase font-mono" placeholder="e.g. SUMMER2026">
                     <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Customers will enter this code at checkout.</p>
                 </div>
 
                 <!-- Discount -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Discount Type <span class="text-rose-500">*</span></label>
-                    <select name="discount_type" class="block w-full rounded-xl border-slate-300 dark:border-slate-700 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                    <select name="discount_type" class="block w-full rounded-xl border-slate-300 dark:border-slate-600/50 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                         <option value="PERCENTAGE" {% if coupon and coupon.discount_type == 'PERCENTAGE' %}selected{% endif %}>Percentage (%)</option>
                         <option value="FIXED_AMOUNT" {% if coupon and coupon.discount_type == 'FIXED_AMOUNT' %}selected{% endif %}>Fixed Amount ($)</option>
                     </select>
@@ -60,13 +60,13 @@
 
                 <div>
                     <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Discount Value <span class="text-rose-500">*</span></label>
-                    <input type="number" name="discount_value" value="{% if coupon %}{{ coupon.discount_value }}{% endif %}" required min="0" step="0.01" class="block w-full rounded-xl border-slate-300 dark:border-slate-700 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 20">
+                    <input type="number" name="discount_value" value="{% if coupon %}{{ coupon.discount_value }}{% endif %}" required min="0" step="0.01" class="block w-full rounded-xl border-slate-300 dark:border-slate-600/50 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 20">
                 </div>
 
                 <!-- Conditions -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Condition <span class="text-rose-500">*</span></label>
-                    <select name="condition" class="block w-full rounded-xl border-slate-300 dark:border-slate-700 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                    <select name="condition" class="block w-full rounded-xl border-slate-300 dark:border-slate-600/50 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                         <option value="NONE" {% if coupon and coupon.condition == 'NONE' %}selected{% endif %}>No restrictions</option>
                         <option value="MINIMUM_PURCHASE" {% if coupon and coupon.condition == 'MINIMUM_PURCHASE' %}selected{% endif %}>Minimum Purchase Amount</option>
                     </select>
@@ -74,19 +74,19 @@
 
                 <div>
                     <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Minimum Purchase Amount (Optional)</label>
-                    <input type="number" name="min_order_value" value="{% if coupon %}{{ coupon.min_purchase_amount }}{% endif %}" min="0" step="0.01" class="block w-full rounded-xl border-slate-300 dark:border-slate-700 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 50.00">
+                    <input type="number" name="min_order_value" value="{% if coupon %}{{ coupon.min_purchase_amount }}{% endif %}" min="0" step="0.01" class="block w-full rounded-xl border-slate-300 dark:border-slate-600/50 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 50.00">
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Maximum Uses (Optional)</label>
-                    <input type="number" name="max_uses" value="{% if coupon %}{{ coupon.max_uses }}{% endif %}" min="0" class="block w-full md:w-1/2 rounded-xl border-slate-300 dark:border-slate-700 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 100">
+                    <input type="number" name="max_uses" value="{% if coupon %}{{ coupon.max_uses }}{% endif %}" min="0" class="block w-full md:w-1/2 rounded-xl border-slate-300 dark:border-slate-600/50 py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="e.g. 100">
                     <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Leave blank for unlimited usage.</p>
                 </div>
 
                 <!-- Status -->
-                <div class="md:col-span-2 bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between mt-4">
+                <div class="md:col-span-2 bg-slate-50 dark:bg-slate-800/50/80 p-6 rounded-xl border border-slate-100 dark:border-slate-600/50/50 flex items-center justify-between mt-4">
                     <div>
-                        <h4 class="text-sm font-bold text-slate-900 dark:text-slate-50">Active Status</h4>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-slate-300">Active Status</h4>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Enable or disable this coupon</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
@@ -97,8 +97,8 @@
             </div>
         </div>
 
-        <div class="bg-slate-50 dark:bg-slate-900 px-8 py-5 border-t border-slate-200 dark:border-slate-800 flex justify-end space-x-4">
-            <a href="{% url 'coupon_list' %}" class="inline-flex items-center justify-center px-6 py-2.5 border border-slate-300 dark:border-slate-700 shadow-sm text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <div class="bg-slate-50 dark:bg-slate-800/50/80 px-8 py-5 border-t border-slate-200 dark:border-slate-600/50/50 flex justify-end space-x-4">
+            <a href="{% url 'coupon_list' %}" class="inline-flex items-center justify-center px-6 py-2.5 border border-slate-300 dark:border-slate-600/50 shadow-sm text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/50/80 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Cancel
             </a>
             <button type="submit" class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent shadow-sm text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

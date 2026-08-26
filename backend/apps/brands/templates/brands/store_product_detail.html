@@ -94,7 +94,7 @@
                                    :style="selectedSize === {{ size.id }} ? 'color: var(--tw-prose-body);' : ''">
                                 <input type="radio" name="size-choice" value="{{ size.id }}" class="sr-only" x-model.number="selectedSize">
                                 
-                                <span x-show="selectedSize === {{ size.id }}" class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none rounded-xl"></span>
+                                <span x-show="selectedSize === {{ size.id }}" class="absolute inset-0 w-full h-full bg-white dark:bg-slate-800/50/80 mix-blend-difference pointer-events-none rounded-xl"></span>
                                 <span :class="selectedSize === {{ size.id }} ? 'relative z-10 mix-blend-exclusion text-white' : ''">{{ size.code }}</span>
                             </label>
                             {% endfor %}
@@ -109,7 +109,7 @@
     
                         {% if feature_flags.virtual_try_on %}
                         <a :href="isTryOnDisabled ? '#' : tryOnUrl" :class="isTryOnDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:-translate-y-1 hover:shadow-xl'" class="flex-1 border border-current rounded-2xl py-4 px-8 flex items-center justify-center text-sm font-extrabold uppercase tracking-widest bg-current text-white transition-all transform shadow-md relative overflow-hidden group" style="color: var(--tw-prose-body);">
-                            <span class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
+                            <span class="absolute inset-0 w-full h-full bg-white dark:bg-slate-800/50/80 mix-blend-difference pointer-events-none"></span>
                             <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Try On Virtually</span>
                         </a>
                         {% else %}

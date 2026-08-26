@@ -2,7 +2,7 @@
 <div id="toast-container" class="fixed top-20 right-4 z-[9999] flex flex-col space-y-2 pointer-events-none">
     {% if messages %}
         {% for message in messages %}
-            <div class="toast-message pointer-events-auto flex items-center p-4 w-full max-w-xs text-gray-900 bg-white rounded-lg shadow-lg border-l-4 {% if message.tags == 'error' %}border-red-500{% elif message.tags == 'success' %}border-green-500{% elif message.tags == 'warning' %}border-yellow-500{% else %}border-blue-500{% endif %} transition-all duration-300 transform translate-x-full opacity-0" role="alert">
+            <div class="toast-message pointer-events-auto flex items-center p-4 w-full max-w-xs text-gray-900 bg-white dark:bg-slate-900 rounded-lg shadow-lg border-l-4 {% if message.tags == 'error' %}border-red-500{% elif message.tags == 'success' %}border-green-500{% elif message.tags == 'warning' %}border-yellow-500{% else %}border-blue-500{% endif %} transition-all duration-300 transform translate-x-full opacity-0" role="alert">
                 <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 
                     {% if message.tags == 'error' %}text-red-500 bg-red-100
                     {% elif message.tags == 'success' %}text-green-500 bg-green-100
@@ -14,7 +14,7 @@
                     {% else %}<i class="fa-solid fa-info"></i>{% endif %}
                 </div>
                 <div class="ml-3 text-sm font-medium">{{ message }}</div>
-                <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition" onclick="this.parentElement.remove();">
+                <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white dark:bg-slate-900 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition" onclick="this.parentElement.remove();">
                     <span class="sr-only">Close</span>
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -48,13 +48,13 @@
             iconClass = 'fa-exclamation';
         }
 
-        toast.className = `toast-message pointer-events-auto flex items-center p-4 w-full max-w-xs text-gray-900 bg-white rounded-lg shadow-lg border-l-4 ${borderColor} transition-all duration-300 transform translate-x-full opacity-0`;
+        toast.className = `toast-message pointer-events-auto flex items-center p-4 w-full max-w-xs text-gray-900 bg-white dark:bg-slate-900 rounded-lg shadow-lg border-l-4 ${borderColor} transition-all duration-300 transform translate-x-full opacity-0`;
         toast.innerHTML = `
             <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 ${iconColor} rounded-lg">
                 <i class="fa-solid ${iconClass}"></i>
             </div>
             <div class="ml-3 text-sm font-medium">${message}</div>
-            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition" onclick="this.parentElement.remove();">
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white dark:bg-slate-900 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition" onclick="this.parentElement.remove();">
                 <span class="sr-only">Close</span>
                 <i class="fa-solid fa-xmark"></i>
             </button>

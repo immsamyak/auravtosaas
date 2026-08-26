@@ -39,12 +39,12 @@
         }
     </script>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 antialiased min-h-screen flex flex-col relative selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-800/50/80 text-slate-900 dark:text-slate-300 antialiased min-h-screen flex flex-col relative selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300">
     
     <!-- Floating, Rounded Sticky Navigation -->
     {% block navbar %}
     <div class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-        <nav class="pointer-events-auto bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 border border-white/80 dark:border-slate-800 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
+        <nav class="pointer-events-auto bg-white/70 dark:bg-slate-800/50/80/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 border border-white/80 dark:border-slate-600/50/50 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
             <!-- Brand -->
             <a href="{% url 'index' %}" class="flex items-center space-x-2 group">
                 <span class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">AURA<span class="text-indigo-500">.</span></span>
@@ -73,9 +73,9 @@
                         <a href="{% url 'admin:dashboard' %}" class="hidden lg:flex text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mr-2"><i class="fa-solid fa-shield mr-1.5"></i> Admin</a>
                     {% endif %}
                     {% if user.owned_brand %}
-                        <a href="{% url 'dashboard' %}" class="text-sm font-bold bg-slate-900 dark:bg-slate-800 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Dashboard</a>
+                        <a href="{% url 'dashboard' %}" class="text-sm font-bold bg-slate-900 dark:bg-slate-800/50 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Dashboard</a>
                     {% else %}
-                        <a href="{% url 'profile' %}" class="text-sm font-bold bg-slate-900 dark:bg-slate-800 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Try-On History</a>
+                        <a href="{% url 'profile' %}" class="text-sm font-bold bg-slate-900 dark:bg-slate-800/50 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Try-On History</a>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="hidden sm:block text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Log in</a>
@@ -94,7 +94,7 @@
         {% if messages %}
         <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none">
             {% for message in messages %}
-            <div class="pointer-events-auto bg-white dark:bg-slate-900 rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
+            <div class="pointer-events-auto bg-white dark:bg-slate-800/50/80 rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         {% if message.tags == 'error' %}
@@ -106,7 +106,7 @@
                         {% endif %}
                     </div>
                     <div class="ml-3 w-0 flex-1 pt-0.5">
-                        <p class="text-sm font-medium text-slate-900 dark:text-slate-50">{{ message }}</p>
+                        <p class="text-sm font-medium text-slate-900 dark:text-slate-300">{{ message }}</p>
                     </div>
                     <div class="ml-4 flex-shrink-0 flex">
                         <button class="inline-flex text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 focus:outline-none" onclick="document.getElementById('toast-{{ forloop.counter }}').style.display='none'">

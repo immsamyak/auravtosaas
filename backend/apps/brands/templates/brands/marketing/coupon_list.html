@@ -11,7 +11,7 @@
             <li aria-current="page">
                 <div class="flex items-center">
                     <i class="fa-solid fa-bullhorn text-slate-400 dark:text-slate-500 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">Marketing</span>
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-300">Marketing</span>
                     <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
                     <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Coupons</span>
                 </div>
@@ -22,7 +22,7 @@
     <!-- Header & Actions -->
     <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">Marketing <span class="text-indigo-600 font-light">Coupons</span></h1>
+            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-300 tracking-tight">Marketing <span class="text-indigo-600 font-light">Coupons</span></h1>
             <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Manage discount codes and promotions.</p>
         </div>
         <div class="flex space-x-3">
@@ -33,11 +33,11 @@
     </div>
 
     <!-- Content -->
-    <div class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div class="bg-white dark:bg-slate-800/50/80 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-600/50/50 overflow-hidden">
         {% if coupons %}
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
-                <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold border-b border-slate-200 dark:border-slate-800">
+                <thead class="bg-slate-50 dark:bg-slate-800/50/80 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold border-b border-slate-200 dark:border-slate-600/50/50">
                     <tr>
                         <th class="px-6 py-4">Code</th>
                         <th class="px-6 py-4">Discount</th>
@@ -50,7 +50,7 @@
                 <tbody class="divide-y divide-slate-100">
                     {% for coupon in coupons %}
                     <tr class="hover:bg-slate-50/50 transition">
-                        <td class="px-6 py-4 font-bold text-slate-900 dark:text-slate-50">{{ coupon.code }}</td>
+                        <td class="px-6 py-4 font-bold text-slate-900 dark:text-slate-300">{{ coupon.code }}</td>
                         <td class="px-6 py-4">
                             {% if coupon.discount_type == 'PERCENTAGE' %}
                             {{ coupon.discount_value|floatformat:0 }}% Off
@@ -72,7 +72,7 @@
                             {% if coupon.is_active %}
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 border border-emerald-200">Active</span>
                             {% else %}
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800">Inactive</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800/50 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50/50">Inactive</span>
                             {% endif %}
                         </td>
                         <td class="px-6 py-4">
@@ -85,10 +85,10 @@
         </div>
         {% else %}
         <div class="p-12 text-center flex flex-col items-center justify-center">
-            <div class="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-4">
+            <div class="w-16 h-16 bg-slate-50 dark:bg-slate-800/50/80 rounded-2xl flex items-center justify-center mb-4">
                 <i class="fa-solid fa-ticket text-2xl text-slate-400 dark:text-slate-500"></i>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-50 mb-2">No coupons yet</h3>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-300 mb-2">No coupons yet</h3>
             <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">Create your first discount code to offer promotions to your customers.</p>
             <a href="{% url 'coupon_create' %}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent shadow-sm text-sm font-bold rounded-xl text-white hover:bg-indigo-700 transition-all focus:outline-none">
                 <i class="fa-solid fa-plus mr-2"></i> Create Coupon

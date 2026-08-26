@@ -7,7 +7,7 @@
 <div class="max-w-7xl mx-auto pb-12">
     <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">Email <span class="text-indigo-600 font-light">Campaigns</span></h1>
+            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-300 tracking-tight">Email <span class="text-indigo-600 font-light">Campaigns</span></h1>
             <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Send marketing emails and notifications to your subscribers and customers.</p>
         </div>
         <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 hover:scale-[1.02] active:scale-100 transition-all shadow-lg shadow-indigo-200">
@@ -16,11 +16,11 @@
     </div>
 
     <!-- Campaigns List -->
-    <div class="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden relative">
+    <div class="bg-white dark:bg-slate-800/50/80 rounded-2xl border border-slate-200 dark:border-slate-600/50/50 shadow-sm overflow-hidden relative">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50/80 border-b border-slate-200 dark:border-slate-800 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
+                    <tr class="bg-slate-50/80 border-b border-slate-200 dark:border-slate-600/50/50 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
                         <th class="px-6 py-4">Campaign Name</th>
                         <th class="px-6 py-4">Subject</th>
                         <th class="px-6 py-4">Audience</th>
@@ -32,14 +32,14 @@
                     {% for campaign in campaigns %}
                     <tr class="hover:bg-slate-50/50 transition-colors group">
                         <td class="px-6 py-4">
-                            <div class="font-bold text-slate-900 dark:text-slate-50">{{ campaign.name }}</div>
+                            <div class="font-bold text-slate-900 dark:text-slate-300">{{ campaign.name }}</div>
                             <div class="text-xs text-slate-400 dark:text-slate-500 mt-1">Created {{ campaign.created_at|date:"M d, Y" }}</div>
                         </td>
                         <td class="px-6 py-4 text-slate-600 dark:text-slate-400 max-w-xs truncate" title="{{ campaign.subject }}">
                             {{ campaign.subject }}
                         </td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300">
                                 {% if campaign.target_audience == 'SUBSCRIBERS' %}
                                     <i class="fa-solid fa-envelope-open-text mr-1.5 text-slate-400 dark:text-slate-500"></i> Subscribers
                                 {% elif campaign.target_audience == 'CUSTOMERS' %}
@@ -92,10 +92,10 @@
                     {% empty %}
                     <tr>
                         <td colspan="5" class="px-6 py-16 text-center text-slate-500 dark:text-slate-400">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 dark:bg-slate-900 mb-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 dark:bg-slate-800/50/80 mb-4">
                                 <i class="fa-solid fa-envelope-open-text text-2xl text-slate-400 dark:text-slate-500"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-50 mb-1">No campaigns yet</h3>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-300 mb-1">No campaigns yet</h3>
                             <p class="text-sm">Create your first email campaign to engage with your audience.</p>
                             <a href="{% url 'campaign_create' %}" class="inline-flex items-center px-4 py-2 mt-4 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors">
                                 <i class="fa-solid fa-plus mr-2"></i> Create Campaign
