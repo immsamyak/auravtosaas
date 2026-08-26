@@ -49,8 +49,8 @@
  
  {% if try_on.ai_confidence_score %}
  <div class="absolute bottom-8 right-8 z-10 hidden lg:block">
- <span class="bg-current text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg border border-current" style="color: var(--tw-prose-body);">
- <span class="mix-blend-difference filter invert">AI Confidence: {{ try_on.ai_confidence_score }}</span>
+ <span class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg" style="background-color: var(--theme-text-base); color: var(--theme-bg-base);">
+ AI Confidence: {{ try_on.ai_confidence_score }}
  </span>
  </div>
  {% endif %}
@@ -118,10 +118,8 @@
  </p>
  <form method="POST" action="{% url 'try_on' variant.product.brand.slug variant.slug %}" class="w-full">
  {% csrf_token %}
- <button type="submit" class="inline-flex justify-center items-center px-6 py-3 border border-current shadow-md text-sm font-extrabold rounded-xl bg-current text-white hover:opacity-90 transition-transform hover:-translate-y-0.5" style="color: var(--tw-prose-body);">
- <span class="bg-clip-text text-transparent mix-blend-difference filter invert flex items-center">
+ <button type="submit" class="inline-flex justify-center items-center px-6 py-3 shadow-md text-sm font-extrabold rounded-xl hover:opacity-90 transition-transform hover:-translate-y-0.5" style="background-color: var(--theme-text-base); color: var(--theme-bg-base);">
  <i class="fa-solid fa-rotate-right mr-2"></i> Retry Generation
- </span>
  </button>
  </form>
  </div>
@@ -152,7 +150,7 @@
  {% endif %}
  </span>
  </div>
- <span class="bg-current text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded" style="color: var(--tw-prose-body);"><span class="mix-blend-difference filter invert">AI Recommended</span></span>
+ <span class="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded" style="background-color: var(--theme-text-base); color: var(--theme-bg-base);">AI Recommended</span>
  </div>
  <div class="relative z-10">
  {% if recommended_size and recommended_size.code == variant.size.code %}
@@ -188,10 +186,7 @@
  <div class="flex flex-wrap gap-2">
  {% for v in variant.product.variants.all %}
  {% if v.color == variant.color %}
- <a href="{% url 'try_on' variant.product.brand.slug v.slug %}" class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg border transition-all shadow-sm {% if v.size == variant.size %}bg-current text-white border-current scale-105{% else %}bg-neutral-500/5 border-neutral-500/20 hover:border-current hover:bg-neutral-500/10{% endif %}" {% if v.size == variant.size %}style="color: var(--tw-prose-body);"{% endif %}>
- {% if v.size == variant.size %}
- <span class="mix-blend-difference filter invert">{{ v.size.code }}</span>
- {% else %}
+ <a href="{% url 'try_on' variant.product.brand.slug v.slug %}" class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg transition-all shadow-sm {% if v.size == variant.size %}scale-105{% else %}bg-neutral-500/5 border border-neutral-500/20 hover:border-current hover:bg-neutral-500/10{% endif %}" {% if v.size == variant.size %}style="background-color: var(--theme-text-base); color: var(--theme-bg-base);"{% endif %}>
  {{ v.size.code }}
  {% endif %}
  </a>
@@ -215,8 +210,8 @@
  {% else %}
  <i class="fa-solid fa-shirt opacity-30"></i>
  {% endif %}
- <div class="absolute bottom-0 left-0 right-0 bg-current/80 backdrop-blur-sm text-white text-[8px] font-black uppercase text-center py-1 opacity-0 group-hover:opacity-100 transition-opacity" style="color: var(--tw-prose-body);">
- <span class="mix-blend-difference filter invert">{{ item.get_product_type_display }}</span>
+ <div class="absolute bottom-0 left-0 right-0 backdrop-blur-sm text-[8px] font-black uppercase text-center py-1 opacity-0 group-hover:opacity-100 transition-opacity" style="background-color: var(--theme-text-base); color: var(--theme-bg-base);">
+ {{ item.get_product_type_display }}
  </div>
  </div>
  {% endfor %}
@@ -273,8 +268,8 @@
  </a>
  </div>
  
- <button type="button" @click="$store.cart.add({id: '{{variant.id}}', name: '{{variant.product.name|escapejs}}', price: {{variant.product.price}}, variant_name: '{{variant.color.name}} / {{variant.size.code}}', image: '{{variant.image.url|default:""}}'}); isCartOpen = true;" class="w-full bg-current text-white text-xs font-bold uppercase tracking-widest py-4 rounded-xl shadow-lg hover:opacity-90 transition-all flex items-center justify-center transform hover:-translate-y-1" style="color: var(--tw-prose-body);">
- <span class="mix-blend-difference filter invert flex items-center"><i class="fa-solid fa-bag-shopping mr-3"></i> Add to Cart</span>
+ <button type="button" @click="$store.cart.add({id: '{{variant.id}}', name: '{{variant.product.name|escapejs}}', price: {{variant.product.price}}, variant_name: '{{variant.color.name}} / {{variant.size.code}}', image: '{{variant.image.url|default:""}}'}); isCartOpen = true;" class="w-full text-xs font-bold uppercase tracking-widest py-4 rounded-xl shadow-lg hover:opacity-90 transition-all flex items-center justify-center transform hover:-translate-y-1" style="background-color: var(--theme-text-base); color: var(--theme-bg-base);">
+ <i class="fa-solid fa-bag-shopping mr-3"></i> Add to Cart
  </button>
  </div>
  </div>
@@ -320,9 +315,10 @@
  .then(data => {
  if(data.status === 'success') {
  btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Saved to Wardrobe';
- btn.classList.add('bg-current', 'text-white');
- btn.style.color = 'var(--tw-prose-body)';
- btn.innerHTML = '<span class="mix-blend-difference filter invert flex items-center"><i class="fa-solid fa-check mr-2"></i> Saved to Wardrobe</span>';
+ btn.classList.remove('bg-neutral-500/10', 'backdrop-blur-sm', 'border', 'border-neutral-500/30', 'text-current');
+ btn.style.backgroundColor = 'var(--theme-text-base)';
+ btn.style.color = 'var(--theme-bg-base)';
+ btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Saved to Wardrobe';
  } else {
  btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> Error';
  btn.disabled = false;
