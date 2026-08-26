@@ -10,7 +10,7 @@
     {% if categories %}
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for cat in categories %}
-        <a href="{% url 'storefront_shop' brand.slug %}?category={{ cat.id }}" class="group block relative border border-gray-200 bg-white p-8 text-center hover:shadow-xl transition-shadow duration-300">
+        <a href="{% url 'storefront_shop' brand.slug %}?category={{ cat.id }}" class="group block relative border border-gray-200 bg-white dark:bg-slate-950 p-8 text-center hover:shadow-xl transition-shadow duration-300">
             <h2 class="text-lg font-bold text-gray-900 uppercase tracking-widest mb-2">{{ cat.name }}</h2>
             <div class="w-12 h-1 bg-black mx-auto transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </a>

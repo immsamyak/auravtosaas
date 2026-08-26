@@ -15,7 +15,7 @@
             
             <div class="relative z-10">
                 <a href="{% url 'storefront_logout' brand.slug %}" class="inline-flex justify-center items-center px-6 py-3 border border-current rounded-full shadow-md text-sm font-extrabold uppercase tracking-widest bg-current text-white hover:opacity-90 focus:outline-none transition-all transform hover:-translate-y-1 overflow-hidden group" style="color: var(--tw-prose-body);">
-                    <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                    <span class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
                     <span class="relative z-10 mix-blend-exclusion text-white group-hover:scale-105 transition-transform"><i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sign Out</span>
                 </a>
             </div>
@@ -27,7 +27,7 @@
                     :class="activeTab === 'orders' ? 'bg-current shadow-md' : 'bg-neutral-500/10 hover:bg-neutral-500/20'"
                     class="px-6 py-3.5 rounded-2xl font-bold transition-all whitespace-nowrap border border-neutral-500/20 relative overflow-hidden group"
                     :style="activeTab === 'orders' ? 'color: var(--tw-prose-body);' : ''">
-                <span x-show="activeTab === 'orders'" class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                <span x-show="activeTab === 'orders'" class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
                 <span :class="activeTab === 'orders' ? 'relative z-10 mix-blend-exclusion text-white' : ''">
                     <i class="fa-solid fa-box mr-2"></i> Order History
                 </span>
@@ -36,7 +36,7 @@
                     :class="activeTab === 'wardrobe' ? 'bg-current shadow-md' : 'bg-neutral-500/10 hover:bg-neutral-500/20'"
                     class="px-6 py-3.5 rounded-2xl font-bold transition-all whitespace-nowrap border border-neutral-500/20 relative overflow-hidden group"
                     :style="activeTab === 'wardrobe' ? 'color: var(--tw-prose-body);' : ''">
-                <span x-show="activeTab === 'wardrobe'" class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                <span x-show="activeTab === 'wardrobe'" class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
                 <span :class="activeTab === 'wardrobe' ? 'relative z-10 mix-blend-exclusion text-white' : ''">
                     <i class="fa-solid fa-shirt mr-2"></i> Virtual Wardrobe
                 </span>
@@ -45,7 +45,7 @@
                     :class="activeTab === 'ai' ? 'bg-current shadow-md' : 'bg-neutral-500/10 hover:bg-neutral-500/20'"
                     class="px-6 py-3.5 rounded-2xl font-bold transition-all whitespace-nowrap border border-neutral-500/20 relative overflow-hidden group"
                     :style="activeTab === 'ai' ? 'color: var(--tw-prose-body);' : ''">
-                <span x-show="activeTab === 'ai'" class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                <span x-show="activeTab === 'ai'" class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
                 <span :class="activeTab === 'ai' ? 'relative z-10 mix-blend-exclusion text-white' : ''">
                     <i class="fa-solid fa-sparkles mr-2" :class="activeTab === 'ai' ? '' : 'opacity-80'"></i> Profile AI Stylist
                 </span>
@@ -107,7 +107,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="absolute top-2 right-2 h-6 w-6 rounded-full bg-current text-white flex items-center justify-center text-xs font-bold shadow-sm" style="color: var(--tw-prose-body);">
-                                    <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none rounded-full"></span>
+                                    <span class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none rounded-full"></span>
                                     <span class="relative z-10 mix-blend-exclusion text-white">{{ item.quantity }}</span>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                     <h3 class="text-2xl font-black mb-3">No orders yet</h3>
                     <p class="opacity-70 mb-8 max-w-md mx-auto">When you make your first purchase, your complete order history will appear right here.</p>
                     <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex justify-center items-center px-8 py-4 border border-current rounded-xl shadow-lg text-sm font-extrabold uppercase tracking-widest bg-current text-white hover:opacity-90 transition-all transform hover:-translate-y-1 relative group overflow-hidden" style="color: var(--tw-prose-body);">
-                        <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                        <span class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
                         <span class="relative z-10 mix-blend-exclusion text-white group-hover:scale-105 transition-transform">Start Shopping</span>
                     </a>
                 </div>
@@ -161,7 +161,7 @@
                             <p class="text-white font-bold mb-1 line-clamp-1">{{ look.try_on.product_variant.product.name }}</p>
                             <p class="text-white/70 text-xs mb-4">{{ look.saved_at|date:"M d, Y" }}</p>
                             <div class="flex space-x-3">
-                                <a href="{{ look.try_on.generated_image.url }}" download class="flex-1 bg-white text-black py-2.5 rounded-xl font-bold text-center hover:bg-gray-200 transition-colors text-sm shadow-md"><i class="fa-solid fa-download mr-1"></i> Save</a>
+                                <a href="{{ look.try_on.generated_image.url }}" download class="flex-1 bg-white dark:bg-slate-950 text-black py-2.5 rounded-xl font-bold text-center hover:bg-gray-200 transition-colors text-sm shadow-md"><i class="fa-solid fa-download mr-1"></i> Save</a>
                                 <a href="{% url 'store_product_detail' brand.slug look.try_on.product_variant.product.slug %}" class="flex-1 bg-transparent border border-white text-white py-2.5 rounded-xl font-bold text-center hover:bg-white/20 transition-colors text-sm shadow-md">Shop</a>
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                     <h3 class="text-2xl font-black mb-3">Your Virtual Wardrobe is empty</h3>
                     <p class="opacity-70 mb-8 max-w-md mx-auto">Try on clothes virtually using our AI fitting room and save your favorite looks here.</p>
                     <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex justify-center items-center px-8 py-4 border border-current rounded-xl shadow-lg text-sm font-extrabold uppercase tracking-widest bg-current text-white hover:opacity-90 transition-all transform hover:-translate-y-1 relative group overflow-hidden" style="color: var(--tw-prose-body);">
-                        <span class="absolute inset-0 w-full h-full bg-white mix-blend-difference pointer-events-none"></span>
+                        <span class="absolute inset-0 w-full h-full bg-white dark:bg-slate-950 mix-blend-difference pointer-events-none"></span>
                         <span class="relative z-10 mix-blend-exclusion text-white group-hover:scale-105 transition-transform">Find Clothes to Try</span>
                     </a>
                 </div>

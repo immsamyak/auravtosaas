@@ -10,10 +10,10 @@
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li aria-current="page">
                 <div class="flex items-center">
-                    <i class="fa-solid fa-bullhorn text-slate-400 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800">Marketing</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
-                    <span class="text-sm font-medium text-slate-500">Popup Banners</span>
+                    <i class="fa-solid fa-bullhorn text-slate-400 dark:text-slate-500 mr-2"></i>
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">Marketing</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Popup Banners</span>
                 </div>
             </li>
         </ol>
@@ -22,8 +22,8 @@
     <!-- Header & Actions -->
     <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Marketing <span class="text-indigo-600 font-light">Popups</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Manage popups and banners to engage visitors.</p>
+            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">Marketing <span class="text-indigo-600 font-light">Popups</span></h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Manage popups and banners to engage visitors.</p>
         </div>
         <a href="{% url 'popup_create' %}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 shadow-lg shadow-indigo-200 text-sm font-bold rounded-xl text-white hover:bg-indigo-700 transition-all">
             <i class="fa-solid fa-plus mr-2"></i> Create Popup
@@ -34,12 +34,12 @@
     <div class="space-y-4">
         {% if popups %}
             {% for popup in popups %}
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md hover:border-slate-300 transition-all group">
+            <div class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                 <div class="p-5 flex items-center gap-5">
                     <!-- Image/Icon -->
                     <div class="flex-shrink-0">
                         {% if popup.image %}
-                        <img src="{{ popup.image.url }}" alt="{{ popup.title }}" class="w-16 h-16 rounded-xl object-cover border border-slate-100">
+                        <img src="{{ popup.image.url }}" alt="{{ popup.title }}" class="w-16 h-16 rounded-xl object-cover border border-slate-100 dark:border-slate-800">
                         {% else %}
                         <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
                             {% if popup.banner_type == 'TOP_BAR' %}
@@ -56,21 +56,21 @@
                     <!-- Details -->
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2 mb-1">
-                            <h3 class="font-bold text-slate-900 truncate">{{ popup.title }}</h3>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-50 truncate">{{ popup.title }}</h3>
                             {% if popup.is_active %}
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
                                 <i class="fa-solid fa-circle text-[5px] mr-1 text-emerald-400"></i> Active
                             </span>
                             {% else %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 text-slate-400 border border-slate-200">
-                                <i class="fa-solid fa-circle text-[5px] mr-1 text-slate-300"></i> Draft
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-800">
+                                <i class="fa-solid fa-circle text-[5px] mr-1 text-slate-300 dark:text-slate-600"></i> Draft
                             </span>
                             {% endif %}
                         </div>
                         {% if popup.headline %}
-                        <p class="text-sm text-slate-600 font-medium truncate mb-1.5">"{{ popup.headline }}"</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 font-medium truncate mb-1.5">"{{ popup.headline }}"</p>
                         {% endif %}
-                        <div class="flex items-center gap-3 text-xs text-slate-400 font-medium">
+                        <div class="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500 font-medium">
                             <span class="inline-flex items-center gap-1">
                                 <i class="fa-solid {% if popup.banner_type == 'TOP_BAR' %}fa-window-maximize{% elif popup.banner_type == 'BOTTOM_POPUP' %}fa-window-restore{% else %}fa-expand{% endif %}"></i>
                                 {{ popup.get_banner_type_display }}
@@ -92,12 +92,12 @@
 
                     <!-- Actions -->
                     <div class="flex items-center gap-2 flex-shrink-0">
-                        <a href="{% url 'popup_edit' popup.id %}" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-indigo-100 hover:text-indigo-700 transition-colors">
+                        <a href="{% url 'popup_edit' popup.id %}" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-bold hover:bg-indigo-100 hover:text-indigo-700 transition-colors">
                             <i class="fa-solid fa-pen mr-1.5"></i> Edit
                         </a>
                         <form method="POST" action="{% url 'popup_delete' popup.id %}" onsubmit="return confirm('Delete this popup?');">
                             {% csrf_token %}
-                            <button type="submit" class="px-3 py-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors">
+                            <button type="submit" class="px-3 py-2 text-slate-400 dark:text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </form>
@@ -106,12 +106,12 @@
             </div>
             {% endfor %}
         {% else %}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-16 text-center flex flex-col items-center justify-center">
+        <div class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-16 text-center flex flex-col items-center justify-center">
             <div class="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mb-5">
                 <i class="fa-solid fa-bullhorn text-3xl text-indigo-400"></i>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">No popups yet</h3>
-            <p class="text-sm text-slate-500 max-w-sm mx-auto mb-6">Create promotional banners, bottom popups, or center modals to grab customer attention and boost sales.</p>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">No popups yet</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">Create promotional banners, bottom popups, or center modals to grab customer attention and boost sales.</p>
             <a href="{% url 'popup_create' %}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 shadow-lg shadow-indigo-200 text-sm font-bold rounded-xl text-white hover:bg-indigo-700 transition-all">
                 <i class="fa-solid fa-plus mr-2"></i> Create Your First Popup
             </a>

@@ -6,19 +6,19 @@
 {% block content %}
 <div class="max-w-7xl mx-auto pb-20">
     <!-- Breadcrumbs -->
-    <nav class="flex text-sm text-slate-500 mb-6" aria-label="Breadcrumb">
+    <nav class="flex text-sm text-slate-500 dark:text-slate-400 mb-6" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li><a href="{% url 'campaign_list' %}" class="hover:text-indigo-600 transition-colors">Email Campaigns</a></li>
             <li><span class="mx-2">/</span></li>
-            <li class="font-bold text-slate-900" aria-current="page">{% if campaign %}Edit Campaign{% else %}New Campaign{% endif %}</li>
+            <li class="font-bold text-slate-900 dark:text-slate-50" aria-current="page">{% if campaign %}Edit Campaign{% else %}New Campaign{% endif %}</li>
         </ol>
     </nav>
 
     <!-- Header -->
     <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">{% if campaign %}Edit <span class="text-indigo-600 font-light">Campaign</span>{% else %}Create <span class="text-indigo-600 font-light">Campaign</span>{% endif %}</h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Design and configure your email marketing campaign.</p>
+            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">{% if campaign %}Edit <span class="text-indigo-600 font-light">Campaign</span>{% else %}Create <span class="text-indigo-600 font-light">Campaign</span>{% endif %}</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Design and configure your email marketing campaign.</p>
         </div>
         {% if campaign %}
         <div class="flex items-center space-x-3">
@@ -32,25 +32,25 @@
         {% endif %}
     </div>
 
-    <form method="POST" class="space-y-8 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+    <form method="POST" class="space-y-8 bg-white dark:bg-slate-950 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         {% csrf_token %}
         
         <!-- General Settings -->
         <div class="space-y-6">
-            <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Campaign Settings</h2>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50 border-b border-slate-100 dark:border-slate-800 pb-2">Campaign Settings</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Internal Name <span class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Internal Name <span class="text-rose-500">*</span></label>
                     <input type="text" name="name" value="{{ campaign.name }}" required
-                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
+                           class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
                            placeholder="e.g., Summer Sale 2026 Announcement">
-                    <p class="mt-1.5 text-xs text-slate-500">Only visible to you on the dashboard.</p>
+                    <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Only visible to you on the dashboard.</p>
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Target Audience <span class="text-rose-500">*</span></label>
-                    <select name="target_audience" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Target Audience <span class="text-rose-500">*</span></label>
+                    <select name="target_audience" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
                         <option value="SUBSCRIBERS" {% if campaign.target_audience == 'SUBSCRIBERS' %}selected{% endif %}>Newsletter Subscribers</option>
                         <option value="CUSTOMERS" {% if campaign.target_audience == 'CUSTOMERS' %}selected{% endif %}>Registered Customers</option>
                         <option value="BOTH" {% if campaign.target_audience == 'BOTH' %}selected{% endif %}>Everyone (Subscribers & Customers)</option>
@@ -59,26 +59,26 @@
             </div>
             
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">Email Subject Line <span class="text-rose-500">*</span></label>
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Email Subject Line <span class="text-rose-500">*</span></label>
                 <input type="text" name="subject" value="{{ campaign.subject }}" required
-                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
+                       class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
                        placeholder="e.g., Huge Savings Inside! 🎁">
-                <p class="mt-1.5 text-xs text-slate-500">This is what your customers will see in their inbox.</p>
+                <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-400">This is what your customers will see in their inbox.</p>
             </div>
         </div>
         
         <!-- Content Design -->
         <div class="space-y-6 pt-4">
-            <div class="flex justify-between items-end border-b border-slate-100 pb-2">
-                <h2 class="text-lg font-bold text-slate-900">Email Content</h2>
+            <div class="flex justify-between items-end border-b border-slate-100 dark:border-slate-800 pb-2">
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50">Email Content</h2>
             </div>
-            <p class="text-sm text-slate-500 -mt-4">Write the HTML content of your email. Use the editor below and see the live preview.</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 -mt-4">Write the HTML content of your email. Use the editor below and see the live preview.</p>
             
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 h-[600px]">
                 <!-- Editor Pane -->
-                <div class="flex flex-col border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
-                    <div class="px-4 py-2 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-600 uppercase tracking-widest"><i class="fa-solid fa-code mr-1"></i> HTML Editor</span>
+                <div class="flex flex-col border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-900">
+                    <div class="px-4 py-2 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest"><i class="fa-solid fa-code mr-1"></i> HTML Editor</span>
                     </div>
                     <!-- The textarea is hidden but will be synced with CodeMirror -->
                     <textarea name="html_content" id="html_content" class="hidden">{{ campaign.html_content }}</textarea>
@@ -86,9 +86,9 @@
                 </div>
 
                 <!-- Preview Pane -->
-                <div class="flex flex-col border border-slate-200 rounded-xl overflow-hidden bg-slate-100">
-                    <div class="px-4 py-2 bg-slate-200 border-b border-slate-300 flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-eye mr-1"></i> Live Preview</span>
+                <div class="flex flex-col border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+                    <div class="px-4 py-2 bg-slate-200 border-b border-slate-300 dark:border-slate-700 flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest"><i class="fa-solid fa-eye mr-1"></i> Live Preview</span>
                         <div class="flex space-x-1">
                             <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
                             <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
@@ -96,14 +96,14 @@
                         </div>
                     </div>
                     <div class="flex-1 w-full h-full p-4 overflow-hidden flex justify-center bg-slate-200/50">
-                        <iframe id="preview-frame" class="w-full max-w-[600px] h-full bg-white shadow-xl rounded-xl border border-slate-200 overflow-y-auto"></iframe>
+                        <iframe id="preview-frame" class="w-full max-w-[600px] h-full bg-white dark:bg-slate-950 shadow-xl rounded-xl border border-slate-200 dark:border-slate-800 overflow-y-auto"></iframe>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
-            <a href="{% url 'campaign_list' %}" class="px-5 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors">
+        <div class="pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
+            <a href="{% url 'campaign_list' %}" class="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors">
                 Cancel
             </a>
             <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 hover:scale-[1.02] active:scale-100 transition-all shadow-lg shadow-indigo-200">

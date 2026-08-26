@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aura - Generative AI Virtual Fitting Room</title>
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="{% static 'js/tailwind.config.js' %}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
     <!-- Framer Motion for React-like animations in vanilla JS -->
     <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
@@ -44,7 +44,7 @@
     <!-- Floating, Rounded Sticky Navigation -->
     {% block navbar %}
     <div class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-        <nav class="pointer-events-auto bg-white dark:bg-slate-950/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 border border-white/80 dark:border-slate-800 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
+        <nav class="pointer-events-auto bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 border border-white/80 dark:border-slate-800 rounded-full px-6 py-3 w-full max-w-6xl flex justify-between items-center transition-all duration-300">
             <!-- Brand -->
             <a href="{% url 'index' %}" class="flex items-center space-x-2 group">
                 <span class="text-2xl font-extrabold tracking-tighter text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">AURA<span class="text-indigo-500">.</span></span>
@@ -53,12 +53,12 @@
             <!-- Desktop Links -->
             <div class="hidden md:flex items-center space-x-8">
                 {% if not request.resolver_match.url_name == 'store' and not request.resolver_match.url_name == 'store_product_detail' %}
-                    <a href="{% url 'index' %}#benefits" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Features</a>
-                    <a href="{% url 'index' %}#demo" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Live Demo</a>
-                    <a href="{% url 'index' %}#integrations" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Integrations</a>
-                    <a href="{% url 'index' %}#pricing" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Pricing</a>
-                    <a href="{% url 'index' %}#faq" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">FAQ</a>
-                    <a href="{% url 'index' %}#brands" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Brands</a>
+                    <a href="{% url 'index' %}#benefits" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Features</a>
+                    <a href="{% url 'index' %}#demo" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Live Demo</a>
+                    <a href="{% url 'index' %}#integrations" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Integrations</a>
+                    <a href="{% url 'index' %}#pricing" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Pricing</a>
+                    <a href="{% url 'index' %}#faq" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">FAQ</a>
+                    <a href="{% url 'index' %}#brands" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Brands</a>
                 {% endif %}
             </div>
             
@@ -70,16 +70,16 @@
                 </button>
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
-                        <a href="{% url 'admin:dashboard' %}" class="hidden lg:flex text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors mr-2"><i class="fa-solid fa-shield mr-1.5"></i> Admin</a>
+                        <a href="{% url 'admin:dashboard' %}" class="hidden lg:flex text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mr-2"><i class="fa-solid fa-shield mr-1.5"></i> Admin</a>
                     {% endif %}
                     {% if user.owned_brand %}
-                        <a href="{% url 'dashboard' %}" class="text-sm font-bold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Dashboard</a>
+                        <a href="{% url 'dashboard' %}" class="text-sm font-bold bg-slate-900 dark:bg-slate-800 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Dashboard</a>
                     {% else %}
-                        <a href="{% url 'profile' %}" class="text-sm font-bold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Try-On History</a>
+                        <a href="{% url 'profile' %}" class="text-sm font-bold bg-slate-900 dark:bg-slate-800 text-white px-5 py-2.5 rounded-full hover:bg-indigo-600 transition-all shadow-md hover:shadow-indigo-500/25 transform hover:-translate-y-0.5">Try-On History</a>
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'login' %}" class="hidden sm:block text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors">Log in</a>
-                    <a href="{% url 'signup' %}" class="text-sm font-bold bg-indigo-600 text-white px-5 py-2.5 rounded-full hover:bg-slate-900 transition-all shadow-md shadow-indigo-500/25 transform hover:-translate-y-0.5">
+                    <a href="{% url 'login' %}" class="hidden sm:block text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Log in</a>
+                    <a href="{% url 'signup' %}" class="text-sm font-bold bg-indigo-600 text-white px-5 py-2.5 rounded-full hover:bg-slate-900 dark:hover:bg-slate-800 transition-all shadow-md shadow-indigo-500/25 transform hover:-translate-y-0.5">
                         Start Free Trial
                     </a>
                 {% endif %}
@@ -94,7 +94,7 @@
         {% if messages %}
         <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none">
             {% for message in messages %}
-            <div class="pointer-events-auto bg-white dark:bg-slate-950 rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
+            <div class="pointer-events-auto bg-white dark:bg-slate-900 rounded-xl shadow-lg border-l-4 {% if message.tags == 'error' %}border-rose-500{% elif message.tags == 'success' %}border-emerald-500{% else %}border-indigo-500{% endif %} p-4 max-w-sm w-full transform transition-all duration-300 translate-x-0 opacity-100" id="toast-{{ forloop.counter }}">
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         {% if message.tags == 'error' %}
@@ -109,7 +109,7 @@
                         <p class="text-sm font-medium text-slate-900 dark:text-slate-50">{{ message }}</p>
                     </div>
                     <div class="ml-4 flex-shrink-0 flex">
-                        <button class="inline-flex text-slate-400 hover:text-slate-500 focus:outline-none" onclick="document.getElementById('toast-{{ forloop.counter }}').style.display='none'">
+                        <button class="inline-flex text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 focus:outline-none" onclick="document.getElementById('toast-{{ forloop.counter }}').style.display='none'">
                             <span class="sr-only">Close</span>
                             <i class="fa-solid fa-xmark"></i>
                         </button>

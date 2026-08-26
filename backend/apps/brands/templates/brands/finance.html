@@ -9,10 +9,10 @@
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li aria-current="page">
                 <div class="flex items-center">
-                    <i class="fa-solid fa-chart-pie text-slate-400 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800">Analytics</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
-                    <span class="text-sm font-medium text-slate-500">Finance</span>
+                    <i class="fa-solid fa-chart-pie text-slate-400 dark:text-slate-500 mr-2"></i>
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">Analytics</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Finance</span>
                 </div>
             </li>
         </ol>
@@ -21,21 +21,21 @@
     <!-- Header & Actions -->
     <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Finance <span class="text-indigo-600 font-light">Analytics</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Track your store's revenue, orders, and payment methods — all real data from your orders.</p>
+            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">Finance <span class="text-indigo-600 font-light">Analytics</span></h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Track your store's revenue, orders, and payment methods — all real data from your orders.</p>
         </div>
         <div class="flex space-x-3">
-            <a href="{% url 'finance' %}?export=csv&range={{ filter_range }}&status={{ filter_status }}&payment={{ filter_payment }}" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 shadow-sm text-sm font-bold rounded-xl text-slate-700 bg-white hover:bg-slate-50 transition-all focus:outline-none">
+            <a href="{% url 'finance' %}?export=csv&range={{ filter_range }}&status={{ filter_status }}&payment={{ filter_payment }}" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-800 shadow-sm text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all focus:outline-none">
                 <i class="fa-solid fa-file-csv mr-2 text-emerald-500"></i> Export CSV
             </a>
         </div>
     </div>
 
     <!-- Filters -->
-    <form method="GET" class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-wrap items-end gap-4">
+    <form method="GET" class="mb-8 bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 flex flex-wrap items-end gap-4">
         <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Time Range</label>
-            <select name="range" class="block w-full rounded-lg border-slate-300 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Time Range</label>
+            <select name="range" class="block w-full rounded-lg border-slate-300 dark:border-slate-700 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                 <option value="7" {% if filter_range == '7' %}selected{% endif %}>Last 7 Days</option>
                 <option value="30" {% if filter_range == '30' %}selected{% endif %}>Last 30 Days</option>
                 <option value="90" {% if filter_range == '90' %}selected{% endif %}>Last 90 Days</option>
@@ -43,8 +43,8 @@
             </select>
         </div>
         <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Order Status</label>
-            <select name="status" class="block w-full rounded-lg border-slate-300 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Order Status</label>
+            <select name="status" class="block w-full rounded-lg border-slate-300 dark:border-slate-700 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                 <option value="">All Statuses</option>
                 <option value="PENDING" {% if filter_status == 'PENDING' %}selected{% endif %}>Pending</option>
                 <option value="PAID" {% if filter_status == 'PAID' %}selected{% endif %}>Paid</option>
@@ -54,8 +54,8 @@
             </select>
         </div>
         <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Payment Method</label>
-            <select name="payment" class="block w-full rounded-lg border-slate-300 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Payment Method</label>
+            <select name="payment" class="block w-full rounded-lg border-slate-300 dark:border-slate-700 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                 <option value="">All Methods</option>
                 {% for provider in provider_choices %}
                     <option value="{{ provider.code }}" {% if filter_payment == provider.code %}selected{% endif %}>{{ provider.label }}</option>
@@ -70,39 +70,39 @@
     <!-- Stat Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Total Revenue Card -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 flex flex-col relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+        <div class="bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 dark:bg-indigo-500/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600">
                         <i class="fa-solid fa-dollar-sign text-xl"></i>
                     </div>
                 </div>
-                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Total Revenue</h3>
+                <h3 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Total Revenue</h3>
                 <div class="flex items-baseline">
-                    <span class="text-3xl font-extrabold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ total_revenue }}</span>
+                    <span class="text-3xl font-extrabold text-slate-900 dark:text-slate-50">{{ request.user.owned_brand.get_currency_symbol }}{{ total_revenue }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Pending Amount Card -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 flex flex-col relative overflow-hidden group">
+        <div class="bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col relative overflow-hidden group">
             <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center text-amber-600">
                         <i class="fa-solid fa-clock text-xl"></i>
                     </div>
                 </div>
-                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Pending Amount</h3>
+                <h3 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Pending Amount</h3>
                 <div class="flex items-baseline">
-                    <span class="text-3xl font-extrabold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ pending_amount }}</span>
+                    <span class="text-3xl font-extrabold text-slate-900 dark:text-slate-50">{{ request.user.owned_brand.get_currency_symbol }}{{ pending_amount }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Total Orders Card -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 flex flex-col relative overflow-hidden group">
+        <div class="bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col relative overflow-hidden group">
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4">
@@ -110,25 +110,25 @@
                         <i class="fa-solid fa-receipt text-xl"></i>
                     </div>
                 </div>
-                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Total Orders</h3>
+                <h3 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Total Orders</h3>
                 <div class="flex items-baseline">
-                    <span class="text-3xl font-extrabold text-slate-900">{{ total_orders }}</span>
+                    <span class="text-3xl font-extrabold text-slate-900 dark:text-slate-50">{{ total_orders }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Paid Orders Card -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 flex flex-col relative overflow-hidden group">
+        <div class="bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col relative overflow-hidden group">
             <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600">
                         <i class="fa-solid fa-check-circle text-xl"></i>
                     </div>
                 </div>
-                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Paid / Fulfilled</h3>
+                <h3 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Paid / Fulfilled</h3>
                 <div class="flex items-baseline">
-                    <span class="text-3xl font-extrabold text-slate-900">{{ paid_orders }}</span>
+                    <span class="text-3xl font-extrabold text-slate-900 dark:text-slate-50">{{ paid_orders }}</span>
                 </div>
             </div>
         </div>
@@ -138,21 +138,21 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         
         <!-- Revenue Chart -->
-        <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-bold text-slate-900">Revenue Overview</h2>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Last {{ filter_range }} Days</span>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50">Revenue Overview</h2>
+                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Last {{ filter_range }} Days</span>
             </div>
             <canvas id="revenueChart" class="w-full" style="height: 280px; max-height: 280px;"></canvas>
         </div>
 
         <!-- Payment Methods Breakdown -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
-            <h2 class="text-lg font-bold text-slate-900 mb-6">Payment Methods</h2>
+        <div class="bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50 mb-6">Payment Methods</h2>
             {% if payment_methods_data %}
                 <div class="space-y-4">
                     {% for pm in payment_methods_data %}
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center
                                 {% if 'eSewa' in pm.provider %}bg-emerald-100 text-emerald-600
@@ -170,26 +170,26 @@
                                 {% endif %}
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-slate-900">{{ pm.provider }}</p>
-                                <p class="text-xs text-slate-500">{{ pm.count }} order{{ pm.count|pluralize }}</p>
+                                <p class="text-sm font-bold text-slate-900 dark:text-slate-50">{{ pm.provider }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ pm.count }} order{{ pm.count|pluralize }}</p>
                             </div>
                         </div>
-                        <p class="text-sm font-extrabold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ pm.revenue|floatformat:2 }}</p>
+                        <p class="text-sm font-extrabold text-slate-900 dark:text-slate-50">{{ request.user.owned_brand.get_currency_symbol }}{{ pm.revenue|floatformat:2 }}</p>
                     </div>
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="text-center py-8">
-                    <div class="mx-auto h-16 w-16 bg-slate-50 border-2 border-dashed border-slate-200 rounded-full flex items-center justify-center mb-3">
-                        <i class="fa-solid fa-chart-pie text-xl text-slate-300"></i>
+                    <div class="mx-auto h-16 w-16 bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-chart-pie text-xl text-slate-300 dark:text-slate-600"></i>
                     </div>
-                    <p class="text-sm text-slate-500">No payment data in this range.</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">No payment data in this range.</p>
                 </div>
             {% endif %}
 
             <!-- Order Status Breakdown -->
-            <div class="mt-6 pt-6 border-t border-slate-100">
-                <h3 class="text-sm font-bold text-slate-700 mb-3">Order Status</h3>
+            <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Order Status</h3>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
                     <div class="flex items-center gap-2 bg-amber-50 rounded-lg px-3 py-2 border border-amber-100">
                         <div class="w-2 h-2 rounded-full bg-amber-400"></div>
@@ -201,20 +201,20 @@
                         <span class="text-xs font-bold text-emerald-700">Paid</span>
                         <span class="ml-auto text-xs font-extrabold text-emerald-900">{{ status_counts.PAID|default:"0" }}</span>
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div class="w-2 h-2 rounded-full bg-slate-400"></div>
-                        <span class="text-xs font-bold text-slate-700">Completed (POS)</span>
-                        <span class="ml-auto text-xs font-extrabold text-slate-900">{{ status_counts.COMPLETED|default:"0" }}</span>
+                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Completed (POS)</span>
+                        <span class="ml-auto text-xs font-extrabold text-slate-900 dark:text-slate-50">{{ status_counts.COMPLETED|default:"0" }}</span>
                     </div>
                     <div class="flex items-center gap-2 bg-blue-50 rounded-lg px-3 py-2 border border-blue-100">
                         <div class="w-2 h-2 rounded-full bg-blue-400"></div>
                         <span class="text-xs font-bold text-blue-700">Shipped</span>
                         <span class="ml-auto text-xs font-extrabold text-blue-900">{{ status_counts.SHIPPED|default:"0" }}</span>
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-100 rounded-lg px-3 py-2 border border-slate-200">
+                    <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-800">
                         <div class="w-2 h-2 rounded-full bg-slate-500"></div>
-                        <span class="text-xs font-bold text-slate-800">Delivered</span>
-                        <span class="ml-auto text-xs font-extrabold text-slate-900">{{ status_counts.DELIVERED|default:"0" }}</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Delivered</span>
+                        <span class="ml-auto text-xs font-extrabold text-slate-900 dark:text-slate-50">{{ status_counts.DELIVERED|default:"0" }}</span>
                     </div>
                     <div class="flex items-center gap-2 bg-rose-50 rounded-lg px-3 py-2 border border-rose-100">
                         <div class="w-2 h-2 rounded-full bg-rose-400"></div>
@@ -227,39 +227,39 @@
     </div>
 
     <!-- Recent Transactions Table -->
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-            <h2 class="text-lg font-bold text-slate-900">Recent Orders</h2>
+    <div class="bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50">Recent Orders</h2>
             <a href="{% url 'manage_orders' %}" class="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition">
                 View All <i class="fa-solid fa-arrow-right ml-1"></i>
             </a>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-100">
-                <thead class="bg-slate-50">
+                <thead class="bg-slate-50 dark:bg-slate-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Order ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Payment</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Order ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Payment</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Date</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-slate-50">
+                <tbody class="bg-white dark:bg-slate-950 divide-y divide-slate-50">
                     {% for order in recent_orders %}
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="text-sm font-mono font-bold text-indigo-600">#{{ order.id|stringformat:"s"|slice:":8" }}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div>
-                                <p class="text-sm font-bold text-slate-900">{{ order.customer_name|default:"N/A" }}</p>
-                                <p class="text-xs text-slate-500">{{ order.customer_phone|default:"" }}</p>
+                                <p class="text-sm font-bold text-slate-900 dark:text-slate-50">{{ order.customer_name|default:"N/A" }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ order.customer_phone|default:"" }}</p>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-sm font-extrabold text-slate-900">{{ request.user.owned_brand.get_currency_symbol }}{{ order.total_amount }}</span>
+                            <span class="text-sm font-extrabold text-slate-900 dark:text-slate-50">{{ request.user.owned_brand.get_currency_symbol }}{{ order.total_amount }}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {% if order.payment_provider == 'CUSTOM_MANUAL' %}
@@ -269,7 +269,7 @@
                             {% elif order.payment_provider == 'KHALTI' %}
                                 <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-50 text-purple-700 border border-purple-100">Khalti</span>
                             {% else %}
-                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-50 text-slate-500 border border-slate-200">{{ order.payment_provider|default:"N/A" }}</span>
+                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800">{{ order.payment_provider|default:"N/A" }}</span>
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -280,29 +280,29 @@
                             {% elif order.status == 'SHIPPED' %}
                                 <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-blue-50 text-blue-600 border border-blue-100"><i class="fa-solid fa-truck-fast mr-1"></i>Shipped</span>
                             {% elif order.status == 'DELIVERED' %}
-                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200"><i class="fa-solid fa-box-open mr-1"></i>Delivered</span>
+                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800"><i class="fa-solid fa-box-open mr-1"></i>Delivered</span>
                             {% elif order.status == 'COMPLETED' %}
-                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200"><i class="fa-solid fa-check-double mr-1"></i>Completed</span>
+                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800"><i class="fa-solid fa-check-double mr-1"></i>Completed</span>
                             {% elif order.status == 'DRAFT' %}
-                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100"><i class="fa-solid fa-file-signature mr-1"></i>Draft</span>
+                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 border border-indigo-100"><i class="fa-solid fa-file-signature mr-1"></i>Draft</span>
                             {% elif order.status == 'CANCELLED' %}
                                 <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-rose-50 text-rose-600 border border-rose-100"><i class="fa-solid fa-xmark mr-1"></i>Cancelled</span>
                             {% else %}
-                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-500 border border-slate-200">{{ order.status }}</span>
+                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800">{{ order.status }}</span>
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-xs text-slate-500 font-medium">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400 font-medium">
                             {{ order.created_at|date:"M d, Y h:i A" }}
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
                         <td colspan="6" class="px-6 py-16 text-center">
-                            <div class="mx-auto h-20 w-20 bg-slate-50 border-2 border-dashed border-slate-200 rounded-full flex items-center justify-center mb-4">
-                                <i class="fa-solid fa-receipt text-2xl text-slate-300"></i>
+                            <div class="mx-auto h-20 w-20 bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-receipt text-2xl text-slate-300 dark:text-slate-600"></i>
                             </div>
-                            <h3 class="text-base font-bold text-slate-900">No orders found</h3>
-                            <p class="mt-1 text-sm text-slate-500">Try adjusting your filters or wait for your first orders to come in.</p>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-slate-50">No orders found</h3>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Try adjusting your filters or wait for your first orders to come in.</p>
                         </td>
                     </tr>
                     {% endfor %}

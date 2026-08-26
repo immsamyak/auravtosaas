@@ -10,10 +10,10 @@
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li aria-current="page">
                 <div class="flex items-center">
-                    <i class="fa-solid fa-bullhorn text-slate-400 mr-2"></i>
-                    <span class="text-sm font-bold text-slate-800">Marketing</span>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
-                    <span class="text-sm font-medium text-slate-500">Subscribers</span>
+                    <i class="fa-solid fa-bullhorn text-slate-400 dark:text-slate-500 mr-2"></i>
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">Marketing</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 dark:text-slate-600 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Subscribers</span>
                 </div>
             </li>
         </ol>
@@ -22,77 +22,77 @@
     <!-- Header & Stats -->
     <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Email <span class="text-indigo-600 font-light">Subscribers</span></h1>
-            <p class="text-slate-500 mt-2 text-sm font-medium">Customers who subscribed via your storefront.</p>
+            <h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight">Email <span class="text-indigo-600 font-light">Subscribers</span></h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Customers who subscribed via your storefront.</p>
         </div>
     </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+        <div class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600">
                 <i class="fa-solid fa-users text-lg"></i>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total</p>
-                <p class="text-2xl font-extrabold text-slate-900">{{ total_count }}</p>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total</p>
+                <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-50">{{ total_count }}</p>
             </div>
         </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+        <div class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600">
                 <i class="fa-solid fa-circle-check text-lg"></i>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Active</p>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Active</p>
                 <p class="text-2xl font-extrabold text-emerald-600">{{ active_count }}</p>
             </div>
         </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
+        <div class="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center text-amber-600">
                 <i class="fa-solid fa-chart-line text-lg"></i>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Growth</p>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Growth</p>
                 <p class="text-2xl font-extrabold text-amber-600">+{{ total_count }}</p>
             </div>
         </div>
     </div>
 
     <!-- Search Bar -->
-    <form method="GET" class="mb-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-end gap-4">
+    <form method="GET" class="mb-6 bg-white dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 flex items-end gap-4">
         <div class="flex-1">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 dark:text-slate-500"></i>
                 </div>
-                <input type="text" name="q" value="{{ filter_search }}" placeholder="Search by email address..." class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <input type="text" name="q" value="{{ filter_search }}" placeholder="Search by email address..." class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
             </div>
         </div>
         <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
             <i class="fa-solid fa-search mr-2"></i> Search
         </button>
         {% if filter_search %}
-        <a href="{% url 'subscriber_list' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+        <a href="{% url 'subscriber_list' %}" class="inline-flex items-center px-4 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl transition">
             <i class="fa-solid fa-xmark mr-1"></i> Clear
         </a>
         {% endif %}
     </form>
 
     <!-- Subscribers Table -->
-    <div class="bg-white shadow-sm sm:rounded-2xl border border-slate-200 overflow-hidden">
+    <div class="bg-white dark:bg-slate-950 shadow-sm sm:rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
         {% if subscribers %}
         <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
+            <thead class="bg-slate-50 dark:bg-slate-900">
                 <tr>
-                    <th scope="col" class="pl-6 pr-3 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email</th>
-                    <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-wider">Subscribed</th>
+                    <th scope="col" class="pl-6 pr-3 py-4 text-left text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</th>
+                    <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Subscribed</th>
                     <th scope="col" class="relative py-4 pl-3 pr-6">
                         <span class="sr-only">Actions</span>
                     </th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-slate-100">
+            <tbody class="bg-white dark:bg-slate-950 divide-y divide-slate-100">
                 {% for sub in subscribers %}
                 <tr class="hover:bg-slate-50/50 transition-colors">
                     <td class="pl-6 pr-3 py-4 whitespace-nowrap">
@@ -100,7 +100,7 @@
                             <div class="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs uppercase shadow-sm">
                                 {{ sub.email|make_list|first }}
                             </div>
-                            <span class="text-sm font-bold text-slate-900">{{ sub.email }}</span>
+                            <span class="text-sm font-bold text-slate-900 dark:text-slate-50">{{ sub.email }}</span>
                         </div>
                     </td>
                     <td class="px-3 py-4 whitespace-nowrap">
@@ -109,14 +109,14 @@
                             <i class="fa-solid fa-circle text-[6px] mr-1.5 text-emerald-400"></i> Active
                         </span>
                         {% else %}
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
-                            <i class="fa-solid fa-circle text-[6px] mr-1.5 text-slate-300"></i> Inactive
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800">
+                            <i class="fa-solid fa-circle text-[6px] mr-1.5 text-slate-300 dark:text-slate-600"></i> Inactive
                         </span>
                         {% endif %}
                     </td>
-                    <td class="px-3 py-4 whitespace-nowrap text-sm text-slate-500 font-medium">
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 font-medium">
                         {{ sub.subscribed_at|date:"M d, Y" }}
-                        <span class="text-slate-300 ml-1">{{ sub.subscribed_at|date:"h:i A" }}</span>
+                        <span class="text-slate-300 dark:text-slate-600 ml-1">{{ sub.subscribed_at|date:"h:i A" }}</span>
                     </td>
                     <td class="relative py-4 pl-3 pr-6 text-right whitespace-nowrap">
                         <form method="POST" action="{% url 'subscriber_delete' sub.id %}" onsubmit="return confirm('Remove {{ sub.email }} from subscribers?');">
@@ -132,11 +132,11 @@
         </table>
         {% else %}
         <div class="p-12 text-center flex flex-col items-center justify-center">
-            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
-                <i class="fa-solid fa-envelope text-2xl text-slate-400"></i>
+            <div class="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-4">
+                <i class="fa-solid fa-envelope text-2xl text-slate-400 dark:text-slate-500"></i>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-1">No subscribers yet</h3>
-            <p class="text-sm text-slate-500 max-w-sm">When customers subscribe via your storefront footer, their emails will appear here.</p>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-50 mb-1">No subscribers yet</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm">When customers subscribe via your storefront footer, their emails will appear here.</p>
         </div>
         {% endif %}
     </div>

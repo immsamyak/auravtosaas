@@ -22,7 +22,7 @@
 
 {% render_brand_analytics brand %}
 
-    <div x-data="{ mobileMenuOpen: false, categoryOpen: false }" class="bg-white border-b border-gray-200">
+    <div x-data="{ mobileMenuOpen: false, categoryOpen: false }" class="bg-white dark:bg-slate-950 border-b border-gray-200">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
             <a href="#" class="font-bold text-xl flex items-center">
                 {% if brand.logo %}
@@ -44,7 +44,7 @@
         </nav>
         
         <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" x-cloak class="md:hidden border-t border-gray-200 bg-white">
+        <div x-show="mobileMenuOpen" x-cloak class="md:hidden border-t border-gray-200 bg-white dark:bg-slate-950">
             <a href="#" class="block px-4 py-3 border-b border-gray-100 text-gray-700 font-medium">Home</a>
             <div x-data="{ mobileCatOpen: false }">
                 <button @click="mobileCatOpen = !mobileCatOpen" class="w-full text-left px-4 py-3 border-b border-gray-100 text-gray-700 font-medium flex justify-between items-center">
