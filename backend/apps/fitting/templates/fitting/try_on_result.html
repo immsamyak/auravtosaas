@@ -188,7 +188,6 @@
  {% if v.color == variant.color %}
  <a href="{% url 'try_on' variant.product.brand.slug v.slug %}" class="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg transition-all shadow-sm {% if v.size == variant.size %}scale-105{% else %}bg-neutral-500/5 border border-neutral-500/20 hover:border-current hover:bg-neutral-500/10{% endif %}" {% if v.size == variant.size %}style="background-color: var(--theme-text-base); color: var(--theme-bg-base);"{% endif %}>
  {{ v.size.code }}
- {% endif %}
  </a>
  {% endif %}
  {% endfor %}
