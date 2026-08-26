@@ -216,8 +216,8 @@
             </a>
             <div class="flex items-center space-x-2">
                 <button id="theme-toggle-mobile" type="button" class="text-slate-500 hover:text-indigo-600 transition-colors p-2" title="Toggle Theme">
-                    <i id="theme-toggle-dark-icon-mobile" class="fa-solid fa-moon hidden text-xl"></i>
-                    <i id="theme-toggle-light-icon-mobile" class="fa-solid fa-sun hidden text-xl"></i>
+                    <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
+                    <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
                 </button>
                 <button @click="sidebarOpen = true" class="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors p-2">
                     <i class="fa-solid fa-bars text-xl"></i>
@@ -250,8 +250,8 @@
                 
                 <!-- Theme Toggle Button -->
                 <button id="theme-toggle" type="button" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 md:mr-2" title="Toggle Theme">
-                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden text-xl"></i>
-                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden text-xl"></i>
+                    <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
+                    <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
                 </button>
 
                 <!-- Fullscreen Button -->
@@ -435,49 +435,35 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            function initThemeToggle(btnId, darkIconId, lightIconId) {
-                var themeToggleBtn = document.getElementById(btnId);
-                var themeToggleDarkIcon = document.getElementById(darkIconId);
-                var themeToggleLightIcon = document.getElementById(lightIconId);
-
-                if (themeToggleBtn && themeToggleDarkIcon && themeToggleLightIcon) {
-                    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                        themeToggleLightIcon.classList.remove('hidden');
+            function handleThemeToggle() {
+                if (localStorage.theme) {
+                    if (localStorage.theme === 'light') {
+                        document.documentElement.classList.add('dark');
+                        localStorage.theme = 'dark';
                     } else {
-                        themeToggleDarkIcon.classList.remove('hidden');
+                        document.documentElement.classList.remove('dark');
+                        localStorage.theme = 'light';
                     }
-
-                    themeToggleBtn.addEventListener('click', function() {
-                        // Toggle both desktop and mobile icons together
-                        const allDarkIcons = document.querySelectorAll('#theme-toggle-dark-icon, #theme-toggle-dark-icon-mobile');
-                        const allLightIcons = document.querySelectorAll('#theme-toggle-light-icon, #theme-toggle-light-icon-mobile');
-                        
-                        allDarkIcons.forEach(el => el.classList.toggle('hidden'));
-                        allLightIcons.forEach(el => el.classList.toggle('hidden'));
-
-                        if (localStorage.theme) {
-                            if (localStorage.theme === 'light') {
-                                document.documentElement.classList.add('dark');
-                                localStorage.theme = 'dark';
-                            } else {
-                                document.documentElement.classList.remove('dark');
-                                localStorage.theme = 'light';
-                            }
-                        } else {
-                            if (document.documentElement.classList.contains('dark')) {
-                                document.documentElement.classList.remove('dark');
-                                localStorage.theme = 'light';
-                            } else {
-                                document.documentElement.classList.add('dark');
-                                localStorage.theme = 'dark';
-                            }
-                        }
-                    });
+                } else {
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.theme = 'light';
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.theme = 'dark';
+                    }
                 }
             }
 
-            initThemeToggle('theme-toggle', 'theme-toggle-dark-icon', 'theme-toggle-light-icon');
-            initThemeToggle('theme-toggle-mobile', 'theme-toggle-dark-icon-mobile', 'theme-toggle-light-icon-mobile');
+            const desktopToggle = document.getElementById('theme-toggle');
+            if (desktopToggle) {
+                desktopToggle.addEventListener('click', handleThemeToggle);
+            }
+
+            const mobileToggle = document.getElementById('theme-toggle-mobile');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', handleThemeToggle);
+            }
         });
     </script>
 

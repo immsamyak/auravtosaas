@@ -65,8 +65,8 @@
             <!-- Auth & Actions -->
             <div class="flex items-center space-x-4">
                 <button id="theme-toggle" type="button" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none rounded-lg text-sm p-2.5 transition-colors">
-                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
-                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
+                    <i class="fa-solid fa-moon text-xl dark:hidden block"></i>
+                    <i class="fa-solid fa-sun text-xl hidden dark:block"></i>
                 </button>
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
@@ -221,43 +221,31 @@
             });
 
             // Theme toggle logic
-            var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-            var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-            // Change the icons inside the button based on previous settings
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                themeToggleLightIcon.classList.remove('hidden');
-            } else {
-                themeToggleDarkIcon.classList.remove('hidden');
-            }
-
             var themeToggleBtn = document.getElementById('theme-toggle');
 
-            themeToggleBtn.addEventListener('click', function() {
-                // toggle icons
-                themeToggleDarkIcon.classList.toggle('hidden');
-                themeToggleLightIcon.classList.toggle('hidden');
-
-                // if set via local storage previously
-                if (localStorage.theme) {
-                    if (localStorage.theme === 'light') {
-                        document.documentElement.classList.add('dark');
-                        localStorage.theme = 'dark';
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', function() {
+                    // if set via local storage previously
+                    if (localStorage.theme) {
+                        if (localStorage.theme === 'light') {
+                            document.documentElement.classList.add('dark');
+                            localStorage.theme = 'dark';
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.theme = 'light';
+                        }
+                    // if NOT set via local storage previously
                     } else {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.theme = 'light';
+                        if (document.documentElement.classList.contains('dark')) {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.theme = 'light';
+                        } else {
+                            document.documentElement.classList.add('dark');
+                            localStorage.theme = 'dark';
+                        }
                     }
-                // if NOT set via local storage previously
-                } else {
-                    if (document.documentElement.classList.contains('dark')) {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.theme = 'light';
-                    } else {
-                        document.documentElement.classList.add('dark');
-                        localStorage.theme = 'dark';
-                    }
-                }
-            });
+                });
+            }
         });
     </script>
 </body>
