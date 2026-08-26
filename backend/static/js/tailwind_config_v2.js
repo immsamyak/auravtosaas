@@ -13,6 +13,12 @@ tailwind.config = {
                     DEFAULT: '#F3F4F6'
                 },
                 theme: {
+                    surface: {
+                        DEFAULT: 'var(--theme-bg-surface)',
+                        hover: 'var(--theme-bg-hover)',
+                    },
+                    overlay: 'rgba(15, 23, 42, 0.5)',
+                    secondary: 'var(--theme-primary-hover)',
                     bg: {
                         base: 'var(--theme-bg-base)',
                         surface: 'var(--theme-bg-surface)',
