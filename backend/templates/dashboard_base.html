@@ -7,8 +7,8 @@
     <title>AURA. Dashboard | {% block title %}Overview{% endblock %}</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="{% static 'js/tailwind.config.js' %}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
     
     <!-- Google Fonts: Plus Jakarta Sans for a premium modern look -->
@@ -49,8 +49,15 @@
             font-weight: 600;
         }
     </style>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
-<body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900" x-data="{ sidebarOpen: false }">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300" x-data="{ sidebarOpen: false }">
 <div class="flex h-screen overflow-hidden w-full relative">
 
     <!-- Mobile sidebar overlay -->
@@ -235,6 +242,12 @@
 
             <div class="flex items-center space-x-6 ml-8">
                 
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" type="button" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 hidden md:block">
+                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden text-xl"></i>
+                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden text-xl"></i>
+                </button>
+
                 <!-- Fullscreen Button -->
                 <button onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()" class="text-slate-400 hover:text-indigo-600 transition-colors p-2 hidden md:block" title="Toggle Fullscreen">
                     <i class="fa-solid fa-expand text-xl"></i>
@@ -414,6 +427,45 @@
         }
     </script>
     
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            var themeToggleBtn = document.getElementById('theme-toggle');
+
+            if (themeToggleBtn && themeToggleDarkIcon && themeToggleLightIcon) {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                } else {
+                    themeToggleDarkIcon.classList.remove('hidden');
+                }
+
+                themeToggleBtn.addEventListener('click', function() {
+                    themeToggleDarkIcon.classList.toggle('hidden');
+                    themeToggleLightIcon.classList.toggle('hidden');
+
+                    if (localStorage.theme) {
+                        if (localStorage.theme === 'light') {
+                            document.documentElement.classList.add('dark');
+                            localStorage.theme = 'dark';
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.theme = 'light';
+                        }
+                    } else {
+                        if (document.documentElement.classList.contains('dark')) {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.theme = 'light';
+                        } else {
+                            document.documentElement.classList.add('dark');
+                            localStorage.theme = 'dark';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
     {% block extra_scripts %}
     {% endblock %}
     
