@@ -56,13 +56,13 @@
  <div class="group bg-surface brutal-border p-4 hover:brutal-shadow hover:-translate-y-2 transition-all duration-300 flex flex-col h-full relative">
 <a class="block aspect-square bg-[#111] brutal-border mb-4 overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
  {% if product.images.first %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
  {% elif product.variants.first.image %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
+ <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
  {% else %}
- <div class="w-full h-full flex flex-col items-center justify-center text-[#333]">
-<i class="fa-solid fa-skull text-5xl mb-2"></i>
-</div>
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
  {% endif %}
  
  <!-- Hover overlay tag -->
@@ -88,10 +88,10 @@
  </a>
  </div>
 
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
  {% else %}
- <div class="bg-surface brutal-border p-12 text-center border-dashed">
-<h3 class="font-display font-black text-4xl text-[#333] italic">SOLD OUT /// WAITING FOR RESTOCK</h3>
-</div>
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
  {% endif %}
 </section>
 <!-- Collections Section -->

@@ -50,13 +50,13 @@
  <div class="group glass glass-hover rounded-2xl overflow-hidden transition-all duration-300">
 <a class="block aspect-[3/4] overflow-hidden relative bg-white/5" href="{% url 'store_product_detail' brand.slug product.slug %}">
  {% if product.images.first %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
  {% elif product.variants.first.image %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
+ <img alt="{{ product.name }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
  {% else %}
- <div class="w-full h-full flex items-center justify-center">
-<i class="fa-solid fa-cube text-4xl text-white/10"></i>
-</div>
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
  {% endif %}
  <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-transparent to-transparent opacity-60"></div>
 </a>
@@ -76,10 +76,10 @@
  </a>
  </div>
 
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
  {% else %}
- <div class="glass rounded-2xl p-16 text-center">
-<p class="text-white/30 text-lg">Products launching soon.</p>
-</div>
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
  {% endif %}
 </section>
 <!-- Collections Section -->

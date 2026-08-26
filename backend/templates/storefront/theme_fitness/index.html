@@ -30,7 +30,7 @@
  <div class="group bg-theme-surface border-4 border-black p-4 flex flex-col hard-shadow">
  <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-[4/5] bg-theme-bg-secondary mb-6 overflow-hidden border-2 border-black">
  {% if product.variants.first.image %}
- <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+ <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';">
  {% else %}
  <div class="w-full h-full flex flex-col items-center justify-center text-theme-text-disabled">
  <i class="fa-solid fa-dumbbell text-6xl mb-4"></i>

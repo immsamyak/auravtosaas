@@ -52,13 +52,13 @@
  <div class="group bg-skate-concrete skate-border hover:border-skate-lime transition-colors duration-200 overflow-hidden">
 <a class="block aspect-square overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
  {% if product.images.first %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}"/>
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
  {% elif product.variants.first.image %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover filter contrast-110 group-hover:scale-110 transition-transform duration-300" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}"/>
+ <img alt="{{ product.name }}" class="w-full h-full object-cover filter contrast-110 group-hover:scale-110 transition-transform duration-300" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
  {% else %}
- <div class="w-full h-full flex items-center justify-center bg-skate-dark">
-<i class="fa-solid fa-skull text-4xl text-theme-text-secondary"></i>
-</div>
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
  {% endif %}
  </a>
 <div class="p-4">

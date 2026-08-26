@@ -28,7 +28,7 @@
  <div class="group">
  <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative mb-4 overflow-hidden bg-theme-bg aspect-[3/4] img-hover">
  {% if product.variants.first.image %}
- <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+ <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';">
  {% else %}
  <div class="w-full h-full flex flex-col items-center justify-center text-theme-text-disabled p-4 text-center">
  <i class="fa-solid fa-shirt text-2xl mb-2"></i>

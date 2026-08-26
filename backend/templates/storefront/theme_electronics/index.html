@@ -39,7 +39,7 @@
  
  <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-square border-b border-theme-border-subtle bg-theme-surface p-8">
  {% if product.variants.first.image %}
- <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
+ <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';">
  {% else %}
  <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
  <i class="fa-solid fa-laptop text-5xl mb-4"></i>
@@ -67,12 +67,10 @@
  </a>
  </div>
 
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
  {% else %}
- <div class="bg-theme-surface border border-theme-border p-16 text-center">
- <i class="fa-solid fa-database text-4xl text-slate-300 mb-4"></i>
- <h3 class="text-xl font-bold text-theme-text-primary mb-2">DATABASE EMPTY</h3>
- <p class="text-theme-text-muted font-mono text-sm">No hardware units currently found in the system registry.</p>
- </div>
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
  {% endif %}
  </div>
 </section>
