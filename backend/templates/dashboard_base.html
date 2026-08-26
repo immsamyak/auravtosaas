@@ -224,7 +224,7 @@
  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
  <i class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
  </div>
- <input type="text" name="q" id="global-search-input" required value="{{ request.GET.q|default:'' }}" class="block w-full pl-11 pr-4 py-2.5 border-transparent bg-slate-100 dark:bg-slate-800/50 rounded-2xl text-sm placeholder-theme-input-placeholder dark:text-slate-200 focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-indigo-500/10 transition-all" placeholder="Search orders, products, or customers... (Press '/' to focus)">
+ <input type="text" name="q" id="global-search-input" required value="{{ request.GET.q|default:'' }}" class="block w-full pl-11 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800/50 rounded-2xl text-sm placeholder-theme-input-placeholder dark:text-slate-200 focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-indigo-500/10 transition-all" placeholder="Search orders, products, or customers... (Press '/' to focus)">
  <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
  <span class="text-xs font-bold text-slate-400 bg-theme-bg-surface px-2 py-1 rounded shadow-sm border border-theme-border-base">/</span>
  </div>
