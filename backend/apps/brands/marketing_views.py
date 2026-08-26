@@ -325,7 +325,10 @@ def subscriber_delete_view(request, subscriber_id):
     return redirect('subscriber_list')
 
 
+from django.views.decorators.csrf import csrf_exempt
+
 # ─── Public Storefront Subscribe API ─────────────────────────
+@csrf_exempt
 @require_POST
 def newsletter_subscribe_api(request, brand_slug):
     """Public AJAX endpoint for storefront footer subscribe forms."""
