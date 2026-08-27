@@ -54,7 +54,12 @@
 <a class="text-goth-bone hover:text-goth-blood transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
 </h3>
 <div class="flex justify-between items-center">
-<span class="font-serif italic text-goth-blood text-lg">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+<span class="font-serif italic text-goth-blood text-lg">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
 <span class="font-display text-[10px] tracking-widest uppercase text-goth-bone/30 opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
 </div>
 </div>

@@ -63,7 +63,12 @@
 <div class="p-5">
 <h3 class="font-semibold text-white truncate mb-1"><a class="hover:text-indigo-400 transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
 <div class="flex justify-between items-center">
-<span class="text-sm font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+<span class="text-sm font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
 <button class="text-white/40 hover:text-white text-sm transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" ><i class="fa-solid fa-plus"></i></button>
 </div>
 </div>

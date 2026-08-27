@@ -40,7 +40,12 @@
  </a>
 <div class="flex justify-between items-center">
 <a class="text-lg font-light hover:text-stone-500 transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
-<span class="text-sm font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+<span class="text-sm font-medium">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
 </div>
 </div>
  {% endfor %}

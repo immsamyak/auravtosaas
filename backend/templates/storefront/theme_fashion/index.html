@@ -46,7 +46,12 @@
  <div class="flex justify-between items-start">
  <div>
  <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block text-sm font-semibold text-black hover:text-gray-500 transition-colors mb-1">{{ product.name }}</a>
- <p class="text-theme-text-muted text-sm font-light">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+ <p class="text-theme-text-muted text-sm font-light">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
  </div>
  </div>
  </div>

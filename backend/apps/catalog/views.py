@@ -124,6 +124,8 @@ def create_product_view(request):
         category_id = request.POST.get('category')
         product_type_id = request.POST.get('product_type')
         price = request.POST.get('price')
+        sale_price = request.POST.get('sale_price')
+        occasion = request.POST.get('occasion')
         
         color_id = request.POST.get('color')
         size_id = request.POST.get('size')
@@ -148,6 +150,13 @@ def create_product_view(request):
                 if price_val < 0: errors.append("Price cannot be negative.")
             except ValueError:
                 errors.append("Invalid price format.")
+                
+        if sale_price:
+            try:
+                sale_val = float(sale_price)
+                if sale_val < 0: errors.append("Sale price cannot be negative.")
+            except ValueError:
+                errors.append("Invalid sale price format.")
         
         if stock:
             try:
@@ -174,6 +183,8 @@ def create_product_view(request):
                     category_id=category_id, 
                     product_type_id=product_type_id,
                     price=price,
+                    sale_price=sale_price if sale_price else None,
+                    occasion=occasion,
                     seo_title=request.POST.get('seo_title', ''),
                     seo_description=request.POST.get('seo_description', ''),
                     seo_keywords=request.POST.get('seo_keywords', ''),
@@ -181,7 +192,9 @@ def create_product_view(request):
                 )
                 if 'seo_og_image' in request.FILES:
                     product.seo_og_image = request.FILES['seo_og_image']
-                    product.save()
+                if 'size_chart_image' in request.FILES:
+                    product.size_chart_image = request.FILES['size_chart_image']
+                product.save()
                 
                 variant = ProductVariant.objects.create(
                     product=product, 
@@ -291,6 +304,8 @@ def edit_product_view(request, product_id):
         price = request.POST.get('price')
         category_id = request.POST.get('category')
         product_type_id = request.POST.get('product_type')
+        sale_price = request.POST.get('sale_price')
+        occasion = request.POST.get('occasion')
 
         errors = []
         if not name: errors.append("Product name is required.")
@@ -308,6 +323,13 @@ def edit_product_view(request, product_id):
             except ValueError:
                 errors.append("Invalid price format.")
 
+        if sale_price:
+            try:
+                sale_val = float(sale_price)
+                if sale_val < 0: errors.append("Sale price cannot be negative.")
+            except ValueError:
+                errors.append("Invalid sale price format.")
+
         if errors:
             for e in errors: messages.error(request, e)
         else:
@@ -317,6 +339,8 @@ def edit_product_view(request, product_id):
                 product.category_id = category_id
                 product.product_type_id = product_type_id
                 product.price = price
+                product.sale_price = sale_price if sale_price else None
+                product.occasion = occasion
                 product.is_vto_ready = request.POST.get('is_vto_ready') == 'on'
                 
                 # SEO Settings
@@ -325,6 +349,8 @@ def edit_product_view(request, product_id):
                 product.seo_keywords = request.POST.get('seo_keywords', product.seo_keywords)
                 if 'seo_og_image' in request.FILES:
                     product.seo_og_image = request.FILES['seo_og_image']
+                if 'size_chart_image' in request.FILES:
+                    product.size_chart_image = request.FILES['size_chart_image']
                     
                 product.save()
                 messages.success(request, f'Product "{product.name}" updated successfully.')

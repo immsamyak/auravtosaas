@@ -42,7 +42,12 @@
  <h3 class="text-2xl font-display font-bold text-black mb-2 line-clamp-2 uppercase"><a href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
  
  <div class="mt-auto pt-6 flex items-center justify-between">
- <span class="text-3xl font-display font-bold text-black">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+ <span class="text-3xl font-display font-bold text-black">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
  <button class="bg-black text-white font-display text-xl font-bold px-6 py-2 hover:bg-yellow-500 hover:text-black transition-colors">
  ADD
  </button>

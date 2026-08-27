@@ -50,7 +50,14 @@
  <h1 class="text-3xl sm:text-4xl font-black tracking-tighter">{{ product.name }}</h1>
  
  <div class="mt-4 flex items-end space-x-4">
+ <div class="flex items-center gap-3">
+ {% if product.sale_price %}
+ <p class="text-3xl font-extrabold text-red-500">{{ brand.currency_symbol|default:"$" }}{{ product.sale_price }}</p>
+ <p class="text-xl font-medium opacity-50 line-through">{{ brand.currency_symbol|default:"$" }}{{ product.price }}</p>
+ {% else %}
  <p class="text-3xl font-extrabold">{{ brand.currency_symbol|default:"$" }}{{ product.price }}</p>
+ {% endif %}
+ </div>
  {% if product.variants.first.total_stock < 10 %}
  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-neutral-500/20 border border-current mb-1">
  Limited Stock
@@ -85,7 +92,11 @@
  <div class="mt-10">
  <div class="flex items-center justify-between">
  <h3 class="text-sm font-bold uppercase tracking-wider opacity-70">Select Size</h3>
+ {% if product.size_chart_image %}
+ <a href="{{ product.size_chart_image.url }}" target="_blank" class="text-xs font-bold underline opacity-60 hover:opacity-100 transition-opacity">Size Guide</a>
+ {% else %}
  <a href="#" class="text-xs font-bold underline opacity-60 hover:opacity-100 transition-opacity">Size Guide</a>
+ {% endif %}
  </div>
  <div class="mt-4 grid grid-cols-4 gap-4 sm:grid-cols-6 lg:grid-cols-4">
  {% for size in sizes %}

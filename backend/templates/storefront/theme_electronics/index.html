@@ -52,7 +52,12 @@
  <h3 class="text-lg font-bold text-theme-text-primary mb-1 leading-tight"><a href="{% url 'store_product_detail' brand.slug product.slug %}" class="hover:text-blue-600 transition-colors">{{ product.name }}</a></h3>
  
  <div class="mt-auto pt-4 border-t border-theme-border-subtle flex items-center justify-between">
- <span class="text-xl font-black text-theme-text-primary font-mono">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+ <span class="text-xl font-black text-theme-text-primary font-mono">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
  <button class="w-10 h-10 bg-theme-bg border border-theme-border text-theme-text-primary hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors flex items-center justify-center" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >
  <i class="fa-solid fa-plus"></i>
  </button>

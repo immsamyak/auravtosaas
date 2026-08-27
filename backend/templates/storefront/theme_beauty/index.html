@@ -44,7 +44,12 @@
  
  <div class="text-center">
  <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block text-lg font-serif text-glow-charcoal hover:text-glow-clay transition-colors mb-2">{{ product.name }}</a>
- <p class="text-theme-text-muted font-medium">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+ <p class="text-theme-text-muted font-medium">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
  </div>
  </div>
  {% endfor %}

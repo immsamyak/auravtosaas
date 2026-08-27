@@ -64,7 +64,12 @@
 <a class="hover:text-pop-blue transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
 </h3>
 <div class="flex justify-between items-center">
-<span class="font-display text-lg text-pop-red">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+<span class="font-display text-lg text-pop-red">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
 <button class="bg-pop-black text-pop-yellow font-sans font-bold text-xs px-3 py-1 neo-brutal-sm hover:bg-pop-blue hover:text-white transition-colors">
  ADD
  </button>

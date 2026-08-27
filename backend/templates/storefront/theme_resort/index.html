@@ -57,7 +57,12 @@
  </a>
 <div class="text-center">
 <h3 class="font-serif text-lg mb-1"><a class="hover:text-resort-ocean transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
-<p class="font-sans font-semibold text-resort-gold">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</p>
+<p class="font-sans font-semibold text-resort-gold">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
 </div>
 </div>
  {% endfor %}

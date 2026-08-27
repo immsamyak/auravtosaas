@@ -82,8 +82,10 @@ class Product(models.Model):
     
     # Pricing is now independent of hardcoded USD references
     price = models.DecimalField(validators=[MinValueValidator(Decimal('0.00'))], max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(validators=[MinValueValidator(Decimal('0.00'))], max_digits=10, decimal_places=2, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_vto_ready = models.BooleanField(default=False)
+    size_chart_image = models.ImageField(validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])], upload_to='size_charts/', blank=True, null=True, help_text="Upload a size chart image")
     
     # SEO Settings
     seo_title = models.CharField(max_length=150, blank=True, null=True, help_text="Product SEO Title (max 150 chars)")
