@@ -23,8 +23,8 @@ class HuggingFaceVTONEngine:
         
         client = None
         try:
-            # Initialize client with `hf_token` (gradio_client 1.3.0)
-            client = Client(space_id, hf_token=api_token)
+            # Initialize client with `token` (gradio_client >= 2.6.0)
+            client = Client(space_id, token=api_token)
             
             logger.info("Sending prediction request to Hugging Face...")
             start_time = time.time()
