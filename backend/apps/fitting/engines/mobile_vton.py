@@ -47,6 +47,15 @@ class MobileVTONEngine(VTOEngine):
         
         self.device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
         self.weight_dtype = torch.float16 if self.device.type != 'cpu' else torch.float32 # Speed up MPS
+        if torch.cuda.is_available():
+            self.device = torch.device("cuda")
+            self.weight_dtype = torch.float16
+        elif torch.backends.mps.is_available():
+            self.device = torch.device("mps")
+            self.weight_dtype = torch.float16
+        else:
+            self.device = torch.device("cpu")
+            self.weight_dtype = torch.float32
 
         # Scheduler
         noise_scheduler = FlowMatchEulerDiscreteScheduler(
@@ -80,6 +89,7 @@ class MobileVTONEngine(VTOEngine):
         denoiser_garment = Unet_Garment.from_pretrained(ckpt_path, subfolder="denoiser_garment", low_cpu_mem_usage=False)
         
         # Load to MPS
+        # Load to CPU
         vae.to(self.device, dtype=self.weight_dtype)
         vae_decoder.to(self.device, dtype=torch.float32) # MUST be fp32
         text_encoder_one.to(self.device, dtype=self.weight_dtype)
@@ -95,14 +105,15 @@ class MobileVTONEngine(VTOEngine):
             vae=vae,
             vae_decoder=vae_decoder,
             scheduler=noise_scheduler,
-            tokenizer=self.tokenizer_one,
-            tokenizer_2=self.tokenizer_two,
+            tokenizer=CLIPTokenizer.from_pretrained(ckpt_path, subfolder="tokenizer"),
+            tokenizer_2=CLIPTokenizer.from_pretrained(ckpt_path, subfolder="tokenizer_2"),
             text_encoder=text_encoder_one,
             text_encoder_2=text_encoder_two,
             image_encoder=image_encoder,
             denoiser=denoiser,
             denoiser_garment=denoiser_garment,
         )
+        self.pipeline.to(self.device)
         self.image_processor = AutoImageProcessor.from_pretrained(ckpt_path + "/image_encoder")
 
     def _prepare_image(self, pil_image, target_size=(768, 1024), convert_range=False):
