@@ -84,3 +84,10 @@ replicate==0.25.2
 gradio_client==1.3.0
 redis==5.0.1
 django-anymail
+channels
+daphne
+channels_redis
+
+channels==4.3.2
+daphne==4.2.3
+channels_redis==4.3.0

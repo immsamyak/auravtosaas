@@ -33,16 +33,18 @@ class HuggingFaceVTONEngine:
                 # Fashn VTON 1.5 signature
                 category = "tops"
                 garment_desc = kwargs.get('garment_description', 'clothing')
-                if "dress" in garment_desc:
+                desc_lower = garment_desc.lower()
+                
+                if "dress" in desc_lower:
                     category = "one-pieces"
-                elif "pant" in garment_desc or "skirt" in garment_desc or "short" in garment_desc:
+                elif "pant" in desc_lower or "skirt" in desc_lower or "shorts" in desc_lower or "trouser" in desc_lower or "jeans" in desc_lower:
                     category = "bottoms"
                     
                 result = client.predict(
                     person_image=handle_file(user_photo_path),
                     garment_image=handle_file(product_photo_path),
                     category=category,
-                    garment_photo_type="model",
+                    garment_photo_type="flat-lay",
                     num_timesteps=30,
                     guidance_scale=1.5,
                     seed=42,

@@ -160,14 +160,14 @@ def guest_photo_upload_view(request, slug, variant_slug):
             # Copy image file content
             vault_entry.image.save(os.path.basename(avatar.image.name), avatar.image.file, save=True)
             
-            return redirect('try_on', slug=slug, variant_id=variant_id)
+            return redirect('try_on', slug=slug, variant_slug=variant_slug)
             
         elif selected_user_photo_id:
             # User selected a previously uploaded photo from their vault
             existing_photo = get_object_or_404(VTOPhotoVault, id=selected_user_photo_id, passport=passport)
             existing_photo.is_default = True
             existing_photo.save()
-            return redirect('try_on', slug=slug, variant_id=variant_id)
+            return redirect('try_on', slug=slug, variant_slug=variant_slug)
             
         elif request.FILES.get('base_photo'):
             photo = request.FILES['base_photo']
@@ -206,7 +206,7 @@ def guest_photo_upload_view(request, slug, variant_slug):
                 quality_score=validation_result['score'],
                 validation_metadata=validation_result['metadata']
             )
-            return redirect('try_on', slug=slug, variant_id=variant_id)
+            return redirect('try_on', slug=slug, variant_slug=variant_slug)
         
     user = request.user if request.user.is_authenticated else None
     if not request.session.session_key:

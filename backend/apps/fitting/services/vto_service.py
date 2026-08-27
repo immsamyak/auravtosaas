@@ -112,7 +112,23 @@ class VirtualTryOnService:
         Executes the actual VTO engine inference in a background thread to prevent UI timeouts.
         """
         from apps.fitting.models import VirtualTryOn
-        
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+
+        def broadcast(to):
+            channel_layer = get_channel_layer()
+            if channel_layer:
+                async_to_sync(channel_layer.group_send)(
+                    f"vto_status_{to.id}",
+                    {
+                        "type": "status_update",
+                        "message": {
+                            "status": to.status,
+                            "progress_percent": to.progress_percent
+                        }
+                    }
+                )
+
         try:
             try_on = VirtualTryOn.objects.get(id=try_on_id)
             engine = VirtualTryOnService.get_engine()
@@ -146,15 +162,16 @@ class VirtualTryOnService:
                 try_on.generated_image = result.get('result_image_file')
                 try_on.ai_confidence_score = result.get('confidence_score')
                 
-                # Notify customer
-                from apps.core.utils import notify
-                notify(
-                    user=try_on.session.user,
-                    title="Try-On Complete! 🎉",
-                    message=f"Your fitting for {try_on.product_variant.product.name} is ready to view.",
-                    icon_class="fa-solid fa-wand-magic-sparkles text-indigo-500",
-                    action_url=f"/store/{try_on.product_variant.product.brand.slug}/try-on/status/{try_on.id}/"
-                )
+                # Notify customer if they are logged in
+                if hasattr(try_on.session, 'passport') and try_on.session.passport.user:
+                    from apps.core.utils import notify
+                    notify(
+                        user=try_on.session.passport.user,
+                        title="Try-On Complete! 🎉",
+                        message=f"Your fitting for {try_on.product_variant.product.name} is ready to view.",
+                        icon_class="fa-solid fa-wand-magic-sparkles text-indigo-500",
+                        action_url=f"/store/{try_on.product_variant.product.brand.slug}/try-on/status/{try_on.id}/"
+                    )
                 
             elif result.get('status') == 'CANCELLED':
                 # The try_on was already cancelled by a newer request
@@ -164,7 +181,10 @@ class VirtualTryOnService:
                 try_on.error_message = result.get('error_message', 'Unknown VTO Engine failure')
                 
             try_on.processing_completed_at = timezone.now()
+            try_on.progress_percent = 100 if try_on.status == 'COMPLETED' else 0
             try_on.save()
+            
+            broadcast(try_on)
             
         except Exception as e:
             # Handle catastrophic thread failures
@@ -174,5 +194,6 @@ class VirtualTryOnService:
                 try_on.error_message = f"Background Thread Exception: {str(e)}"
                 try_on.processing_completed_at = timezone.now()
                 try_on.save()
+                broadcast(try_on)
             except:
                 pass

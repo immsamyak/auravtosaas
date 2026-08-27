@@ -56,29 +56,33 @@
  {% endif %}
 
  {% elif try_on.status == 'PROCESSING' or try_on.status == 'PENDING' or try_on.status == 'VALIDATING' %}
- <!-- Realtime Polling -->
+ <!-- Realtime WebSocket -->
  <script>
- function checkStatus() {
- fetch("{% url 'check_vto_status' variant.product.brand.slug try_on.id %}")
- .then(response => response.json())
- .then(data => {
- if (data.status === 'COMPLETED' || data.status === 'FAILED') {
- window.location.reload();
- } else {
- if (data.progress_percent !== undefined) {
- const progressBar = document.getElementById('vto-progress-bar');
- const progressText = document.getElementById('vto-progress-text');
- if (progressBar) progressBar.style.width = data.progress_percent + '%';
- if (progressText) progressText.innerText = data.progress_percent + '%';
- }
- setTimeout(checkStatus, 1500);
- }
- })
- .catch(err => {
- setTimeout(checkStatus, 3000);
- });
- }
- setTimeout(checkStatus, 1500);
+ const tryOnId = "{{ try_on.id }}";
+ const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+ const wsUrl = `${wsProtocol}//${window.location.host}/ws/vto/status/${tryOnId}/`;
+ 
+ const statusSocket = new WebSocket(wsUrl);
+
+ statusSocket.onmessage = function(e) {
+     const data = JSON.parse(e.data);
+     if (data.status === 'COMPLETED' || data.status === 'FAILED') {
+         window.location.reload();
+     } else {
+         if (data.progress_percent !== undefined) {
+             const progressBar = document.getElementById('vto-progress-bar');
+             const progressText = document.getElementById('vto-progress-text');
+             if (progressBar) progressBar.style.width = data.progress_percent + '%';
+             if (progressText) progressText.innerText = data.progress_percent + '%';
+         }
+     }
+ };
+
+ statusSocket.onclose = function(e) {
+     console.error('VTO Status socket closed unexpectedly');
+     // Fallback to reload after some time if socket fails
+     setTimeout(() => { window.location.reload(); }, 15000);
+ };
  </script>
  <div class="flex flex-col items-center text-center max-w-sm relative z-10 w-full px-8">
  
