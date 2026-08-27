@@ -10,7 +10,7 @@ def run_idm_vton_api():
         print("Failed to connect to API:", e)
         return
 
-    base_dir = r"E:\Aura\vtos"
+    base_dir = "/Users/saamyak/COllege Project/Aura/vtos"
     result_dir = os.path.join(base_dir, "result_api")
     os.makedirs(result_dir, exist_ok=True)
     
@@ -34,6 +34,9 @@ def run_idm_vton_api():
     count = 1
     
     for p_idx, person in enumerate(persons, 1):
+        if p_idx != 2:
+            count += len(garments)
+            continue
         for g_idx, (garment, desc) in enumerate(garments, 1):
             print(f"\n--- Processing Pair {count}/{total} via API ---")
             print(f"Person {p_idx}: {person}")

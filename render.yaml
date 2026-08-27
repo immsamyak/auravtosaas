@@ -3,7 +3,9 @@ databases:
     databaseName: aura_db
     user: aura_user
     plan: free
-
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere
 services:
   - type: web
     name: aura-backend
