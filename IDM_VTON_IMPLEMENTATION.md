@@ -47,3 +47,4 @@ pip install gradio_client
 
 ---
 *Ready for Git:* You can commit this file to your repository so your team knows how to configure the high-quality VTO model without crashing their local machines!
+
