@@ -1,26 +1,39 @@
 <div class="w-full py-20 bg-white text-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-serif font-bold text-black">{{ settings.heading|default:'Gallery' }}</h2>
-            <p class="mt-4 text-xl font-sans text-gray-600">{{ settings.subheading|default:'View our latest collections and lookbooks.' }}</p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-serif font-bold text-black">{{ settings.heading|default:'Gallery' }}</h2>
+<p class="mt-4 text-xl font-sans text-gray-600">{{ settings.subheading|default:'View our latest collections and lookbooks.' }}</p>
+</div>
+
+<div class="{% if settings.layout == '4_column' %}grid grid-cols-2 md:grid-cols-4 gap-4{% elif settings.layout == 'bento' %}grid grid-cols-2 md:grid-cols-4 gap-4{% elif settings.layout == 'carousel' %}flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scrollbar-hide{% else %}columns-2 md:columns-4 gap-6{% endif %}">
+            {% if settings.slides %}
+                {% for slide in settings.slides %}
+                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100 {% if settings.layout == 'carousel' %}flex-shrink-0 w-full md:w-[80vw] snap-center{% elif settings.layout == 'bento' %}{% if forloop.counter0|divisibleby:5 %}col-span-2 row-span-2{% endif %}{% elif settings.layout == '4_column' %}aspect-[4/5]{% else %}break-inside-avoid mb-6 inline-block w-full{% endif %}">
+<img alt="{{ slide.caption|default:'' }}" class="h-full w-full hover:scale-110 transition-transform duration-700 object-{{ settings.image_fit|default:'cover' }}" src="{{ slide.image_url|default:'#' }}"/>
+</div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback to original content -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="grid gap-6">
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80"/></div>
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80"/></div>
+</div>
+<div class="grid gap-6">
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80"/></div>
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80"/></div>
+</div>
+<div class="grid gap-6">
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1434389678278-be43e498c218?w=600&q=80"/></div>
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1520975954732-57dd22299614?w=600&q=80"/></div>
+</div>
+<div class="grid gap-6">
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80"/></div>
+<div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img alt="" class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1509631179647-0c37cb1100f6?w=600&q=80"/></div>
+</div>
+</div>
+            {% endif %}
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div class="grid gap-6">
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt=""></div>
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt=""></div>
-            </div>
-            <div class="grid gap-6">
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80" alt=""></div>
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt=""></div>
-            </div>
-            <div class="grid gap-6">
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1434389678278-be43e498c218?w=600&q=80" alt=""></div>
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1520975954732-57dd22299614?w=600&q=80" alt=""></div>
-            </div>
-            <div class="grid gap-6">
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80" alt=""></div>
-                <div class="overflow-hidden rounded-none shadow-xl shadow-gray-100"><img class="h-auto w-full object-cover hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1509631179647-0c37cb1100f6?w=600&q=80" alt=""></div>
-            </div>
-        </div>
-    </div>
+
+</div>
 </div>

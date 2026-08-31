@@ -120,27 +120,113 @@
                     </template>
 
                     <!-- Schema: HERO -->
-                    <template x-if="sections[activeSectionIndex].type === 'hero'">
+                                        <template x-if="sections[activeSectionIndex].type === 'hero'">
                         <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Banner Image URL</label>
-                                <input type="text" x-model="sections[activeSectionIndex].settings.image_url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Leave empty for default" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <!-- Image Upload & Preview -->
+                            <div class="border border-theme-border p-4 rounded-xl bg-white/50 space-y-3">
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase">Banner Image</label>
+                                <div class="flex items-center gap-4">
+                                    <template x-if="sections[activeSectionIndex].settings.image_url">
+                                        <div class="w-16 h-16 rounded-lg overflow-hidden border border-theme-border shrink-0">
+                                            <img :src="sections[activeSectionIndex].settings.image_url" class="w-full h-full object-cover">
+                                        </div>
+                                    </template>
+                                    <div class="flex-1">
+                                        <input type="file" accept="image/*" @change="uploadGenericImage($event, activeSectionIndex, 'image_url')" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Headline</label>
-                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            
+                            <!-- Layout Settings -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image Position</label>
+                                    <select x-model="sections[activeSectionIndex].settings.image_position" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                        <option value="">Right (Default)</option>
+                                        <option value="left">Left</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Text Alignment</label>
+                                    <select x-model="sections[activeSectionIndex].settings.text_alignment" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                        <option value="">Left (Default)</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Subheadline</label>
-                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+
+                            <!-- Text Content -->
+                            <!-- Global Top Announcement Bar -->
+                            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
+                                <label class="block text-xs font-bold text-indigo-800 uppercase mb-2"><i class="fa-solid fa-bullhorn mr-1"></i> Global Top Announcement Bar</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.top_announcement_text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. Free Shipping on all orders!" class="w-full px-3 py-2 bg-white border border-indigo-200 rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                             </div>
+                            
+                            <!-- Hero Badge -->
                             <div>
-                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Primary CTA Text</label>
-                                <input type="text" x-model="sections[activeSectionIndex].settings.cta_text" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Hero Badge Text</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.badge_text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. New Collection" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Primary CTA URL</label>
-                                <input type="text" x-model="sections[activeSectionIndex].settings.cta_url" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            
+                            <!-- Headline -->
+                            <div class="border border-theme-border p-3 rounded-xl space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Banner Heading</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-theme-text-muted uppercase mb-1">Font Color</label>
+                                        <input type="color" x-model="sections[activeSectionIndex].settings.heading_color" @input.debounce.500ms="triggerPreviewUpdate" class="w-full h-10 rounded cursor-pointer">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-theme-text-muted uppercase mb-1">Font Size (px)</label>
+                                        <input type="number" x-model="sections[activeSectionIndex].settings.heading_size" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. 72" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Subheadline -->
+                            <div class="border border-theme-border p-3 rounded-xl space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Subheadline</label>
+                                    <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-theme-text-muted uppercase mb-1">Font Color</label>
+                                        <input type="color" x-model="sections[activeSectionIndex].settings.subheading_color" @input.debounce.500ms="triggerPreviewUpdate" class="w-full h-10 rounded cursor-pointer">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-theme-text-muted uppercase mb-1">Font Size (px)</label>
+                                        <input type="number" x-model="sections[activeSectionIndex].settings.subheading_size" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. 18" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CTA 1 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Primary CTA Text</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.cta_text" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Primary CTA URL</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.cta_url" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                            </div>
+                            
+                            <!-- CTA 2 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Secondary CTA Text</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.secondary_cta_text" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Secondary CTA URL</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.secondary_cta_url" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
                             </div>
                         </div>
                     </template>
