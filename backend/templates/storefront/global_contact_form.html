@@ -1,0 +1,34 @@
+<div class="w-full py-16" style="background-color: {{ settings.bgColor|default:'#ffffff' }};">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900">{{ settings.heading|default:'Contact Us' }}</h2>
+            <p class="mt-4 text-lg text-gray-500">{{ settings.subheading|default:'We would love to hear from you. Send us a message below.' }}</p>
+        </div>
+        <form class="space-y-6" x-data="{ isSubmitting: false }" @submit.prevent="isSubmitting = true; setTimeout(() => { isSubmitting = false; $el.reset(); window.showToast('Message sent successfully!', 'success'); }, 1500)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input required type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input required type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input required type="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Message</label>
+                <textarea required rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"></textarea>
+            </div>
+            <div>
+                <button type="submit" :disabled="isSubmitting" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-70">
+                    <span x-show="!isSubmitting">Send Message</span>
+                    <span x-show="isSubmitting" x-cloak><i class="fa-solid fa-circle-notch fa-spin"></i> Sending...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

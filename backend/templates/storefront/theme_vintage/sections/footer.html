@@ -1,0 +1,31 @@
+<footer class="bg-sepia-100 border-t border-sepia-200 mt-24 py-16 px-6 noise-bg">
+<div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+{% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+{% else %}
+ <h2 class="font-serif text-3xl text-rust mb-4">{{ brand.name }}</h2>
+{% endif %}
+<p class="font-sans text-sepia-800 max-w-md mb-8 italic">{% if brand.description %}{{ brand.description }}{% else %}Curated vintage garments and timeless heritage pieces built to last a lifetime.{% endif %}</p>
+<div class="flex space-x-4 mt-6">
+ {% if brand.instagram_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
+ {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+ </div>
+
+<div class="flex gap-6 font-sans font-bold uppercase text-xs tracking-widest mb-12">
+<a class="hover:text-rust transition-colors" href="#">About</a>
+<a class="hover:text-rust transition-colors" href="#">Journal</a>
+<a class="hover:text-rust transition-colors" href="#">Contact</a>
+</div>
+<p class="font-sans text-sm text-sepia-800/60">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }} Mercantile Co.{% endif %}</p>
+</div>
+<div class="max-w-7xl mx-auto px-6 py-12 text-center">
+<h4 class="text-xl font-bold mb-4">Subscribe to our Newsletter</h4>
+<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex justify-center max-w-md mx-auto">
+<input class="px-4 py-2 border w-full text-black" placeholder="Your email address" required="" type="email" name="email"/>
+<button class="bg-black text-white px-6 py-2 font-bold" type="submit">Join</button>
+</form>
+</div>
+</footer>

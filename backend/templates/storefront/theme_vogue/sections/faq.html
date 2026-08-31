@@ -1,0 +1,28 @@
+<div class="w-full py-20 bg-white text-black">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-serif font-normal uppercase tracking-[0.3em] text-black">{{ settings.heading|default:'FAQ' }}</h2>
+            <p class="mt-4 text-xl font-sans font-light text-gray-500">{{ settings.subheading|default:'Find answers.' }}</p>
+        </div>
+        <div class="space-y-4" x-data="{ activeIndex: null }">
+            <div class="border border-gray-100 bg-white rounded-none shadow-2xl shadow-gray-100 overflow-hidden">
+                <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
+                    <h3 class="text-xl font-serif font-normal uppercase tracking-[0.3em] text-black text-inherit">What is your return policy?</h3>
+                    <i class="fa-solid fa-chevron-down transition-transform duration-300 text-gray-400" :class="activeIndex === 0 ? 'rotate-180' : ''"></i>
+                </button>
+                <div x-show="activeIndex === 0" x-collapse x-transition class="px-8 pb-6">
+                    <p class="font-sans font-light text-gray-500">We offer a 30-day return policy for all unworn items with original tags attached.</p>
+                </div>
+            </div>
+            <div class="border border-gray-100 bg-white rounded-none shadow-2xl shadow-gray-100 overflow-hidden">
+                <button @click="activeIndex = activeIndex === 1 ? null : 1" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
+                    <h3 class="text-xl font-serif font-normal uppercase tracking-[0.3em] text-black text-inherit">Do you ship internationally?</h3>
+                    <i class="fa-solid fa-chevron-down transition-transform duration-300 text-gray-400" :class="activeIndex === 1 ? 'rotate-180' : ''"></i>
+                </button>
+                <div x-show="activeIndex === 1" x-collapse x-transition class="px-8 pb-6">
+                    <p class="font-sans font-light text-gray-500">Yes, we ship to over 100 countries worldwide. Shipping costs are calculated at checkout.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

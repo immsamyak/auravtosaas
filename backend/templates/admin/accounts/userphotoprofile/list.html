@@ -103,7 +103,7 @@
  <td class="p-4 text-sm text-right space-x-3">
  <button @click="open = true" class="text-theme-text-muted font-bold hover:text-indigo-600 transition">View</button>
  <a href="{% url 'admin:userphotoprofile_edit' obj.pk %}" class="text-indigo-600 font-bold hover:text-indigo-800 transition">Edit</a>
- <button class="text-rose-600 font-bold hover:text-rose-800 transition" onclick="alert('Delete view not yet configured for userphotoprofile.')">Delete</button>
+ <button class="text-rose-600 font-bold hover:text-rose-800 transition" onclick="showToast('Delete view not yet configured for userphotoprofile.')">Delete</button>
  
  <!-- Alpine Modal -->
  <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" x-cloak>

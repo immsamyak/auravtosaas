@@ -1,0 +1,27 @@
+<section class="relative h-[85vh] flex items-center clip-path-angled bg-tech-dark">
+<!-- Background Image -->
+<div class="absolute inset-0 z-0">
+ {% if brand.banner %}
+ <img alt="Performance" class="w-full h-full object-cover opacity-50 mix-blend-luminosity" src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}"/>
+ {% else %}
+ <div class="w-full h-full bg-gradient-to-br from-tech-darker to-tech-dark"></div>
+ {% endif %}
+ <!-- Tech grid overlay -->
+<div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(#0ea5e9 1px, transparent 1px), linear-gradient(90deg, #0ea5e9 1px, transparent 1px); background-size: 50px 50px;"></div>
+</div>
+<!-- Content -->
+<div class="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center">
+<div class="w-full md:w-2/3">
+<h1 class="font-display font-bold text-7xl md:text-9xl uppercase italic tracking-wider leading-[0.8] mb-6 skew-x-custom drop-shadow-[0_0_15px_rgba(14,165,233,0.5)]">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Defy <br/>Gravity.{% endif %}</h1>
+<p class="font-sans font-semibold text-xl md:text-2xl text-gray-300 max-w-lg mb-10 border-l-4 border-tech-accent pl-4">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Experience the next generation of lightweight, breathable activewear engineered for elite athletes.{% endif %}</p>
+<div class="flex gap-4">
+<a class="bg-tech-accent hover:bg-tech-neon text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors" href="{{ brand.banner_cta_link|default:'#gear' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}<span class="inline-block unskew-x-custom">Shop Collection</span>{% endif %}</a>
+<a class="bg-white/10 hover:bg-white/20 text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors backdrop-blur-sm border border-white/20" href="#">
+{% if brand.banner_secondary_cta_text %}
+<a href="{{ brand.banner_secondary_cta_link|default:'#' }}" class="inline-block unskew-x-custom">{{ brand.banner_secondary_cta_text }}</a>
+{% endif %}
+</a>
+</div>
+</div>
+</div>
+</section>

@@ -1,0 +1,31 @@
+<div class="w-full py-16" style="background-color: {{ settings.bgColor|default:'#ffffff' }};">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900">{{ settings.heading|default:'Why Choose Us' }}</h2>
+            <p class="mt-4 text-lg text-gray-500">{{ settings.subheading|default:'We are dedicated to providing the best experience.' }}</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="text-center">
+                <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-truck-fast text-2xl text-indigo-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Fast Shipping</h3>
+                <p class="text-gray-500">Enjoy fast and reliable shipping on all orders, ensuring your items arrive on time.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-leaf text-2xl text-indigo-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Sustainable</h3>
+                <p class="text-gray-500">Our products are made from ethically sourced, sustainable materials.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-headset text-2xl text-indigo-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">24/7 Support</h3>
+                <p class="text-gray-500">Our customer service team is available around the clock to assist you.</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="w-full py-16" style="background-color: {{ settings.bgColor|default:'#f9fafb' }};">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="w-full md:w-1/2">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" alt="Feature" class="w-full h-auto rounded-xl shadow-lg">
+            </div>
+            <div class="w-full md:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{{ settings.heading|default:'Our Story' }}</h2>
+                <p class="text-lg text-gray-600 mb-8">{{ settings.subheading|default:'Learn more about our brand, our mission, and our values. We believe in quality, transparency, and building a community.' }}</p>
+                <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-colors">
+                    Read More
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

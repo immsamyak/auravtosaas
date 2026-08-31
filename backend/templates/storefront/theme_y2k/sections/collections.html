@@ -1,0 +1,33 @@
+{% load theme_tags %}
+<div class="w-full py-20 bg-fuchsia-100 text-fuchsia-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-sans font-black text-blue-500 drop-shadow-[2px_2px_0px_#ec4899] mb-4">{{ settings.heading|default:'Our Collections' }}</h2>
+            <p class="text-xl font-sans font-bold text-fuchsia-700">{{ settings.subheading|default:'Curated just for you.' }}</p>
+        </div>
+        {% if collections %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% filter_selected_items collections settings.selected_ids as featured_collections %}
+            {% with limit=settings.count|default:6 %}
+            {% for collection in featured_collections|slice:limit %}
+            <a href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}" class="group block relative overflow-hidden rounded-full shadow-[6px_6px_0px_0px_rgba(236,72,153,1)] border-4 border-pink-500 bg-white aspect-[4/5] img-hover">
+                {% if collection.image %}
+                <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="w-full h-full object-cover">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" alt="{{ collection.name }}" class="w-full h-full object-cover">
+                {% endif %}
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-8 text-center">
+                    <h3 class="text-4xl font-sans font-black text-blue-500 drop-shadow-[2px_2px_0px_#ec4899] text-white mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{{ collection.name }}</h3>
+                    <div class="bg-gradient-to-r from-pink-500 to-blue-500 text-white hover:from-pink-400 hover:to-blue-400 rounded-full font-black uppercase px-8 py-4 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700">View Collection</div>
+                </div>
+            </a>
+            {% endfor %}
+            {% endwith %}
+        </div>
+        {% else %}
+        <div class="text-center font-sans font-bold text-fuchsia-700 py-16 border-4 border-pink-500 bg-white rounded-full opacity-50">
+            <p>No collections found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>

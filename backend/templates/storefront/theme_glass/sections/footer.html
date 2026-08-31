@@ -1,0 +1,32 @@
+<footer class="glass border-t border-white/5 py-16 mt-20">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+<div>
+{% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+{% else %}
+ <h3 class="text-lg font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent mb-4">{{ brand.name }}</h3>
+{% endif %}
+<p class="text-white/40 text-sm leading-relaxed">{% if brand.description %}{{ brand.description }}{% else %}Sleek, modern fashion for the digital generation.{% endif %}</p>
+<div class="flex space-x-4 mt-6">
+ {% if brand.instagram_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
+ {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+ </div>
+
+</div>
+<div class="text-sm text-white/40 space-y-3">
+<a class="block hover:text-white transition-colors" href="#">FAQ</a>
+<a class="block hover:text-white transition-colors" href="#">Shipping</a>
+<a class="block hover:text-white transition-colors" href="#">Returns</a>
+</div>
+<div>
+<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex glass rounded-xl overflow-hidden">
+<input class="w-full px-4 py-3 bg-transparent outline-none text-white placeholder-white/30 text-sm" placeholder="Email address" type="email" name="email"/>
+<button class="bg-gradient-to-r from-indigo-500 to-pink-500 px-6 text-white font-semibold text-sm hover:opacity-80 transition-opacity" type="submit">Join</button>
+</form>
+</div>
+</div>
+<div class="text-center text-white/20 text-xs mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}{% endif %}</div>
+</footer>

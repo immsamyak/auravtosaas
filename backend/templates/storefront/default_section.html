@@ -1,0 +1,10 @@
+<section class="py-16 px-8 md:px-16" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+    <div class="max-w-4xl mx-auto text-center">
+        {% if settings.heading %}
+            <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">{{ settings.heading }}</h2>
+        {% endif %}
+        {% if settings.subheading %}
+            <p class="text-lg opacity-80">{{ settings.subheading }}</p>
+        {% endif %}
+    </div>
+</section>

@@ -1,0 +1,31 @@
+<section class="max-w-[1600px] mx-auto px-8 mb-20">
+<div class="asymmetric-grid min-h-[75vh]">
+<!-- Left: Text -->
+<div class="flex flex-col justify-end pb-16 pr-12">
+<span class="editorial-line"></span>
+<span class="font-sans text-xs font-bold uppercase tracking-[0.3em] text-theme-text-disabled mb-6">Collection 01</span>
+<h1 class="font-serif italic text-7xl md:text-9xl leading-[0.85] mb-8 text-black">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}L'Art<br/>du<br/>Corps{% endif %}</h1>
+<p class="font-sans text-theme-text-muted text-sm max-w-xs mb-10 leading-relaxed">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}An exploration of form, movement, and the poetry of the human silhouette in fabric.{% endif %}</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+<a class="font-sans font-bold text-xs uppercase tracking-[0.2em] border-b-2 border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-colors w-fit" href="{{ brand.banner_cta_link|default:'#pieces' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Discover the Collection{% endif %}</a>
+
+ {% if brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+ {{ brand.banner_secondary_cta_text }}
+ </a>
+ {% endif %}
+ 
+</div>
+</div>
+<!-- Right: Image -->
+<div class="bg-theme-bg-secondary overflow-hidden relative">
+ {% if brand.banner %}
+ <img alt="Couture" class="w-full h-full object-cover filter grayscale-[30%] contrast-110 hover:grayscale-0 transition-all duration-[2s]" src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-200">
+<span class="font-serif italic text-[12rem] text-gray-300/50 leading-none select-none">C</span>
+</div>
+ {% endif %}
+ </div>
+</div>
+</section>

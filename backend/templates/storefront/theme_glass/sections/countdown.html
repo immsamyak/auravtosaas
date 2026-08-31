@@ -1,0 +1,35 @@
+<div class="w-full py-20 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white" 
+    x-data="{ 
+        endDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(), 
+        days: 0, hours: 0, mins: 0, 
+        init() { this.update(); setInterval(() => this.update(), 60000); },
+        update() {
+            let distance = this.endDate - new Date().getTime();
+            if (distance < 0) { this.days = 0; this.hours = 0; this.mins = 0; return; }
+            this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            this.mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        }
+    }">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl md:text-6xl font-sans font-bold text-white drop-shadow-md mb-6">{{ settings.heading|default:'Flash Sale' }}</h2>
+        <p class="text-xl md:text-2xl font-sans text-white/90 mb-16">{{ settings.subheading|default:'Ends soon.' }}</p>
+        
+        <div class="flex items-center justify-center gap-6 md:gap-12">
+            <div class="border border-white/20 backdrop-blur-lg bg-white/10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] p-6 md:p-10 min-w-[100px] md:min-w-[160px]">
+                <div class="text-5xl md:text-7xl font-sans font-bold text-white drop-shadow-md text-inherit mb-2" x-text="days < 10 ? '0' + days : days">14</div>
+                <div class="font-sans text-white/90 uppercase tracking-widest text-inherit opacity-70">Days</div>
+            </div>
+            <div class="text-4xl md:text-6xl font-sans font-bold text-white drop-shadow-md text-inherit opacity-50">:</div>
+            <div class="border border-white/20 backdrop-blur-lg bg-white/10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] p-6 md:p-10 min-w-[100px] md:min-w-[160px]">
+                <div class="text-5xl md:text-7xl font-sans font-bold text-white drop-shadow-md text-inherit mb-2" x-text="hours < 10 ? '0' + hours : hours">08</div>
+                <div class="font-sans text-white/90 uppercase tracking-widest text-inherit opacity-70">Hours</div>
+            </div>
+            <div class="text-4xl md:text-6xl font-sans font-bold text-white drop-shadow-md text-inherit opacity-50">:</div>
+            <div class="border border-white/20 backdrop-blur-lg bg-white/10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] p-6 md:p-10 min-w-[100px] md:min-w-[160px]">
+                <div class="text-5xl md:text-7xl font-sans font-bold text-white drop-shadow-md text-inherit mb-2" x-text="mins < 10 ? '0' + mins : mins">45</div>
+                <div class="font-sans text-white/90 uppercase tracking-widest text-inherit opacity-70">Mins</div>
+            </div>
+        </div>
+    </div>
+</div>

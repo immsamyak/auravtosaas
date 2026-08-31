@@ -1,0 +1,51 @@
+<header class="fixed w-full top-0 z-50 bg-goth-bg/90 backdrop-blur-md border-b border-white/5">
+<div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
+ 
+ <!-- Navigation Links -->
+ <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
+        {% if settings.links %}
+            {% for link in settings.links %}
+                <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{{ link.url }}">{{ link.text }}</a>
+            {% endfor %}
+        {% else %}
+            
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
+ <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+ 
+        {% endif %}
+        </nav>
+
+ <!-- Logo -->
+ <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
+ {% if brand.logo %}
+ <a href="{% url 'storefront' brand.slug %}" class="inline-block">
+ <img src="{% if settings.logo_url %}{{ settings.logo_url }}{% else %}{{ brand.logo.url }}{% endif %}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
+ </a>
+ {% else %}
+ <a class="inline-block" href="{% url 'storefront' brand.slug %}">
+ <span class="text-3xl font-bold tracking-tight">{{ brand.name }}</span>
+ </a>
+ {% endif %}
+ </div>
+
+ <!-- Right Icons -->
+ <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
+ <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
+ <i class="fa-solid fa-bars text-lg"></i>
+ </button>
+ <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
+ <i class="fa-solid fa-magnifying-glass text-lg"></i>
+ </button>
+ <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
+ <i class="fa-regular fa-user text-lg"></i>
+ </a>
+ <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
+ <i class="fa-solid fa-bag-shopping text-lg"></i>
+ <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
+ </button>
+ </div>
+
+</div>
+</header>

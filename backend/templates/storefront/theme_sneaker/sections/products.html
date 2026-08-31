@@ -1,0 +1,69 @@
+{% load theme_tags %}
+<section class="py-24 max-w-7xl mx-auto px-6" id="drops">
+<div class="flex justify-between items-end mb-12 border-b border-white/5 pb-4">
+<h2 class="font-display text-4xl uppercase">All Releases</h2>
+<div class="hidden md:flex gap-4 font-sans text-sm font-semibold text-theme-text-muted">
+<button class="px-4 py-2 bg-theme-surface text-black rounded-lg">All</button>
+
+ {% with limit=settings.count|default:3 %}
+{% for cat in categories|slice:limit %}
+ <a class="px-4 py-2 hover:text-opacity-80 transition-colors" href="{% url 'storefront_shop' brand.slug %}?category={{ cat.id }}">{{ cat.name }}</a>
+ {% endfor %}
+{% endwith %}
+ 
+
+
+</div>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group bg-snkr-card rounded-2xl overflow-hidden border border-white/5 hover:border-snkr-red/30 transition-all duration-300">
+<a class="block aspect-square bg-snkr-surface overflow-hidden relative p-8" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-contain group-hover:scale-110 group-hover:rotate-[-5deg] transition-all duration-500 drop-shadow-2xl" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ </a>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-sans font-bold text-lg leading-tight"><a class="hover:text-snkr-red transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+<span class="bg-snkr-red/10 text-snkr-red font-sans font-bold text-xs px-2 py-1 rounded shrink-0 ml-2">NEW</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-display text-2xl">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
+<button class="bg-theme-surface text-black font-sans font-bold text-sm px-6 py-2 rounded-lg hover:bg-snkr-red hover:text-white transition-colors">
+ Buy Now
+ </button>
+</div>
+</div>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="text-center py-20 bg-snkr-surface rounded-2xl border border-white/5">
+<i class="fa-solid fa-shoe-prints text-5xl text-white/5 mb-4"></i>
+<h3 class="font-display text-3xl text-theme-text-secondary uppercase">No Releases Yet</h3>
+</div>
+ {% endif %}
+</section>

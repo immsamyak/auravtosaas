@@ -1,0 +1,55 @@
+{% load theme_tags %}
+<section class="py-20 px-6 md:px-12" id="shop">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-serif italic text-5xl text-boho-walnut mb-2">Handpicked Pieces</h2>
+<p class="font-sans text-boho-clay">Each item tells a story of craft and nature.</p>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group">
+<a class="block aspect-[3/4] rounded-2xl overflow-hidden mb-4 bg-boho-sand relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ <div class="absolute inset-0 bg-boho-walnut/0 group-hover:bg-boho-walnut/10 transition-colors duration-300 flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
+<span class="bg-theme-surface text-boho-walnut font-sans font-bold text-xs uppercase tracking-widest px-6 py-2 rounded-full shadow-md">Quick View</span>
+</div>
+</a>
+<div class="text-center">
+<h3 class="font-serif text-xl mb-1"><a class="hover:text-boho-terra transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+<p class="font-sans font-bold text-boho-terra">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
+</div>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="text-center py-20 bg-theme-surface rounded-3xl border border-boho-sand">
+<i class="fa-solid fa-seedling text-4xl text-boho-olive/30 mb-4"></i>
+<p class="font-serif italic text-2xl text-boho-clay/50">Growing something beautiful. Check back soon.</p>
+</div>
+ {% endif %}
+ </div>
+</section>

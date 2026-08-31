@@ -262,6 +262,20 @@ class NewsletterSubscriber(models.Model):
     def __str__(self):
         return f"{self.email} - {self.brand.name}"
 
+class BrandContactMessage(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='contact_messages')
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Message from {self.name} to {self.brand.name}"
+
 class EmailCampaign(models.Model):
     STATUS_CHOICES = (
         ('DRAFT', 'Draft'),
@@ -309,3 +323,37 @@ class APILog(models.Model):
         
     def __str__(self):
         return f"{self.method} {self.endpoint} [{self.status_code}]"
+
+class StorefrontLayout(models.Model):
+    brand = models.OneToOneField(Brand, on_delete=models.CASCADE, related_name='layout')
+    global_styles = models.JSONField(default=dict, blank=True, help_text="Colors, typography, spacing variables")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.brand.name} Layout"
+
+class StorefrontSection(models.Model):
+    SECTION_TYPES = (
+        ('hero', 'Hero'),
+        ('products', 'Product Grid'),
+        ('collections', 'Collections'),
+        ('categories', 'Categories'),
+        ('header', 'Header / Navbar'),
+        ('footer', 'Footer'),
+        ('testimonials', 'Testimonials'),
+        ('custom_html', 'Custom HTML'),
+        ('newsletter', 'Newsletter Form'),
+        ('announcement', 'Announcement Bar'),
+    )
+    layout = models.ForeignKey(StorefrontLayout, on_delete=models.CASCADE, related_name='sections')
+    section_type = models.CharField(max_length=50, choices=SECTION_TYPES)
+    name = models.CharField(max_length=100, blank=True, help_text="Optional internal name for the section")
+    display_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    settings = models.JSONField(default=dict, blank=True, help_text="Text content, background images, specific tweaks")
+    
+    class Meta:
+        ordering = ['display_order']
+
+    def __str__(self):
+        return f"{self.section_type} for {self.layout.brand.name}"

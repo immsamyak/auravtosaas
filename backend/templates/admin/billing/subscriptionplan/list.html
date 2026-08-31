@@ -49,7 +49,7 @@
  <div x-show="open" x-transition.opacity class="absolute right-0 mt-2 w-32 bg-theme-surface rounded-xl shadow-lg border border-theme-border-subtle overflow-hidden z-20">
  <a href="{% url 'admin:subscriptionplan_edit' obj.pk %}" class="block px-4 py-2 text-sm font-bold text-theme-text-secondary hover:bg-theme-surface-hover hover:text-indigo-600 transition">Edit Plan</a>
  
- <form method="post" action="#" onsubmit="alert('Delete functionality is not yet implemented.'); return false;">
+ <form method="post" action="#" onsubmit="showToast('Delete functionality is not yet implemented.'); return false;">
  {% csrf_token %}
  <button type="submit" class="w-full text-left px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50 transition">Delete</button>
  </form>

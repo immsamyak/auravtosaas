@@ -43,55 +43,82 @@
  </style>
 
 <style>.bg-theme-surface { background-color: #fdfcfb !important; } .text-theme-text-primary { color: inherit; }</style>
+
+ <!-- Alpine.js & Cart Store -->
+ <script>
+ document.addEventListener('alpine:init', () => {
+ Alpine.store('cart', {
+ items: (() => {
+ try {
+ const parsed = JSON.parse(localStorage.getItem('aura_cart') || '[]');
+ return Array.isArray(parsed) ? parsed : [];
+ } catch (e) {
+ console.warn('Cart parse error:', e);
+ return [];
+ }
+ })(),
+ add(item) {
+ const existing = this.items.find(i => i.id === item.id);
+ if (existing) {
+ existing.quantity += item.quantity || 1;
+ } else {
+ item.quantity = item.quantity || 1;
+ this.items.push(item);
+ }
+ this.save();
+ },
+ remove(index) {
+ this.items.splice(index, 1);
+ this.save();
+ },
+ get count() { 
+ return this.items.reduce((sum, item) => sum + item.quantity, 0); 
+ },
+ get total() { 
+ return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); 
+ },
+ checkout() {
+ if (this.items.length === 0) return;
+ window.location.href = `/checkout/{{ brand.slug }}/`;
+ },
+ save() { 
+ localStorage.setItem('aura_cart', JSON.stringify(this.items)); 
+ }
+ });
+ });
+ </script>
+ <style>[x-cloak] { display: none !important; }</style>
+
+<!-- Toastify Setup -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  window.showToast = function(msg, type='info') {
+    let bgColor = type === 'error' ? '#ef4444' : (type === 'success' ? '#10b981' : '#333');
+    Toastify({
+      text: msg,
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: bgColor,
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        padding: '12px 24px',
+        fontSize: '14px',
+        fontWeight: '500'
+      }
+    }).showToast();
+  };
+</script>
+
 </head>
 <body class="antialiased min-h-screen flex flex-col" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
 
 
  <!-- Header -->
- <header class="bg-hab-white border-b border-[#e5e0d8] sticky top-0 z-50">
-<div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
- 
- <!-- Navigation Links -->
- <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
- </nav>
-
- <!-- Logo -->
- <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
- {% if brand.logo %}
- <a href="{% url 'storefront' brand.slug %}" class="inline-block">
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
- </a>
- {% else %}
- <a class="inline-block" href="{% url 'storefront' brand.slug %}">
- <span class="text-3xl font-serif tracking-tight text-hab-wood">{{ brand.name }}</span>
- </a>
- {% endif %}
- </div>
-
- <!-- Right Icons -->
- <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
- <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
- <i class="fa-solid fa-bars text-lg"></i>
- </button>
- <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
- <i class="fa-solid fa-magnifying-glass text-lg"></i>
- </button>
- <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
- <i class="fa-regular fa-user text-lg"></i>
- </a>
- <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
- <i class="fa-solid fa-bag-shopping text-lg"></i>
- <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
- </button>
- </div>
-
-</div>
-</header>
+ {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/header.html" %}
 
  <!-- Main Content -->
  <main class="flex-grow">
@@ -99,77 +126,7 @@
  </main>
 
  <!-- Footer -->
- <footer class="bg-hab-wood text-hab-sand pt-20 pb-10 mt-auto">
- <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
- <div class="md:col-span-1">
- {% if brand.logo %}
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 object-contain mb-6 filter invert opacity-90">
- {% else %}
- {% if brand.logo %}
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
-{% else %}
- <h3 class="text-3xl font-serif mb-6 text-white">{{ brand.name }}</h3>
-{% endif %}
- {% endif %}
- {% if brand.description %}
- <p class="text-hab-sand/70 text-sm leading-relaxed mb-6">{{ brand.description }}</p>
- {% endif %}
- <div class="flex space-x-4">
- {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
- {% if brand.pinterest_url %}<a href="{{ brand.pinterest_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>{% endif %}
- {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-hab-wood transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
- </div>
- </div>
- 
- <div>
- <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Categories</h4>
- <ul class="space-y-3">
- {% for category in categories %}
- <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">{{ category.name }}</a></li>
- {% empty %}
- <li><span class="text-hab-sand/70 text-sm">All Products</span></li>
- {% endfor %}
- </ul>
- </div>
- 
- <div>
- <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Collections</h4>
- <ul class="space-y-3">
- {% for collection in collections %}
- <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">{{ collection.name }}</a></li>
- {% empty %}
- <li><span class="text-hab-sand/70 text-sm">Main Collection</span></li>
- {% endfor %}
- </ul>
- </div>
-
- <div>
- <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Contact</h4>
- <ul class="space-y-3">
- {% if brand.contact_email %}
- <li><a href="mailto:{{ brand.contact_email }}" class="text-hab-sand/70 hover:text-white transition-colors text-sm">Email Us</a></li>
- {% endif %}
- </ul>
- </div>
- </div>
- 
- <div class="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-hab-sand/50">
- <p>&copy; {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
- <p class="mt-4 md:mt-0">Powered by Aura</p>
- </div>
- 
- <div class="max-w-7xl mx-auto px-6 pb-8">
- <div class="text-center mb-6">
- <h4 class="text-sm font-medium uppercase tracking-widest text-stone-700 mb-2">Stay Inspired</h4>
- <p class="text-stone-400 text-sm">Design ideas and deals in your inbox.</p>
- </div>
- <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border border-stone-300 rounded-full overflow-hidden">
- <input type="email" name="email" placeholder="Your email address" required class="flex-1 px-5 py-3 bg-transparent outline-none text-sm text-stone-800 placeholder-stone-400">
- <button type="submit" class="px-6 py-3 bg-stone-800 text-white text-sm font-medium hover:bg-stone-700 transition-colors">Subscribe</button>
- </form>
- </div>
-
- </footer>
+ {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/footer.html" %}
 
  {% if whatsapp_addon and whatsapp_addon.is_active %}
  <a href="https://wa.me/{{ whatsapp_addon.whatsapp_number|urlencode }}?text={% if whatsapp_message %}{{ whatsapp_message|urlencode }}{% else %}{{ whatsapp_addon.whatsapp_instructions|urlencode }}{% endif %}" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-[#128C7E] hover:scale-110 transition-all z-50">
@@ -203,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
  if (typeof showToast === 'function') {
  showToast(data.message, data.success ? 'success' : 'error');
  } else {
- alert(data.message);
+ showToast(data.message);
  }
  if (data.success) emailInput.value = '';
  })

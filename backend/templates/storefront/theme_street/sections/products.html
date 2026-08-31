@@ -1,0 +1,59 @@
+{% load theme_tags %}
+<section class="py-20 px-4 md:px-8 max-w-[1400px] mx-auto" id="shop">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-display font-black text-5xl italic uppercase">Latest Drops</h2>
+<a class="font-bold text-neon hover:text-white uppercase tracking-widest text-sm underline decoration-2 underline-offset-4" href="{% url 'storefront_shop' brand.slug %}">View All</a>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group bg-surface brutal-border p-4 hover:brutal-shadow hover:-translate-y-2 transition-all duration-300 flex flex-col h-full relative">
+<a class="block aspect-square bg-[#111] brutal-border mb-4 overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ 
+ <!-- Hover overlay tag -->
+<div class="absolute top-3 left-3 bg-theme-surface text-black font-bold text-xs uppercase px-2 py-1 brutal-border opacity-0 group-hover:opacity-100 transition-opacity transform -rotate-3">
+ Click to view
+ </div>
+</a>
+<div class="mt-auto">
+<h3 class="font-display font-bold text-xl uppercase leading-tight mb-2 truncate"><a class="hover:text-neon" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+<div class="flex justify-between items-center">
+<p class="font-sans font-bold text-neon text-lg">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
+<button class="w-10 h-10 bg-theme-surface text-black brutal-border rounded-full flex items-center justify-center hover:bg-neon transition-colors" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >
+<i class="fa-solid fa-plus"></i>
+</button>
+</div>
+</div>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+</section>

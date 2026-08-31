@@ -1,0 +1,35 @@
+<section class="min-h-[85vh] flex flex-col md:flex-row border-b brutal-border">
+<!-- Left Text Area -->
+<div class="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-16 bg-surface border-b md:border-b-0 md:border-r brutal-border relative overflow-hidden">
+<div class="absolute inset-0 opacity-[0.03] z-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+<div class="relative z-10">
+<div class="inline-block bg-neon text-black font-bold px-3 py-1 text-sm mb-6 uppercase tracking-widest transform -rotate-2">
+ New Season
+ </div>
+<h1 class="font-display font-black text-7xl md:text-8xl leading-[0.9] uppercase tracking-tighter mb-6 italic text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-500" style="-webkit-text-stroke: 1px rgba(255,255,255,0.1);">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Rule <br/>The <br/>Streets.{% endif %}</h1>
+<p class="font-sans text-theme-text-disabled font-medium mb-10 max-w-sm">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}No compromises. Unapologetic design for the modern era.{% endif %}</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+<a class="inline-flex items-center justify-center bg-neon text-black font-bold uppercase tracking-wider px-8 py-4 brutal-border hover:bg-white hover:-translate-y-1 hover:brutal-shadow transition-all w-fit" href="{{ brand.banner_cta_link|default:'#shop' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop The Drop <i class="fa-solid fa-arrow-right ml-3"></i>{% endif %}</a>
+
+ {% if brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+ {{ brand.banner_secondary_cta_text }}
+ </a>
+ {% endif %}
+ 
+</div>
+</div>
+</div>
+<!-- Right Image Area -->
+<div class="w-full md:w-1/2 relative bg-dark">
+ {% if brand.banner %}
+ <img alt="Campaign Image" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700" src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}"/>
+ {% else %}
+ <div class="w-full h-full min-h-[400px] bg-[#111] flex items-center justify-center border-l brutal-border">
+<i class="fa-brands fa-drupal text-[10rem] text-[#222]"></i>
+</div>
+ {% endif %}
+ <!-- Distressed overlay -->
+<div class="absolute inset-0 mix-blend-overlay opacity-30 pointer-events-none" style="background: url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+</div>
+</section>

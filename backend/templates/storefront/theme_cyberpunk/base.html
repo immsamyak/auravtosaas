@@ -67,7 +67,15 @@
 <script>
  document.addEventListener('alpine:init', () => {
  Alpine.store('cart', {
- items: JSON.parse(localStorage.getItem('aura_cart') || '[]'),
+ items: (() => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('aura_cart') || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        console.warn('Cart parse error:', e);
+        return [];
+      }
+    })(),
  add(item) {
  // Check if already in cart
  const existing = this.items.find(i => i.id === item.id);
@@ -104,6 +112,30 @@
 <style>[x-cloak] { display: none !important; }</style>
 
 <style>.bg-theme-surface { background-color: #0c0c20 !important; } .text-theme-text-primary { color: inherit; }</style>
+
+<!-- Toastify Setup -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  window.showToast = function(msg, type='info') {
+    let bgColor = type === 'error' ? '#ef4444' : (type === 'success' ? '#10b981' : '#333');
+    Toastify({
+      text: msg,
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: bgColor,
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        padding: '12px 24px',
+        fontSize: '14px',
+        fontWeight: '500'
+      }
+    }).showToast();
+  };
+</script>
+
 </head>
 <body class="flex flex-col min-h-screen antialiased text-white bg-cyber-bg cyber-grid selection:bg-cyber-magenta/30" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
@@ -114,83 +146,10 @@
  </div>
  {% endif %}
 <!-- Header -->
-<header class="fixed w-full top-0 z-50 bg-cyber-bg/80 backdrop-blur-xl border-b border-cyber-cyan/20">
-<div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
- 
- <!-- Navigation Links -->
- <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
- </nav>
-
- <!-- Logo -->
- <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
- {% if brand.logo %}
- <a href="{% url 'storefront' brand.slug %}" class="inline-block">
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
- </a>
- {% else %}
- <a class="inline-block" href="{% url 'storefront' brand.slug %}">
- <span class="font-display text-xl text-cyber-cyan neon-text tracking-tight">{{ brand.name }}</span>
- </a>
- {% endif %}
- </div>
-
- <!-- Right Icons -->
- <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
- <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
- <i class="fa-solid fa-bars text-lg"></i>
- </button>
- <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
- <i class="fa-solid fa-magnifying-glass text-lg"></i>
- </button>
- <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
- <i class="fa-regular fa-user text-lg"></i>
- </a>
- <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
- <i class="fa-solid fa-bag-shopping text-lg"></i>
- <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
- </button>
- </div>
-
-</div>
-</header>
+{% include "storefront/"|add:brand.theme.template_folder|add:"/sections/header.html" %}
 <main class="flex-grow pt-16">{% block content %}{% endblock %}</main>
 <!-- Footer -->
-<footer class="bg-cyber-surface border-t border-cyber-cyan/10 py-16 mt-20 scanline relative">
-<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 font-mono text-sm">
-<div>
-<h3 class="font-display text-xl text-cyber-cyan neon-text mb-4">{{ brand.name|upper }}</h3>
-<p class="text-theme-text-muted leading-relaxed">{% if brand.description %}{{ brand.description }}{% else %}// Future-proof fashion for the digital age. Engineered for the next dimension.{% endif %}</p>
-<div class="flex space-x-4 mt-6">
- {% if brand.instagram_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
- {% if brand.facebook_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
- {% if brand.twitter_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
- {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
- {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
- </div>
-
-</div>
-<div>
-<h4 class="text-cyber-magenta font-bold mb-4 uppercase">&gt; Links_</h4>
-<ul class="space-y-2 text-theme-text-muted">
-<li><a class="hover:text-cyber-cyan transition-colors" href="#">$ Shop</a></li>
-<li><a class="hover:text-cyber-cyan transition-colors" href="#">$ Support</a></li>
-<li><a class="hover:text-cyber-cyan transition-colors" href="#">$ Returns</a></li>
-</ul>
-</div>
-<div>
-<h4 class="text-cyber-magenta font-bold mb-4 uppercase">&gt; Newsletter_</h4>
-<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex border border-cyber-cyan/30 focus-within:border-cyber-cyan transition-colors">
-<input class="bg-transparent w-full px-4 py-2 outline-none text-gray-300 placeholder-gray-600 font-mono" placeholder="your@email.io" type="email" name="email"/>
-<button class="bg-cyber-cyan text-black px-4 py-2 font-bold hover:bg-cyber-magenta transition-colors" type="submit">OK</button>
-</form>
-</div>
-</div>
-<div class="text-center text-theme-text-secondary text-xs font-mono mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }} // ALL_RIGHTS_RESERVED{% endif %}</div>
-</footer>
+{% include "storefront/"|add:brand.theme.template_folder|add:"/sections/footer.html" %}
 <!-- Search Modal -->
 <div class="fixed inset-0 z-[100] flex items-start justify-center pt-20" style="display: none;" x-show="isSearchOpen" x-transition.opacity="">
 <div @click="isSearchOpen = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
@@ -391,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
  if (typeof showToast === 'function') {
  showToast(data.message, data.success ? 'success' : 'error');
  } else {
- alert(data.message);
+ showToast(data.message);
  }
  if (data.success) emailInput.value = '';
  })

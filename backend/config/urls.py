@@ -22,7 +22,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
 
+from django.http import HttpResponse
+
 urlpatterns = [
+    path('favicon.ico', lambda x: HttpResponse(status=204)),
     path('admin/', include('apps.admin.urls')),
     path('django-admin/', admin.site.urls),
     path('api/', include('api.urls')),
@@ -55,3 +58,4 @@ if settings.DEBUG:
     ]
 
 handler404 = 'apps.core.views.custom_404_view'
+

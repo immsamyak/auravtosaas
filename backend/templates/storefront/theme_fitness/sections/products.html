@@ -1,0 +1,56 @@
+{% load theme_tags %}
+<section id="shop" class="py-24 bg-theme-surface">
+ <div class="max-w-7xl mx-auto px-6">
+ <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b-8 border-black pb-4">
+ <h2 class="text-6xl font-display font-bold text-black">NEW GEAR</h2>
+ </div>
+
+ {% if products %}
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group bg-theme-surface border-4 border-black p-4 flex flex-col hard-shadow">
+ <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-[4/5] bg-theme-bg-secondary mb-6 overflow-hidden border-2 border-black">
+ {% if product.variants.first.image %}
+ <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';">
+ {% else %}
+ <div class="w-full h-full flex flex-col items-center justify-center text-theme-text-disabled">
+ <i class="fa-solid fa-dumbbell text-6xl mb-4"></i>
+ </div>
+ {% endif %}
+ </a>
+ 
+ <div class="flex-1 flex flex-col">
+ <h3 class="text-2xl font-display font-bold text-black mb-2 line-clamp-2 uppercase"><a href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+ 
+ <div class="mt-auto pt-6 flex items-center justify-between">
+ <span class="text-3xl font-display font-bold text-black">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
+ <button class="bg-black text-white font-display text-xl font-bold px-6 py-2 hover:bg-yellow-500 hover:text-black transition-colors">
+ ADD
+ </button>
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="bg-theme-bg-secondary border-4 border-black p-20 text-center">
+ <h3 class="text-6xl font-display font-bold text-black mb-4">RESTOCKING SOON</h3>
+ <p class="text-xl font-medium text-theme-text-secondary">The armory is currently empty. Check back for the next drop.</p>
+ </div>
+ {% endif %}
+ </div>
+</section>

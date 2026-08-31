@@ -1,0 +1,11 @@
+<section class="bg-[#fcfcfb] overflow-hidden flex items-center justify-center relative min-h-[60vh]">
+ <div class="absolute inset-0 w-full h-full">
+ {% if brand.banner %}
+ <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover">
+ {% else %}
+ <div class="w-full h-full bg-glow-sand flex flex-col items-center justify-center text-glow-charcoal">
+ <span class="text-4xl font-serif tracking-tight">{{ brand.name }}</span>
+ </div>
+ {% endif %}
+ </div>
+</section>

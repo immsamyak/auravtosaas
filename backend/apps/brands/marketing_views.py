@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from .models import Brand, PopupBanner, Coupon, NewsletterSubscriber, EmailCampaign
+from .models import Brand, PopupBanner, Coupon, NewsletterSubscriber, EmailCampaign, BrandContactMessage
+from apps.core.models import ContactMessage, BlogPost
 
 @login_required
 def marketing_dashboard_view(request):
@@ -348,6 +349,30 @@ def newsletter_subscribe_api(request, brand_slug):
     else:
         return JsonResponse({'success': True, 'message': 'You are already subscribed!'})
 
+@require_POST
+def contact_submit_api(request, brand_slug):
+    """Public AJAX endpoint for storefront contact forms."""
+    brand = get_object_or_404(Brand, slug=brand_slug)
+    first_name = request.POST.get('first_name', '').strip()
+    last_name = request.POST.get('last_name', '').strip()
+    email = request.POST.get('email', '').strip().lower()
+    message = request.POST.get('message', '').strip()
+    
+    if not email or '@' not in email or not message:
+        return JsonResponse({'success': False, 'message': 'Please provide a valid email and message.'}, status=400)
+    
+    name = f"{first_name} {last_name}".strip() or "Anonymous"
+    
+    # Save to the brand's specific contact messages table
+    BrandContactMessage.objects.create(
+        brand=brand,
+        name=name,
+        email=email,
+        message=message
+    )
+    
+    return JsonResponse({'success': True, 'message': 'Your message has been sent successfully!'})
+
 # ==========================================
 # EMAIL CAMPAIGNS
 # ==========================================
@@ -539,3 +564,302 @@ def campaign_send_view(request, campaign_id):
         messages.error(request, f"Failed to send campaign: {str(e)}")
         
     return redirect('campaign_list')
+
+# ==========================================
+# CONTACT MESSAGES
+# ==========================================
+
+@login_required
+def contact_messages_list_view(request):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    messages_list = BrandContactMessage.objects.filter(brand=brand).order_by('-created_at')
+    total_count = messages_list.count()
+    unread_count = messages_list.filter(is_read=False).count()
+    read_count = total_count - unread_count
+    
+    return render(request, 'brands/marketing/contact_messages.html', {
+        'brand': brand,
+        'messages_list': messages_list,
+        'total_count': total_count,
+        'unread_count': unread_count,
+        'read_count': read_count,
+        'active_tab': 'marketing'
+    })
+
+@login_required
+@require_POST
+def contact_message_toggle_read_view(request, message_id):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    contact_msg = get_object_or_404(BrandContactMessage, id=message_id, brand=brand)
+    contact_msg.is_read = not contact_msg.is_read
+    contact_msg.save()
+    
+    return redirect('contact_messages_list')
+
+@login_required
+@require_POST
+def contact_message_reply_view(request, message_id):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    contact_msg = get_object_or_404(BrandContactMessage, id=message_id, brand=brand)
+    reply_body = request.POST.get('reply_body', '').strip()
+    
+    if not reply_body:
+        messages.error(request, "Reply cannot be empty.")
+        return redirect('contact_messages_list')
+    
+    try:
+        from apps.core.email_utils import get_dynamic_email_backend
+        from apps.core.models import GlobalSettings
+        from django.core.mail import EmailMultiAlternatives
+        
+        global_settings = GlobalSettings.get_settings()
+        backend = get_dynamic_email_backend()
+        from_email = f"{brand.name} <{global_settings.support_email}>"
+        
+        subject = f"Re: Your message to {brand.name}"
+        full_body = (
+            f"Hi {contact_msg.name},\n\n"
+            f"{reply_body}\n\n"
+            f"---\n"
+            f"Best regards,\n"
+            f"{brand.name}\n"
+        )
+        
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=full_body,
+            from_email=from_email,
+            to=[contact_msg.email],
+            connection=backend,
+        )
+        email.send()
+        
+        # Mark as read after replying
+        contact_msg.is_read = True
+        contact_msg.save()
+        messages.success(request, f"Reply sent successfully to {contact_msg.email}.")
+    except ValueError as e:
+        messages.error(request, f"Email not configured: {str(e)} Please set up SMTP in Admin → Global Settings → SMTP tab.")
+    except Exception as e:
+        messages.error(request, f"Failed to send reply: {str(e)}")
+    
+    return redirect('contact_messages_list')
+
+@login_required
+@require_POST
+def contact_message_mark_all_read_view(request):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+    
+    BrandContactMessage.objects.filter(brand=brand, is_read=False).update(is_read=True)
+    messages.success(request, "All messages marked as read.")
+    return redirect('contact_messages_list')
+
+@login_required
+@require_POST
+def contact_message_delete_view(request, message_id):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    contact_msg = get_object_or_404(BrandContactMessage, id=message_id, brand=brand)
+    contact_msg.delete()
+    messages.success(request, "Message deleted successfully.")
+    
+    return redirect('contact_messages_list')
+
+
+# ==========================================
+# BRAND DASHBOARD: BLOG MANAGEMENT
+# ==========================================
+
+@login_required
+def dashboard_blog_list_view(request):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    posts = BlogPost.objects.filter(brand=brand).order_by('-created_at')
+    
+    from django.core.paginator import Paginator
+    paginator = Paginator(posts, 10)  # Show 10 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'brands/marketing/blog_list.html', {
+        'brand': brand,
+        'posts': page_obj,  # Pass the paginated object as 'posts'
+        'page_obj': page_obj, # Pass 'page_obj' for pagination.html
+        'active_tab': 'marketing'
+    })
+
+@login_required
+def dashboard_blog_create_view(request):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        slug = request.POST.get('slug')
+        content = request.POST.get('content')
+        excerpt = request.POST.get('excerpt', '')
+        author_name = request.POST.get('author_name', 'Aura Team')
+        is_published = request.POST.get('is_published') == 'on'
+        featured_image = request.FILES.get('featured_image')
+        
+        from django.utils import timezone
+        published_at = timezone.now() if is_published else None
+        
+        try:
+            BlogPost.objects.create(
+                brand=brand,
+                title=title,
+                slug=slug,
+                content=content,
+                excerpt=excerpt,
+                author_name=author_name,
+                is_published=is_published,
+                published_at=published_at,
+                featured_image=featured_image
+            )
+            messages.success(request, "Blog post created successfully.")
+            return redirect('dashboard_blog_list')
+        except Exception as e:
+            messages.error(request, f"Error creating blog post: {str(e)}")
+            
+    from django.urls import reverse
+    breadcrumb_links = [{'name': 'Blog Posts', 'url': reverse('dashboard_blog_list')}]
+    return render(request, 'brands/marketing/blog_form.html', {
+        'brand': brand,
+        'active_tab': 'marketing',
+        'breadcrumb_links': breadcrumb_links
+    })
+
+@login_required
+def dashboard_blog_edit_view(request, post_id):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    post = get_object_or_404(BlogPost, id=post_id, brand=brand)
+    
+    if request.method == 'POST':
+        post.title = request.POST.get('title')
+        post.slug = request.POST.get('slug')
+        post.content = request.POST.get('content')
+        post.excerpt = request.POST.get('excerpt', '')
+        post.author_name = request.POST.get('author_name', 'Aura Team')
+        
+        was_published = post.is_published
+        post.is_published = request.POST.get('is_published') == 'on'
+        
+        if post.is_published and not was_published:
+            from django.utils import timezone
+            post.published_at = timezone.now()
+            
+        if 'featured_image' in request.FILES:
+            post.featured_image = request.FILES['featured_image']
+            
+        try:
+            post.save()
+            messages.success(request, "Blog post updated successfully.")
+            return redirect('dashboard_blog_list')
+        except Exception as e:
+            messages.error(request, f"Error updating blog post: {str(e)}")
+            
+    from django.urls import reverse
+    breadcrumb_links = [{'name': 'Blog Posts', 'url': reverse('dashboard_blog_list')}]
+    return render(request, 'brands/marketing/blog_form.html', {
+        'brand': brand,
+        'post': post,
+        'active_tab': 'marketing',
+        'breadcrumb_links': breadcrumb_links
+    })
+
+@login_required
+@require_POST
+def dashboard_blog_delete_view(request, post_id):
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+        
+    post = get_object_or_404(BlogPost, id=post_id, brand=brand)
+    post.delete()
+    messages.success(request, "Blog post deleted successfully.")
+    
+    return redirect('dashboard_blog_list')
+

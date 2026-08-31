@@ -31,6 +31,30 @@
  color: #312e81; /* indigo-900 */
  }
  </style>
+
+<!-- Toastify Setup -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  window.showToast = function(msg, type='info') {
+    let bgColor = type === 'error' ? '#ef4444' : (type === 'success' ? '#10b981' : '#333');
+    Toastify({
+      text: msg,
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: bgColor,
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        padding: '12px 24px',
+        fontSize: '14px',
+        fontWeight: '500'
+      }
+    }).showToast();
+  };
+</script>
+
 </head>
 <body class="bg-theme-bg-base dark:bg-slate-800/50/80 text-theme-text-base antialiased min-h-screen flex flex-col relative selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300">
  

@@ -1,0 +1,57 @@
+<div class="w-full py-20 bg-gray-900 text-cyan-400">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)]">{{ settings.heading|default:'Contact Us' }}</h2>
+            <p class="mt-4 text-xl font-mono text-cyan-400">{{ settings.subheading|default:'We would love to hear from you.' }}</p>
+        </div>
+        <form class="space-y-6 border-2 border-pink-500 bg-black rounded-none shadow-[0_0_15px_rgba(236,72,153,0.5)] p-8 md:p-12" 
+              x-data="{ isSubmitting: false }" 
+              @submit.prevent="
+                isSubmitting = true; 
+                fetch('{% url 'contact_submit' brand.slug %}', {
+                    method: 'POST',
+                    body: new FormData($el),
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    isSubmitting = false;
+                    if (data.success) {
+                        $el.reset();
+                        window.showToast(data.message || 'Message sent successfully!', 'success');
+                    } else {
+                        window.showToast(data.message || 'An error occurred.', 'error');
+                    }
+                })
+                .catch(error => {
+                    isSubmitting = false;
+                    window.showToast('Failed to send message.', 'error');
+                })
+              ">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block mb-2 font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)] text-inherit">First Name</label>
+                    <input required type="text" name="first_name" class="w-full bg-transparent border-2 border-pink-500 bg-black rounded-none p-4 focus:outline-none focus:ring-2 focus:ring-current font-mono text-cyan-400 text-inherit">
+                </div>
+                <div>
+                    <label class="block mb-2 font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)] text-inherit">Last Name</label>
+                    <input required type="text" name="last_name" class="w-full bg-transparent border-2 border-pink-500 bg-black rounded-none p-4 focus:outline-none focus:ring-2 focus:ring-current font-mono text-cyan-400 text-inherit">
+                </div>
+            </div>
+            <div>
+                <label class="block mb-2 font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)] text-inherit">Email Address</label>
+                <input required type="email" name="email" class="w-full bg-transparent border-2 border-pink-500 bg-black rounded-none p-4 focus:outline-none focus:ring-2 focus:ring-current font-mono text-cyan-400 text-inherit">
+            </div>
+            <div>
+                <label class="block mb-2 font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)] text-inherit">Message</label>
+                <textarea required rows="5" name="message" class="w-full bg-transparent border-2 border-pink-500 bg-black rounded-none p-4 focus:outline-none focus:ring-2 focus:ring-current font-mono text-cyan-400 text-inherit"></textarea>
+            </div>
+            <div class="pt-4">
+                <button type="submit" :disabled="isSubmitting" class="w-full flex justify-center bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black uppercase font-bold px-8 py-4 rounded-none transition-all disabled:opacity-70">
+                    <span x-show="!isSubmitting">Send Message</span>
+                    <span x-show="isSubmitting" x-cloak><i class="fa-solid fa-circle-notch fa-spin"></i> Sending...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

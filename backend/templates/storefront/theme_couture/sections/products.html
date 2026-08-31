@@ -1,0 +1,59 @@
+{% load theme_tags %}
+<section class="max-w-[1600px] mx-auto px-8 mb-20" id="pieces">
+<div class="flex items-center mb-16">
+<span class="editorial-line"></span>
+<span class="font-sans text-xs font-bold uppercase tracking-[0.3em] text-theme-text-disabled mr-6">Selected Pieces</span>
+<div class="flex-grow h-px bg-gray-200"></div>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ {% if forloop.counter|divisibleby:3 %}
+ <div class="md:col-span-8 group">
+ {% elif forloop.counter0|divisibleby:2 %}
+ <div class="md:col-span-4 group">
+ {% else %}
+ <div class="md:col-span-5 group">
+ {% endif %}
+ <a class="block overflow-hidden relative {% if forloop.counter|divisibleby:3 %}aspect-[16/9]{% else %}aspect-[3/4]{% endif %} bg-theme-bg-secondary" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-1000" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ 
+ <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 flex items-end p-8">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
+<h3 class="font-serif italic text-2xl text-white mb-1">{{ product.name }}</h3>
+<p class="font-sans text-white/70 text-sm">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
+</div>
+</div>
+</a>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="text-center py-32">
+<p class="font-serif italic text-3xl text-gray-300">The atelier is preparing the next collection.</p>
+</div>
+ {% endif %}
+</div></div></section>

@@ -1,0 +1,30 @@
+<div class="relative w-full h-[70vh] md:h-[90vh] bg-white overflow-hidden" 
+    x-data="{ 
+        activeSlide: 0,
+        slides: [
+            'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80',
+            'https://images.unsplash.com/photo-1434389678278-be43e498c218?w=1920&q=80'
+        ],
+        init() { setInterval(() => { this.activeSlide = (this.activeSlide + 1) % this.slides.length; }, 6000); }
+    }">
+    <template x-for="(slide, index) in slides" :key="index">
+        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out" 
+             :class="activeSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+            <img :src="slide" alt="Slideshow Background" class="w-full h-full object-cover opacity-60">
+        </div>
+    </template>
+
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 z-20 pointer-events-none">
+        <h1 class="text-5xl md:text-7xl font-sans font-medium tracking-tight text-black text-white mb-6 pointer-events-auto">{{ settings.heading|default:'New Collection' }}</h1>
+        <p class="text-2xl md:text-3xl font-sans text-gray-500 text-gray-200 max-w-4xl mb-12 pointer-events-auto">{{ settings.subheading|default:"Discover the season's most anticipated styles." }}</p>
+        <div class="flex gap-6 pointer-events-auto">
+            <a href="{% url 'storefront_shop' brand.slug %}" class="bg-black text-white hover:bg-gray-800 rounded-sm px-8 py-4 rounded-none">Shop Now</a>
+        </div>
+    </div>
+    <div class="absolute bottom-10 left-0 right-0 flex justify-center gap-4 z-20 pointer-events-auto">
+        <template x-for="(slide, index) in slides" :key="index">
+            <button @click="activeSlide = index" class="w-4 h-4 rounded-full transition-colors" :class="activeSlide === index ? 'bg-white' : 'bg-white/30 hover:bg-white/60'"></button>
+        </template>
+    </div>
+</div>

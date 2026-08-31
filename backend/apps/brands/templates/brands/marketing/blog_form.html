@@ -1,0 +1,188 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}{% if post %}Edit Blog Post{% else %}New Blog Post{% endif %} - {{ brand.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    <!-- Header -->
+    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            {% include 'components/breadcrumb.html' with links=breadcrumb_links current=post|yesno:"Edit Post,New Post" %}
+            <h1 class="text-3xl font-extrabold text-theme-text-primary tracking-tight">{% if post %}Edit Blog Post{% else %}New Blog Post{% endif %}</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="{% url 'dashboard_blog_list' %}" class="px-5 py-2.5 rounded-xl border border-theme-border text-theme-text-primary text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                Cancel
+            </a>
+            <button type="submit" form="blogForm" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-bold shadow-sm shadow-indigo-200 hover:bg-indigo-700 transition-colors">
+                Save Post
+            </button>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="blogForm">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Main Content (Left) -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <div class="bg-theme-surface rounded-2xl border border-theme-border shadow-sm p-8">
+                    <div class="space-y-6">
+                        <!-- Title -->
+                        <div>
+                            <label for="title" class="block text-sm font-bold text-theme-text-primary mb-2">Title *</label>
+                            <input type="text" name="title" id="title" value="{{ post.title|default:'' }}" required
+                                   oninput="document.getElementById('slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')"
+                                   class="w-full bg-theme-bg-secondary border border-theme-border rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors">
+                        </div>
+
+                        <!-- Content -->
+                        <div>
+                            <label for="content" class="block text-sm font-bold text-theme-text-primary mb-2">Content *</label>
+                            <textarea name="content" id="content" class="w-full bg-theme-bg-secondary border border-theme-border rounded-xl px-4 py-2.5 text-sm transition-colors">{{ post.content|default:'' }}</textarea>
+                        </div>
+                        
+                        <!-- Excerpt -->
+                        <div>
+                            <label for="excerpt" class="block text-sm font-bold text-theme-text-primary mb-2">Excerpt</label>
+                            <textarea name="excerpt" id="excerpt" rows="3"
+                                      class="w-full bg-theme-bg-secondary border border-theme-border rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors">{{ post.excerpt|default:'' }}</textarea>
+                            <p class="mt-1 text-xs text-theme-text-muted">Short description shown on the blog listing page.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sidebar (Right) -->
+            <div class="space-y-8">
+                
+                <!-- Publishing & Meta -->
+                <div class="bg-theme-surface rounded-2xl border border-theme-border shadow-sm p-6">
+                    <h3 class="text-sm font-bold text-theme-text-primary mb-4 uppercase tracking-wider">Publishing</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Publishing Status -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm font-bold text-theme-text-primary">Publish Post</div>
+                                <div class="text-xs text-theme-text-muted">Make visible on storefront</div>
+                            </div>
+                            <label class="relative flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_published" id="is_published" class="sr-only peer" {% if post.is_published %}checked{% endif %}>
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 shadow-inner"></div>
+                            </label>
+                        </div>
+
+                        <hr class="border-theme-border">
+
+                        <!-- Slug -->
+                        <div>
+                            <label for="slug" class="block text-sm font-bold text-theme-text-primary mb-2">URL Slug *</label>
+                            <input type="text" name="slug" id="slug" value="{{ post.slug|default:'' }}" required
+                                   class="w-full bg-theme-bg-secondary border border-theme-border rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors">
+                        </div>
+
+                        <!-- Author -->
+                        <div>
+                            <label for="author_name" class="block text-sm font-bold text-theme-text-primary mb-2">Author Name</label>
+                            <input type="text" name="author_name" id="author_name" value="{{ post.author_name|default:'Aura Team' }}"
+                                   class="w-full bg-theme-bg-secondary border border-theme-border rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Image -->
+                <div class="bg-theme-surface rounded-2xl border border-theme-border shadow-sm p-6" x-data="imagePreview('{% if post.featured_image %}{{ post.featured_image.url }}{% endif %}')">
+                    <h3 class="text-sm font-bold text-theme-text-primary mb-4 uppercase tracking-wider">Featured Image</h3>
+                    
+                    <div class="mt-2 text-center">
+                        <template x-if="imageUrl">
+                            <div class="mb-4 relative rounded-xl overflow-hidden border border-theme-border aspect-video group">
+                                <img :src="imageUrl" alt="Preview" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <button type="button" @click="clearImage" class="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 transition">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <template x-if="!imageUrl">
+                            <div class="mb-4 aspect-video rounded-xl border-2 border-dashed border-theme-border flex flex-col items-center justify-center bg-theme-bg-secondary text-theme-text-muted">
+                                <i class="fa-regular fa-image text-3xl mb-2"></i>
+                                <span class="text-xs font-medium">No image selected</span>
+                            </div>
+                        </template>
+                        
+                        <div class="relative">
+                            <input type="file" name="featured_image" id="featured_image" accept="image/*" @change="fileChosen" class="hidden">
+                            <label for="featured_image" class="cursor-pointer inline-flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-800 text-theme-text-primary rounded-lg text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                <i class="fa-solid fa-upload mr-2"></i> Choose Image
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- TinyMCE Rich Text Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if(typeof tinymce !== 'undefined') {
+            tinymce.init({
+                selector: '#content',
+                height: 600,
+                menubar: true,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                         'bold italic textcolor | alignleft aligncenter ' +
+                         'alignright alignjustify | bullist numlist outdent indent | ' +
+                         'removeformat | code | help',
+                content_style: 'body { font-family: "Plus Jakarta Sans", sans-serif; font-size:16px }',
+                skin: (window.matchMedia("(prefers-color-scheme: dark)").matches ? "oxide-dark" : "oxide"),
+                content_css: (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default"),
+                branding: false,
+                promotion: false,
+                setup: function (editor) {
+                    editor.on('change', function () {
+                        editor.save();
+                    });
+                }
+            });
+        }
+    });
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('imagePreview', (initialUrl) => ({
+            imageUrl: initialUrl,
+            fileChosen(event) {
+                const file = event.target.files[0];
+                if (!file) {
+                    this.imageUrl = initialUrl;
+                    return;
+                }
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = e => this.imageUrl = e.target.result;
+            },
+            clearImage() {
+                this.imageUrl = '';
+                document.getElementById('featured_image').value = '';
+            }
+        }));
+    });
+</script>
+{% endblock %}

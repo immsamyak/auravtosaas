@@ -1,135 +1,19 @@
 {% extends "storefront/theme_vintage/base.html" %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="vintage-border rounded-xl p-4 md:p-8 bg-theme-surface mb-16 shadow-lg shadow-sepia-900/5">
-<div class="flex flex-col md:flex-row gap-8 items-center">
-<div class="flex-1 text-center md:text-left">
-<span class="font-sans font-bold text-rust uppercase tracking-widest text-sm mb-2 block">New Arrivals</span>
-<h1 class="font-serif text-5xl md:text-7xl mb-6 leading-tight">{% if brand.banner_title %}{{ brand.banner_title }}{% else %}The Heritage <br/>Collection{% endif %}</h1>
-<p class="font-sans text-lg text-sepia-800 mb-8 max-w-md mx-auto md:mx-0">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Heavyweight flannel, durable denim, and classic silhouettes designed for the modern trailblazer.{% endif %}</p>
-<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
-<a class="inline-block bg-sepia-900 text-sepia-50 font-sans font-bold uppercase tracking-widest px-8 py-4 rounded hover:bg-rust transition-colors" href="{{ brand.banner_cta_link|default:'#shop' }}">{% if brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop the Collection{% endif %}</a>
-
- {% if brand.banner_secondary_cta_text %}
- <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
- {{ brand.banner_secondary_cta_text }}
- </a>
- {% endif %}
- 
-</div>
-</div>
-<div class="flex-1 w-full aspect-square md:aspect-[4/3] rounded-lg overflow-hidden border border-sepia-200">
- {% if brand.banner %}
- <img alt="Hero" class="w-full h-full object-cover filter sepia-[0.3] contrast-125" src="{{ brand.banner.url }}"/>
- {% else %}
- <div class="w-full h-full bg-sepia-200 flex items-center justify-center">
-<i class="fa-solid fa-camera-retro text-6xl text-sepia-800/30"></i>
-</div>
- {% endif %}
- </div>
-</div>
-</section>
-<!-- Product Grid -->
-<section class="mb-20" id="shop">
-<div class="text-center mb-12 relative">
-<hr class="absolute top-1/2 w-full border-sepia-200 -z-10"/>
-<h2 class="inline-block bg-sepia-50 px-6 font-serif text-4xl text-sepia-900">Featured Goods</h2>
-</div>
-
- {% if products %}
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
- {% for product in products|slice:":4" %}
- <div class="group bg-theme-surface p-4 rounded-xl border border-sepia-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-<a class="block aspect-[3/4] rounded-lg overflow-hidden mb-4 relative bg-sepia-100" href="{% url 'store_product_detail' brand.slug product.slug %}">
- {% if product.images.first %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
- {% elif product.variants.first.image %}
- <img alt="{{ product.name }}" class="w-full h-full object-cover filter sepia-[0.2] group-hover:scale-105 transition-transform duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
- {% elif brand.logo %}
- <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
- {% else %}
- <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
- {% endif %}
- 
- <div class="absolute inset-0 bg-sepia-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-<span class="bg-theme-surface text-sepia-900 font-sans font-bold uppercase tracking-widest text-xs px-4 py-2 rounded">View</span>
-</div>
-</a>
-<div class="text-center">
-<h3 class="font-serif text-xl mb-1 truncate px-2"><a class="hover:text-rust transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
-<p class="font-sans font-bold text-rust">{% if product.sale_price %}
-    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
-    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
-{% else %}
-    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
-{% endif %}</p>
-</div>
-</div>
- {% endfor %}
- </div>
- <div class="mt-12 text-center w-full flex justify-center">
- <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
- View All Products
- </a>
- </div>
-
- {% else %}
- <div class="text-center py-16 bg-theme-surface rounded-xl border border-sepia-200">
-<i class="fa-solid fa-box-open text-4xl text-sepia-300 mb-4"></i>
-<h3 class="font-serif text-2xl text-sepia-800">Inventory Empty</h3>
-</div>
- {% endif %}
-</section>
-<!-- Collections Section -->
-<section class="py-16 max-w-7xl mx-auto px-6 bg-black/5">
-<div class="mb-10 text-center">
-<h2 class="inline-block bg-sepia-50 px-6 font-serif text-4xl text-sepia-900">Curated Collections</h2>
-</div>
- {% if collections %}
- <div class="flex flex-col space-y-12">
- {% for collection in collections %}
- <div class="flex flex-col md:flex-row gap-8 items-center {% if forloop.counter|divisibleby:2 %}md:flex-row-reverse{% endif %}">
-<div class="flex-1 w-full aspect-video relative overflow-hidden border border-gray-200/20">
- {% if collection.image %}
- <img alt="{{ collection.name }}" class="w-full h-full object-cover" src="{{ collection.image.url }}"/>
- {% else %}
- <div class="w-full h-full bg-gray-200"></div>
- {% endif %}
- </div>
-<div class="flex-1 text-center md:text-left px-6">
-<h3 class="text-2xl font-bold mb-4">{{ collection.name }}</h3>
-<p class="text-theme-text-secondary mb-6">{{ collection.description|truncatewords:20 }}</p>
-<a class="inline-block border border-current px-6 py-2 uppercase tracking-widest text-sm hover:bg-black hover:text-white transition-colors" href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}">View Collection</a>
-</div>
-</div>
- {% endfor %}
- </div>
- {% endif %}
-</section>
-<!-- Categories Section -->
-<section class="py-16 max-w-7xl mx-auto px-6">
-<div class="mb-10 text-center">
-<h2 class="inline-block bg-sepia-50 px-6 font-serif text-4xl text-sepia-900">Shop by Category</h2>
-</div>
- {% if categories %}
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
- {% for category in categories %}
- <a class="group block relative overflow-hidden aspect-square border border-gray-200/20" href="{% url 'storefront_shop' brand.slug %}?category={{ category.id }}">
- {% if category.image %}
- <img alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ category.image.url }}"/>
- {% else %}
- <div class="w-full h-full bg-theme-bg-secondary flex items-center justify-center">
-<i class="fa-solid fa-tags text-4xl text-gray-300"></i>
-</div>
- {% endif %}
- <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-<h3 class="text-white font-bold text-2xl uppercase tracking-wider">{{ category.name }}</h3>
-</div>
-</a>
- {% endfor %}
- </div>
- {% endif %}
-</section>
-
+{% load theme_tags %}
+    {% for layout_section in brand.layout.sections.all %}
+        {% if layout_section.is_active and layout_section.section_type != 'header' and layout_section.section_type != 'footer' %}
+            {% with template_path="storefront/"|add:brand.theme.template_folder|add:"/sections/"|add:layout_section.section_type|add:".html" %}
+                {% get_safe_template_path template_path as safe_path %}
+                {% include safe_path with settings=layout_section.settings %}
+            {% endwith %}
+        {% endif %}
+    {% empty %}
+        <!-- Fallback if no layout is defined -->
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/hero.html" %}
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/products.html" %}
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/collections.html" %}
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/categories.html" %}
+    {% endfor %}
 {% endblock %}

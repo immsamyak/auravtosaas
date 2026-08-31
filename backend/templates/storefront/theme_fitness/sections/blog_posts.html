@@ -1,0 +1,39 @@
+<div class="w-full py-20 bg-zinc-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-16">
+            <div>
+                <h2 class="text-4xl md:text-5xl font-sans uppercase font-black text-lime-400 italic">{{ settings.heading|default:'From The Journal' }}</h2>
+                <p class="mt-4 text-xl font-sans text-gray-300">{{ settings.subheading|default:'News, style guides, and brand updates.' }}</p>
+            </div>
+        </div>
+        
+        {% if blog_posts %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {% for post in blog_posts|slice:':3' %}
+            <div class="flex flex-col border-2 border-lime-400/30 bg-zinc-800 rounded-sm shadow-[0_4px_20px_rgba(163,230,53,0.2)] overflow-hidden group">
+                <div class="flex-shrink-0 overflow-hidden">
+                    {% if post.featured_image %}
+                    <img class="h-64 w-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                    <img class="h-64 w-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80" alt="">
+                    {% endif %}
+                </div>
+                <div class="flex-1 p-8 flex flex-col justify-between bg-zinc-900 text-white">
+                    <div class="flex-1">
+                        <p class="text-sm font-sans uppercase font-black text-lime-400 italic text-lime-400 uppercase tracking-widest">{{ post.published_at|date:"M d, Y"|default:post.created_at|date:"M d, Y" }}</p>
+                        <a href="{% url 'storefront_blog_detail' brand.slug post.slug %}" class="block mt-4">
+                            <p class="text-2xl font-sans uppercase font-black text-lime-400 italic mb-4">{{ post.title }}</p>
+                            <p class="text-lg font-sans text-gray-300 opacity-80">{{ post.excerpt|truncatewords:20|default:post.content|truncatewords:20 }}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-16 opacity-60">
+            <p class="text-2xl font-sans text-gray-300">No blog posts available at the moment.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>

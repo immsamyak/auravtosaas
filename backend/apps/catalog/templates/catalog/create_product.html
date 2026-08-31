@@ -165,10 +165,13 @@
  <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-theme-input-border border-dashed rounded-2xl bg-theme-bg hover:bg-indigo-50 hover:border-indigo-300 transition-all group">
  <div class="space-y-1 text-center">
  <i class="fa-solid fa-cloud-arrow-up text-theme-text-disabled text-3xl mb-3 group-hover:text-indigo-500 transition-colors"></i>
+ <div class="mb-4" id="image_preview_container" style="display: none;">
+ <img src="" alt="Main Image Preview" class="h-32 object-contain rounded-xl border border-theme-border bg-theme-bg" id="image_preview">
+ </div>
  <div class="flex text-sm text-theme-text-muted justify-center">
  <label for="image" class="relative cursor-pointer bg-theme-surface rounded-lg px-3 py-1 font-bold text-indigo-600 shadow-sm border border-theme-border hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 transition-all">
  <span>Upload a file</span>
- <input id="image" name="image" type="file" class="sr-only" accept="image/*" required>
+ <input id="image" name="image" type="file" class="sr-only" accept="image/*" required onchange="previewImage(this, 'image_preview')">
  </label>
  </div>
  <p class="text-xs font-medium text-theme-text-muted mt-2">PNG, JPG up to 5MB</p>
@@ -181,10 +184,13 @@
  <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-theme-input-border border-dashed rounded-2xl bg-theme-bg hover:bg-indigo-50 hover:border-indigo-300 transition-all group">
  <div class="space-y-1 text-center">
  <i class="fa-solid fa-ruler-combined text-theme-text-disabled text-3xl mb-3 group-hover:text-indigo-500 transition-colors"></i>
+ <div class="mb-4" id="size_chart_preview_container" style="display: none;">
+ <img src="" alt="Size Chart Preview" class="h-32 object-contain rounded-xl border border-theme-border bg-theme-bg" id="size_chart_preview">
+ </div>
  <div class="flex text-sm text-theme-text-muted justify-center">
  <label for="size_chart_image" class="relative cursor-pointer bg-theme-surface rounded-lg px-3 py-1 font-bold text-indigo-600 shadow-sm border border-theme-border hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 transition-all">
  <span>Upload a file</span>
- <input id="size_chart_image" name="size_chart_image" type="file" class="sr-only" accept="image/*">
+ <input id="size_chart_image" name="size_chart_image" type="file" class="sr-only" accept="image/*" onchange="previewImage(this, 'size_chart_preview')">
  </label>
  </div>
  <p class="text-xs font-medium text-theme-text-muted mt-2">PNG, JPG up to 5MB</p>
@@ -355,11 +361,29 @@ async function submitQuickCreate(e) {
  } else {
  showToast('Error creating item. Please try again.', 'error');
  }
+ }
  } catch (err) {
  showToast('Network error.', 'error');
  } finally {
  btn.disabled = false;
  btn.textContent = 'Save';
+ }
+}
+
+function previewImage(input, previewId) {
+ if (input.files && input.files[0]) {
+ var reader = new FileReader();
+ reader.onload = function(e) {
+ var previewElement = document.getElementById(previewId);
+ if(previewElement) {
+ previewElement.src = e.target.result;
+ var container = document.getElementById(previewId + "_container");
+ if(container && container.style.display === 'none') {
+ container.style.display = 'block';
+ }
+ }
+ }
+ reader.readAsDataURL(input.files[0]);
  }
 }
 </script>

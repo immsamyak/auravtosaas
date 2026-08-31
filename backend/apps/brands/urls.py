@@ -23,6 +23,7 @@ urlpatterns = [
     path('dashboard/addons/', views.addons_view, name='addons'),
     path('dashboard/developer/', views.developer_api_view, name='developer_api'),
     path('dashboard/themes/', views.theme_gallery_view, name='theme_gallery'),
+    path('dashboard/designer/', views.website_designer_view, name='website_designer'),
     path('dashboard/notifications/', views.notifications_view, name='notifications'),
     path('dashboard/notifications/mark-read/', views.mark_notifications_read, name='mark_notifications_read'),
     
@@ -40,11 +41,26 @@ urlpatterns = [
     path('dashboard/marketing/subscribers/', marketing_views.subscriber_list_view, name='subscriber_list'),
     path('dashboard/marketing/subscriber/<int:subscriber_id>/delete/', marketing_views.subscriber_delete_view, name='subscriber_delete'),
     
+    path('dashboard/marketing/contact-messages/', marketing_views.contact_messages_list_view, name='contact_messages_list'),
+    path('dashboard/marketing/contact-message/<int:message_id>/delete/', marketing_views.contact_message_delete_view, name='contact_message_delete'),
+    path('dashboard/marketing/contact-message/<int:message_id>/toggle-read/', marketing_views.contact_message_toggle_read_view, name='contact_message_toggle_read'),
+    path('dashboard/marketing/contact-message/<int:message_id>/reply/', marketing_views.contact_message_reply_view, name='contact_message_reply'),
+    path('dashboard/marketing/contact-messages/mark-all-read/', marketing_views.contact_message_mark_all_read_view, name='contact_message_mark_all_read'),
+    
     path('dashboard/marketing/campaigns/', marketing_views.campaign_list_view, name='campaign_list'),
     path('dashboard/marketing/campaign/create/', marketing_views.campaign_create_view, name='campaign_create'),
     path('dashboard/marketing/campaign/<int:campaign_id>/edit/', marketing_views.campaign_edit_view, name='campaign_edit'),
     path('dashboard/marketing/campaign/<int:campaign_id>/delete/', marketing_views.campaign_delete_view, name='campaign_delete'),
     path('dashboard/marketing/campaign/<int:campaign_id>/send/', marketing_views.campaign_send_view, name='campaign_send'),
     
+    path('dashboard/marketing/blogs/', marketing_views.dashboard_blog_list_view, name='dashboard_blog_list'),
+    path('dashboard/marketing/blog/create/', marketing_views.dashboard_blog_create_view, name='dashboard_blog_create'),
+    path('dashboard/marketing/blog/<int:post_id>/edit/', marketing_views.dashboard_blog_edit_view, name='dashboard_blog_edit'),
+    path('dashboard/marketing/blog/<int:post_id>/delete/', marketing_views.dashboard_blog_delete_view, name='dashboard_blog_delete'),
+    
     path('store/<slug:brand_slug>/subscribe/', marketing_views.newsletter_subscribe_api, name='newsletter_subscribe'),
+    path('store/<slug:brand_slug>/contact-submit/', marketing_views.contact_submit_api, name='contact_submit'),
+    
+    path('store/<slug:slug>/journal/', views.storefront_blog_list_view, name='storefront_blog_list'),
+    path('store/<slug:slug>/journal/<slug:post_slug>/', views.storefront_blog_detail_view, name='storefront_blog_detail'),
 ]

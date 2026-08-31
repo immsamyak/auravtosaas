@@ -1,0 +1,14 @@
+<div class="w-full py-24 bg-white text-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center gap-16">
+            <div class="w-full md:w-1/2 overflow-hidden rounded-none shadow-2xl shadow-gray-100 border border-gray-100 bg-white">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&q=80" alt="Feature" class="w-full h-auto hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="w-full md:w-1/2">
+                <h2 class="text-4xl md:text-5xl font-serif font-normal uppercase tracking-[0.3em] text-black mb-8">{{ settings.heading|default:'Our Story' }}</h2>
+                <p class="text-xl font-sans font-light text-gray-500 mb-10 opacity-90 leading-relaxed">{{ settings.subheading|default:'Learn more about our brand, our mission, and our values. We believe in quality, transparency, and building a community.' }}</p>
+                <a href="#" class="bg-transparent border border-black text-black hover:bg-black hover:text-white uppercase tracking-[0.2em] text-xs px-8 py-4 rounded-none">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,6 +29,75 @@
  </style>
 
 <style>.bg-theme-surface { background-color: #f8fafc !important; } .text-theme-text-primary { color: inherit; }</style>
+
+ <!-- Alpine.js & Cart Store -->
+ <script>
+ document.addEventListener('alpine:init', () => {
+ Alpine.store('cart', {
+ items: (() => {
+ try {
+ const parsed = JSON.parse(localStorage.getItem('aura_cart') || '[]');
+ return Array.isArray(parsed) ? parsed : [];
+ } catch (e) {
+ console.warn('Cart parse error:', e);
+ return [];
+ }
+ })(),
+ add(item) {
+ const existing = this.items.find(i => i.id === item.id);
+ if (existing) {
+ existing.quantity += item.quantity || 1;
+ } else {
+ item.quantity = item.quantity || 1;
+ this.items.push(item);
+ }
+ this.save();
+ },
+ remove(index) {
+ this.items.splice(index, 1);
+ this.save();
+ },
+ get count() { 
+ return this.items.reduce((sum, item) => sum + item.quantity, 0); 
+ },
+ get total() { 
+ return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); 
+ },
+ checkout() {
+ if (this.items.length === 0) return;
+ window.location.href = `/checkout/{{ brand.slug }}/`;
+ },
+ save() { 
+ localStorage.setItem('aura_cart', JSON.stringify(this.items)); 
+ }
+ });
+ });
+ </script>
+ <style>[x-cloak] { display: none !important; }</style>
+
+<!-- Toastify Setup -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  window.showToast = function(msg, type='info') {
+    let bgColor = type === 'error' ? '#ef4444' : (type === 'success' ? '#10b981' : '#333');
+    Toastify({
+      text: msg,
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: bgColor,
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        padding: '12px 24px',
+        fontSize: '14px',
+        fontWeight: '500'
+      }
+    }).showToast();
+  };
+</script>
+
 </head>
 <body class="antialiased min-h-screen flex flex-col" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
@@ -42,49 +111,7 @@
  </div>
 
  <!-- Main Header -->
- <header class="bg-theme-surface border-b-2 border-slate-900 sticky top-0 z-50">
-<div class="max-w-7xl mx-auto px-4 py-4 w-full flex items-center justify-between">
- 
- <!-- Navigation Links -->
- <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
- <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
- </nav>
-
- <!-- Logo -->
- <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
- {% if brand.logo %}
- <a href="{% url 'storefront' brand.slug %}" class="inline-block">
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
- </a>
- {% else %}
- <a class="inline-block" href="{% url 'storefront' brand.slug %}">
- <span class="text-3xl font-bold tracking-tight">{{ brand.name }}</span>
- </a>
- {% endif %}
- </div>
-
- <!-- Right Icons -->
- <div class="flex items-center justify-end space-x-4 md:space-x-6 flex-1 order-3">
- <button @click.prevent="isMenuOpen = true" class="md:hidden hover:opacity-70 transition-opacity cursor-pointer mr-2">
- <i class="fa-solid fa-bars text-lg"></i>
- </button>
- <button @click.prevent="isSearchOpen = true" class="hover:opacity-70 transition-opacity cursor-pointer">
- <i class="fa-solid fa-magnifying-glass text-lg"></i>
- </button>
- <a href="{% url 'storefront_account' brand.slug %}" class="hover:opacity-70 transition-opacity hidden sm:block cursor-pointer">
- <i class="fa-regular fa-user text-lg"></i>
- </a>
- <button @click.prevent="isCartOpen = true" class="hover:opacity-70 transition-opacity relative cursor-pointer">
- <i class="fa-solid fa-bag-shopping text-lg"></i>
- <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center" x-cloak x-show="$store.cart.count > 0" x-text="$store.cart.count"></span>
- </button>
- </div>
-
-</div>
-</header>
+ {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/header.html" %}
 
  <!-- Main Content -->
  <main class="flex-grow">
@@ -92,73 +119,7 @@
  </main>
 
  <!-- Structured Footer -->
- <footer class="bg-theme-surface border-t border-theme-input-border pt-16 pb-8 mt-auto">
- <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
- <div class="md:col-span-4">
- {% if brand.logo %}
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-8 object-contain mb-6">
- {% else %}
- <h3 class="text-2xl font-black tracking-tight text-theme-text-primary mb-6">{{ brand.name }}<span class="text-blue-600">.</span></h3>
- {% endif %}
- {% if brand.description %}
- <p class="text-theme-text-muted text-sm leading-relaxed font-mono">{{ brand.description }}</p>
- {% endif %}
- <div class="mt-6 flex space-x-4">
- {% if brand.twitter_url %}<a href="{{ brand.twitter_url }}" class="w-8 h-8 flex items-center justify-center bg-theme-bg-secondary text-theme-text-muted hover:bg-blue-600 hover:text-white transition-colors"><i class="fa-brands fa-x-twitter"></i></a>{% endif %}
- {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-8 h-8 flex items-center justify-center bg-theme-bg-secondary text-theme-text-muted hover:bg-blue-600 hover:text-white transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
- {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-8 h-8 flex items-center justify-center bg-theme-bg-secondary text-theme-text-muted hover:bg-blue-600 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
- </div>
- </div>
- 
- <div class="md:col-span-2 md:col-start-7">
- <h4 class="text-sm font-bold text-theme-text-primary mb-4 font-mono uppercase">Categories</h4>
- <ul class="space-y-3">
- {% for category in categories %}
- <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-theme-text-muted hover:text-blue-600 text-sm font-medium transition-colors">{{ category.name }}</a></li>
- {% empty %}
- <li><span class="text-theme-text-muted text-sm font-medium">All Products</span></li>
- {% endfor %}
- </ul>
- </div>
- 
- <div class="md:col-span-2">
- <h4 class="text-sm font-bold text-theme-text-primary mb-4 font-mono uppercase">Collections</h4>
- <ul class="space-y-3">
- {% for collection in collections %}
- <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-theme-text-muted hover:text-blue-600 text-sm font-medium transition-colors">{{ collection.name }}</a></li>
- {% empty %}
- <li><span class="text-theme-text-muted text-sm font-medium">Main Collection</span></li>
- {% endfor %}
- </ul>
- </div>
-
- <div class="md:col-span-2">
- <h4 class="text-sm font-bold text-theme-text-primary mb-4 font-mono uppercase">Contact</h4>
- <ul class="space-y-3">
- {% if brand.contact_email %}
- <li><a href="mailto:{{ brand.contact_email }}" class="text-theme-text-muted hover:text-blue-600 text-sm font-medium transition-colors">Email Support</a></li>
- {% endif %}
- </ul>
- </div>
- </div>
- 
- <div class="max-w-7xl mx-auto px-6 border-t border-theme-border pt-6 flex justify-between items-center text-[10px] text-theme-text-muted font-mono">
- <p>&copy; {% now "Y" %} {{ brand.name }}. ALL RIGHTS RESERVED.</p>
- <p>POWERED BY AURA</p>
- </div>
- 
- <div class="max-w-7xl mx-auto px-6 pb-8">
- <div class="text-center mb-6">
- <h4 class="text-sm font-bold uppercase tracking-wider text-white mb-2">Newsletter</h4>
- <p class="text-theme-text-muted text-sm">Get the latest in tech and exclusive deals.</p>
- </div>
- <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border border-blue-500/30 rounded-lg overflow-hidden">
- <input type="email" name="email" placeholder="Enter your email" required class="flex-1 px-4 py-3 bg-transparent outline-none text-white text-sm placeholder-gray-500">
- <button type="submit" class="px-6 py-3 bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-colors">Subscribe</button>
- </form>
- </div>
-
- </footer>
+ {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/footer.html" %}
 
  {% if whatsapp_addon and whatsapp_addon.is_active %}
  <a href="https://wa.me/{{ whatsapp_addon.whatsapp_number|urlencode }}?text={% if whatsapp_message %}{{ whatsapp_message|urlencode }}{% else %}{{ whatsapp_addon.whatsapp_instructions|urlencode }}{% endif %}" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-[#128C7E] hover:scale-110 transition-all z-50">
@@ -192,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
  if (typeof showToast === 'function') {
  showToast(data.message, data.success ? 'success' : 'error');
  } else {
- alert(data.message);
+ showToast(data.message);
  }
  if (data.success) emailInput.value = '';
  })

@@ -1,0 +1,33 @@
+{% load theme_tags %}
+<div class="w-full py-20 bg-teal-50 text-teal-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-serif text-teal-800 uppercase tracking-widest mb-4">{{ settings.heading|default:'Our Collections' }}</h2>
+            <p class="text-xl font-sans font-light text-teal-700">{{ settings.subheading|default:'Curated just for you.' }}</p>
+        </div>
+        {% if collections %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% filter_selected_items collections settings.selected_ids as featured_collections %}
+            {% with limit=settings.count|default:6 %}
+            {% for collection in featured_collections|slice:limit %}
+            <a href="{% url 'storefront_shop' brand.slug %}?collection={{ collection.id }}" class="group block relative overflow-hidden rounded-3xl shadow-lg shadow-teal-100 border border-teal-200 bg-white aspect-[4/5] img-hover">
+                {% if collection.image %}
+                <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="w-full h-full object-cover">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" alt="{{ collection.name }}" class="w-full h-full object-cover">
+                {% endif %}
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-8 text-center">
+                    <h3 class="text-4xl font-serif text-teal-800 uppercase tracking-widest text-white mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{{ collection.name }}</h3>
+                    <div class="bg-teal-700 text-white hover:bg-teal-800 rounded-full px-8 py-4 rounded-3xl opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700">View Collection</div>
+                </div>
+            </a>
+            {% endfor %}
+            {% endwith %}
+        </div>
+        {% else %}
+        <div class="text-center font-sans font-light text-teal-700 py-16 border border-teal-200 bg-white rounded-3xl opacity-50">
+            <p>No collections found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>

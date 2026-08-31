@@ -1,0 +1,39 @@
+<div class="w-full py-16" style="background-color: {{ settings.bgColor|default:'#000000' }};" 
+    x-data="{ 
+        endDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(), 
+        days: 0, hours: 0, mins: 0, 
+        init() {
+            this.update();
+            setInterval(() => this.update(), 60000);
+        },
+        update() {
+            let now = new Date().getTime();
+            let distance = this.endDate - now;
+            if (distance < 0) { this.days = 0; this.hours = 0; this.mins = 0; return; }
+            this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            this.mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        }
+    }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ settings.heading|default:'Flash Sale' }}</h2>
+        <p class="text-lg text-gray-400 mb-10">{{ settings.subheading|default:'50% off select items. Ends soon!' }}</p>
+        
+        <div class="flex items-center justify-center gap-4 sm:gap-8">
+            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 sm:p-6 min-w-[80px] sm:min-w-[120px]">
+                <div class="text-3xl sm:text-5xl font-bold text-white mb-1" x-text="days < 10 ? '0' + days : days">14</div>
+                <div class="text-xs sm:text-sm text-gray-500 uppercase tracking-widest">Days</div>
+            </div>
+            <div class="text-2xl sm:text-4xl text-gray-600 font-light">:</div>
+            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 sm:p-6 min-w-[80px] sm:min-w-[120px]">
+                <div class="text-3xl sm:text-5xl font-bold text-white mb-1" x-text="hours < 10 ? '0' + hours : hours">08</div>
+                <div class="text-xs sm:text-sm text-gray-500 uppercase tracking-widest">Hours</div>
+            </div>
+            <div class="text-2xl sm:text-4xl text-gray-600 font-light">:</div>
+            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 sm:p-6 min-w-[80px] sm:min-w-[120px]">
+                <div class="text-3xl sm:text-5xl font-bold text-white mb-1" x-text="mins < 10 ? '0' + mins : mins">45</div>
+                <div class="text-xs sm:text-sm text-gray-500 uppercase tracking-widest">Mins</div>
+            </div>
+        </div>
+    </div>
+</div>

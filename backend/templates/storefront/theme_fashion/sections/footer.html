@@ -1,0 +1,70 @@
+<footer class="bg-black text-white border-t border-gray-800 pt-20 pb-10 mt-auto">
+ <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+ <div class="md:col-span-1">
+ {% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-8 object-contain mb-6 filter invert">
+ {% else %}
+ {% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+{% else %}
+ <h3 class="text-2xl font-serif font-black tracking-tighter uppercase mb-6">{{ brand.name }}</h3>
+{% endif %}
+ {% endif %}
+ {% if brand.description %}
+ <p class="text-theme-text-disabled text-sm leading-relaxed max-w-xs font-light">{{ brand.description }}</p>
+ {% endif %}
+ </div>
+ 
+ <div>
+ <h4 class="text-xs font-bold uppercase tracking-[0.15em] mb-6 border-b border-gray-800 pb-2">Categories</h4>
+ <ul class="space-y-4">
+ {% for category in categories %}
+ <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors">{{ category.name }}</a></li>
+ {% empty %}
+ <li><span class="text-theme-text-secondary text-sm font-light">All Products</span></li>
+ {% endfor %}
+ </ul>
+ </div>
+ 
+ <div>
+ <h4 class="text-xs font-bold uppercase tracking-[0.15em] mb-6 border-b border-gray-800 pb-2">Collections</h4>
+ <ul class="space-y-4">
+ {% for collection in collections %}
+ <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors">{{ collection.name }}</a></li>
+ {% empty %}
+ <li><span class="text-theme-text-secondary text-sm font-light">Default Collection</span></li>
+ {% endfor %}
+ </ul>
+ </div>
+ 
+ <div>
+ <h4 class="text-xs font-bold uppercase tracking-[0.15em] mb-6 border-b border-gray-800 pb-2">Connect</h4>
+ <ul class="space-y-4">
+ {% if brand.contact_email %}
+ <li><a href="mailto:{{ brand.contact_email }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-regular fa-envelope w-5"></i> Email Us</a></li>
+ {% endif %}
+ 
+ {% if brand.instagram_url %}<li><a href="{{ brand.instagram_url }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-instagram w-5"></i> Instagram</a></li>{% endif %}
+ {% if brand.tiktok_url %}<li><a href="{{ brand.tiktok_url }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-tiktok w-5"></i> TikTok</a></li>{% endif %}
+ {% if brand.facebook_url %}<li><a href="{{ brand.facebook_url }}" class="text-theme-text-disabled hover:text-white text-sm font-light transition-colors flex items-center"><i class="fa-brands fa-facebook-f w-5"></i> Facebook</a></li>{% endif %}
+ </ul>
+ </div>
+ </div>
+ 
+ <div class="max-w-7xl mx-auto px-6 border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-theme-text-muted font-light tracking-wide uppercase">
+ <p>&copy; {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
+ <p class="mt-4 md:mt-0">Powered by Aura</p>
+ </div>
+ 
+ <div class="max-w-6xl mx-auto px-6 pb-8">
+ <div class="text-center mb-6">
+ <h4 class="text-xs font-medium uppercase tracking-[0.3em] text-theme-text-disabled mb-2">Newsletter</h4>
+ <p class="text-theme-text-muted text-sm">Be the first to know about new arrivals.</p>
+ </div>
+ <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border-b border-theme-border pb-1">
+ <input type="email" name="email" placeholder="Email address" required class="flex-1 bg-transparent outline-none text-sm text-theme-text-primary placeholder-theme-placeholder py-2">
+ <button type="submit" class="px-4 py-2 text-sm font-medium text-theme-text-primary hover:text-black transition-colors uppercase tracking-wider">Join</button>
+ </form>
+ </div>
+
+ </footer>

@@ -48,7 +48,31 @@
  font-weight: 600;
  }
  </style>
+
+<!-- Toastify Setup -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  window.showToast = function(msg, type='info') {
+    let bgColor = type === 'error' ? '#ef4444' : (type === 'success' ? '#10b981' : '#333');
+    Toastify({
+      text: msg,
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: bgColor,
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        padding: '12px 24px',
+        fontSize: '14px',
+        fontWeight: '500'
+      }
+    }).showToast();
+  };
+</script>
 </head>
+
 <body class="bg-theme-bg-base dark:bg-slate-800/50/80 text-theme-text-base antialiased selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100 transition-colors duration-300" x-data="{ sidebarOpen: false }">
 <div class="flex h-screen overflow-hidden w-full relative">
 
@@ -134,10 +158,10 @@
  <i class="fa-solid fa-images w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'media_gallery' %}text-indigo-400{% endif %}"></i> Media Gallery
  </a>
  
- <div x-data="{ marketingOpen: {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}true{% else %}false{% endif %} }">
- <button @click="marketingOpen = !marketingOpen" class="w-full text-left sidebar-link flex items-center justify-between px-6 py-3 text-sm text-slate-400 group {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}active{% endif %}">
+ <div x-data="{ marketingOpen: {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name or 'blog' in request.resolver_match.url_name %}true{% else %}false{% endif %} }">
+ <button @click="marketingOpen = !marketingOpen" class="w-full text-left sidebar-link flex items-center justify-between px-6 py-3 text-sm text-slate-400 group {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name or 'blog' in request.resolver_match.url_name %}active{% endif %}">
  <div class="flex items-center">
- <i class="fa-solid fa-bullhorn w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Marketing
+ <i class="fa-solid fa-bullhorn w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'popup' in request.resolver_match.url_name or 'coupon' in request.resolver_match.url_name or 'subscriber' in request.resolver_match.url_name or 'blog' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Marketing
  </div>
  <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" :class="marketingOpen ? 'rotate-180' : ''"></i>
  </button>
@@ -151,8 +175,14 @@
  <a href="{% url 'subscriber_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'subscriber' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
  Subscribers
  </a>
+ <a href="{% url 'contact_messages_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'contact_message' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
+ Contact Messages
+ </a>
  <a href="{% url 'campaign_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'campaign' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
  Email Campaigns
+ </a>
+ <a href="{% url 'dashboard_blog_list' %}" class="block pl-14 pr-6 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors {% if 'blog' in request.resolver_match.url_name %}text-white font-medium{% endif %}">
+ Blog Posts
  </a>
  </div>
  </div>
@@ -168,8 +198,13 @@
  <i class="fa-solid fa-file-invoice-dollar w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'owner_billing' %}text-indigo-400{% endif %}"></i> Billing & Subscriptions
  </a>
  <a href="{% url 'theme_gallery' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'theme_gallery' %}active{% endif %}">
- <i class="fa-solid fa-palette w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'theme_gallery' %}text-indigo-400{% endif %}"></i> Theme Gallery
- </a>
+                            <i class="fa-solid fa-palette w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'theme_gallery' %}text-indigo-400{% endif %}"></i> Theme Gallery
+                        </a>
+                        <a href="{% url 'website_designer' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'website_designer' %}active{% endif %}">
+                            <i class="fa-solid fa-layer-group w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'website_designer' %}text-indigo-400{% endif %}"></i> Website Designer
+                        </a>
+
+
  <a href="{% url 'addons' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if request.resolver_match.url_name == 'addons' %}active{% endif %}">
  <i class="fa-solid fa-puzzle-piece w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if request.resolver_match.url_name == 'addons' %}text-indigo-400{% endif %}"></i> Add-ons
  </a>

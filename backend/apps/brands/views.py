@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.contrib import messages
 from apps.brands.models import Brand, BrandStaff, MediaAsset, APIKey, WebhookEndpoint
 from apps.analytics.services import DashboardAnalyticsService
@@ -254,6 +255,7 @@ def team_management_view(request):
         'roles': BrandStaff.ROLE_CHOICES,
         'active_tab': 'team'
     })
+@xframe_options_sameorigin
 def storefront_view(request, slug):
     """
     Public storefront for a specific brand.
@@ -294,6 +296,8 @@ def storefront_view(request, slug):
         integration__provider_code='WHATSAPP', 
         is_active=True
     ).first()
+    
+    blog_posts = BlogPost.objects.filter(brand=brand, is_published=True).order_by('-published_at')
 
     return render(request, template_name, {
         'brand': brand,
@@ -302,6 +306,7 @@ def storefront_view(request, slug):
         'categories': categories,
         'theme_base': theme_base,
         'whatsapp_addon': whatsapp_addon,
+        'blog_posts': blog_posts,
     })
 
 def storefront_shop_view(request, slug):
@@ -1249,3 +1254,171 @@ def global_search_view(request):
         'orders': orders,
     }
     return render(request, 'brands/search_results.html', context)
+
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import StorefrontLayout, StorefrontSection
+
+def website_designer_view(request):
+    # Multi-tenant Team Management Check
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+
+    layout, created = StorefrontLayout.objects.get_or_create(brand=brand)
+    
+    # Initialize default layout if created
+    if created or not layout.sections.exists():
+        StorefrontSection.objects.create(layout=layout, section_type='hero', display_order=10)
+        StorefrontSection.objects.create(layout=layout, section_type='products', display_order=20)
+        StorefrontSection.objects.create(layout=layout, section_type='collections', display_order=30)
+        StorefrontSection.objects.create(layout=layout, section_type='categories', display_order=40)
+        StorefrontSection.objects.create(layout=layout, section_type='header', display_order=0)
+        StorefrontSection.objects.create(layout=layout, section_type='footer', display_order=100)
+
+    if request.method == 'POST':
+        import json
+        try:
+            data = json.loads(request.body)
+            action = data.get('action')
+            
+            if action == 'save_global_styles':
+                layout.global_styles = data.get('global_styles', {})
+                layout.save()
+                return JsonResponse({'status': 'success'})
+                
+            elif action == 'save_sections':
+                sections_data = data.get('sections', [])
+                
+                # Delete removed sections
+                keep_ids = [s.get('id') for s in sections_data if s.get('id')]
+                layout.sections.exclude(id__in=keep_ids).delete()
+                
+                # Update or create
+                for idx, s_data in enumerate(sections_data):
+                    if s_data.get('id'):
+                        sec = layout.sections.get(id=s_data['id'])
+                        sec.display_order = idx * 10
+                        sec.is_active = s_data.get('is_active', True)
+                        sec.settings = s_data.get('settings', {})
+                        sec.save()
+                    else:
+                        StorefrontSection.objects.create(
+                            layout=layout,
+                            section_type=s_data['type'],
+                            display_order=idx * 10,
+                            is_active=s_data.get('is_active', True),
+                            settings=s_data.get('settings', {})
+                        )
+                return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    from .models import StoreTheme
+    themes = StoreTheme.objects.filter(is_active=True).order_by('name')
+
+    import json
+    
+    # Serialize available items for the UI picker
+    available_products = list(brand.products.filter(is_active=True).values('id', 'name'))
+    available_collections = list(brand.collections.filter(is_active=True).values('id', 'name'))
+    available_categories = list(brand.categories.filter(is_active=True).values('id', 'name'))
+
+    return render(request, 'brands/website_designer.html', {
+        'brand': brand,
+        'layout': layout,
+        'themes': themes,
+        'active_tab': 'designer',
+        'available_products_json': json.dumps(available_products),
+        'available_collections_json': json.dumps(available_collections),
+        'available_categories_json': json.dumps(available_categories),
+    })
+
+
+# ==========================================
+# STOREFRONT BLOG / JOURNAL
+# ==========================================
+
+def storefront_blog_list_view(request, slug):
+    brand = get_object_or_404(Brand, slug=slug)
+    if brand.status == 'MAINTENANCE':
+        return render(request, 'brands/store_maintenance.html', {'brand': brand})
+    elif brand.status == 'INACTIVE':
+        return render(request, 'brands/store_inactive.html', {'brand': brand})
+    
+    from django.core.paginator import Paginator
+    from apps.catalog.models import Collection, Category
+    from apps.brands.models import BrandIntegration
+    
+    posts = BlogPost.objects.filter(brand=brand, is_published=True).order_by('-published_at', '-created_at')
+    paginator = Paginator(posts, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    theme_base = f"storefront/{brand.theme.template_folder}/base.html" if brand.theme and brand.theme.is_active else "brands/store_base.html"
+    collections = Collection.objects.filter(brand=brand, is_active=True).order_by('-created_at')
+    categories = Category.objects.filter(brand=brand, is_active=True).order_by('display_order')
+    
+    whatsapp_addon = BrandIntegration.objects.filter(
+        brand=brand, 
+        integration__provider_code='WHATSAPP', 
+        is_active=True
+    ).first()
+    
+    return render(request, 'brands/store_blog_list.html', {
+        'brand': brand,
+        'page_obj': page_obj,
+        'theme_base': theme_base,
+        'collections': collections,
+        'categories': categories,
+        'whatsapp_addon': whatsapp_addon,
+    })
+
+
+def storefront_blog_detail_view(request, slug, post_slug):
+    brand = get_object_or_404(Brand, slug=slug)
+    if brand.status == 'MAINTENANCE':
+        return render(request, 'brands/store_maintenance.html', {'brand': brand})
+    elif brand.status == 'INACTIVE':
+        return render(request, 'brands/store_inactive.html', {'brand': brand})
+    
+    from apps.catalog.models import Collection, Category
+    from apps.brands.models import BrandIntegration
+    
+    post = get_object_or_404(BlogPost, slug=post_slug, brand=brand, is_published=True)
+    
+    # Related posts: other published posts, excluding the current one
+    related_posts = BlogPost.objects.filter(brand=brand, is_published=True).exclude(id=post.id).order_by('?')[:3]
+    
+    # Build the absolute URL for social sharing
+    share_url = request.build_absolute_uri()
+    
+    theme_base = f"storefront/{brand.theme.template_folder}/base.html" if brand.theme and brand.theme.is_active else "brands/store_base.html"
+    collections = Collection.objects.filter(brand=brand, is_active=True).order_by('-created_at')
+    categories = Category.objects.filter(brand=brand, is_active=True).order_by('display_order')
+    
+    whatsapp_addon = BrandIntegration.objects.filter(
+        brand=brand, 
+        integration__provider_code='WHATSAPP', 
+        is_active=True
+    ).first()
+    
+    return render(request, 'brands/store_blog_detail.html', {
+        'brand': brand,
+        'post': post,
+        'related_posts': related_posts,
+        'share_url': share_url,
+        'theme_base': theme_base,
+        'collections': collections,
+        'categories': categories,
+        'whatsapp_addon': whatsapp_addon,
+    })
+

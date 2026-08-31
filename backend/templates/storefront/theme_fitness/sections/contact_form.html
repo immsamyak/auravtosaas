@@ -1,0 +1,57 @@
+<div class="w-full py-20 bg-zinc-900 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-sans uppercase font-black text-lime-400 italic">{{ settings.heading|default:'Contact Us' }}</h2>
+            <p class="mt-4 text-xl font-sans text-gray-300">{{ settings.subheading|default:'We would love to hear from you.' }}</p>
+        </div>
+        <form class="space-y-6 border-2 border-lime-400/30 bg-zinc-800 rounded-sm shadow-[0_4px_20px_rgba(163,230,53,0.2)] p-8 md:p-12" 
+              x-data="{ isSubmitting: false }" 
+              @submit.prevent="
+                isSubmitting = true; 
+                fetch('{% url 'contact_submit' brand.slug %}', {
+                    method: 'POST',
+                    body: new FormData($el),
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    isSubmitting = false;
+                    if (data.success) {
+                        $el.reset();
+                        window.showToast(data.message || 'Message sent successfully!', 'success');
+                    } else {
+                        window.showToast(data.message || 'An error occurred.', 'error');
+                    }
+                })
+                .catch(error => {
+                    isSubmitting = false;
+                    window.showToast('Failed to send message.', 'error');
+                })
+              ">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block mb-2 font-sans uppercase font-black text-lime-400 italic text-inherit">First Name</label>
+                    <input required type="text" name="first_name" class="w-full bg-transparent border-2 border-lime-400/30 bg-zinc-800 rounded-sm p-4 focus:outline-none focus:ring-2 focus:ring-current font-sans text-gray-300 text-inherit">
+                </div>
+                <div>
+                    <label class="block mb-2 font-sans uppercase font-black text-lime-400 italic text-inherit">Last Name</label>
+                    <input required type="text" name="last_name" class="w-full bg-transparent border-2 border-lime-400/30 bg-zinc-800 rounded-sm p-4 focus:outline-none focus:ring-2 focus:ring-current font-sans text-gray-300 text-inherit">
+                </div>
+            </div>
+            <div>
+                <label class="block mb-2 font-sans uppercase font-black text-lime-400 italic text-inherit">Email Address</label>
+                <input required type="email" name="email" class="w-full bg-transparent border-2 border-lime-400/30 bg-zinc-800 rounded-sm p-4 focus:outline-none focus:ring-2 focus:ring-current font-sans text-gray-300 text-inherit">
+            </div>
+            <div>
+                <label class="block mb-2 font-sans uppercase font-black text-lime-400 italic text-inherit">Message</label>
+                <textarea required rows="5" name="message" class="w-full bg-transparent border-2 border-lime-400/30 bg-zinc-800 rounded-sm p-4 focus:outline-none focus:ring-2 focus:ring-current font-sans text-gray-300 text-inherit"></textarea>
+            </div>
+            <div class="pt-4">
+                <button type="submit" :disabled="isSubmitting" class="w-full flex justify-center bg-lime-400 text-black hover:bg-lime-500 uppercase font-black italic px-8 py-4 rounded-sm transition-all disabled:opacity-70">
+                    <span x-show="!isSubmitting">Send Message</span>
+                    <span x-show="isSubmitting" x-cloak><i class="fa-solid fa-circle-notch fa-spin"></i> Sending...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

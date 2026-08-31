@@ -1,0 +1,28 @@
+<section class="vintage-border rounded-xl p-4 md:p-8 bg-theme-surface mb-16 shadow-lg shadow-sepia-900/5">
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-1 text-center md:text-left">
+<span class="font-sans font-bold text-rust uppercase tracking-widest text-sm mb-2 block">New Arrivals</span>
+<h1 class="font-serif text-5xl md:text-7xl mb-6 leading-tight">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}The Heritage <br/>Collection{% endif %}</h1>
+<p class="font-sans text-lg text-sepia-800 mb-8 max-w-md mx-auto md:mx-0">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Heavyweight flannel, durable denim, and classic silhouettes designed for the modern trailblazer.{% endif %}</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+<a class="inline-block bg-sepia-900 text-sepia-50 font-sans font-bold uppercase tracking-widest px-8 py-4 rounded hover:bg-rust transition-colors" href="{{ brand.banner_cta_link|default:'#shop' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop the Collection{% endif %}</a>
+
+ {% if brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+ {{ brand.banner_secondary_cta_text }}
+ </a>
+ {% endif %}
+ 
+</div>
+</div>
+<div class="flex-1 w-full aspect-square md:aspect-[4/3] rounded-lg overflow-hidden border border-sepia-200">
+ {% if brand.banner %}
+ <img alt="Hero" class="w-full h-full object-cover filter sepia-[0.3] contrast-125" src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}"/>
+ {% else %}
+ <div class="w-full h-full bg-sepia-200 flex items-center justify-center">
+<i class="fa-solid fa-camera-retro text-6xl text-sepia-800/30"></i>
+</div>
+ {% endif %}
+ </div>
+</div>
+</section>

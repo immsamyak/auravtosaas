@@ -1,0 +1,55 @@
+{% load theme_tags %}
+<section class="py-24 max-w-7xl mx-auto px-6" id="collection">
+<div class="text-center mb-16">
+<span class="font-display text-xs tracking-[0.3em] uppercase text-goth-blood">— Pieces —</span>
+<h2 class="font-display font-bold text-4xl tracking-wider uppercase text-goth-bone mt-3">The Dark Archive</h2>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group relative overflow-hidden bg-goth-surface border border-white/5 hover:border-goth-blood/30 transition-all duration-500">
+<a class="block aspect-[2/3] overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover filter brightness-75 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ <div class="absolute inset-0 bg-gradient-to-t from-goth-bg via-transparent to-transparent"></div>
+</a>
+<div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+<h3 class="font-display font-bold text-lg tracking-widest uppercase mb-1 truncate">
+<a class="text-goth-bone hover:text-goth-blood transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
+</h3>
+<div class="flex justify-between items-center">
+<span class="font-serif italic text-goth-blood text-lg">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</span>
+<span class="font-display text-[10px] tracking-widest uppercase text-goth-bone/30 opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
+</div>
+</div>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="text-center py-20 border border-white/5">
+<p class="font-serif italic text-2xl text-goth-bone/30">The archive is being prepared...</p>
+</div>
+ {% endif %}
+</section>

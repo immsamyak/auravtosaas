@@ -1,0 +1,51 @@
+{% load theme_tags %}
+<section class="py-20 px-6" id="shop">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-display text-4xl text-y2k-hotpink mb-2">Shop the Look ✧</h2>
+<p class="text-theme-text-muted font-medium">Curated Y2K essentials for your closet.</p>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden y2k-border hover:bubble-shadow hover:-translate-y-2 transition-all duration-300">
+<a class="block aspect-[3/4] bg-y2k-lavender/30 overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ </a>
+<div class="p-4 text-center">
+<h3 class="font-display text-lg text-theme-text-primary truncate mb-1"><a class="hover:text-y2k-hotpink transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+<p class="font-bold text-y2k-hotpink">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
+</div>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="text-center py-16 bg-white/40 rounded-3xl y2k-border">
+<span class="font-display text-3xl text-y2k-pink/40">✧ Coming Soon ✧</span>
+</div>
+ {% endif %}
+ </div>
+</section>

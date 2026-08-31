@@ -1,0 +1,183 @@
+{% extends 'dashboard_base.html' %}
+{% load static core_tags %}
+
+{% block title %}Contact Messages - {{ brand.name }}{% endblock %}
+
+{% block content %}
+<div x-data="{ replyModal: null }" class="max-w-7xl mx-auto pb-12">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-bullhorn text-theme-text-disabled mr-2"></i>
+                    <span class="text-sm font-bold text-theme-text-primary">Marketing</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-theme-text-muted">Contact Messages</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Contact <span class="text-indigo-600 font-light">Messages</span></h1>
+            <p class="text-theme-text-muted mt-2 text-sm font-medium">Messages submitted through your storefront contact form.</p>
+        </div>
+        {% if unread_count > 0 %}
+        <form method="POST" action="{% url 'contact_message_mark_all_read' %}">
+            {% csrf_token %}
+            <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
+                <i class="fa-solid fa-check-double mr-2"></i> Mark All Read
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border dark:border-slate-600/50 p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600">
+                <i class="fa-solid fa-inbox text-lg"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Total</p>
+                <p class="text-2xl font-extrabold text-theme-text-primary">{{ total_count }}</p>
+            </div>
+        </div>
+        <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border dark:border-slate-600/50 p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center text-amber-600">
+                <i class="fa-solid fa-envelope text-lg"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Unread</p>
+                <p class="text-2xl font-extrabold text-amber-600">{{ unread_count }}</p>
+            </div>
+        </div>
+        <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border dark:border-slate-600/50 p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600">
+                <i class="fa-solid fa-envelope-open text-lg"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Read</p>
+                <p class="text-2xl font-extrabold text-emerald-600">{{ read_count }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages List -->
+    <div class="bg-theme-surface shadow-sm sm:rounded-2xl border border-theme-border dark:border-slate-600/50 overflow-hidden">
+        {% if messages_list %}
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-theme-bg">
+                    <tr>
+                        <th scope="col" class="pl-6 pr-3 py-4 text-left text-[10px] font-bold text-theme-text-muted uppercase tracking-wider w-8">Status</th>
+                        <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Sender</th>
+                        <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Message</th>
+                        <th scope="col" class="px-3 py-4 text-left text-[10px] font-bold text-theme-text-muted uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-3 py-4 text-right text-[10px] font-bold text-theme-text-muted uppercase tracking-wider pr-6">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-theme-surface divide-y divide-slate-100">
+                    {% for msg in messages_list %}
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors {% if not msg.is_read %}bg-indigo-50/40 dark:bg-indigo-950/20{% endif %}">
+                            <!-- Status indicator -->
+                            <td class="pl-6 pr-3 py-4">
+                                {% if not msg.is_read %}
+                                    <span class="inline-flex items-center justify-center w-3 h-3 rounded-full bg-indigo-500 shadow-sm shadow-indigo-200" title="Unread"></span>
+                                {% else %}
+                                    <span class="inline-flex items-center justify-center w-3 h-3 rounded-full bg-slate-200 dark:bg-slate-600" title="Read"></span>
+                                {% endif %}
+                            </td>
+                            <!-- Sender -->
+                            <td class="px-3 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs uppercase shadow-sm flex-shrink-0">
+                                        {{ msg.name|make_list|first }}
+                                    </div>
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-sm {% if not msg.is_read %}font-extrabold{% else %}font-bold{% endif %} text-theme-text-primary truncate">{{ msg.name }}</span>
+                                        <span class="text-xs text-theme-text-muted truncate">{{ msg.email }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <!-- Message -->
+                            <td class="px-3 py-4 text-sm text-theme-text-primary max-w-xs md:max-w-sm lg:max-w-md">
+                                <p class="{% if not msg.is_read %}font-semibold{% endif %} line-clamp-2 whitespace-pre-wrap">{{ msg.message }}</p>
+                            </td>
+                            <!-- Date -->
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-theme-text-muted font-medium">
+                                {{ msg.created_at|date:"M d, Y" }}
+                                <br><span class="text-xs text-slate-400">{{ msg.created_at|date:"h:i A" }}</span>
+                            </td>
+                            <!-- Actions -->
+                            <td class="px-3 py-4 text-right whitespace-nowrap pr-6">
+                                <div class="flex items-center justify-end gap-2">
+                                    <!-- Reply -->
+                                    <button @click="replyModal = {{ msg.id }}" type="button" class="inline-flex items-center px-3 py-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 rounded-lg transition" title="Reply">
+                                        <i class="fa-solid fa-reply mr-1"></i> Reply
+                                    </button>
+                                    <!-- Toggle Read / Unread -->
+                                    <form method="POST" action="{% url 'contact_message_toggle_read' msg.id %}">
+                                        {% csrf_token %}
+                                        {% if msg.is_read %}
+                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 text-xs font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 dark:bg-amber-500/10 dark:hover:bg-amber-500/20 rounded-lg transition" title="Mark as Unread">
+                                            <i class="fa-solid fa-envelope mr-1"></i> Unread
+                                        </button>
+                                        {% else %}
+                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 rounded-lg transition" title="Mark as Read">
+                                            <i class="fa-solid fa-envelope-open mr-1"></i> Read
+                                        </button>
+                                        {% endif %}
+                                    </form>
+                                    <!-- Delete -->
+                                    <form method="POST" action="{% url 'contact_message_delete' msg.id %}" onsubmit="return confirm('Delete this message from {{ msg.name }}?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 text-xs font-bold text-rose-500 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 rounded-lg transition" title="Delete">
+                                            <i class="fa-solid fa-trash-can mr-1"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Reply Modal (inline per row, driven by Alpine) -->
+                        <tr x-show="replyModal === {{ msg.id }}" x-transition.opacity x-cloak>
+                            <td colspan="5" class="px-6 py-5 bg-slate-50 dark:bg-slate-800/40 border-t border-indigo-100 dark:border-indigo-900/30">
+                                <form method="POST" action="{% url 'contact_message_reply' msg.id %}" class="flex flex-col gap-3">
+                                    {% csrf_token %}
+                                    <div class="flex items-center gap-2 text-sm text-theme-text-muted">
+                                        <i class="fa-solid fa-reply text-indigo-500"></i>
+                                        <span>Replying to <strong class="text-theme-text-primary">{{ msg.name }}</strong> ({{ msg.email }})</span>
+                                    </div>
+                                    <div class="bg-theme-surface border border-theme-border dark:border-slate-600/50 rounded-xl p-3 text-sm text-theme-text-muted italic max-h-24 overflow-y-auto">
+                                        "{{ msg.message }}"
+                                    </div>
+                                    <textarea name="reply_body" rows="4" required placeholder="Type your reply here..." class="w-full px-4 py-3 bg-theme-surface border border-theme-border dark:border-slate-600/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"></textarea>
+                                    <div class="flex items-center gap-3 justify-end">
+                                        <button type="button" @click="replyModal = null" class="px-4 py-2 text-sm font-bold text-theme-text-muted bg-theme-bg-secondary hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition">
+                                            Cancel
+                                        </button>
+                                        <button type="submit" class="inline-flex items-center px-5 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
+                                            <i class="fa-solid fa-paper-plane mr-2"></i> Send Reply
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="p-12 text-center flex flex-col items-center justify-center">
+                <div class="w-16 h-16 bg-theme-bg rounded-2xl flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-inbox text-2xl text-theme-text-disabled"></i>
+                </div>
+                <h3 class="text-lg font-bold text-theme-text-primary mb-1">No messages yet</h3>
+                <p class="text-sm text-theme-text-muted max-w-sm">When customers submit the contact form on your storefront, their messages will appear here.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+<section class="h-[75vh] flex items-center justify-center px-8 md:px-16 relative">
+<div class="absolute inset-0 bg-stone-50 -z-10"></div>
+ {% if brand.banner %}
+ <img alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-90" src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}"/>
+ {% endif %}
+ <div class="text-center z-10 {% if brand.banner %}text-white{% else %}text-stone-800{% endif %}">
+<h1 class="text-5xl md:text-7xl font-light tracking-tight mb-8">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Elevate the everyday.{% endif %}</h1>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+<a class="inline-block border {% if brand.banner %}border-white hover:bg-white hover:text-stone-900{% else %}border-stone-800 hover:bg-stone-800 hover:text-white{% endif %} px-10 py-3 text-xs uppercase tracking-[0.2em] transition-colors duration-500" href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}{{ brand.banner_cta_link|default:'#products' }}{% endif %}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop Collection{% endif %}</a>
+
+ {% if brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+ {{ brand.banner_secondary_cta_text }}
+ </a>
+ {% endif %}
+ 
+</div>
+</div>
+</section>

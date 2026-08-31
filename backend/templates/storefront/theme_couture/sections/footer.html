@@ -1,0 +1,31 @@
+<footer class="bg-black text-white py-20 mt-24">
+<div class="max-w-[1600px] mx-auto px-8 flex flex-col items-center text-center">
+{% if brand.logo %}
+ <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+{% else %}
+ <h3 class="font-serif italic text-5xl mb-6">{{ brand.name }}</h3>
+{% endif %}
+<p class="font-sans text-theme-text-muted max-w-lg mb-10">{% if brand.description %}{{ brand.description }}{% else %}Avant-garde fashion that challenges convention and redefines silhouette.{% endif %}</p>
+<div class="flex space-x-4 mt-6">
+ {% if brand.instagram_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
+ {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+ </div>
+
+<div class="flex gap-6 text-theme-text-secondary mb-12">
+<a class="hover:text-white transition-colors" href="#"><i class="fa-brands fa-instagram text-xl"></i></a>
+<a class="hover:text-white transition-colors" href="#"><i class="fa-brands fa-pinterest text-xl"></i></a>
+<a class="hover:text-white transition-colors" href="#"><i class="fa-brands fa-twitter text-xl"></i></a>
+</div>
+<p class="text-theme-text-secondary text-xs font-sans tracking-widest uppercase">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} Maison {{ brand.name }}{% endif %}</p>
+</div>
+<div class="max-w-7xl mx-auto px-6 py-12 text-center">
+<h4 class="text-xl font-bold mb-4">Subscribe to our Newsletter</h4>
+<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex justify-center max-w-md mx-auto">
+<input class="px-4 py-2 border w-full text-black" placeholder="Your email address" required="" type="email" name="email"/>
+<button class="bg-black text-white px-6 py-2 font-bold" type="submit">Join</button>
+</form>
+</div>
+</footer>

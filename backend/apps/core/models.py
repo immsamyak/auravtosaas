@@ -337,6 +337,7 @@ class Testimonial(models.Model):
         return f"{self.name} - {self.role}"
 
 class BlogPost(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='blog_posts', null=True, blank=True)
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, max_length=255)
     content = models.TextField()

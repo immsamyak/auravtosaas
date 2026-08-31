@@ -1,0 +1,544 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<div class="h-[calc(100vh-64px)] -m-6 flex overflow-hidden bg-theme-bg" x-data="websiteDesigner()">
+    
+    <!-- Left Sidebar: Section Reordering -->
+    <div class="w-80 border-r border-theme-border bg-theme-surface flex flex-col h-full flex-shrink-0 relative z-20">
+        <div class="p-4 border-b border-theme-border flex justify-between items-center bg-theme-surface">
+            <h2 class="font-bold text-theme-text-primary text-lg"><i class="fa-solid fa-layer-group mr-2 text-indigo-500"></i> Website Designer</h2>
+            <button @click="saveLayout(false)" class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded shadow-md hover:bg-indigo-700 transition flex items-center">
+                <i class="fa-solid fa-save mr-1.5"></i> <span x-text="isSaving ? 'Saving...' : 'Save'"></span>
+            </button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            
+            <div class="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-2">Sections</div>
+            
+            <!-- Draggable List -->
+            <div class="space-y-2">
+                <template x-for="(section, index) in sections" :key="index">
+                    <div 
+                        class="p-3 border rounded-lg flex items-center justify-between cursor-pointer transition-all"
+                        :class="activeSectionIndex === index ? 'border-indigo-500 bg-indigo-50/10' : 'border-theme-border hover:border-theme-border-hover bg-theme-surface'"
+                        @click="activeSectionIndex = index"
+                    >
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-grip-vertical text-theme-text-muted mr-3 cursor-grab hover:text-theme-text-primary"></i>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-theme-text-primary uppercase" x-text="section.type"></span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button @click.stop="toggleSection(index)" class="text-theme-text-muted hover:text-indigo-500">
+                                <i class="fa-solid" :class="section.is_active ? 'fa-eye' : 'fa-eye-slash'"></i>
+                            </button>
+                            <button @click.stop="moveUp(index)" x-show="index > 0" class="text-theme-text-muted hover:text-theme-text-primary"><i class="fa-solid fa-arrow-up"></i></button>
+                            <button @click.stop="moveDown(index)" x-show="index < sections.length - 1" class="text-theme-text-muted hover:text-theme-text-primary"><i class="fa-solid fa-arrow-down"></i></button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <button @click="isAddModalOpen = true" class="w-full py-3 border-2 border-dashed border-theme-border rounded-lg text-theme-text-muted hover:text-indigo-500 hover:border-indigo-500 transition-colors flex justify-center items-center font-medium text-sm">
+                <i class="fa-solid fa-plus mr-2"></i> Add Section
+            </button>
+        </div>
+    </div>
+    
+    <!-- Center: Live Preview iframe -->
+    <div class="flex-1 flex flex-col h-full bg-slate-100 relative">
+        <div class="h-14 border-b border-theme-border bg-white flex justify-between items-center px-4 shadow-sm z-10">
+            <div class="flex items-center">
+                {% include 'components/breadcrumb.html' with breadcrumbs='Dashboard,Website Designer' %}
+            </div>
+            <div class="bg-slate-100 p-1 rounded-lg flex space-x-1">
+                <button @click="previewMode = 'desktop'" :class="previewMode === 'desktop' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-800'" class="w-10 h-8 rounded flex items-center justify-center transition-all"><i class="fa-solid fa-desktop"></i></button>
+                <button @click="previewMode = 'tablet'" :class="previewMode === 'tablet' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-800'" class="w-10 h-8 rounded flex items-center justify-center transition-all"><i class="fa-solid fa-tablet-screen-button"></i></button>
+                <button @click="previewMode = 'mobile'" :class="previewMode === 'mobile' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-800'" class="w-10 h-8 rounded flex items-center justify-center transition-all"><i class="fa-solid fa-mobile-screen-button"></i></button>
+            </div>
+            
+            <a href="{% url 'storefront' brand.slug %}" target="_blank" class="text-xs text-theme-text-muted hover:text-indigo-500 font-medium ml-4">View Live Store <i class="fa-solid fa-external-link-alt ml-1"></i></a>
+        </div>
+        
+        <div class="flex-1 overflow-auto flex justify-center items-start p-4 custom-scrollbar">
+            <div class="transition-all duration-300 ease-in-out shadow-2xl rounded overflow-hidden border border-slate-300 bg-white"
+                 :class="{
+                     'w-full h-full': previewMode === 'desktop',
+                     'w-[768px] h-[1024px]': previewMode === 'tablet',
+                     'w-[375px] h-[812px]': previewMode === 'mobile'
+                 }">
+                <iframe id="preview-frame" src="{% url 'storefront' brand.slug %}?preview=1" class="w-full h-full border-0 bg-white"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Sidebar: Section Settings -->
+    <div class="w-80 border-l border-theme-border bg-theme-surface flex flex-col h-full flex-shrink-0 transform transition-transform" :class="activeSectionIndex !== null ? 'translate-x-0' : 'translate-x-full'">
+        <template x-if="activeSectionIndex !== null && sections[activeSectionIndex]">
+            <div class="flex flex-col h-full">
+                <div class="p-4 border-b border-theme-border flex justify-between items-center bg-theme-surface">
+                    <h3 class="font-bold text-theme-text-primary capitalize flex items-center">
+                        <i class="fa-solid fa-sliders mr-2 text-indigo-500"></i>
+                        <span x-text="sections[activeSectionIndex].type"></span> Settings
+                    </h3>
+                    <button @click="activeSectionIndex = null" class="text-theme-text-muted hover:text-theme-text-primary"><i class="fa-solid fa-times"></i></button>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto p-4 space-y-6">
+                    <div class="bg-indigo-50/50 p-4 rounded-lg border border-indigo-100">
+                        <p class="text-xs text-indigo-800 font-medium"><i class="fa-solid fa-circle-info mr-1"></i> These settings override the default theme content for this section.</p>
+                    </div>
+
+                    <!-- Schema: HEADER -->
+                    <template x-if="sections[activeSectionIndex].type === 'header'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Logo URL (Optional)</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.logo_url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Leave empty to use brand logo" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Navigation Links</label>
+                                <div class="space-y-2 mb-3">
+                                    <template x-for="(link, lIndex) in (sections[activeSectionIndex].settings.links || [])" :key="lIndex">
+                                        <div class="flex items-center space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
+                                            <div class="flex-1 space-y-2">
+                                                <input type="text" x-model="link.text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Link Text" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
+                                                <input type="text" x-model="link.url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="URL (e.g. /shop/)" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
+                                            </div>
+                                            <button @click="removeLink(activeSectionIndex, lIndex)" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-times"></i></button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button @click="addLink(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium transition flex items-center justify-center">
+                                    <i class="fa-solid fa-plus mr-1.5"></i> Add Nav Link
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: HERO -->
+                    <template x-if="sections[activeSectionIndex].type === 'hero'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Banner Image URL</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.image_url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Leave empty for default" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Headline</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Subheadline</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Primary CTA Text</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.cta_text" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Primary CTA URL</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.cta_url" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: PRODUCTS / COLLECTIONS / CATEGORIES -->
+                    <template x-if="['products', 'collections', 'categories'].includes(sections[activeSectionIndex].type)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Number of Items to Show</label>
+                                <input type="number" min="1" max="50" x-model.number="sections[activeSectionIndex].settings.count" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g. 4, 8, 12">
+                            </div>
+                            
+                            <!-- Feature Specific Items -->
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Feature Specific Items</label>
+                                <div class="bg-theme-bg border border-theme-border rounded p-2 max-h-48 overflow-y-auto space-y-2">
+                                    <template x-if="sections[activeSectionIndex].type === 'products'">
+                                        <template x-for="item in availableProducts" :key="item.id">
+                                            <label class="flex items-center space-x-2 cursor-pointer">
+                                                <input type="checkbox" :value="item.id" x-model="sections[activeSectionIndex].settings.selected_ids" @change="triggerPreviewUpdate" class="text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                                                <span class="text-sm text-theme-text-primary" x-text="item.name"></span>
+                                            </label>
+                                        </template>
+                                    </template>
+                                    
+                                    <template x-if="sections[activeSectionIndex].type === 'collections'">
+                                        <template x-for="item in availableCollections" :key="item.id">
+                                            <label class="flex items-center space-x-2 cursor-pointer">
+                                                <input type="checkbox" :value="item.id" x-model="sections[activeSectionIndex].settings.selected_ids" @change="triggerPreviewUpdate" class="text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                                                <span class="text-sm text-theme-text-primary" x-text="item.name"></span>
+                                            </label>
+                                        </template>
+                                    </template>
+                                    
+                                    <template x-if="sections[activeSectionIndex].type === 'categories'">
+                                        <template x-for="item in availableCategories" :key="item.id">
+                                            <label class="flex items-center space-x-2 cursor-pointer">
+                                                <input type="checkbox" :value="item.id" x-model="sections[activeSectionIndex].settings.selected_ids" @change="triggerPreviewUpdate" class="text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                                                <span class="text-sm text-theme-text-primary" x-text="item.name"></span>
+                                            </label>
+                                        </template>
+                                    </template>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-1">If none selected, defaults to latest.</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Background Color</label>
+                                <input type="color" x-model="sections[activeSectionIndex].settings.bgColor" @change="triggerPreviewUpdate" class="w-full h-10 rounded cursor-pointer border border-theme-border">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Schema: TESTIMONIALS -->
+                    <template x-if="sections[activeSectionIndex].type === 'testimonials'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-16"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Customer Reviews</label>
+                                <div class="space-y-3 mb-3">
+                                    <template x-for="(review, rIndex) in (sections[activeSectionIndex].settings.testimonials || [])" :key="rIndex">
+                                        <div class="p-3 bg-theme-bg border border-theme-border rounded-lg relative">
+                                            <button @click="removeTestimonial(activeSectionIndex, rIndex)" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button>
+                                            <div class="space-y-2 mt-2">
+                                                <input type="text" x-model="review.name" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Customer Name" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:ring-1 outline-none">
+                                                <input type="text" x-model="review.role" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Role (e.g. Verified Buyer)" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:ring-1 outline-none">
+                                                <div class="flex items-center space-x-2">
+                                                    <label class="text-xs text-slate-500">Rating:</label>
+                                                    <input type="number" min="1" max="5" x-model.number="review.rating" @input.debounce.500ms="triggerPreviewUpdate" class="w-16 px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 outline-none">
+                                                </div>
+                                                <textarea x-model="review.text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Review Text..." class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm h-16 focus:ring-1 outline-none"></textarea>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button @click="addTestimonial(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium transition flex items-center justify-center">
+                                    <i class="fa-solid fa-plus mr-1.5"></i> Add Review
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: DEFAULT / OTHER -->
+                    <template x-if="!['header', 'hero', 'products', 'collections', 'categories', 'testimonials'].includes(sections[activeSectionIndex].type)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Background Color</label>
+                                <input type="color" x-model="sections[activeSectionIndex].settings.bgColor" @change="triggerPreviewUpdate" class="w-full h-10 rounded cursor-pointer border border-theme-border">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Heading Text</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Subheading / Body</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-24"></textarea>
+                            </div>
+                            <template x-if="sections[activeSectionIndex].type === 'map'">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Google Maps Embed URL</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.map_url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. https://www.google.com/maps/embed?pb=..." class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <p class="text-xs text-slate-400 mt-1">Go to Google Maps -> Share -> Embed a map, and copy the src URL.</p>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    
+                    <div class="pt-4 border-t border-theme-border">
+                        <button @click="isDeleteModalOpen = true" class="w-full py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded font-medium text-sm transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Remove Section
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template x-if="activeSectionIndex === null">
+            <div class="flex-1 flex flex-col items-center justify-center text-theme-text-muted p-8 text-center">
+                <div class="w-16 h-16 rounded-full bg-theme-bg flex items-center justify-center mb-4 border border-theme-border">
+                    <i class="fa-solid fa-hand-pointer text-2xl text-slate-300"></i>
+                </div>
+                <h3 class="font-bold text-theme-text-primary mb-2">No Section Selected</h3>
+                <p class="text-sm">Click a section on the left sidebar to edit its content and styling.</p>
+            </div>
+        </template>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Add Section Modal -->
+    <div x-show="isAddModalOpen" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm" x-transition.opacity>
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col" @click.outside="isAddModalOpen = false">
+            <div class="px-6 py-4 border-b border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-slate-800">Add New Section</h3>
+                    <button @click="isAddModalOpen = false" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-search text-slate-400"></i>
+                    </div>
+                    <input type="text" x-model="searchQuery" class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Search 20+ sections...">
+                </div>
+            </div>
+            <div class="p-6 grid grid-cols-2 gap-3 overflow-y-auto max-h-[60vh]">
+                <template x-for="type in filteredSectionTypes">
+                    <button @click="confirmAddSection(type)" class="flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-center">
+                        <i :class="getSectionIcon(type)" class="text-2xl text-indigo-500 mb-2"></i>
+                        <span class="font-semibold text-sm text-slate-700 capitalize" x-text="type"></span>
+                    </button>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div x-show="isDeleteModalOpen" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm" x-transition.opacity>
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 text-center" @click.outside="isDeleteModalOpen = false">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Remove Section?</h3>
+            <p class="text-sm text-slate-500 mb-6">Are you sure you want to delete this section? This action cannot be undone.</p>
+            <div class="flex space-x-3">
+                <button @click="isDeleteModalOpen = false" class="flex-1 py-2 px-4 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium">Cancel</button>
+                <button @click="confirmDeleteSection" class="flex-1 py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium">Delete</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% include 'components/toast.html' %}
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('websiteDesigner', () => ({
+        sections: [],
+        activeSectionIndex: null,
+        previewMode: 'desktop',
+        isSaving: false,
+        isAddModalOpen: false,
+        isDeleteModalOpen: false,
+        searchQuery: '',
+        availableSectionTypes: [
+            'hero', 'products', 'collections', 'categories', 'testimonials', 
+            'newsletter', 'features', 'header', 'footer',
+            'gallery', 'video', 'faq', 'text_columns', 'image_with_text', 
+            'logo_list', 'map', 'contact_form', 'rich_text', 'countdown', 
+            'blog_posts', 'slideshow'
+        ],
+        get filteredSectionTypes() {
+            if (this.searchQuery.trim() === '') return this.availableSectionTypes;
+            return this.availableSectionTypes.filter(type => type.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        },
+        
+        availableProducts: {{ available_products_json|safe|default:"[]" }},
+        availableCollections: {{ available_collections_json|safe|default:"[]" }},
+        availableCategories: {{ available_categories_json|safe|default:"[]" }},
+        
+        init() {
+            const initialSections = [
+                {% for section in layout.sections.all %}
+                {
+                    id: {{ section.id }},
+                    type: '{{ section.section_type }}',
+                    is_active: {{ section.is_active|yesno:"true,false" }},
+                    settings: {{ section.settings|safe|default:"{}" }}
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ];
+            
+            // Ensure schema defaults
+            initialSections.forEach(s => {
+                if(s.type === 'header' && !s.settings.links) {
+                    s.settings.links = [
+                        {text: 'Shop', url: '/shop/'},
+                        {text: 'Categories', url: '/categories/'}
+                    ];
+                }
+                if(['products', 'collections', 'categories'].includes(s.type)) {
+                    if(!s.settings.count) s.settings.count = 4;
+                    if(!s.settings.selected_ids) s.settings.selected_ids = [];
+                }
+                if(s.type === 'testimonials' && !s.settings.testimonials) {
+                    s.settings.testimonials = [
+                        {name: 'Jane Doe', role: 'Verified Buyer', rating: 5, text: 'Amazing quality and fast shipping!'}
+                    ];
+                }
+            });
+            
+            this.sections = initialSections;
+            if(this.sections.length > 0) this.activeSectionIndex = 0;
+        },
+        
+        getSectionIcon(type) {
+            const icons = {
+                'hero': 'fa-image',
+                'products': 'fa-box',
+                'collections': 'fa-layer-group',
+                'categories': 'fa-tags',
+                'testimonials': 'fa-quote-left',
+                'newsletter': 'fa-envelope',
+                'features': 'fa-star',
+                'header': 'fa-heading',
+                'footer': 'fa-shoe-prints',
+                'gallery': 'fa-images',
+                'video': 'fa-video',
+                'faq': 'fa-circle-question',
+                'text_columns': 'fa-columns',
+                'image_with_text': 'fa-address-card',
+                'logo_list': 'fa-crown',
+                'map': 'fa-map-location-dot',
+                'contact_form': 'fa-address-book',
+                'rich_text': 'fa-align-left',
+                'countdown': 'fa-clock',
+                'blog_posts': 'fa-newspaper',
+                'slideshow': 'fa-panorama'
+            };
+            return 'fa-solid ' + (icons[type] || 'fa-cube');
+        },
+        
+        addLink(sectionIndex) {
+            if(!this.sections[sectionIndex].settings.links) this.sections[sectionIndex].settings.links = [];
+            this.sections[sectionIndex].settings.links.push({text: 'New Link', url: '#'});
+            this.triggerPreviewUpdate();
+        },
+        
+        removeLink(sectionIndex, linkIndex) {
+            this.sections[sectionIndex].settings.links.splice(linkIndex, 1);
+            this.triggerPreviewUpdate();
+        },
+        
+        addTestimonial(sectionIndex) {
+            if(!this.sections[sectionIndex].settings.testimonials) this.sections[sectionIndex].settings.testimonials = [];
+            this.sections[sectionIndex].settings.testimonials.push({name: 'New Customer', role: 'Buyer', rating: 5, text: 'Add review text here...'});
+            this.triggerPreviewUpdate();
+        },
+        
+        removeTestimonial(sectionIndex, tIndex) {
+            this.sections[sectionIndex].settings.testimonials.splice(tIndex, 1);
+            this.triggerPreviewUpdate();
+        },
+        
+        moveUp(index) {
+            if (index > 0) {
+                const temp = this.sections[index];
+                this.sections[index] = this.sections[index - 1];
+                this.sections[index - 1] = temp;
+                this.activeSectionIndex = index - 1;
+                this.triggerPreviewUpdate();
+            }
+        },
+        
+        moveDown(index) {
+            if (index < this.sections.length - 1) {
+                const temp = this.sections[index];
+                this.sections[index] = this.sections[index + 1];
+                this.sections[index + 1] = temp;
+                this.activeSectionIndex = index + 1;
+                this.triggerPreviewUpdate();
+            }
+        },
+        
+        toggleSection(index) {
+            this.sections[index].is_active = !this.sections[index].is_active;
+            this.triggerPreviewUpdate();
+        },
+        
+        confirmAddSection(type) {
+            this.isAddModalOpen = false;
+            
+            const newSection = {
+                id: null,
+                type: type,
+                is_active: true,
+                settings: {
+                    heading: type.charAt(0).toUpperCase() + type.slice(1),
+                    subheading: 'Enter your custom content here'
+                }
+            };
+            
+            if(['products', 'collections', 'categories'].includes(type)) {
+                newSection.settings.count = 4;
+                newSection.settings.selected_ids = [];
+            }
+            if(type === 'testimonials') newSection.settings.testimonials = [{name: 'Jane Doe', role: 'Buyer', rating: 5, text: 'Great!'}];
+            
+            this.sections.push(newSection);
+            this.activeSectionIndex = this.sections.length - 1;
+            this.triggerPreviewUpdate();
+        },
+        
+        confirmDeleteSection() {
+            this.isDeleteModalOpen = false;
+            this.sections.splice(this.activeSectionIndex, 1);
+            this.activeSectionIndex = null;
+            this.triggerPreviewUpdate();
+        },
+        
+        triggerPreviewUpdate() {
+            this.saveLayout(true);
+        },
+        
+        async saveLayout(silent = false) {
+            if (!silent) this.isSaving = true;
+            
+            try {
+                const response = await fetch('{% url "website_designer" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        action: 'save_sections',
+                        sections: this.sections
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    if (!silent && typeof showToast === 'function') {
+                        showToast("Layout saved successfully!", "success");
+                    }
+                    
+                    const iframe = document.getElementById('preview-frame');
+                    iframe.src = iframe.src;
+                    
+                    if (!silent && this.sections.some(s => !s.id)) {
+                        window.location.reload();
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                if (!silent && typeof showToast === 'function') {
+                    showToast("Error saving layout", "error");
+                }
+            } finally {
+                if (!silent) this.isSaving = false;
+            }
+        }
+    }));
+});
+</script>
+{% endblock %}

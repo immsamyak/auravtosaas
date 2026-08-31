@@ -1,0 +1,11 @@
+<section class="bg-hab-white relative min-h-[50vh]">
+ <div class="absolute inset-0 w-full h-full">
+ {% if brand.banner %}
+ <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover">
+ {% else %}
+ <div class="w-full h-full bg-[#e5e0d8] flex items-center justify-center">
+ <span class="text-hab-wood font-serif text-3xl">{{ brand.name }}</span>
+ </div>
+ {% endif %}
+ </div>
+</section>

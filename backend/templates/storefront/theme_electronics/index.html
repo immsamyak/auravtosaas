@@ -1,82 +1,18 @@
 {% extends "storefront/theme_electronics/base.html" %}
 
 {% block content %}
-<!-- Tech Hero / Banner -->
-<section class="bg-slate-900 border-b border-blue-600 relative overflow-hidden h-[50vh]">
- <!-- Grid overlay -->
- <div class="absolute inset-0" style="background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px); background-size: 40px 40px; opacity: 0.5;"></div>
- 
- <div class="absolute inset-0 z-10">
- {% if brand.banner %}
- <img src="{{ brand.banner.url }}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover opacity-80">
- {% else %}
- <div class="w-full h-full flex items-center justify-center">
- <span class="text-theme-text-muted font-mono text-2xl tracking-widest uppercase">{{ brand.name }}</span>
- </div>
- {% endif %}
- </div>
-</section>
+{% load theme_tags %}
+    {% for layout_section in brand.layout.sections.all %}
+        {% if layout_section.is_active and layout_section.section_type != 'header' and layout_section.section_type != 'footer' %}
+            {% with template_path="storefront/"|add:brand.theme.template_folder|add:"/sections/"|add:layout_section.section_type|add:".html" %}
+                {% get_safe_template_path template_path as safe_path %}
+                {% include safe_path with settings=layout_section.settings %}
+            {% endwith %}
+        {% endif %}
+    {% empty %}
+        <!-- Fallback if no layout is defined -->
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/hero.html" %}
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/products.html" %}
 
-<!-- Product Grid -->
-<section id="products" class="py-24 bg-[#f8fafc]">
- <div class="max-w-7xl mx-auto px-6">
- <div class="flex justify-between items-end mb-12 border-b border-theme-input-border pb-4">
- <div>
- <span class="text-blue-600 font-mono text-xs font-bold uppercase tracking-widest block mb-2">// HARDWARE CATALOG</span>
- <h2 class="text-3xl font-black text-theme-text-primary uppercase">Available Units</h2>
- </div>
- </div>
-
- {% if products %}
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
- {% for product in products|slice:":4" %}
- <div class="bg-theme-surface border border-theme-border tech-card flex flex-col group relative">
- <!-- Status indicator -->
- <div class="absolute top-4 left-4 z-10 flex items-center">
- <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
- <span class="text-[10px] font-mono text-emerald-600 font-bold uppercase">In Stock</span>
- </div>
- 
- <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-square border-b border-theme-border-subtle bg-theme-surface p-8">
- {% if product.variants.first.image %}
- <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';">
- {% else %}
- <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
- <i class="fa-solid fa-laptop text-5xl mb-4"></i>
- <span class="font-mono text-xs uppercase">{{ product.name }}</span>
- </div>
- {% endif %}
- </a>
- 
- <div class="p-6 flex-1 flex flex-col">
- <h3 class="text-lg font-bold text-theme-text-primary mb-1 leading-tight"><a href="{% url 'store_product_detail' brand.slug product.slug %}" class="hover:text-blue-600 transition-colors">{{ product.name }}</a></h3>
- 
- <div class="mt-auto pt-4 border-t border-theme-border-subtle flex items-center justify-between">
- <span class="text-xl font-black text-theme-text-primary font-mono">{% if product.sale_price %}
-    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
-    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
-{% else %}
-    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
-{% endif %}</span>
- <button class="w-10 h-10 bg-theme-bg border border-theme-border text-theme-text-primary hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors flex items-center justify-center" @click.prevent="$store.cart.add({id: '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, image: '{% if product.images.first %}{{ product.images.first.image.url }}{% elif product.variants.first.image %}{{ product.variants.first.image.url }}{% endif %}'}); isCartOpen = true;" >
- <i class="fa-solid fa-plus"></i>
- </button>
- </div>
- </div>
- </div>
- {% endfor %}
- </div>
- <div class="mt-12 text-center w-full flex justify-center">
- <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
- View All Products
- </a>
- </div>
-
- {% elif brand.logo %}
- <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
- {% else %}
- <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
- {% endif %}
- </div>
-</section>
+    {% endfor %}
 {% endblock %}

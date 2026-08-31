@@ -1,0 +1,34 @@
+<section class="py-16 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="bg-pop-yellow neo-brutal p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 relative halftone overflow-hidden">
+<div class="flex-1 relative z-10">
+<div class="inline-block bg-pop-red text-white font-sans font-bold px-4 py-1 neo-brutal-sm text-sm mb-6 rotate-[-2deg]">
+ 🔥 HOT DROP
+ </div>
+<h1 class="font-display text-5xl md:text-7xl text-pop-black leading-tight mb-6 drop-shadow-[3px_3px_0_#FF3131]">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}GO LOUD.<br/>GO BOLD.{% endif %}</h1>
+<p class="font-sans font-semibold text-pop-black/70 text-lg mb-8 max-w-md">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Fashion that turns heads and breaks rules. Be unapologetically you.{% endif %}</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+<a class="inline-block bg-pop-black text-pop-yellow font-display text-xl px-10 py-4 neo-brutal hover:bg-pop-red hover:text-white transition-colors" href="{{ brand.banner_cta_link|default:'#shop' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}SHOP NOW!{% endif %}</a>
+
+ {% if brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
+ {{ brand.banner_secondary_cta_text }}
+ </a>
+ {% endif %}
+ 
+</div>
+</div>
+<div class="flex-1 relative z-10">
+<div class="aspect-square neo-brutal bg-theme-surface overflow-hidden rotate-3 hover:rotate-0 transition-transform duration-500">
+ {% if brand.banner %}
+ <img alt="Hero" class="w-full h-full object-cover" src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-pop-pink/20">
+<span class="font-display text-6xl text-pop-red/30">POP!</span>
+</div>
+ {% endif %}
+ </div>
+</div>
+</div>
+</div>
+</section>

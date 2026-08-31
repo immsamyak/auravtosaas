@@ -1,71 +1,18 @@
 {% extends "storefront/theme_beauty/base.html" %}
 
 {% block content %}
-<!-- Soft Hero -->
-<section class="bg-[#fcfcfb] overflow-hidden flex items-center justify-center relative min-h-[60vh]">
- <div class="absolute inset-0 w-full h-full">
- {% if brand.banner %}
- <img src="{{ brand.banner.url }}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover">
- {% else %}
- <div class="w-full h-full bg-glow-sand flex flex-col items-center justify-center text-glow-charcoal">
- <span class="text-4xl font-serif tracking-tight">{{ brand.name }}</span>
- </div>
- {% endif %}
- </div>
-</section>
+{% load theme_tags %}
+    {% for layout_section in brand.layout.sections.all %}
+        {% if layout_section.is_active and layout_section.section_type != 'header' and layout_section.section_type != 'footer' %}
+            {% with template_path="storefront/"|add:brand.theme.template_folder|add:"/sections/"|add:layout_section.section_type|add:".html" %}
+                {% get_safe_template_path template_path as safe_path %}
+                {% include safe_path with settings=layout_section.settings %}
+            {% endwith %}
+        {% endif %}
+    {% empty %}
+        <!-- Fallback if no layout is defined -->
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/hero.html" %}
+        {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/products.html" %}
 
-<!-- Product Grid -->
-<section id="shop" class="py-24 bg-[#fcfcfb]">
- <div class="max-w-7xl mx-auto px-6">
- <div class="text-center mb-16">
- <h2 class="text-4xl font-serif text-glow-charcoal mb-4">Our Collection</h2>
- </div>
-
- {% if products %}
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
- {% for product in products|slice:":4" %}
- <div class="organic-card rounded-3xl p-6 group border border-[#efede5]">
- <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block relative aspect-square bg-[#fcfcfb] rounded-2xl overflow-hidden mb-6 img-zoom flex items-center justify-center border border-[#efede5]">
- {% if product.variants.first.image %}
- <img src="{{ product.variants.first.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';">
- {% else %}
- <div class="text-center text-glow-sage">
- <i class="fa-solid fa-pump-soap text-4xl mb-2"></i>
- </div>
- {% endif %}
- 
- <!-- Soft Add to Cart Button -->
- <div class="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
- <button class="w-full bg-white/90 text-glow-charcoal text-xs uppercase tracking-widest py-3 rounded-xl hover:bg-glow-clay hover:text-white transition-colors backdrop-blur-sm shadow-sm">
- Quick View
- </button>
- </div>
- </a>
- 
- <div class="text-center">
- <a href="{% url 'store_product_detail' brand.slug product.slug %}" class="block text-lg font-serif text-glow-charcoal hover:text-glow-clay transition-colors mb-2">{{ product.name }}</a>
- <p class="text-theme-text-muted font-medium">{% if product.sale_price %}
-    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
-    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
-{% else %}
-    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
-{% endif %}</p>
- </div>
- </div>
- {% endfor %}
- </div>
- <div class="mt-12 text-center w-full flex justify-center">
- <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
- View All Products
- </a>
- </div>
-
- {% else %}
- <div class="text-center py-16 bg-[#fcfcfb] rounded-3xl border border-[#efede5]">
- <h3 class="text-2xl font-serif text-glow-charcoal mb-2">Coming Soon</h3>
- <p class="text-theme-text-muted">Products are currently being curated. Check back shortly.</p>
- </div>
- {% endif %}
- </div>
-</section>
+    {% endfor %}
 {% endblock %}

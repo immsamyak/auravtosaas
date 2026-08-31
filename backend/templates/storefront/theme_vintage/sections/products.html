@@ -1,0 +1,54 @@
+{% load theme_tags %}
+<section class="mb-20" id="shop">
+<div class="text-center mb-12 relative">
+<hr class="absolute top-1/2 w-full border-sepia-200 -z-10"/>
+<h2 class="inline-block bg-sepia-50 px-6 font-serif text-4xl text-sepia-900">Featured Goods</h2>
+</div>
+
+ {% if products %}
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+ {% filter_selected_items products settings.selected_ids as featured_products %}
+{% with limit=settings.count|default:4 %}
+{% for product in featured_products|slice:limit %}
+ <div class="group bg-theme-surface p-4 rounded-xl border border-sepia-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+<a class="block aspect-[3/4] rounded-lg overflow-hidden mb-4 relative bg-sepia-100" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.images.first %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif product.variants.first.image %}
+ <img alt="{{ product.name }}" class="w-full h-full object-cover filter sepia-[0.2] group-hover:scale-105 transition-transform duration-500" src="{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{{ product.variants.first.image.url }}{% endif %}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
+ {% elif brand.logo %}
+ <img alt="{{ brand.name }}" class="w-full h-full object-contain p-8 opacity-50" src="{{ brand.logo.url }}"/>
+ {% else %}
+ <div class="w-full h-full flex items-center justify-center bg-gray-100/10 text-gray-400"><i class="fa-solid fa-image text-3xl opacity-30"></i></div>
+ {% endif %}
+ 
+ <div class="absolute inset-0 bg-sepia-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="bg-theme-surface text-sepia-900 font-sans font-bold uppercase tracking-widest text-xs px-4 py-2 rounded">View</span>
+</div>
+</a>
+<div class="text-center">
+<h3 class="font-serif text-xl mb-1 truncate px-2"><a class="hover:text-rust transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+<p class="font-sans font-bold text-rust">{% if product.sale_price %}
+    <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
+    <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>
+{% else %}
+    {{ brand.currency_symbol|default:'$' }}{{ product.price }}
+{% endif %}</p>
+</div>
+</div>
+ {% endfor %}
+{% endwith %}
+ </div>
+ <div class="mt-12 text-center w-full flex justify-center">
+ <a href="{% url 'storefront_shop' brand.slug %}" class="inline-flex items-center justify-center px-8 py-3 border border-current opacity-70 hover:opacity-100 transition-opacity font-medium tracking-wider uppercase text-sm">
+ View All Products
+ </a>
+ </div>
+
+ {% else %}
+ <div class="text-center py-16 bg-theme-surface rounded-xl border border-sepia-200">
+<i class="fa-solid fa-box-open text-4xl text-sepia-300 mb-4"></i>
+<h3 class="font-serif text-2xl text-sepia-800">Inventory Empty</h3>
+</div>
+ {% endif %}
+</section>
