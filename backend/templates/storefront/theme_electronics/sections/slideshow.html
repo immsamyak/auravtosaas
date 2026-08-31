@@ -2,9 +2,13 @@
     x-data="{ 
         activeSlide: 0,
         slides: [
+            {% if settings.slides %}
+                {% for slide in settings.slides %}'{{ slide.image_url|default:"" }}',{% endfor %}
+            {% else %}
             'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&q=80',
             'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80',
             'https://images.unsplash.com/photo-1434389678278-be43e498c218?w=1920&q=80'
+            {% endif %}
         ],
         init() { setInterval(() => { this.activeSlide = (this.activeSlide + 1) % this.slides.length; }, 6000); }
     }">
@@ -19,7 +23,7 @@
         <h1 class="text-5xl md:text-7xl font-sans font-extrabold tracking-tight text-blue-600 text-white mb-6 pointer-events-auto">{{ settings.heading|default:'New Collection' }}</h1>
         <p class="text-2xl md:text-3xl font-sans text-slate-600 text-gray-200 max-w-4xl mb-12 pointer-events-auto">{{ settings.subheading|default:"Discover the season's most anticipated styles." }}</p>
         <div class="flex gap-6 pointer-events-auto">
-            <a href="{% url 'storefront_shop' brand.slug %}" class="bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-8 py-4 rounded-xl">Shop Now</a>
+            <a href="{{ settings.cta_url|default:'#' }}" class="bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-8 py-4 rounded-xl">{{ settings.cta_text|default:'Shop Now' }}</a>
         </div>
     </div>
     <div class="absolute bottom-10 left-0 right-0 flex justify-center gap-4 z-20 pointer-events-auto">

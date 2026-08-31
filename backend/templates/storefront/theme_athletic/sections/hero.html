@@ -11,17 +11,38 @@
 </div>
 <!-- Content -->
 <div class="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center">
-<div class="w-full md:w-2/3">
-<h1 class="font-display font-bold text-7xl md:text-9xl uppercase italic tracking-wider leading-[0.8] mb-6 skew-x-custom drop-shadow-[0_0_15px_rgba(14,165,233,0.5)]">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Defy <br/>Gravity.{% endif %}</h1>
-<p class="font-sans font-semibold text-xl md:text-2xl text-gray-300 max-w-lg mb-10 border-l-4 border-tech-accent pl-4">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Experience the next generation of lightweight, breathable activewear engineered for elite athletes.{% endif %}</p>
-<div class="flex gap-4">
-<a class="bg-tech-accent hover:bg-tech-neon text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors" href="{{ brand.banner_cta_link|default:'#gear' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}<span class="inline-block unskew-x-custom">Shop Collection</span>{% endif %}</a>
-<a class="bg-white/10 hover:bg-white/20 text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors backdrop-blur-sm border border-white/20" href="#">
-{% if brand.banner_secondary_cta_text %}
-<a href="{{ brand.banner_secondary_cta_link|default:'#' }}" class="inline-block unskew-x-custom">{{ brand.banner_secondary_cta_text }}</a>
-{% endif %}
+<div class="w-full {% if settings.text_alignment == 'center' %}text-center flex flex-col items-center{% elif settings.text_alignment == 'right' %}md:w-2/3 ml-auto text-right md:flex md:flex-col md:items-end{% else %}md:w-2/3{% endif %}">
+<h1 class="font-display font-bold text-7xl md:text-9xl uppercase italic tracking-wider leading-[0.8] mb-6 skew-x-custom drop-shadow-[0_0_15px_rgba(14,165,233,0.5)]" style="{% if settings.heading_color %}color: {{ settings.heading_color }} !important;{% endif %} {% if settings.heading_size %}font-size: {{ settings.heading_size }}px !important;{% endif %} {% if settings.heading_font %}font-family: '{{ settings.heading_font }}', sans-serif !important;{% endif %}">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Defy <br/>Gravity.{% endif %}</h1>
+<p class="font-sans font-semibold text-xl md:text-2xl text-gray-300 max-w-lg mb-10 {% if settings.text_alignment == 'right' %}border-r-4 border-tech-accent pr-4{% elif settings.text_alignment == 'center' %}{% else %}border-l-4 border-tech-accent pl-4{% endif %}" style="{% if settings.subheading_color %}color: {{ settings.subheading_color }} !important;{% endif %} {% if settings.subheading_size %}font-size: {{ settings.subheading_size }}px !important;{% endif %} {% if settings.subheading_font %}font-family: '{{ settings.subheading_font }}', sans-serif !important;{% endif %}">{% if settings.subheading or brand.banner_subtitle %}{% if settings.subheading %}{{ settings.subheading }}{% else %}{{ brand.banner_subtitle }}{% endif %}{% else %}Experience the next generation of lightweight, breathable activewear engineered for elite athletes.{% endif %}</p>
+<div class="flex flex-col sm:flex-row gap-4 {% if settings.text_alignment == 'center' %}justify-center{% elif settings.text_alignment == 'right' %}justify-end{% else %}justify-start{% endif %}">
+<a class="bg-tech-accent hover:bg-tech-neon text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors" href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}{{ brand.banner_cta_link|default:'#gear' }}{% endif %}"><span class="inline-block unskew-x-custom">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop Collection{% endif %}</span></a>
+
+{% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
+<a href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}" class="bg-white/10 hover:bg-white/20 text-white font-display font-bold text-2xl uppercase tracking-wider px-10 py-3 skew-x-custom inline-block transition-colors backdrop-blur-sm border border-white/20 group">
+<span class="inline-block unskew-x-custom group-hover:text-tech-neon transition-colors">{% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}</span>
 </a>
+{% endif %}
 </div>
 </div>
 </div>
 </section>
+
+{% if settings.heading_font or settings.subheading_font %}
+<script>
+    (function() {
+        var fontsToLoad = [];
+        {% if settings.heading_font %}fontsToLoad.push("{{ settings.heading_font|urlencode }}");{% endif %}
+        {% if settings.subheading_font %}fontsToLoad.push("{{ settings.subheading_font|urlencode }}");{% endif %}
+        
+        fontsToLoad.forEach(function(font) {
+            var fontUrl = "https://fonts.googleapis.com/css2?family=" + font + ":wght@300;400;500;600;700&display=swap";
+            if (!document.querySelector('link[href="' + fontUrl + '"]')) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = fontUrl;
+                document.head.appendChild(link);
+            }
+        });
+    })();
+</script>
+{% endif %}

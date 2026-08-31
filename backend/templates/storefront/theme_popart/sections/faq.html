@@ -5,8 +5,22 @@
             <p class="mt-4 text-xl font-sans font-bold text-black">{{ settings.subheading|default:'Find answers.' }}</p>
         </div>
         <div class="space-y-4" x-data="{ activeIndex: null }">
-            <div class="border-4 border-black bg-white rounded-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-                <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
+            
+            {% if settings.items %}
+                {% for item in settings.items %}
+<div class="border-4 border-black bg-white rounded-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+                <button @click="activeIndex = activeIndex === {{ forloop.counter0 }} ? null : {{ forloop.counter0 }}" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
+                    <h3 class="text-xl font-sans font-black uppercase text-pink-600 text-inherit">{{ item.question }}</h3>
+                    <i class="fa-solid fa-chevron-down transition-transform duration-300 text-pink-600" :class="activeIndex === {{ forloop.counter0 }} ? 'rotate-180' : ''"></i>
+                </button>
+                <div x-show="activeIndex === {{ forloop.counter0 }}" x-collapse x-transition class="px-8 pb-6">
+                    <p class="font-sans font-bold text-black">{{ item.answer }}</p>
+                </div>
+            </div>
+                {% endfor %}
+            {% else %}
+<div class="border-4 border-black bg-white rounded-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+                <button @click="activeIndex = activeIndex === 0 ? null : {{ forloop.counter0 }}" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
                     <h3 class="text-xl font-sans font-black uppercase text-pink-600 text-inherit">What is your return policy?</h3>
                     <i class="fa-solid fa-chevron-down transition-transform duration-300 text-pink-600" :class="activeIndex === 0 ? 'rotate-180' : ''"></i>
                 </button>
@@ -23,6 +37,8 @@
                     <p class="font-sans font-bold text-black">Yes, we ship to over 100 countries worldwide. Shipping costs are calculated at checkout.</p>
                 </div>
             </div>
+            {% endif %}
+
         </div>
     </div>
 </div>

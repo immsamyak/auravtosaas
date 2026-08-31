@@ -4,11 +4,47 @@
  
  <div class="absolute inset-0 z-10">
  {% if brand.banner %}
- <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover opacity-80">
+ <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover opacity-50">
  {% else %}
- <div class="w-full h-full flex items-center justify-center">
+ <div class="w-full h-full flex items-center justify-center bg-slate-900/50">
  <span class="text-theme-text-muted font-mono text-2xl tracking-widest uppercase">{{ brand.name }}</span>
  </div>
  {% endif %}
  </div>
+ 
+ <div class="relative z-20 w-full h-full flex flex-col justify-center max-w-7xl mx-auto px-6 text-white {% if settings.text_alignment == 'center' %}items-center text-center{% elif settings.text_alignment == 'right' %}items-end text-right{% else %}items-start text-left{% endif %}">
+     {% if settings.badge_text %}
+     <span class="font-mono text-blue-400 text-sm uppercase tracking-widest mb-4 inline-block px-3 py-1 bg-blue-900/30 border border-blue-500/30">{{ settings.badge_text }}</span>
+     {% endif %}
+     <h1 class="font-sans font-extrabold text-5xl md:text-7xl tracking-tight mb-6 drop-shadow-md" style="{% if settings.heading_color %}color: {{ settings.heading_color }} !important;{% endif %} {% if settings.heading_size %}font-size: {{ settings.heading_size }}px !important;{% endif %} {% if settings.heading_font %}font-family: '{{ settings.heading_font }}', sans-serif !important;{% endif %}">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Next-Gen Tech{% endif %}</h1>
+     <p class="text-lg md:text-xl font-medium text-slate-300 max-w-2xl mb-8" style="{% if settings.subheading_color %}color: {{ settings.subheading_color }} !important;{% endif %} {% if settings.subheading_size %}font-size: {{ settings.subheading_size }}px !important;{% endif %} {% if settings.subheading_font %}font-family: '{{ settings.subheading_font }}', sans-serif !important;{% endif %}">{% if settings.subheading or brand.banner_subtitle %}{% if settings.subheading %}{{ settings.subheading }}{% else %}{{ brand.banner_subtitle }}{% endif %}{% endif %}</p>
+     <div class="flex flex-col sm:flex-row gap-4">
+         <a class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded text-sm font-bold uppercase tracking-wider transition-colors shadow-[0_0_15px_rgba(37,99,235,0.5)]" href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}{{ brand.banner_cta_link|default:'#products' }}{% endif %}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop Now{% endif %}</a>
+         {% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
+         <a class="border border-slate-600 hover:border-slate-400 bg-slate-800/80 hover:bg-slate-700 text-white px-8 py-3 rounded text-sm font-bold uppercase tracking-wider transition-colors" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
+         {% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}
+         </a>
+         {% endif %}
+     </div>
+ </div>
 </section>
+
+{% if settings.heading_font or settings.subheading_font %}
+<script>
+    (function() {
+        var fontsToLoad = [];
+        {% if settings.heading_font %}fontsToLoad.push("{{ settings.heading_font|urlencode }}");{% endif %}
+        {% if settings.subheading_font %}fontsToLoad.push("{{ settings.subheading_font|urlencode }}");{% endif %}
+        
+        fontsToLoad.forEach(function(font) {
+            var fontUrl = "https://fonts.googleapis.com/css2?family=" + font + ":wght@300;400;500;600;700&display=swap";
+            if (!document.querySelector('link[href="' + fontUrl + '"]')) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = fontUrl;
+                document.head.appendChild(link);
+            }
+        });
+    })();
+</script>
+{% endif %}

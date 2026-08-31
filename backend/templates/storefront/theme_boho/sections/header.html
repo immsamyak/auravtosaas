@@ -3,8 +3,8 @@
  
  <!-- Navigation Links -->
  <nav class="hidden md:flex items-center space-x-6 flex-1 {% if brand.logo_alignment == 'center' %}order-1{% else %}order-2 justify-center{% endif %}">
-        {% if settings.links %}
-            {% for link in settings.links %}
+        {% if brand.header_settings.links %}
+            {% for link in brand.header_settings.links %}
                 <a class="hover:opacity-70 transition-opacity font-medium tracking-wide" href="{{ link.url }}">{{ link.text }}</a>
             {% endfor %}
         {% else %}
@@ -21,7 +21,7 @@
  <div class="flex flex-1 {% if brand.logo_alignment == 'center' %}order-2 justify-center{% else %}order-1 justify-start{% endif %}">
  {% if brand.logo %}
  <a href="{% url 'storefront' brand.slug %}" class="inline-block">
- <img src="{% if settings.logo_url %}{{ settings.logo_url }}{% else %}{{ brand.logo.url }}{% endif %}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
+ <img src="{% if brand.header_settings.logo_url %}{{ brand.header_settings.logo_url }}{% else %}{{ brand.logo.url }}{% endif %}" alt="{{ brand.name }}" class="h-10 md:h-12 w-auto object-contain">
  </a>
  {% else %}
  <a class="inline-block" href="{% url 'storefront' brand.slug %}">

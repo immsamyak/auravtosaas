@@ -41,8 +41,9 @@
  <i class="fa-solid fa-address-book w-6 text-center mr-2"></i> Contact & Address
  </button>
  <button type="button" @click="activeTab = 'banner'" :class="{'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 font-bold': activeTab === 'banner', 'text-theme-text-muted hover:bg-theme-surface-hover font-medium': activeTab !== 'banner'}" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center">
- <i class="fa-solid fa-image w-6 text-center mr-2"></i> Storefront Banner
+ <i class="fa-solid fa-image w-6 text-center mr-2"></i> Storefront Hero Banner
  </button>
+
  <button type="button" @click="activeTab = 'social'" :class="{'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 font-bold': activeTab === 'social', 'text-theme-text-muted hover:bg-theme-surface-hover font-medium': activeTab !== 'social'}" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center">
  <i class="fa-solid fa-hashtag w-6 text-center mr-2"></i> Social Media
  </button>
@@ -240,68 +241,27 @@
  </div>
  </div>
 
+ </div>
+ </div>
+
  <!-- STOREFRONT BANNER TAB -->
  <div x-show="activeTab === 'banner'" x-transition.opacity.duration.300ms style="display: none;" class="space-y-8">
  <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border dark:border-slate-600/50/50 p-8">
- <h3 class="text-xl font-bold text-theme-text-primary mb-6 border-b border-theme-border-subtle dark:border-slate-600/50/50 pb-4">Storefront Hero Banner</h3>
- <p class="text-sm text-theme-text-muted mb-6">Customize the main hero section of your storefront. These settings will dynamically update across all themes.</p>
+ <h3 class="text-xl font-bold text-theme-text-primary mb-6 border-b border-theme-border-subtle dark:border-slate-600/50/50 pb-4">Storefront Hero Banner Image</h3>
+ <p class="text-sm text-theme-text-muted mb-6">Upload the main hero image for your storefront. Text settings like the Headline and Buttons are now managed in the Website Designer.</p>
  
- <div class="space-y-6">
+ <div class="space-y-6" x-data="imagePreview('{% if brand.banner %}{{ brand.banner.url }}{% endif %}')">
  <div>
  <label for="banner" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Hero Image</label>
- {% if brand.banner %}
- <div class="mb-4 h-48 rounded-xl overflow-hidden border border-theme-border dark:border-slate-600/50/50 bg-theme-bg-secondary flex items-center justify-center">
- <img src="{{ brand.banner.url }}" alt="Store Banner" class="w-full h-full object-contain">
- </div>
- {% endif %}
- <input type="file" name="banner" id="banner" accept="image/*" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
- </div>
-
- <div>
- <label for="banner_title" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Banner Title</label>
- <input type="text" name="banner_title" id="banner_title" value="{{ brand.banner_title|default_if_none:'' }}" placeholder="e.g. Autumn Winter Collection" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ 
+ <div x-show="imageUrl" class="mb-4 h-64 rounded-xl overflow-hidden border border-theme-border dark:border-slate-600/50/50 bg-slate-100 flex items-center justify-center relative group">
+ <img :src="imageUrl" alt="Store Banner" class="w-full h-full object-cover">
+ <button type="button" @click="clearImage" class="absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700">
+ <i class="fa-solid fa-times"></i>
+ </button>
  </div>
  
- <div>
- <label for="banner_subtitle" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Banner Subtitle / Description</label>
- <textarea name="banner_subtitle" id="banner_subtitle" rows="3" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">{{ brand.banner_subtitle|default_if_none:'' }}</textarea>
- </div>
- 
- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
- <div>
- <label for="banner_cta_text" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Button Text</label>
- <input type="text" name="banner_cta_text" id="banner_cta_text" value="{{ brand.banner_cta_text|default_if_none:'' }}" placeholder="e.g. Shop Now" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
- </div>
- <div>
- <label for="banner_cta_link" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Button Link</label>
- <input type="text" name="banner_cta_link" id="banner_cta_link" value="{{ brand.banner_cta_link|default_if_none:'' }}" placeholder="e.g. #collection or /store/my-brand/" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
- </div>
- </div>
- 
- <div class="pt-6 border-t border-theme-border-subtle dark:border-slate-600/50/50">
- <h4 class="text-sm font-bold text-theme-text-primary mb-4">Advanced Customization (Optional)</h4>
- <div class="space-y-6">
- <div>
- <label for="top_announcement_text" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Top Announcement Bar</label>
- <input type="text" name="top_announcement_text" id="top_announcement_text" value="{{ brand.top_announcement_text|default_if_none:'' }}" placeholder="e.g. Free Shipping on all orders over $100" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
- </div>
- 
- <div>
- <label for="banner_badge_text" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Hero Badge Text</label>
- <input type="text" name="banner_badge_text" id="banner_badge_text" value="{{ brand.banner_badge_text|default_if_none:'' }}" placeholder="e.g. Dropping Now (Leave blank to hide)" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
- </div>
- 
- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
- <div>
- <label for="banner_secondary_cta_text" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Secondary Button Text</label>
- <input type="text" name="banner_secondary_cta_text" id="banner_secondary_cta_text" value="{{ brand.banner_secondary_cta_text|default_if_none:'' }}" placeholder="e.g. Watch Video" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
- </div>
- <div>
- <label for="banner_secondary_cta_link" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Secondary Button Link</label>
- <input type="text" name="banner_secondary_cta_link" id="banner_secondary_cta_link" value="{{ brand.banner_secondary_cta_link|default_if_none:'' }}" placeholder="e.g. https://youtube.com/..." class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
- </div>
- </div>
- </div>
+ <input type="file" name="banner" id="banner" accept="image/*" @change="fileChosen" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
  </div>
  </div>
  </div>
@@ -557,4 +517,28 @@
  </div>
  </form>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('imagePreview', (initialUrl) => ({
+            imageUrl: initialUrl,
+            fileChosen(event) {
+                const file = event.target.files[0];
+                if (!file) {
+                    this.imageUrl = initialUrl;
+                    return;
+                }
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = e => this.imageUrl = e.target.result;
+            },
+            clearImage() {
+                this.imageUrl = '';
+                document.getElementById('banner').value = '';
+            }
+        }));
+    });
+</script>
 {% endblock %}

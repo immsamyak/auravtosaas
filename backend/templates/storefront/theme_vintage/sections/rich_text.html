@@ -1,5 +1,5 @@
 <div class="w-full py-32 bg-[#F5F5DC] text-[#4A4A4A]">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center {% if settings.text_alignment == 'left' %}!text-left{% elif settings.text_alignment == 'right' %}!text-right{% endif %}">
         <h2 class="text-5xl md:text-6xl font-serif text-[#8B4513] mb-12">{{ settings.heading|default:'Our Philosophy' }}</h2>
         <div class="font-serif text-[#696969] text-2xl leading-relaxed opacity-90 mx-auto max-w-4xl">
             <p>{{ settings.subheading|default:'We believe that fashion is more than just clothing. It is an expression of identity, culture, and art. Every piece we create is designed with intention, crafted with care, and built to last. Join us on our journey to redefine modern apparel.' }}</p>

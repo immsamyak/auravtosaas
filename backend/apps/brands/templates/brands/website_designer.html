@@ -238,8 +238,292 @@
                         </div>
                     </template>
 
+                    
+                    <!-- Schema: VIDEO -->
+                    <template x-if="sections[activeSectionIndex].type === 'video'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Video Embed URL</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.video_url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. YouTube or Vimeo Embed URL" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Cover Image URL</label>
+                                <div class="space-y-2">
+                                    <div x-show="sections[activeSectionIndex].settings.cover_image" class="w-full h-32 bg-cover bg-center rounded border border-theme-border" :style="`background-image: url('${sections[activeSectionIndex].settings.cover_image}')`"></div>
+                                    <input type="file" accept="image/*" @change="uploadGenericImage($event, activeSectionIndex, 'cover_image')" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: IMAGE WITH TEXT -->
+                    <template x-if="sections[activeSectionIndex].type === 'image_with_text'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image URL</label>
+                                <div class="space-y-2">
+                                    <div x-show="sections[activeSectionIndex].settings.image_url" class="w-full h-32 bg-cover bg-center rounded border border-theme-border" :style="`background-image: url('${sections[activeSectionIndex].settings.image_url}')`"></div>
+                                    <input type="file" accept="image/*" @change="uploadGenericImage($event, activeSectionIndex, 'image_url')" class="block w-full text-sm text-theme-text-muted file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image Position</label>
+                                <select x-model="sections[activeSectionIndex].settings.image_position" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Text Content</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-32"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">CTA Text</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.cta_text" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">CTA URL</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.cta_url" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: RICH TEXT -->
+                    <template x-if="sections[activeSectionIndex].type === 'rich_text'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Content</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-48"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Text Alignment</label>
+                                <select x-model="sections[activeSectionIndex].settings.text_alignment" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <option value="center">Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: FAQ -->
+                    <template x-if="sections[activeSectionIndex].type === 'faq'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">FAQ Items</label>
+                                <div class="space-y-2 mb-3">
+                                    <template x-for="(item, iIndex) in (sections[activeSectionIndex].settings.items || [])" :key="iIndex">
+                                        <div class="flex items-start space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
+                                            <div class="flex-1 space-y-2">
+                                                <input type="text" x-model="item.question" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Question" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
+                                                <textarea x-model="item.answer" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Answer" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none h-20"></textarea>
+                                            </div>
+                                            <button @click="removeFaqItem(activeSectionIndex, iIndex)" class="text-red-400 hover:text-red-600 px-2 mt-1"><i class="fa-solid fa-times"></i></button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button @click="addFaqItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
+                                    <i class="fa-solid fa-plus mr-1"></i> Add FAQ
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Schema: LOGO LIST -->
+                    <template x-if="sections[activeSectionIndex].type === 'logo_list'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Logos</label>
+                                <div class="space-y-2 mb-3">
+                                    <template x-for="(logo, lIndex) in (sections[activeSectionIndex].settings.logos || [])" :key="lIndex">
+                                        <div class="flex items-center space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
+                                            <div class="flex-1 space-y-2">
+                                                <div class="space-y-2 w-full">
+                                                <div x-show="logo.image_url" class="w-full h-16 bg-contain bg-center bg-no-repeat rounded border border-theme-border bg-gray-50" :style="`background-image: url('${logo.image_url}')`"></div>
+                                                <input type="file" accept="image/*" @change="uploadArrayImage($event, activeSectionIndex, 'logos', idx, 'image_url')" class="block w-full text-xs text-theme-text-muted file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                                            </div>
+                                            </div>
+                                            <button @click="removeLogoItem(activeSectionIndex, lIndex)" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-times"></i></button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button @click="addLogoItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
+                                    <i class="fa-solid fa-plus mr-1"></i> Add Logo
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: FEATURES / TEXT COLUMNS -->
+                    <template x-if="['features', 'text_columns'].includes(sections[activeSectionIndex].type)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Blocks</label>
+                                <div class="space-y-2 mb-3">
+                                    <template x-for="(block, bIndex) in (sections[activeSectionIndex].settings.blocks || [])" :key="bIndex">
+                                        <div class="flex items-start space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
+                                            <div class="flex-1 space-y-2">
+                                                <input type="text" x-model="block.icon" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Icon (e.g. fa-star) or Image URL" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
+                                                <input type="text" x-model="block.title" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Title" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
+                                                <textarea x-model="block.text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Text Content" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none h-16"></textarea>
+                                            </div>
+                                            <button @click="removeBlockItem(activeSectionIndex, bIndex)" class="text-red-400 hover:text-red-600 px-2 mt-1"><i class="fa-solid fa-times"></i></button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button @click="addBlockItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
+                                    <i class="fa-solid fa-plus mr-1"></i> Add Block
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: SLIDESHOW / GALLERY -->
+                    <template x-if="['slideshow', 'gallery'].includes(sections[activeSectionIndex].type)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">CTA Text</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.cta_text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. Shop Now" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">CTA URL</label>
+                                    <input type="text" x-model="sections[activeSectionIndex].settings.cta_url" @input.debounce.500ms="triggerPreviewUpdate" placeholder="e.g. /shop/" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                            </div>
+
+                            <template x-if="sections[activeSectionIndex].type === 'gallery'">
+                                <div class="space-y-4 pt-4 border-t border-theme-border mt-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Gallery Layout</label>
+                                        <select x-model="sections[activeSectionIndex].settings.layout" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                            <option value="zigzag">Masonry Layout</option>
+                                            <option value="4_column">Grid Layout</option>
+                                            <option value="bento">Bento Grid</option>
+                                            <option value="carousel">Fullscreen Carousel</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image Fit</label>
+                                        <select x-model="sections[activeSectionIndex].settings.image_fit" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                            <option value="cover">Crop to Fill (Default)</option>
+                                            <option value="contain">Fit (Show Entire Image)</option>
+                                            <option value="fill">Stretch</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </template>
+
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Images</label>
+                                <div class="space-y-2 mb-3">
+                                    <template x-for="(slide, sIndex) in (sections[activeSectionIndex].settings.slides || [])" :key="sIndex">
+                                        <div class="flex items-start space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
+                                            <div class="flex-1 space-y-2">
+                                                <div class="space-y-2 w-full">
+                                                <div x-show="slide.image_url" class="w-full h-24 bg-cover bg-center rounded border border-theme-border" :style="`background-image: url('${slide.image_url}')`"></div>
+                                                <input type="file" accept="image/*" @change="uploadArrayImage($event, activeSectionIndex, 'slides', sIndex, 'image_url')" class="block w-full text-xs text-theme-text-muted file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                                            </div>
+                                                <input type="text" x-model="slide.caption" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Optional Caption" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
+                                            </div>
+                                            <button @click="removeSlideItem(activeSectionIndex, sIndex)" class="text-red-400 hover:text-red-600 px-2 mt-1"><i class="fa-solid fa-times"></i></button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button @click="addSlideItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
+                                    <i class="fa-solid fa-plus mr-1"></i> Add Image
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Schema: COUNTDOWN -->
+                    <template x-if="sections[activeSectionIndex].type === 'countdown'">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Section Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Target End Date</label>
+                                <input type="datetime-local" x-model="sections[activeSectionIndex].settings.target_date" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                        </div>
+                    </template>
+
                     <!-- Schema: DEFAULT / OTHER -->
-                    <template x-if="!['header', 'hero', 'products', 'collections', 'categories', 'testimonials'].includes(sections[activeSectionIndex].type)">
+                                        <!-- Schema: DEFAULT / OTHER -->
+                    
+                    <template x-if="sections[activeSectionIndex].type === 'blog_posts'">
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-bold text-theme-text uppercase border-b border-theme-border pb-2">Blog Posts Settings</h4>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Heading</label>
+                                <input type="text" x-model="sections[activeSectionIndex].settings.heading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Subheading</label>
+                                <textarea x-model="sections[activeSectionIndex].settings.subheading" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none h-20"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Number of Posts</label>
+                                <input type="number" min="1" max="12" x-model="sections[activeSectionIndex].settings.limit" @input.debounce.500ms="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                        </div>
+                    </template>
+<template x-if="!['header', 'hero', 'products', 'collections', 'categories', 'testimonials', 'video', 'image_with_text', 'rich_text', 'faq', 'logo_list', 'features', 'text_columns', 'slideshow', 'gallery', 'countdown', 'blog_posts'].includes(sections[activeSectionIndex].type)">
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Background Color</label>
@@ -438,6 +722,44 @@ document.addEventListener('alpine:init', () => {
             this.sections[sectionIndex].settings.testimonials.splice(tIndex, 1);
             this.triggerPreviewUpdate();
         },
+
+        addFaqItem(sectionIndex) {
+            if(!this.sections[sectionIndex].settings.items) this.sections[sectionIndex].settings.items = [];
+            this.sections[sectionIndex].settings.items.push({question: 'New Question', answer: 'New Answer'});
+            this.triggerPreviewUpdate();
+        },
+        removeFaqItem(sectionIndex, index) {
+            this.sections[sectionIndex].settings.items.splice(index, 1);
+            this.triggerPreviewUpdate();
+        },
+        addLogoItem(sectionIndex) {
+            if(!this.sections[sectionIndex].settings.logos) this.sections[sectionIndex].settings.logos = [];
+            this.sections[sectionIndex].settings.logos.push({image_url: ''});
+            this.triggerPreviewUpdate();
+        },
+        removeLogoItem(sectionIndex, index) {
+            this.sections[sectionIndex].settings.logos.splice(index, 1);
+            this.triggerPreviewUpdate();
+        },
+        addBlockItem(sectionIndex) {
+            if(!this.sections[sectionIndex].settings.blocks) this.sections[sectionIndex].settings.blocks = [];
+            this.sections[sectionIndex].settings.blocks.push({icon: 'fa-star', title: 'New Feature', text: 'Feature description'});
+            this.triggerPreviewUpdate();
+        },
+        removeBlockItem(sectionIndex, index) {
+            this.sections[sectionIndex].settings.blocks.splice(index, 1);
+            this.triggerPreviewUpdate();
+        },
+        addSlideItem(sectionIndex) {
+            if(!this.sections[sectionIndex].settings.slides) this.sections[sectionIndex].settings.slides = [];
+            this.sections[sectionIndex].settings.slides.push({image_url: '', caption: ''});
+            this.triggerPreviewUpdate();
+        },
+        removeSlideItem(sectionIndex, index) {
+            this.sections[sectionIndex].settings.slides.splice(index, 1);
+            this.triggerPreviewUpdate();
+        },
+
         
         moveUp(index) {
             if (index > 0) {

@@ -5,22 +5,22 @@
 <div class="absolute bottom-10 right-10 w-80 h-80 mesh-gradient rounded-full -z-10"></div>
 <div class="max-w-7xl mx-auto px-6 w-full py-20">
 <div class="max-w-2xl">
-{% if brand.banner_badge_text %}
+{% if settings.badge_text or brand.banner_badge_text %}
 <div class="glass inline-flex items-center px-4 py-2 rounded-full text-xs font-medium text-white/70 mb-8">
 <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
- {{ brand.banner_badge_text }}
+ {% if settings.badge_text %}{{ settings.badge_text }}{% else %}{{ brand.banner_badge_text }}{% endif %}
  </div>
 {% endif %}
-<h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}<span class="bg-gradient-to-r from-white via-white to-white/50 bg-clip-text text-transparent">Modern Fashion,</span><br/>
+<h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6" style="{% if settings.heading_color %}color: {{ settings.heading_color }} !important;{% endif %} {% if settings.heading_size %}font-size: {{ settings.heading_size }}px !important;{% endif %} {% if settings.heading_font %}font-family: '{{ settings.heading_font }}', sans-serif !important;{% endif %}">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}<span class="bg-gradient-to-r from-white via-white to-white/50 bg-clip-text text-transparent">Modern Fashion,</span><br/>
 <span class="bg-gradient-to-r from-indigo-400 via-pink-400 to-sky-400 bg-clip-text text-transparent">Redefined.</span>{% endif %}</h1>
-<p class="text-white/50 text-lg max-w-lg mb-10 leading-relaxed">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Sleek silhouettes and premium materials for the digitally-conscious consumer.{% endif %}</p>
+<p class="text-white/50 text-lg max-w-lg mb-10 leading-relaxed" style="{% if settings.subheading_color %}color: {{ settings.subheading_color }} !important;{% endif %} {% if settings.subheading_size %}font-size: {{ settings.subheading_size }}px !important;{% endif %} {% if settings.subheading_font %}font-family: '{{ settings.subheading_font }}', sans-serif !important;{% endif %}">{% if settings.subheading or brand.banner_subtitle %}{% if settings.subheading %}{{ settings.subheading }}{% else %}{{ brand.banner_subtitle }}{% endif %}{% else %}Sleek silhouettes and premium materials for the digitally-conscious consumer.{% endif %}</p>
 <div class="flex gap-4">
 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
 <a class="bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-indigo-500/25" href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}{{ brand.banner_cta_link|default:'#products' }}{% endif %}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop Now{% endif %}</a>
 
- {% if brand.banner_secondary_cta_text %}
- <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
- {{ brand.banner_secondary_cta_text }}
+ {% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
+ {% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}
  </a>
  {% endif %}
  
@@ -30,3 +30,23 @@
 </div>
 </div>
 </section>
+
+{% if settings.heading_font or settings.subheading_font %}
+<script>
+    (function() {
+        var fontsToLoad = [];
+        {% if settings.heading_font %}fontsToLoad.push("{{ settings.heading_font|urlencode }}");{% endif %}
+        {% if settings.subheading_font %}fontsToLoad.push("{{ settings.subheading_font|urlencode }}");{% endif %}
+        
+        fontsToLoad.forEach(function(font) {
+            var fontUrl = "https://fonts.googleapis.com/css2?family=" + font + ":wght@300;400;500;600;700&display=swap";
+            if (!document.querySelector('link[href="' + fontUrl + '"]')) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = fontUrl;
+                document.head.appendChild(link);
+            }
+        });
+    })();
+</script>
+{% endif %}

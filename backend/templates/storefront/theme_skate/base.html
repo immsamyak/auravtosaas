@@ -130,9 +130,9 @@
 <body class="flex flex-col min-h-screen antialiased text-skate-dark distressed selection:bg-skate-lime" x-cloak="" x-data="{ isCartOpen: false, isSearchOpen: false, isProfileOpen: false, isMenuOpen: false }">
 {% include 'components/popup_renderer.html' %}
 
- {% if brand.top_announcement_text %}
+ {% if brand.announcement_text %}
  <div class="bg-black text-white text-center py-2 text-xs md:text-sm font-sans tracking-wider w-full">
- {{ brand.top_announcement_text }}
+ {{ brand.announcement_text }}
  </div>
  {% endif %}
 {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/header.html" %}
@@ -370,10 +370,16 @@ document.addEventListener('DOMContentLoaded', function() {
  </button>
  </div>
  <div class="p-6 flex flex-col space-y-6 text-black flex-1 overflow-y-auto">
- <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
+ {% if brand.header_settings.links %}
+            {% for link in brand.header_settings.links %}
+                <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{{ link.url }}">{{ link.text }}</a>
+            {% endfor %}
+        {% else %}
+<a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_shop' brand.slug %}">Shop</a>
  <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_categories' brand.slug %}">Categories</a>
  <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront_collections' brand.slug %}">Collections</a>
  <a class="font-medium text-lg hover:text-gray-500 transition-colors" href="{% url 'storefront' brand.slug %}#products">New Arrivals</a>
+        {% endif %}
  </div>
  </div>
 </div>

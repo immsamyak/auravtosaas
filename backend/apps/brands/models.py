@@ -99,6 +99,37 @@ class Brand(models.Model):
         global_settings = GlobalSettings.get_settings()
         return global_settings.currency or 'USD'
 
+    @property
+    def hero_settings(self):
+        """Helper property to access hero section settings globally, eg. for top_announcement_text in base.html"""
+        if hasattr(self, 'layout'):
+            hero_section = self.layout.sections.filter(section_type='hero').first()
+            if hero_section:
+                return hero_section.settings
+        return {}
+        
+    @property
+    def header_settings(self):
+        """Helper property to access header section settings globally, eg. for custom navigation links in base.html"""
+        if hasattr(self, 'layout'):
+            header_section = self.layout.sections.filter(section_type='header').first()
+            if header_section:
+                return header_section.settings
+        return {}
+
+    @property
+    def announcement_text(self):
+        """
+        Returns the top announcement text.
+        If the user has saved it via the website designer (even as an empty string to hide it),
+        it returns that value. Otherwise, falls back to the old top_announcement_text field.
+        """
+        if hasattr(self, 'layout'):
+            hero_section = self.layout.sections.filter(section_type='hero').first()
+            if hero_section and 'top_announcement_text' in hero_section.settings:
+                return hero_section.settings['top_announcement_text']
+        return self.top_announcement_text
+
 class BrandStaff(models.Model):
     ROLE_CHOICES = [
         ('OWNER', 'Owner'),
@@ -344,6 +375,17 @@ class StorefrontSection(models.Model):
         ('custom_html', 'Custom HTML'),
         ('newsletter', 'Newsletter Form'),
         ('announcement', 'Announcement Bar'),
+        ('slideshow', 'Slideshow'),
+        ('gallery', 'Gallery'),
+        ('video', 'Video'),
+        ('image_with_text', 'Image with Text'),
+        ('text_columns', 'Text Columns'),
+        ('countdown', 'Countdown'),
+        ('rich_text', 'Rich Text'),
+        ('logo_list', 'Logo List'),
+        ('features', 'Features'),
+        ('faq', 'FAQ'),
+        ('blog_posts', 'Blog Posts'),
     )
     layout = models.ForeignKey(StorefrontLayout, on_delete=models.CASCADE, related_name='sections')
     section_type = models.CharField(max_length=50, choices=SECTION_TYPES)

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.contrib import messages
@@ -956,10 +957,8 @@ def mark_notifications_read(request):
     try:
         from apps.core.models import Notification
         Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
-        from django.http import JsonResponse
         return JsonResponse({'success': True})
     except Exception as e:
-        from django.http import JsonResponse
         return JsonResponse({'error': str(e)}, status=500)
 
 from django.contrib.auth import authenticate, login, logout
@@ -1256,7 +1255,6 @@ def global_search_view(request):
     return render(request, 'brands/search_results.html', context)
 
 import json
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import StorefrontLayout, StorefrontSection
 
@@ -1285,6 +1283,32 @@ def website_designer_view(request):
         StorefrontSection.objects.create(layout=layout, section_type='footer', display_order=100)
 
     if request.method == 'POST':
+        if request.FILES.get('hero_banner_upload'):
+            file = request.FILES['hero_banner_upload']
+            brand.banner = file
+            brand.save()
+            from .models import MediaAsset
+            MediaAsset.objects.create(
+                brand=brand,
+                file=file,
+                name=file.name,
+                file_size=file.size,
+                file_type=file.content_type
+            )
+            return JsonResponse({'success': True, 'url': brand.banner.url})
+
+        if request.FILES.get('generic_media_upload'):
+            file = request.FILES['generic_media_upload']
+            from .models import MediaAsset
+            asset = MediaAsset.objects.create(
+                brand=brand,
+                file=file,
+                name=file.name,
+                file_size=file.size,
+                file_type=file.content_type
+            )
+            return JsonResponse({'success': True, 'url': asset.file.url})
+
         import json
         try:
             data = json.loads(request.body)

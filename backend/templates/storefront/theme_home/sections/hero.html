@@ -1,11 +1,49 @@
 <section class="bg-hab-white relative min-h-[50vh]">
  <div class="absolute inset-0 w-full h-full">
  {% if brand.banner %}
- <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover">
+ <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}{{ brand.banner.url }}{% endif %}" alt="{{ brand.name }} Banner" class="w-full h-full object-cover opacity-80">
  {% else %}
  <div class="w-full h-full bg-[#e5e0d8] flex items-center justify-center">
  <span class="text-hab-wood font-serif text-3xl">{{ brand.name }}</span>
  </div>
  {% endif %}
  </div>
+ 
+ <div class="relative z-10 w-full max-w-7xl mx-auto px-6 h-full min-h-[50vh] flex flex-col justify-center py-16 text-stone-800 {% if settings.text_alignment == 'left' %}items-start text-left{% elif settings.text_alignment == 'right' %}items-end text-right{% else %}items-center text-center{% endif %}">
+     <div class="bg-white/80 backdrop-blur-sm p-10 max-w-2xl {% if settings.text_alignment == 'left' %}mr-auto{% elif settings.text_alignment == 'right' %}ml-auto{% else %}mx-auto{% endif %}">
+         {% if settings.badge_text %}
+         <span class="text-xs font-semibold tracking-[0.2em] uppercase text-stone-500 mb-4 block">{{ settings.badge_text }}</span>
+         {% endif %}
+         <h1 class="font-serif text-5xl md:text-6xl text-stone-900 leading-tight mb-6" style="{% if settings.heading_color %}color: {{ settings.heading_color }} !important;{% endif %} {% if settings.heading_size %}font-size: {{ settings.heading_size }}px !important;{% endif %} {% if settings.heading_font %}font-family: '{{ settings.heading_font }}', sans-serif !important;{% endif %}">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Curate Your Sanctuary{% endif %}</h1>
+         <p class="font-sans text-stone-600 text-lg mb-8" style="{% if settings.subheading_color %}color: {{ settings.subheading_color }} !important;{% endif %} {% if settings.subheading_size %}font-size: {{ settings.subheading_size }}px !important;{% endif %} {% if settings.subheading_font %}font-family: '{{ settings.subheading_font }}', sans-serif !important;{% endif %}">{% if settings.subheading or brand.banner_subtitle %}{% if settings.subheading %}{{ settings.subheading }}{% else %}{{ brand.banner_subtitle }}{% endif %}{% endif %}</p>
+         <div class="flex flex-col sm:flex-row gap-4 {% if settings.text_alignment == 'left' %}justify-start{% elif settings.text_alignment == 'right' %}justify-end{% else %}justify-center{% endif %}">
+             <a class="bg-hab-wood text-white hover:bg-stone-800 px-8 py-3 text-sm tracking-wider uppercase transition-colors text-center" href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}{{ brand.banner_cta_link|default:'#shop' }}{% endif %}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Shop Collection{% endif %}</a>
+             {% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
+             <a class="bg-transparent border border-stone-300 text-stone-700 hover:border-stone-500 px-8 py-3 text-sm tracking-wider uppercase transition-colors text-center" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
+             {% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}
+             </a>
+             {% endif %}
+         </div>
+     </div>
+ </div>
 </section>
+
+{% if settings.heading_font or settings.subheading_font %}
+<script>
+    (function() {
+        var fontsToLoad = [];
+        {% if settings.heading_font %}fontsToLoad.push("{{ settings.heading_font|urlencode }}");{% endif %}
+        {% if settings.subheading_font %}fontsToLoad.push("{{ settings.subheading_font|urlencode }}");{% endif %}
+        
+        fontsToLoad.forEach(function(font) {
+            var fontUrl = "https://fonts.googleapis.com/css2?family=" + font + ":wght@300;400;500;600;700&display=swap";
+            if (!document.querySelector('link[href="' + fontUrl + '"]')) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = fontUrl;
+                document.head.appendChild(link);
+            }
+        });
+    })();
+</script>
+{% endif %}

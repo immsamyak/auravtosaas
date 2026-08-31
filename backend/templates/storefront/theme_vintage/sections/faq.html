@@ -5,8 +5,22 @@
             <p class="mt-4 text-xl font-serif text-[#696969]">{{ settings.subheading|default:'Find answers.' }}</p>
         </div>
         <div class="space-y-4" x-data="{ activeIndex: null }">
-            <div class="border-2 border-[#D2B48C] border-double bg-[#FFF8DC] rounded-sm shadow-md shadow-[#D2B48C]/50 overflow-hidden">
-                <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
+            
+            {% if settings.items %}
+                {% for item in settings.items %}
+<div class="border-2 border-[#D2B48C] border-double bg-[#FFF8DC] rounded-sm shadow-md shadow-[#D2B48C]/50 overflow-hidden">
+                <button @click="activeIndex = activeIndex === {{ forloop.counter0 }} ? null : {{ forloop.counter0 }}" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
+                    <h3 class="text-xl font-serif text-[#8B4513] text-inherit">{{ item.question }}</h3>
+                    <i class="fa-solid fa-chevron-down transition-transform duration-300 text-[#D2691E]" :class="activeIndex === {{ forloop.counter0 }} ? 'rotate-180' : ''"></i>
+                </button>
+                <div x-show="activeIndex === {{ forloop.counter0 }}" x-collapse x-transition class="px-8 pb-6">
+                    <p class="font-serif text-[#696969]">{{ item.answer }}</p>
+                </div>
+            </div>
+                {% endfor %}
+            {% else %}
+<div class="border-2 border-[#D2B48C] border-double bg-[#FFF8DC] rounded-sm shadow-md shadow-[#D2B48C]/50 overflow-hidden">
+                <button @click="activeIndex = activeIndex === 0 ? null : {{ forloop.counter0 }}" class="w-full text-left px-8 py-6 flex justify-between items-center focus:outline-none">
                     <h3 class="text-xl font-serif text-[#8B4513] text-inherit">What is your return policy?</h3>
                     <i class="fa-solid fa-chevron-down transition-transform duration-300 text-[#D2691E]" :class="activeIndex === 0 ? 'rotate-180' : ''"></i>
                 </button>
@@ -23,6 +37,8 @@
                     <p class="font-serif text-[#696969]">Yes, we ship to over 100 countries worldwide. Shipping costs are calculated at checkout.</p>
                 </div>
             </div>
+            {% endif %}
+
         </div>
     </div>
 </div>

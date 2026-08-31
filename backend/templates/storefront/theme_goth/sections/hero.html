@@ -8,17 +8,37 @@
  <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
 <div class="w-px h-20 bg-goth-blood/40 mx-auto mb-8"></div>
 <span class="font-display text-xs tracking-[0.4em] uppercase text-goth-blood block mb-4">Autumn / Winter MMXXVI</span>
-<h1 class="font-display font-black text-6xl md:text-8xl tracking-wider uppercase leading-[0.85] mb-8 text-goth-bone blood-glow">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Eternal <br/>Noir{% endif %}</h1>
-<p class="font-serif italic text-xl text-goth-bone/50 max-w-lg mx-auto mb-12">{% if brand.banner_subtitle %}{{ brand.banner_subtitle }}{% else %}Where shadow meets silhouette. An exploration of darkness in textile form.{% endif %}</p>
+<h1 class="font-display font-black text-6xl md:text-8xl tracking-wider uppercase leading-[0.85] mb-8 text-goth-bone blood-glow" style="{% if settings.heading_color %}color: {{ settings.heading_color }} !important;{% endif %} {% if settings.heading_size %}font-size: {{ settings.heading_size }}px !important;{% endif %} {% if settings.heading_font %}font-family: '{{ settings.heading_font }}', sans-serif !important;{% endif %}">{% if settings.heading %}{{ settings.heading }}{% elif brand.banner_title %}{{ brand.banner_title }}{% else %}Eternal <br/>Noir{% endif %}</h1>
+<p class="font-serif italic text-xl text-goth-bone/50 max-w-lg mx-auto mb-12" style="{% if settings.subheading_color %}color: {{ settings.subheading_color }} !important;{% endif %} {% if settings.subheading_size %}font-size: {{ settings.subheading_size }}px !important;{% endif %} {% if settings.subheading_font %}font-family: '{{ settings.subheading_font }}', sans-serif !important;{% endif %}">{% if settings.subheading or brand.banner_subtitle %}{% if settings.subheading %}{{ settings.subheading }}{% else %}{{ brand.banner_subtitle }}{% endif %}{% else %}Where shadow meets silhouette. An exploration of darkness in textile form.{% endif %}</p>
 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
 <a class="inline-block border border-goth-blood text-goth-blood font-display text-sm tracking-[0.2em] uppercase px-10 py-4 hover:bg-goth-blood hover:text-white transition-all duration-500" href="{{ brand.banner_cta_link|default:'#collection' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Enter the Collection{% endif %}</a>
 
- {% if brand.banner_secondary_cta_text %}
- <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{{ brand.banner_secondary_cta_link|default:'#' }}">
- {{ brand.banner_secondary_cta_text }}
+ {% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
+ <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
+ {% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}
  </a>
  {% endif %}
  
 </div>
 </div>
 </section>
+
+{% if settings.heading_font or settings.subheading_font %}
+<script>
+    (function() {
+        var fontsToLoad = [];
+        {% if settings.heading_font %}fontsToLoad.push("{{ settings.heading_font|urlencode }}");{% endif %}
+        {% if settings.subheading_font %}fontsToLoad.push("{{ settings.subheading_font|urlencode }}");{% endif %}
+        
+        fontsToLoad.forEach(function(font) {
+            var fontUrl = "https://fonts.googleapis.com/css2?family=" + font + ":wght@300;400;500;600;700&display=swap";
+            if (!document.querySelector('link[href="' + fontUrl + '"]')) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = fontUrl;
+                document.head.appendChild(link);
+            }
+        });
+    })();
+</script>
+{% endif %}

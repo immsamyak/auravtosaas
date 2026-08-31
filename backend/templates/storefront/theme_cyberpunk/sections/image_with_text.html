@@ -1,13 +1,13 @@
 <div class="w-full py-24 bg-gray-900 text-cyan-400">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row items-center gap-16">
+        <div class="flex flex-col md:flex-row {% if settings.image_position == 'right' %}md:flex-row-reverse{% endif %} items-center gap-16">
             <div class="w-full md:w-1/2 overflow-hidden rounded-none shadow-[0_0_15px_rgba(236,72,153,0.5)] border-2 border-pink-500 bg-black">
-                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&q=80" alt="Feature" class="w-full h-auto hover:scale-105 transition-transform duration-700">
+                <img src="{% if settings.image_url %}{{ settings.image_url }}{% else %}https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&q=80{% endif %}" alt="Feature" class="w-full h-auto hover:scale-105 transition-transform duration-700">
             </div>
             <div class="w-full md:w-1/2">
                 <h2 class="text-4xl md:text-5xl font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)] mb-8">{{ settings.heading|default:'Our Story' }}</h2>
                 <p class="text-xl font-mono text-cyan-400 mb-10 opacity-90 leading-relaxed">{{ settings.subheading|default:'Learn more about our brand, our mission, and our values. We believe in quality, transparency, and building a community.' }}</p>
-                <a href="#" class="bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black uppercase font-bold px-8 py-4 rounded-none">Read More</a>
+                <a href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}#{% endif %}" class="bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black uppercase font-bold px-8 py-4 rounded-none">{% if settings.cta_text %}{{ settings.cta_text }}{% else %}Read More{% endif %}</a>
             </div>
         </div>
     </div>
