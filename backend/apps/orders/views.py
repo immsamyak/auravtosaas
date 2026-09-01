@@ -40,6 +40,13 @@ def manage_orders_view(request):
             new_status = request.POST.get('new_status')
             if new_status in dict(Order.STATUS_CHOICES):
                 order.status = new_status
+                if new_status == 'SENT_TO_COURIER':
+                    manual_tracking = request.POST.get('manual_tracking_number')
+                    manual_courier = request.POST.get('manual_courier')
+                    if manual_tracking:
+                        order.tracking_number = manual_tracking
+                    if manual_courier:
+                        order.shipping_provider = manual_courier
                 order.save()
                 messages.success(request, f"Order #{str(order.id)[:8]} status updated to {dict(Order.STATUS_CHOICES).get(new_status)}.")
             else:
