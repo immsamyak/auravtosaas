@@ -26,10 +26,10 @@
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Configure a strict hierarchy of Provinces, Districts, and Cities to manage precise delivery routing and pricing.</p>
  </div>
  <div class="flex space-x-3">
- <button type="button" @click="loadDataModal.isOpen = true; fetchCountries();" class="inline-flex items-center justify-center px-5 py-2.5 border border-theme-input-border rounded-xl shadow-sm text-sm font-bold text-theme-text-secondary bg-theme-surface hover:bg-theme-surface-hover focus:outline-none transition-all">
+ <button type="button" @click="loadDataModal.isOpen = true; fetchCountries();" class="inline-flex items-center justify-center px-5 py-3 border border-theme-input-border rounded-xl shadow-sm text-sm font-bold text-theme-text-secondary bg-theme-surface hover:bg-theme-surface-hover focus:outline-none transition-all">
  <i class="fa-solid fa-cloud-arrow-down mr-2"></i> Load Default Data
  </button>
- <button @click="openModal('province')" class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+ <button @click="openModal('province')" class="inline-flex items-center justify-center px-5 py-3 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
  <i class="fa-solid fa-plus mr-2"></i> Add Province
  </button>
  </div>
@@ -164,7 +164,7 @@
  </div>
  <h3 class="text-base font-bold text-theme-text-primary">No Delivery Zones Configured</h3>
  <p class="text-sm text-theme-text-muted mt-1 mb-6 max-w-sm mx-auto">You must set up at least one Province, District, and City so customers can select a delivery location at checkout.</p>
- <button @click="openModal('province')" class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all">
+ <button @click="openModal('province')" class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all">
  Create First Province
  </button>
  </div>
@@ -206,7 +206,7 @@
  
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-1">Name</label>
- <input type="text" name="name" x-model="modal.name" required class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm" placeholder="e.g. Kathmandu">
+ <input type="text" name="name" x-model="modal.name" required class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm" placeholder="e.g. Kathmandu">
  </div>
  
  <!-- City Specific Fields (Pricing) -->
@@ -215,17 +215,17 @@
  
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-1">Delivery Rate ({{ brand.currency_symbol|default:"Rs." }})</label>
- <input type="number" step="0.01" name="rate" x-model="modal.rate" required class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm">
+ <input type="number" step="0.01" name="rate" x-model="modal.rate" required class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm">
  </div>
  
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-1">Estimated Days</label>
- <input type="text" name="estimated_days" x-model="modal.estimated_days" placeholder="e.g. 1-2 Days" class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm">
+ <input type="text" name="estimated_days" x-model="modal.estimated_days" placeholder="e.g. 1-2 Days" class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm">
  </div>
  
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-1">Free Delivery Above ({{ brand.currency_symbol|default:"Rs." }}) (Optional)</label>
- <input type="number" step="0.01" name="is_free_above" x-model="modal.is_free_above" class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm">
+ <input type="number" step="0.01" name="is_free_above" x-model="modal.is_free_above" class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm">
  </div>
  
  <div class="flex items-center mt-2">
@@ -303,7 +303,7 @@
  <p class="text-sm text-theme-text-muted mt-1">Select a country to automatically load its Provinces/States and Districts/Counties.</p>
  
  <div class="mt-5">
- <input type="text" x-model="countrySearch" placeholder="Search for a country..." class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm mb-4">
+ <input type="text" x-model="countrySearch" placeholder="Search for a country..." class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm mb-4">
  
  <div class="max-h-60 overflow-y-auto border border-theme-border rounded-xl divide-y divide-theme-border">
  <template x-if="countries.length === 0 && !isLoadingCountries">
@@ -343,6 +343,7 @@
  </div>
  </div>
  </template>
+</div> <!-- CLOSE teleport? -->
 </div> <!-- CLOSE x-data="shippingDashboard()" DIV -->
 
 <script>
