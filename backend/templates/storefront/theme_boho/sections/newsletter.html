@@ -1,22 +1,13 @@
-<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-{% if brand.logo %}
- <img alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4" src="{{ brand.logo.url }}"/>
-{% else %}
- <h3 class="font-serif italic text-4xl text-boho-walnut mb-4">{{ settings.heading|default:'{{ brand.name }}' }}</h3>
-{% endif %}
-<p class="font-sans text-boho-clay max-w-md mx-auto mb-8">{{ settings.subheading|default:'{% if brand.description %}{{ brand.description }}{% else %}Inspired by nature. Made with intention. Worn with soul.{% endif %}' }}</p>
-<div class="flex space-x-4 mt-6">
- {% if brand.instagram_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram text-xl"></i></a>{% endif %}
- {% if brand.facebook_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook text-xl"></i></a>{% endif %}
- {% if brand.twitter_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.twitter_url }}" target="_blank"><i class="fa-brands fa-twitter text-xl"></i></a>{% endif %}
- {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
- {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
+<div class="w-full py-20 bg-[#FDFBF7] text-[#5C4A3D]" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div class="text-center mb-12">
+ <h2 class="text-4xl md:text-5xl font-serif italic text-[#8B5A2B]">{{ settings.heading|default:'Subscribe to our Newsletter' }}</h2>
+ <p class="mt-4 text-xl font-sans text-[#7A6B5D]">{{ settings.subheading|default:'Get the latest updates and offers directly in your inbox.' }}</p>
  </div>
-<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex max-w-sm mx-auto border border-boho-clay/30 rounded-full overflow-hidden bg-theme-surface" id="newsletter-subscribe-form" method="POST">
-<input class="w-full px-5 py-3 outline-none bg-transparent text-boho-walnut placeholder-boho-clay/40 font-sans" name="email" placeholder="Your email" type="email"/>
-<button class="bg-boho-terra text-white px-6 font-sans font-bold text-sm hover:bg-boho-olive transition-colors" type="submit">Join</button>
-</form>
-<p class="text-boho-clay/40 text-sm mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}{% endif %}</p>
+ <form action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" id="newsletter-subscribe-form" class="flex max-w-sm border border-boho-clay/30 rounded-full overflow-hidden bg-theme-surface max-w-md mx-auto w-full mt-8">
+ {% csrf_token %}
+ <input type="email" name="email" required placeholder="Your email address" class="w-full px-5 py-3 outline-none bg-transparent text-boho-walnut placeholder-boho-clay/40 font-sans">
+ <button type="submit" class="bg-boho-terra text-white px-6 font-sans font-bold text-sm hover:bg-boho-olive transition-colors">Join</button>
+ </form>
+ </div>
 </div>
-</section>

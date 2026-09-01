@@ -10,7 +10,6 @@
  {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
  {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
  </div>
-
 </div>
 <div class="md:col-span-2 md:col-start-7">
 <h4 class="font-bold font-display uppercase text-xl mb-4">Shop</h4>
@@ -20,13 +19,7 @@
 <li><a class="hover:underline" href="#">Best Sellers</a></li>
 </ul>
 </div>
-<div class="md:col-span-4">
-<h4 class="font-bold font-display uppercase text-xl mb-4">Join The List</h4>
-<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex">
-<input class="bg-black text-white px-4 py-3 font-bold uppercase w-full outline-none brutal-border border-r-0" placeholder="YOUR EMAIL" type="email" name="email"/>
-<button class="bg-black text-neon px-6 py-3 font-bold uppercase brutal-border hover:bg-white hover:text-black transition-colors" type="submit">Submit</button>
-</form>
-</div>
+
 </div>
 <div class="max-w-[1400px] mx-auto px-4 mt-16 flex flex-col md:flex-row justify-between items-center font-bold text-sm border-t-2 border-black/20 pt-6">
 <div>{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}.{% endif %}</div>

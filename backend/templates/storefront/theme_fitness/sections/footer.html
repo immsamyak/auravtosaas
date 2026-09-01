@@ -1,11 +1,11 @@
 <footer class="bg-black text-white pt-20 pb-10 mt-auto border-t-[10px] border-yellow-500">
- <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
- <div class="md:col-span-2">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div class="md:col-span-2">
  {% if brand.logo %}
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 object-contain mb-6 filter invert">
+ <img alt="{{ brand.name }}" class="h-10 object-contain mb-6 filter invert" src="{{ brand.logo.url }}"/>
  {% else %}
  {% if brand.logo %}
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+ <img alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4" src="{{ brand.logo.url }}"/>
 {% else %}
  <h3 class="text-5xl font-display font-bold tracking-wider mb-6">{{ brand.name }}</h3>
 {% endif %}
@@ -14,50 +14,41 @@
  <p class="text-theme-text-disabled text-lg font-medium leading-relaxed max-w-sm mb-8">{{ brand.description }}</p>
  {% endif %}
  <div class="flex space-x-4">
- {% if brand.instagram_url %}<a href="{{ brand.instagram_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>{% endif %}
- {% if brand.tiktok_url %}<a href="{{ brand.tiktok_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-tiktok"></i></a>{% endif %}
- {% if brand.twitter_url %}<a href="{{ brand.twitter_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-x-twitter"></i></a>{% endif %}
- {% if brand.facebook_url %}<a href="{{ brand.facebook_url }}" class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
+ {% if brand.instagram_url %}<a class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors" href="{{ brand.instagram_url }}"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+ {% if brand.tiktok_url %}<a class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors" href="{{ brand.tiktok_url }}"><i class="fa-brands fa-tiktok"></i></a>{% endif %}
+ {% if brand.twitter_url %}<a class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors" href="{{ brand.twitter_url }}"><i class="fa-brands fa-x-twitter"></i></a>{% endif %}
+ {% if brand.facebook_url %}<a class="w-12 h-12 bg-theme-surface text-black flex items-center justify-center text-xl hover:bg-yellow-500 transition-colors" href="{{ brand.facebook_url }}"><i class="fa-brands fa-facebook-f"></i></a>{% endif %}
  </div>
- </div>
- 
- <div>
- <h4 class="text-2xl font-display font-bold text-yellow-500 mb-6">CATEGORIES</h4>
- <ul class="space-y-3">
+</div>
+<div>
+<h4 class="text-2xl font-display font-bold text-yellow-500 mb-6">CATEGORIES</h4>
+<ul class="space-y-3">
  {% for category in categories %}
- <li><a href="{% url 'storefront' brand.slug %}?category={{ category.id }}" class="text-white hover:text-yellow-500 font-bold transition-colors">{{ category.name|upper }}</a></li>
+ <li><a class="text-white hover:text-yellow-500 font-bold transition-colors" href="{% url 'storefront' brand.slug %}?category={{ category.id }}">{{ category.name|upper }}</a></li>
  {% empty %}
  <li><span class="text-theme-text-muted font-bold">ALL GEAR</span></li>
  {% endfor %}
  </ul>
- </div>
- 
- <div>
- <h4 class="text-2xl font-display font-bold text-yellow-500 mb-6">COLLECTIONS</h4>
- <ul class="space-y-3">
+</div>
+<div>
+<h4 class="text-2xl font-display font-bold text-yellow-500 mb-6">COLLECTIONS</h4>
+<ul class="space-y-3">
  {% for collection in collections %}
- <li><a href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}" class="text-white hover:text-yellow-500 font-bold transition-colors">{{ collection.name|upper }}</a></li>
+ <li><a class="text-white hover:text-yellow-500 font-bold transition-colors" href="{% url 'storefront' brand.slug %}?collection={{ collection.id }}">{{ collection.name|upper }}</a></li>
  {% empty %}
  <li><span class="text-theme-text-muted font-bold">CORE COLLECTION</span></li>
  {% endfor %}
  </ul>
- </div>
- </div>
- 
- <div class="max-w-7xl mx-auto px-6 border-t-2 border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center font-bold text-theme-text-muted">
- <p>&copy; {% now "Y" %} {{ brand.name|upper }}. ALL RIGHTS RESERVED.</p>
- <p class="mt-4 md:mt-0">POWERED BY AURA</p>
- </div>
- 
- <div class="max-w-7xl mx-auto px-6 pb-8">
- <div class="text-center mb-6">
- <h4 class="text-sm font-black uppercase tracking-wider text-white mb-2">Join the Team</h4>
- <p class="text-theme-text-muted text-sm">Get training tips and exclusive drops.</p>
- </div>
- <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border border-white/20 rounded-lg overflow-hidden">
- <input type="email" name="email" placeholder="Your email" required class="flex-1 px-4 py-3 bg-transparent outline-none text-white text-sm placeholder-gray-500">
- <button type="submit" class="px-6 py-3 bg-lime-500 text-black text-sm font-black uppercase hover:bg-lime-400 transition-colors">Subscribe</button>
- </form>
- </div>
-
- </footer>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 border-t-2 border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center font-bold text-theme-text-muted">
+<p>© {% now "Y" %} {{ brand.name|upper }}. ALL RIGHTS RESERVED.</p>
+<p class="mt-4 md:mt-0">POWERED BY AURA</p>
+</div>
+<div class="max-w-7xl mx-auto px-6 pb-8">
+<div class="text-center mb-6">
+<h4 class="text-sm font-black uppercase tracking-wider text-white mb-2">Join the Team</h4>
+<p class="text-theme-text-muted text-sm">Get training tips and exclusive drops.</p>
+</div>
+</div>
+</footer>

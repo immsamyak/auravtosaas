@@ -10,23 +10,16 @@
  {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
  {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
  </div>
-
 </div>
 <div>
-<h4 class="text-cyber-magenta font-bold mb-4 uppercase">&gt; Links_</h4>
+<h4 class="text-cyber-magenta font-bold mb-4 uppercase">> Links_</h4>
 <ul class="space-y-2 text-theme-text-muted">
 <li><a class="hover:text-cyber-cyan transition-colors" href="#">$ Shop</a></li>
 <li><a class="hover:text-cyber-cyan transition-colors" href="#">$ Support</a></li>
 <li><a class="hover:text-cyber-cyan transition-colors" href="#">$ Returns</a></li>
 </ul>
 </div>
-<div>
-<h4 class="text-cyber-magenta font-bold mb-4 uppercase">&gt; Newsletter_</h4>
-<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex border border-cyber-cyan/30 focus-within:border-cyber-cyan transition-colors">
-<input class="bg-transparent w-full px-4 py-2 outline-none text-gray-300 placeholder-gray-600 font-mono" placeholder="your@email.io" type="email" name="email"/>
-<button class="bg-cyber-cyan text-black px-4 py-2 font-bold hover:bg-cyber-magenta transition-colors" type="submit">OK</button>
-</form>
-</div>
+
 </div>
 <div class="text-center text-theme-text-secondary text-xs font-mono mt-12">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }} // ALL_RIGHTS_RESERVED{% endif %}</div>
 </footer>

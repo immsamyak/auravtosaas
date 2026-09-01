@@ -3,7 +3,7 @@
 <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 pt-8">
 <div>
 {% if brand.logo %}
- <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4">
+ <img alt="{{ brand.name }}" class="h-12 w-auto object-contain mb-4" src="{{ brand.logo.url }}"/>
 {% else %}
  <h3 class="font-serif italic text-3xl mb-4">{{ brand.name }}</h3>
 {% endif %}
@@ -15,19 +15,13 @@
  {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
  {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
  </div>
-
 </div>
 <div class="font-sans text-sm space-y-3 text-sky-200/60">
 <a class="block hover:text-white transition-colors" href="#">Shipping</a>
 <a class="block hover:text-white transition-colors" href="#">Size Guide</a>
 <a class="block hover:text-white transition-colors" href="#">Returns</a>
 </div>
-<div>
-<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex border border-sky-200/20 rounded-full overflow-hidden">
-<input class="w-full px-5 py-3 bg-transparent outline-none text-white placeholder-sky-200/30 font-sans text-sm" placeholder="Stay in the loop" type="email" name="email"/>
-<button class="bg-resort-gold text-white px-6 font-sans font-semibold text-sm hover:bg-resort-ocean transition-colors" type="submit">Join</button>
-</form>
-</div>
+
 </div>
 <p class="text-center text-sky-200/20 text-xs mt-16 font-sans">{% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}{% endif %}</p>
 </footer>

@@ -1,9 +1,13 @@
-<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
-    <div>
-<h4 class="text-cyber-magenta font-bold mb-4 uppercase">{{ settings.heading|default:'> Newsletter_' }}</h4>
-<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex border border-cyber-cyan/30 focus-within:border-cyber-cyan transition-colors" id="newsletter-subscribe-form" method="POST">
-<input class="bg-transparent w-full px-4 py-2 outline-none text-gray-300 placeholder-gray-600 font-mono" name="email" placeholder="your@email.io" type="email"/>
-<button class="bg-cyber-cyan text-black px-4 py-2 font-bold hover:bg-cyber-magenta transition-colors" type="submit">OK</button>
-</form>
+<div class="w-full py-20 bg-gray-900 text-cyan-400" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div class="text-center mb-12">
+ <h2 class="text-4xl md:text-5xl font-mono font-bold text-pink-500 uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,255,255,0.8)]">{{ settings.heading|default:'Subscribe to our Newsletter' }}</h2>
+ <p class="mt-4 text-xl font-mono text-cyan-400">{{ settings.subheading|default:'Get the latest updates and offers directly in your inbox.' }}</p>
+ </div>
+ <form action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" id="newsletter-subscribe-form" class="flex border border-cyber-cyan/30 focus-within:border-cyber-cyan transition-colors max-w-md mx-auto w-full mt-8">
+ {% csrf_token %}
+ <input type="email" name="email" required placeholder="Your email address" class="bg-transparent w-full px-4 py-2 outline-none text-gray-300 placeholder-gray-600 font-mono">
+ <button type="submit" class="bg-cyber-cyan text-black px-4 py-2 font-bold hover:bg-cyber-magenta transition-colors">OK</button>
+ </form>
+ </div>
 </div>
-</section>

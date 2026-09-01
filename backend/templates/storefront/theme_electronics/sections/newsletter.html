@@ -1,12 +1,13 @@
-<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
-    <div class="max-w-7xl mx-auto px-6 pb-8">
-<div class="text-center mb-6">
-<h4 class="text-sm font-bold uppercase tracking-wider text-white mb-2">{{ settings.heading|default:'Newsletter' }}</h4>
-<p class="text-theme-text-muted text-sm">Get the latest in tech and exclusive deals.</p>
+<div class="w-full py-20 bg-slate-50 text-slate-800" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div class="text-center mb-12">
+ <h2 class="text-4xl md:text-5xl font-sans font-extrabold tracking-tight text-blue-600">{{ settings.heading|default:'Subscribe to our Newsletter' }}</h2>
+ <p class="mt-4 text-xl font-sans text-slate-600">{{ settings.subheading|default:'Get the latest updates and offers directly in your inbox.' }}</p>
+ </div>
+ <form action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" id="newsletter-subscribe-form" class="flex border border-blue-500/30 rounded-lg overflow-hidden max-w-md mx-auto w-full mt-8">
+ {% csrf_token %}
+ <input type="email" name="email" required placeholder="Your email address" class="flex-1 px-4 py-3 bg-transparent outline-none text-white text-sm placeholder-gray-500">
+ <button type="submit" class="px-6 py-3 bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-colors">Subscribe</button>
+ </form>
+ </div>
 </div>
-<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex max-w-md mx-auto border border-blue-500/30 rounded-lg overflow-hidden" id="newsletter-subscribe-form" method="POST">
-<input class="flex-1 px-4 py-3 bg-transparent outline-none text-white text-sm placeholder-gray-500" name="email" placeholder="Enter your email" required="" type="email"/>
-<button class="px-6 py-3 bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-colors" type="submit">Subscribe</button>
-</form>
-</div>
-</section>

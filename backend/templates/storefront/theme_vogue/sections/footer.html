@@ -10,7 +10,6 @@
  {% if brand.tiktok_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.tiktok_url }}" target="_blank"><i class="fa-brands fa-tiktok text-xl"></i></a>{% endif %}
  {% if brand.pinterest_url %}<a class="text-theme-text-disabled hover:text-current" href="{{ brand.pinterest_url }}" target="_blank"><i class="fa-brands fa-pinterest text-xl"></i></a>{% endif %}
  </div>
-
 </div>
 <div>
 <h4 class="uppercase tracking-widest text-[10px] text-theme-text-muted font-bold mb-4">Customer Care</h4>
@@ -20,13 +19,7 @@
 <li><a class="hover:text-[#c5a059] transition-colors" href="#">Track Order</a></li>
 </ul>
 </div>
-<div>
-<h4 class="uppercase tracking-widest text-[10px] text-theme-text-muted font-bold mb-4">Newsletter</h4>
-<form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex border-b border-white/30 pb-2">
-<input class="bg-transparent w-full text-white outline-none placeholder-gray-600 text-sm" placeholder="Enter your email" type="email" name="email"/>
-<button class="text-white hover:text-[#c5a059] uppercase tracking-widest text-[10px] font-bold" type="submit">Subscribe</button>
-</form>
-</div>
+
 </div>
 <div class="max-w-7xl mx-auto px-6 mt-16 text-center text-theme-text-secondary text-xs tracking-widest uppercase">
  {% if brand.footer_copyright_text %}{{ brand.footer_copyright_text|safe }}{% else %}© {% now "Y" %} {{ brand.name }}. All rights reserved.{% endif %}
