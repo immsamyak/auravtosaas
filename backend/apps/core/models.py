@@ -547,3 +547,23 @@ class SystemEmailTemplate(models.Model):
 
     def __str__(self):
         return f"{self.get_event_type_display()} Template"
+
+class EmailLog(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        SENT = 'sent', 'Sent'
+        FAILED = 'failed', 'Failed'
+
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=255)
+    template_type = models.CharField(max_length=50, blank=True, null=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    error_message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"[{self.get_status_display()}] {self.subject} to {self.recipient}"

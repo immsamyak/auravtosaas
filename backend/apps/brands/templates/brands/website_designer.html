@@ -799,6 +799,55 @@ document.addEventListener('alpine:init', () => {
             return 'fa-solid ' + (icons[type] || 'fa-cube');
         },
         
+        async uploadGenericImage(event, sectionIndex, key) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('generic_media_upload', file);
+            
+            try {
+                const response = await fetch('{% url "website_designer" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    this.sections[sectionIndex].settings[key] = result.url;
+                    this.triggerPreviewUpdate();
+                }
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }
+        },
+        
+        async uploadArrayImage(event, sectionIndex, arrayKey, itemIndex, key) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('generic_media_upload', file);
+            
+            try {
+                const response = await fetch('{% url "website_designer" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    this.sections[sectionIndex].settings[arrayKey][itemIndex][key] = result.url;
+                    this.triggerPreviewUpdate();
+                }
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }
+        },
         
         getArray(sectionIndex, key) {
             if (sectionIndex === null || !this.sections[sectionIndex] || !this.sections[sectionIndex].settings) return [];

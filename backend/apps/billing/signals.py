@@ -2,6 +2,7 @@ import logging
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from apps.core.email_utils import dispatch_async_email
+from apps.core.utils import get_brand_url
 from apps.billing.models import BrandSubscription
 
 logger = logging.getLogger(__name__)
@@ -57,11 +58,12 @@ def trigger_subscription_emails(sender, instance, created, **kwargs):
         elif current_status == 'past_due' and old_status != 'past_due':
             # Payment Failed
             try:
+                base_url = get_brand_url(instance.brand)
                 context = {
                     'brand_name': instance.brand.name,
                     'amount_due': str(instance.plan.monthly_price) if instance.plan else '0.00',
                     'retry_date': 'in 3 days',  # Hardcoded for example
-                    'update_billing_url': f"http://{instance.brand.slug}.localhost:8000/admin/settings/billing/"
+                    'update_billing_url': f"{base_url}/admin/settings/billing/"
                 }
                 dispatch_async_email('payment_failed', context, [owner_email], instance.brand)
                 logger.info(f"Dispatched payment_failed for {instance.brand.name}")

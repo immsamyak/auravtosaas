@@ -2,6 +2,7 @@ import logging
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from apps.core.email_utils import dispatch_async_email
+from apps.core.utils import get_brand_url
 from apps.catalog.models import ProductVariant
 
 logger = logging.getLogger(__name__)
@@ -44,10 +45,11 @@ def trigger_inventory_emails(sender, instance, created, **kwargs):
         # Check for Back in Stock
         elif current_stock > 0 and old_stock <= 0:
             try:
+                base_url = get_brand_url(instance.product.brand)
                 context = {
                     'product_name': instance.product.name,
                     'variant_name': str(instance),
-                    'product_url': f"http://{instance.product.brand.slug}.localhost:8000/product/{instance.product.slug}/"
+                    'product_url': f"{base_url}/product/{instance.product.slug}/"
                 }
                 # We would typically notify a list of users who subscribed to this back-in-stock alert.
                 # For this implementation, we will dispatch the event. The actual recipients list would need 

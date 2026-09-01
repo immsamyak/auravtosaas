@@ -3,6 +3,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from .models import Order
 from apps.core.email_utils import send_transactional_email
+from apps.core.utils import get_brand_url
 
 def dispatch_async_email(event_type, context, to_emails):
     def send():
@@ -34,6 +35,9 @@ def order_lifecycle_emails(sender, instance, created, **kwargs):
         # If no email is available to send to, just return
         return
 
+    # Use brand URL for dynamic routing
+    base_url = get_brand_url(instance.brand) if instance.brand else "{{ platform_settings.site_url }}"
+
     # Prepare standard context for all order emails
     context = {
         'order_id': str(instance.id).split('-')[0].upper(), # short ID
@@ -42,9 +46,10 @@ def order_lifecycle_emails(sender, instance, created, **kwargs):
         'shipping_address': instance.shipping_address or "N/A",
         'tracking_number': instance.tracking_number or "N/A",
         'courier_name': instance.shipping_provider or "N/A",
-        'order_url': f"{{{{ platform_settings.site_url }}}}/orders/{instance.id}/",
+        'order_url': f"{base_url}/orders/{instance.id}/",
         'tracking_url': f"https://www.google.com/search?q={instance.tracking_number}" if instance.tracking_number else "#"
     }
+
 
     if created:
         # If order was just created, it might be PENDING or PAID immediately depending on gateway

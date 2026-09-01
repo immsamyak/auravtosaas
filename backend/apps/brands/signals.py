@@ -2,6 +2,7 @@ import logging
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from apps.core.email_utils import dispatch_async_email
+from apps.core.utils import get_brand_url
 from apps.brands.models import Brand, BrandStaff
 
 logger = logging.getLogger(__name__)
@@ -16,7 +17,7 @@ def trigger_store_created_email(sender, instance, created, **kwargs):
             context = {
                 'brand_name': instance.name,
                 'owner_name': instance.owner.first_name or instance.owner.username,
-                'login_url': f"http://{instance.slug}.localhost:8000/admin/"  # Should be generated via absolute url helper in prod
+                'login_url': f"{get_brand_url(instance)}/admin/"
             }
             # For system emails, brand might be None if it's sent from the platform, but this is a brand email.
             dispatch_async_email('store_created', context, [instance.owner.email], instance)
@@ -35,7 +36,7 @@ def trigger_staff_emails(sender, instance, created, **kwargs):
                 'staff_name': instance.user.first_name or instance.user.username,
                 'brand_name': instance.brand.name,
                 'role': instance.role,
-                'login_url': f"http://{instance.brand.slug}.localhost:8000/admin/"
+                'login_url': f"{get_brand_url(instance.brand)}/admin/"
             }
             dispatch_async_email('staff_invitation', context, [instance.user.email], instance.brand)
             logger.info(f"Dispatched staff_invitation email to {instance.user.email}")

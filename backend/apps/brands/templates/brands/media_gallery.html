@@ -49,9 +49,47 @@
  </div>
  </div>
 
- {% if assets or product_images %}
+ {% if assets or product_images or brand.logo or brand.banner %}
  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
  <!-- Brand Assets -->
+ {% if brand.logo %}
+ <div x-show="(activeTab === 'all' || activeTab === 'brand') && (searchTerm === '' || 'brand logo'.includes(searchTerm.toLowerCase()))" 
+ x-transition
+ class="group relative bg-theme-bg rounded-2xl border border-theme-border dark:border-slate-600/50/50 overflow-hidden hover:border-indigo-300 hover:shadow-md transition-all duration-200 aspect-square flex flex-col">
+ <div class="flex-1 bg-theme-bg-secondary relative overflow-hidden flex items-center justify-center">
+ <img src="{{ brand.logo.url }}" alt="Brand Logo" class="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110">
+ <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
+ <a href="{{ brand.logo.url }}" target="_blank" class="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center text-theme-text-secondary hover:text-indigo-600 hover:scale-110 transition-all" title="View">
+ <i class="fa-solid fa-eye text-sm"></i>
+ </a>
+ </div>
+ </div>
+ <div class="p-3 bg-theme-surface border-t border-theme-border-subtle dark:border-slate-600/50/50">
+ <p class="text-xs font-bold text-theme-text-primary truncate" title="Brand Logo">Brand Logo</p>
+ <p class="text-[10px] font-medium text-theme-text-disabled mt-0.5">Brand Asset</p>
+ </div>
+ </div>
+ {% endif %}
+
+ {% if brand.banner %}
+ <div x-show="(activeTab === 'all' || activeTab === 'brand') && (searchTerm === '' || 'brand banner'.includes(searchTerm.toLowerCase()))" 
+ x-transition
+ class="group relative bg-theme-bg rounded-2xl border border-theme-border dark:border-slate-600/50/50 overflow-hidden hover:border-indigo-300 hover:shadow-md transition-all duration-200 aspect-square flex flex-col">
+ <div class="flex-1 bg-theme-bg-secondary relative overflow-hidden flex items-center justify-center">
+ <img src="{{ brand.banner.url }}" alt="Brand Banner" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+ <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
+ <a href="{{ brand.banner.url }}" target="_blank" class="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center text-theme-text-secondary hover:text-indigo-600 hover:scale-110 transition-all" title="View">
+ <i class="fa-solid fa-eye text-sm"></i>
+ </a>
+ </div>
+ </div>
+ <div class="p-3 bg-theme-surface border-t border-theme-border-subtle dark:border-slate-600/50/50">
+ <p class="text-xs font-bold text-theme-text-primary truncate" title="Brand Banner">Brand Banner</p>
+ <p class="text-[10px] font-medium text-theme-text-disabled mt-0.5">Brand Asset</p>
+ </div>
+ </div>
+ {% endif %}
+
  {% for asset in assets %}
  <div x-show="(activeTab === 'all' || activeTab === 'brand') && (searchTerm === '' || '{{ asset.name|lower }}'.includes(searchTerm.toLowerCase()))" 
  x-transition

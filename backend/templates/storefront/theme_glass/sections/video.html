@@ -1,3 +1,4 @@
+{% load core_tags %}
 <div class="w-full py-20 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white" x-data="{ videoOpen: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-4xl md:text-6xl font-sans font-bold text-white drop-shadow-md mb-6">{{ settings.heading|default:'Watch the Campaign' }}</h2>
@@ -21,7 +22,9 @@
                 <i class="fa-solid fa-xmark text-2xl"></i>
             </button>
             {% if settings.video_url %}
-            <iframe class="w-full h-full" src="{{ settings.video_url }}" frameborder="0" allowfullscreen></iframe>
+            <template x-if="videoOpen">
+                <iframe class="w-full h-full" src="{{ settings.video_url|embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </template>
             {% else %}
             <div class="w-full h-full flex items-center justify-center text-white bg-gray-900 border-2 border-dashed border-gray-700">
                 <div class="text-center py-24">

@@ -111,9 +111,27 @@ def send_transactional_email(event_type, context_dict, to_emails):
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
         msg.attach_alternative(final_html, "text/html")
         msg.send()
+        return subject
         
     except SystemEmailTemplate.DoesNotExist:
         # Fallback to hardcoded templates if DB template is disabled or doesn't exist
         print(f"Warning: No active custom template for {event_type}. Falling back to default.")
         # E.g. implement standard render_to_string fallback here based on event_type
-        pass
+        return False
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
+
+def dispatch_async_email(event_type, context, to_emails, brand=None):
+    """
+    Fire-and-forget email dispatcher using Celery.
+    """
+    if brand:
+        context['brand_name'] = brand.name
+        if brand.logo:
+            context['brand_logo'] = brand.logo.url
+    
+    from apps.core.tasks import send_email_async
+    send_email_async.delay(event_type, context, to_emails)
+
+
