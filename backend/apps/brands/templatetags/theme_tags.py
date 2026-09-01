@@ -9,13 +9,23 @@ def get_safe_template_path(template_path, fallback_path="storefront/default_sect
     """
     Checks if a template exists. 
     If it does, returns the original path.
-    If it doesn't, returns the fallback path.
+    If it doesn't, checks for a global fallback (e.g. storefront/global_newsletter.html).
+    If that fails, returns the default fallback path.
     This prevents TemplateDoesNotExist 500 errors dynamically.
     """
     try:
         get_template(template_path)
         return template_path
     except TemplateDoesNotExist:
+        try:
+            # Extract section filename (e.g., newsletter.html)
+            if '/sections/' in template_path:
+                section_file = template_path.split('/sections/')[-1]
+                global_path = f"storefront/global_{section_file}"
+                get_template(global_path)
+                return global_path
+        except TemplateDoesNotExist:
+            pass
         return fallback_path
 
 @register.simple_tag

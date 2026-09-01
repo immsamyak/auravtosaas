@@ -61,8 +61,8 @@
  <h4 class="text-xs font-medium uppercase tracking-[0.3em] text-theme-text-disabled mb-2">Newsletter</h4>
  <p class="text-theme-text-muted text-sm">Be the first to know about new arrivals.</p>
  </div>
- <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border-b border-theme-border pb-1">
- <input type="email" name="email" placeholder="Email address" required class="flex-1 bg-transparent outline-none text-sm text-theme-text-primary placeholder-theme-placeholder py-2">
+ <form id="newsletter-subscribe-form" action="{% url 'newsletter_subscribe' brand.slug %}" method="POST" class="flex max-w-md mx-auto border-b border-gray-400 focus-within:border-gray-800 transition-colors pb-1">
+ <input type="email" name="email" placeholder="Email address" required class="flex-1 bg-transparent outline-none text-sm text-theme-text-primary placeholder-gray-500 py-2">
  <button type="submit" class="px-4 py-2 text-sm font-medium text-theme-text-primary hover:text-black transition-colors uppercase tracking-wider">Join</button>
  </form>
  </div>

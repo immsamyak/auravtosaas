@@ -1,0 +1,12 @@
+<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+    <div class="max-w-7xl mx-auto px-6 pb-8">
+<div class="text-center mb-6">
+<h4 class="text-sm font-medium uppercase tracking-widest text-stone-700 mb-2">{{ settings.heading|default:'Stay Inspired' }}</h4>
+<p class="text-stone-400 text-sm">Design ideas and deals in your inbox.</p>
+</div>
+<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex max-w-md mx-auto border border-stone-300 rounded-full overflow-hidden" id="newsletter-subscribe-form" method="POST">
+<input class="flex-1 px-5 py-3 bg-transparent outline-none text-sm text-stone-800 placeholder-stone-400" name="email" placeholder="Your email address" required="" type="email"/>
+<button class="px-6 py-3 bg-stone-800 text-white text-sm font-medium hover:bg-stone-700 transition-colors" type="submit">Subscribe</button>
+</form>
+</div>
+</section>

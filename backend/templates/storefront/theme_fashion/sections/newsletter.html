@@ -1,0 +1,12 @@
+<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+    <div class="max-w-6xl mx-auto px-6 pb-8">
+<div class="text-center mb-6">
+<h4 class="text-xs font-medium uppercase tracking-[0.3em] text-theme-text-disabled mb-2">{{ settings.heading|default:'Newsletter' }}</h4>
+<p class="text-theme-text-muted text-sm">Be the first to know about new arrivals.</p>
+</div>
+<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex max-w-md mx-auto border-b border-gray-400 focus-within:border-gray-800 transition-colors pb-1" id="newsletter-subscribe-form" method="POST">
+<input class="flex-1 bg-transparent outline-none text-sm text-theme-text-primary placeholder-gray-500 py-2" name="email" placeholder="Email address" required="" type="email"/>
+<button class="px-4 py-2 text-sm font-medium text-theme-text-primary hover:text-black transition-colors uppercase tracking-wider" type="submit">Join</button>
+</form>
+</div>
+</section>

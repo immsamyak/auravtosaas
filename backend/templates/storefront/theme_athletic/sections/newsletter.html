@@ -1,0 +1,9 @@
+<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+    <div class="max-w-7xl mx-auto px-6 py-12 text-center">
+<h4 class="text-xl font-bold mb-4">{{ settings.heading|default:'Subscribe to our Newsletter' }}</h4>
+<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex justify-center max-w-md mx-auto" id="newsletter-subscribe-form" method="POST">
+<input class="px-4 py-2 border w-full text-black" name="email" placeholder="Your email address" required="" type="email"/>
+<button class="bg-black text-white px-6 py-2 font-bold" type="submit">Join</button>
+</form>
+</div>
+</section>

@@ -1,0 +1,9 @@
+<section class="py-16 px-4 md:px-8 w-full" style="background-color: {{ settings.bgColor|default:'transparent' }};">
+    <div>
+<h4 class="uppercase tracking-widest text-[10px] text-theme-text-muted font-bold mb-4">{{ settings.heading|default:'Newsletter' }}</h4>
+<form action="{% url 'newsletter_subscribe' brand.slug %}" class="flex border-b border-white/30 pb-2" id="newsletter-subscribe-form" method="POST">
+<input class="bg-transparent w-full text-white outline-none placeholder-gray-600 text-sm" name="email" placeholder="Enter your email" type="email"/>
+<button class="text-white hover:text-[#c5a059] uppercase tracking-widest text-[10px] font-bold" type="submit">Subscribe</button>
+</form>
+</div>
+</section>
