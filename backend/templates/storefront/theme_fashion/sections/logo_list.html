@@ -4,11 +4,19 @@
             <h2 class="text-3xl font-serif font-bold text-black opacity-80 uppercase tracking-widest">{{ settings.heading|default:'As Seen On' }}</h2>
         </div>
         <div class="flex flex-wrap justify-center gap-16 opacity-60 hover:opacity-100 transition-opacity duration-500 text-gray-500">
+            {% if settings.logos %}
+                {% for logo in settings.logos %}
+                    {% if logo.image_url %}
+                        <img src="{{ logo.image_url }}" alt="Brand Logo" class="h-12 md:h-16 w-auto object-contain hover:scale-110 transition-transform mix-blend-multiply">
+                    {% endif %}
+                {% endfor %}
+            {% else %}
             <i class="fa-brands fa-vogue text-6xl hover:scale-110 transition-transform"></i>
             <i class="fa-brands fa-etsy text-6xl hover:scale-110 transition-transform"></i>
             <i class="fa-brands fa-amazon text-6xl hover:scale-110 transition-transform"></i>
             <i class="fa-brands fa-shopify text-6xl hover:scale-110 transition-transform"></i>
             <i class="fa-brands fa-pinterest text-6xl hover:scale-110 transition-transform"></i>
+            {% endif %}
         </div>
     </div>
 </div>

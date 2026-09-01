@@ -10,7 +10,7 @@
 <a class="font-sans font-bold text-xs uppercase tracking-[0.2em] border-b-2 border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-colors w-fit" href="{{ brand.banner_cta_link|default:'#pieces' }}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}Discover the Collection{% endif %}</a>
 
  {% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
- <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
+ <a class="inline-block border border-black text-black font-sans font-bold text-xs uppercase tracking-[0.2em] px-8 py-3 hover:bg-black hover:text-white transition-colors w-fit" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
  {% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}
  </a>
  {% endif %}

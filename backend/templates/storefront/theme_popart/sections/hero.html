@@ -11,7 +11,7 @@
 <a class="inline-block bg-pop-black text-pop-yellow font-display text-xl px-10 py-4 neo-brutal hover:bg-pop-red hover:text-white transition-colors" href="{% if settings.cta_url %}{{ settings.cta_url }}{% else %}{{ brand.banner_cta_link|default:'#shop' }}{% endif %}">{% if settings.cta_text %}{{ settings.cta_text }}{% elif brand.banner_cta_text %}{{ brand.banner_cta_text }}{% else %}SHOP NOW!{% endif %}</a>
 
  {% if settings.secondary_cta_text or brand.banner_secondary_cta_text %}
- <a class="inline-block border-2 border-white text-white hover:bg-white hover:text-black font-sans font-bold uppercase tracking-wider px-10 py-4 rounded-lg transition-colors shadow-lg shadow-black/25" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
+ <a class="inline-block bg-white text-pop-black font-display text-xl px-10 py-4 neo-brutal border-4 border-pop-black hover:bg-pop-blue hover:text-white transition-colors" href="{% if settings.secondary_cta_url %}{{ settings.secondary_cta_url }}{% else %}{{ brand.banner_secondary_cta_link|default:'#' }}{% endif %}">
  {% if settings.secondary_cta_text %}{{ settings.secondary_cta_text }}{% else %}{{ brand.banner_secondary_cta_text }}{% endif %}
  </a>
  {% endif %}
