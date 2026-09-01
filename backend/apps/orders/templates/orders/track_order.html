@@ -1,7 +1,7 @@
 {% extends theme_base %}
 
 {% block content %}
-<div class="min-h-screen pt-28 pb-24 px-4 sm:px-6 lg:px-8 text-current">
+<div class="min-h-screen pt-28 pb-24 px-4 sm:px-6 lg:px-8 text-theme-text-primary">
  <div class="max-w-4xl mx-auto">
 
  <!-- Header -->
@@ -11,8 +11,8 @@
  </div>
 
  <!-- Search Form -->
- <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl mb-10 relative overflow-hidden">
- <div class="absolute -top-20 -right-20 w-40 h-40 bg-current opacity-5 rounded-full blur-3xl"></div>
+ <div class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-2xl mb-10 relative overflow-hidden">
+ <div class="absolute -top-20 -right-20 w-40 h-40 bg-theme-text-primary opacity-5 rounded-full blur-3xl"></div>
  <form method="POST" class="relative z-10">
  {% csrf_token %}
  <div class="flex flex-col sm:flex-row gap-4">
@@ -22,12 +22,12 @@
  </div>
  <input type="text" name="order_id" id="order_id"
  value="{% if order %}{{ order.id }}{% endif %}"
- class="w-full pl-11 pr-4 py-4 bg-neutral-500/10 border border-neutral-500/20 rounded-2xl text-sm font-mono font-bold placeholder:font-sans placeholder:font-medium placeholder:opacity-50 focus:outline-none focus:ring-2 focus:ring-current/30 focus:border-current/40 transition-all"
+ class="w-full pl-11 pr-4 py-4 bg-theme-bg-secondary border border-theme-border-subtle rounded-2xl text-sm font-mono font-bold placeholder:font-sans placeholder:font-medium placeholder:opacity-50 focus:outline-none focus:ring-2 focus:ring-theme-text-primary/30 focus:border-theme-border/40 transition-all"
  placeholder="e.g. c986ba1d-fce0-4e56-8306-345fd02ade11" required>
  </div>
- <button type="submit" class="inline-flex justify-center items-center px-8 py-4 border border-current shadow-md text-sm font-bold uppercase tracking-widest rounded-2xl bg-current transition-all overflow-hidden relative group shrink-0" style="color: var(--tw-prose-body);">
- <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none"></span>
- <span class="relative z-10 mix-blend-exclusion text-white flex items-center">
+ <button type="submit" class="inline-flex justify-center items-center px-8 py-4 border border-theme-border shadow-md text-sm font-bold uppercase tracking-widest rounded-2xl bg-theme-text-primary transition-all overflow-hidden relative group shrink-0" >
+ 
+ <span class="relative z-10  flex items-center">
  <i class="fa-solid fa-location-dot mr-2"></i> Track
  </span>
  </button>
@@ -36,7 +36,7 @@
  </div>
 
  {% if error %}
- <div class="bg-red-500/10 backdrop-blur-xl border border-red-500/30 rounded-2xl p-5 mb-10 flex items-center gap-4">
+ <div class="bg-red-500/10  border border-red-500/30 rounded-2xl p-5 mb-10 flex items-center gap-4">
  <div class="h-10 w-10 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
  <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
  </div>
@@ -49,13 +49,13 @@
  <div class="space-y-8">
 
  <!-- Status & Order ID Card -->
- <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
- <div class="absolute -top-24 -right-24 w-48 h-48 bg-current opacity-5 rounded-full blur-2xl"></div>
+ <div class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+ <div class="absolute -top-24 -right-24 w-48 h-48 bg-theme-text-primary opacity-5 rounded-full blur-2xl"></div>
 
  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10 mb-8">
  <div>
  <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Order ID</p>
- <p class="font-mono font-bold text-sm bg-neutral-500/10 px-3 py-1.5 rounded-lg inline-block border border-neutral-500/10">{{ order.id }}</p>
+ <p class="font-mono font-bold text-sm bg-theme-bg-secondary px-3 py-1.5 rounded-lg inline-block border border-theme-border-subtle">{{ order.id }}</p>
  </div>
  <div class="text-left sm:text-right">
  <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Placed On</p>
@@ -77,44 +77,44 @@
  {% else %}
  <div class="relative">
  <!-- Progress bar background -->
- <div class="absolute top-5 left-[10%] right-[10%] h-1 bg-neutral-500/15 rounded-full z-0 hidden sm:block"></div>
+ <div class="absolute top-5 left-[10%] right-[10%] h-1 bg-theme-bg-secondary rounded-full z-0 hidden sm:block"></div>
  <!-- Active progress bar -->
- <div class="absolute top-5 left-[10%] h-1 bg-current opacity-70 rounded-full z-[1] hidden sm:block transition-all duration-700"
+ <div class="absolute top-5 left-[10%] h-1 bg-theme-text-primary opacity-70 rounded-full z-[1] hidden sm:block transition-all duration-700"
  style="width: {% if order.status == 'PENDING' %}0%{% elif order.status == 'PAID' %}10%{% elif order.status == 'PROCESSING' %}20%{% elif order.status == 'SENT_TO_COURIER' %}40%{% elif order.status == 'COURIER_PROCESSING' %}60%{% elif order.status == 'DELIVERED' %}80%{% endif %};"></div>
 
  <ol class="relative z-10 flex flex-col sm:flex-row sm:justify-between gap-6 sm:gap-0">
  <!-- Step 1: Order Placed -->
  <li class="flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2 flex-1">
- <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'PENDING,PAID,PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}bg-current border-current shadow-lg{% else %}bg-neutral-500/10 border-neutral-500/20{% endif %}">
- <i class="fa-solid fa-receipt text-sm {% if order.status in 'PENDING,PAID,PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}text-white mix-blend-exclusion{% else %}opacity-40{% endif %}"></i>
+ <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'PENDING,PAID,PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}bg-theme-text-primary border-theme-border shadow-lg{% else %}bg-theme-bg-secondary border-theme-border-subtle{% endif %}">
+ <i class="fa-solid fa-receipt text-sm {% if order.status in 'PENDING,PAID,PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}text-theme-bg {% else %}opacity-40{% endif %}"></i>
  </span>
  <span class="text-xs font-bold text-center {% if order.status in 'PENDING,PAID,PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}opacity-100{% else %}opacity-40{% endif %}">Order Placed</span>
  </li>
  <!-- Step 2: Processing -->
  <li class="flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2 flex-1">
- <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}bg-current border-current shadow-lg{% else %}bg-neutral-500/10 border-neutral-500/20{% endif %}">
- <i class="fa-solid fa-box text-sm {% if order.status in 'PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}text-white mix-blend-exclusion{% else %}opacity-40{% endif %}"></i>
+ <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}bg-theme-text-primary border-theme-border shadow-lg{% else %}bg-theme-bg-secondary border-theme-border-subtle{% endif %}">
+ <i class="fa-solid fa-box text-sm {% if order.status in 'PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}text-theme-bg {% else %}opacity-40{% endif %}"></i>
  </span>
  <span class="text-xs font-bold text-center {% if order.status in 'PROCESSING,SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}opacity-100{% else %}opacity-40{% endif %}">Processing</span>
  </li>
  <!-- Step 3: Shipped -->
  <li class="flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2 flex-1">
- <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}bg-current border-current shadow-lg{% else %}bg-neutral-500/10 border-neutral-500/20{% endif %}">
- <i class="fa-solid fa-truck-fast text-sm {% if order.status in 'SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}text-white mix-blend-exclusion{% else %}opacity-40{% endif %}"></i>
+ <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}bg-theme-text-primary border-theme-border shadow-lg{% else %}bg-theme-bg-secondary border-theme-border-subtle{% endif %}">
+ <i class="fa-solid fa-truck-fast text-sm {% if order.status in 'SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}text-theme-bg {% else %}opacity-40{% endif %}"></i>
  </span>
  <span class="text-xs font-bold text-center {% if order.status in 'SENT_TO_COURIER,COURIER_PROCESSING,DELIVERED' %}opacity-100{% else %}opacity-40{% endif %}">Shipped</span>
  </li>
  <!-- Step 4: In Transit -->
  <li class="flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2 flex-1">
- <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'COURIER_PROCESSING,DELIVERED' %}bg-current border-current shadow-lg{% else %}bg-neutral-500/10 border-neutral-500/20{% endif %}">
- <i class="fa-solid fa-route text-sm {% if order.status in 'COURIER_PROCESSING,DELIVERED' %}text-white mix-blend-exclusion{% else %}opacity-40{% endif %}"></i>
+ <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status in 'COURIER_PROCESSING,DELIVERED' %}bg-theme-text-primary border-theme-border shadow-lg{% else %}bg-theme-bg-secondary border-theme-border-subtle{% endif %}">
+ <i class="fa-solid fa-route text-sm {% if order.status in 'COURIER_PROCESSING,DELIVERED' %}text-theme-bg {% else %}opacity-40{% endif %}"></i>
  </span>
  <span class="text-xs font-bold text-center {% if order.status in 'COURIER_PROCESSING,DELIVERED' %}opacity-100{% else %}opacity-40{% endif %}">In Transit</span>
  </li>
  <!-- Step 5: Delivered -->
  <li class="flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2 flex-1">
- <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status == 'DELIVERED' %}bg-current border-current shadow-lg{% else %}bg-neutral-500/10 border-neutral-500/20{% endif %}">
- <i class="fa-solid fa-circle-check text-sm {% if order.status == 'DELIVERED' %}text-white mix-blend-exclusion{% else %}opacity-40{% endif %}"></i>
+ <span class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all shrink-0 {% if order.status == 'DELIVERED' %}bg-theme-text-primary border-theme-border shadow-lg{% else %}bg-theme-bg-secondary border-theme-border-subtle{% endif %}">
+ <i class="fa-solid fa-circle-check text-sm {% if order.status == 'DELIVERED' %}text-theme-bg {% else %}opacity-40{% endif %}"></i>
  </span>
  <span class="text-xs font-bold text-center {% if order.status == 'DELIVERED' %}opacity-100{% else %}opacity-40{% endif %}">Delivered</span>
  </li>
@@ -129,14 +129,14 @@
  <div class="lg:col-span-7 space-y-8">
 
  <!-- Order Items -->
- <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl">
+ <div class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-xl">
  <h2 class="text-lg font-bold mb-6 flex items-center">
  <i class="fa-solid fa-bag-shopping mr-3 opacity-60"></i> Order Items
  </h2>
  <div class="space-y-5 max-h-[50vh] overflow-y-auto pr-1">
  {% for item in order.items.all %}
- <div class="flex items-start space-x-4 group {% if not forloop.last %}pb-5 border-b border-neutral-500/10{% endif %}">
- <div class="h-20 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-500/20 bg-neutral-500/10 relative">
+ <div class="flex items-start space-x-4 group {% if not forloop.last %}pb-5 border-b border-theme-border-subtle{% endif %}">
+ <div class="h-20 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-theme-border-subtle bg-theme-bg-secondary relative">
  {% if item.product_variant.image %}
  <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" class="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
  {% else %}
@@ -144,9 +144,9 @@
  <i class="fa-solid fa-image opacity-30 text-2xl"></i>
  </div>
  {% endif %}
- <div class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-current text-white flex items-center justify-center text-[10px] font-bold shadow-sm" style="color: var(--tw-prose-body);">
- <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none rounded-full"></span>
- <span class="relative z-10 mix-blend-exclusion text-white">{{ item.quantity }}</span>
+ <div class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-theme-text-primary text-theme-bg flex items-center justify-center text-[10px] font-bold shadow-sm" >
+ 
+ <span class="relative z-10 ">{{ item.quantity }}</span>
  </div>
  </div>
  <div class="flex-1 min-w-0 pt-1">
@@ -162,7 +162,7 @@
  </div>
 
  <!-- Delivery Information -->
- <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl">
+ <div class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-xl">
  <h2 class="text-lg font-bold mb-6 flex items-center">
  <i class="fa-solid fa-address-card mr-3 opacity-60"></i> Delivery Information
  </h2>
@@ -183,7 +183,7 @@
  </div>
 
  <!-- Shipping & Tracking Details -->
- <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-xl">
+ <div class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-xl">
  <h2 class="text-lg font-bold mb-6 flex items-center">
  <i class="fa-solid fa-truck mr-3 opacity-60"></i> Shipping Details
  </h2>
@@ -195,7 +195,7 @@
  <div>
  <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Tracking Number</p>
  {% if order.tracking_number %}
- <span class="font-mono font-bold text-sm bg-neutral-500/10 px-3 py-1.5 rounded-lg inline-block border border-neutral-500/10">{{ order.tracking_number }}</span>
+ <span class="font-mono font-bold text-sm bg-theme-bg-secondary px-3 py-1.5 rounded-lg inline-block border border-theme-border-subtle">{{ order.tracking_number }}</span>
  {% else %}
  <p class="text-sm opacity-50 italic">Not available yet</p>
  {% endif %}
@@ -206,7 +206,7 @@
  </div>
  <div>
  <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Current Status</p>
- <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest border border-current/30 bg-neutral-500/10">
+ <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest border border-theme-border/30 bg-theme-bg-secondary">
  {{ order.get_status_display }}
  </span>
  </div>
@@ -217,10 +217,10 @@
 
  <!-- Right Column: Order Summary -->
  <div class="lg:col-span-5 mt-8 lg:mt-0">
- <div class="bg-neutral-500/5 backdrop-blur-xl border border-neutral-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl sticky top-8">
+ <div class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-2xl sticky top-8">
  <h2 class="text-xl font-extrabold mb-6 tracking-tight">Order Summary</h2>
 
- <div class="border-t border-neutral-500/20 pt-6">
+ <div class="border-t border-theme-border-subtle pt-6">
  <dl class="space-y-4 text-sm font-medium opacity-80">
  <div class="flex items-center justify-between">
  <dt>Subtotal</dt>
@@ -230,7 +230,7 @@
  {% if order.discount_amount > 0 %}
  <div class="flex items-center justify-between">
  <dt class="opacity-100 font-bold">Discount</dt>
- <dd class="font-extrabold opacity-100 border-b border-current border-opacity-30">-{{ brand.currency_symbol|default:"$" }}{{ order.discount_amount }}</dd>
+ <dd class="font-extrabold opacity-100 border-b border-theme-border border-opacity-30">-{{ brand.currency_symbol|default:"$" }}{{ order.discount_amount }}</dd>
  </div>
  {% endif %}
 
@@ -245,14 +245,14 @@
  <dt class="opacity-100 font-bold">Shipping</dt>
  <dd class="opacity-100 font-bold text-right">
  {% if order.shipping_cost == 0 %}
- <span class="font-extrabold border border-current border-opacity-40 px-2 py-0.5 rounded uppercase tracking-wider text-[10px] text-emerald-500 border-emerald-500">Free</span>
+ <span class="font-extrabold border border-theme-border border-opacity-40 px-2 py-0.5 rounded uppercase tracking-wider text-[10px] text-emerald-500 border-emerald-500">Free</span>
  {% else %}
  <span>{{ brand.currency_symbol|default:"$" }}{{ order.shipping_cost }}</span>
  {% endif %}
  </dd>
  </div>
 
- <div class="flex items-center justify-between border-t border-neutral-500/20 pt-6 mt-6">
+ <div class="flex items-center justify-between border-t border-theme-border-subtle pt-6 mt-6">
  <dt class="text-base font-extrabold opacity-100 uppercase tracking-widest">Total</dt>
  <dd class="text-3xl font-black opacity-100 tracking-tighter">{{ brand.currency_symbol|default:"$" }}{{ order.grand_total }}</dd>
  </div>
@@ -261,28 +261,28 @@
 
  <!-- Actions -->
  <div class="mt-8 space-y-3">
- <a href="{% url 'storefront' brand.slug %}" class="w-full inline-flex justify-center items-center px-6 py-4 border border-current shadow-md text-sm font-bold rounded-xl bg-current transition-all overflow-hidden relative group" style="color: var(--tw-prose-body);">
- <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none"></span>
- <span class="relative z-10 mix-blend-exclusion text-white flex items-center">
+ <a href="{% url 'storefront' brand.slug %}" class="w-full inline-flex justify-center items-center px-6 py-4 border border-theme-border shadow-md text-sm font-bold rounded-xl bg-theme-text-primary transition-all overflow-hidden relative group" >
+ 
+ <span class="relative z-10  flex items-center">
  Continue Shopping <i class="fa-solid fa-arrow-right ml-2"></i>
  </span>
  </a>
  </div>
  
  <!-- Returns & Exchanges -->
- <div class="mt-8 pt-8 border-t border-neutral-500/20">
+ <div class="mt-8 pt-8 border-t border-theme-border-subtle">
  <h3 class="text-sm font-bold uppercase tracking-wider opacity-50 mb-4">Returns & Exchanges</h3>
  {% if order.returns.first %}
- <div class="p-4 rounded-xl border border-current/20 bg-current/5">
+ <div class="p-4 rounded-xl border border-theme-border/20 bg-theme-text-primary/5">
  <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-1">Return Status</p>
- <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest border border-current/30 bg-neutral-500/10">
+ <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest border border-theme-border/30 bg-theme-bg-secondary">
  {{ order.returns.first.get_status_display }}
  </span>
  <p class="mt-3 text-sm opacity-80 italic">"{{ order.returns.first.reason }}"</p>
  </div>
  {% elif order.status in 'DELIVERED,SHIPPED' %}
  <div x-data="{ open: false }">
- <button @click="open = !open" type="button" class="w-full inline-flex justify-center items-center px-6 py-4 border border-current shadow-md text-sm font-bold rounded-xl transition-all overflow-hidden relative group hover:bg-current hover:text-white" style="color: var(--tw-prose-body);">
+ <button @click="open = !open" type="button" class="w-full inline-flex justify-center items-center px-6 py-4 border border-theme-border shadow-md text-sm font-bold rounded-xl transition-all overflow-hidden relative group hover:bg-theme-text-primary hover:text-theme-bg" >
  <i class="fa-solid fa-arrow-rotate-left mr-2"></i> Request Return
  </button>
  
@@ -292,14 +292,14 @@
  {% if not order.user %}
  <div>
  <label class="block text-xs font-bold uppercase tracking-wider opacity-50 mb-2">Email Address</label>
- <input type="email" name="email" required class="w-full px-4 py-3 bg-neutral-500/10 border border-neutral-500/20 rounded-xl text-sm focus:outline-none focus:border-current">
+ <input type="email" name="email" required class="w-full px-4 py-3 bg-theme-bg-secondary border border-theme-border-subtle rounded-xl text-sm focus:outline-none focus:border-theme-border">
  </div>
  {% endif %}
  <div>
  <label class="block text-xs font-bold uppercase tracking-wider opacity-50 mb-2">Reason for Return</label>
- <textarea name="reason" rows="3" required class="w-full px-4 py-3 bg-neutral-500/10 border border-neutral-500/20 rounded-xl text-sm focus:outline-none focus:border-current" placeholder="Please describe why you are returning this item..."></textarea>
+ <textarea name="reason" rows="3" required class="w-full px-4 py-3 bg-theme-bg-secondary border border-theme-border-subtle rounded-xl text-sm focus:outline-none focus:border-theme-border" placeholder="Please describe why you are returning this item..."></textarea>
  </div>
- <button type="submit" class="w-full bg-current text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md transition-all opacity-90 hover:opacity-100 mix-blend-exclusion">Submit Request</button>
+ <button type="submit" class="w-full bg-theme-text-primary text-theme-bg px-6 py-3 rounded-xl font-bold text-sm shadow-md transition-all opacity-90 hover:opacity-100 ">Submit Request</button>
  </form>
  </div>
  </div>

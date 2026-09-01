@@ -750,13 +750,15 @@ def media_gallery_view(request):
             messages.success(request, 'Media uploaded successfully.')
             return redirect('media_gallery')
 
-    from apps.catalog.models import ProductImage
+    from apps.catalog.models import ProductImage, ProductVariant
     product_images = ProductImage.objects.filter(product__brand=brand).order_by('-id')
+    product_variants = ProductVariant.objects.filter(product__brand=brand).exclude(image='').order_by('-id')
     
     return render(request, 'brands/media_gallery.html', {
         'brand': brand,
         'assets': assets,
         'product_images': product_images,
+        'product_variants': product_variants,
     })
 
 from apps.core.models import PlatformIntegration
@@ -989,7 +991,9 @@ def storefront_account_view(request, slug):
     # Profile AI logic: Recommend 4 products based on catalog recency (until ML engine integrated)
     ai_recommendations = Product.objects.filter(brand=brand, is_active=True).order_by('-created_at')[:4]
     
-    return render(request, 'brands/store_account.html', {
+    template_name = f"storefront/{brand.theme.template_folder}/account.html" if brand.theme and brand.theme.is_active else 'brands/store_account.html'
+    
+    return render(request, template_name, {
         'brand': brand,
         'theme_base': theme_base,
         'orders': orders,

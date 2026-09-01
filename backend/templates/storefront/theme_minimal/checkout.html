@@ -1,0 +1,477 @@
+{% extends theme_base %}
+{% load static %}
+
+{% block content %}
+<div class="py-20 min-h-screen text-theme-text-primary" x-data="checkoutApp()">
+ 
+
+
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+ <div class="lg:grid lg:grid-cols-12 lg:gap-x-16 lg:items-start">
+ 
+ <!-- Checkout Form (Left Column) -->
+ <div class="lg:col-span-7 space-y-10">
+ 
+ <div>
+ <h1 class="text-3xl font-extrabold tracking-tight">Checkout</h1>
+ <p class="opacity-70 mt-2 text-sm">Please complete your order details below.</p>
+ </div>
+
+ <form id="checkoutForm" method="POST" action="{% url 'storefront_checkout' brand.slug %}" class="space-y-10">
+ {% csrf_token %}
+ 
+ <!-- 1. Contact Information -->
+ <section class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-2xl">
+ <h2 class="text-lg font-bold mb-6 flex items-center">
+ <span class="border border-theme-border rounded-full w-7 h-7 inline-flex items-center justify-center text-xs mr-3 opacity-80">1</span> 
+ Contact Information
+ </h2>
+ 
+ <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6">
+ <div class="sm:col-span-1">
+ <label for="customer_name" class="block text-sm font-bold opacity-80 mb-2">Full Name</label>
+ <input type="text" id="customer_name" name="customer_name" value="{{ user.get_full_name|default:'' }}" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary placeholder-theme-text-muted">
+ </div>
+ 
+ <div class="sm:col-span-1">
+ <label for="customer_email" class="block text-sm font-bold opacity-80 mb-2">Email Address</label>
+ <input type="email" id="customer_email" name="customer_email" value="{{ user.email|default:'' }}" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary placeholder-theme-text-muted">
+ </div>
+ 
+ <div class="sm:col-span-2">
+ <label for="customer_phone" class="block text-sm font-bold opacity-80 mb-2">Phone Number</label>
+ <input type="tel" id="customer_phone" name="customer_phone" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary placeholder-theme-text-muted">
+ </div>
+
+ <div class="sm:col-span-2">
+ <label for="shipping_address" class="block text-sm font-bold opacity-80 mb-2">Full Delivery Address</label>
+ <textarea id="shipping_address" name="shipping_address" rows="3" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary placeholder-theme-text-muted" placeholder="Street address, city, state, zip code..."></textarea>
+ </div>
+ </div>
+ </section>
+
+ <!-- 2. Delivery Location -->
+ {% if locations_json != '[]' %}
+ <section class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-2xl">
+ <h2 class="text-lg font-bold mb-6 flex items-center">
+ <span class="border border-theme-border rounded-full w-7 h-7 inline-flex items-center justify-center text-xs mr-3 opacity-80">2</span> 
+ Delivery Location
+ </h2>
+ 
+ <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+ <!-- Province -->
+ <div>
+ <label class="block text-sm font-bold opacity-80 mb-2">Province <span class="text-rose-500">*</span></label>
+ <select x-model="selectedProvince" @change="selectedDistrict = ''; selectedCity = ''" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary">
+ <option value="" class="text-theme-text-primary">Select Province</option>
+ <template x-for="p in locations" :key="p.id">
+ <option :value="p.id" x-text="p.name" class="text-theme-text-primary"></option>
+ </template>
+ </select>
+ </div>
+
+ <!-- District -->
+ <div>
+ <label class="block text-sm font-bold opacity-80 mb-2">District <span class="text-rose-500">*</span></label>
+ <select x-model="selectedDistrict" @change="selectedCity = ''" :disabled="!selectedProvince" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary disabled:opacity-50 disabled:cursor-not-allowed">
+ <option value="" class="text-theme-text-primary">Select District</option>
+ <template x-for="d in availableDistricts" :key="d.id">
+ <option :value="d.id" x-text="d.name" class="text-theme-text-primary"></option>
+ </template>
+ </select>
+ </div>
+
+ <!-- City -->
+ <div>
+ <label class="block text-sm font-bold opacity-80 mb-2">City / Area <span class="text-rose-500">*</span></label>
+ <select x-model="selectedCity" :disabled="!selectedDistrict" required class="block w-full rounded-xl bg-transparent border-theme-border py-3 px-4 shadow-sm focus:ring-1 focus:ring-theme-text-primary/30 focus:border-theme-border transition-colors sm:text-sm text-theme-text-primary disabled:opacity-50 disabled:cursor-not-allowed">
+ <option value="" class="text-theme-text-primary">Select City</option>
+ <template x-for="c in availableCities" :key="c.id">
+ <option :value="c.id" x-text="`${c.name} (${brandCurrency}${c.rate})`" class="text-theme-text-primary"></option>
+ </template>
+ </select>
+ </div>
+ </div>
+
+ <!-- Selected City Details (Shipping Rate Preview) -->
+ <div x-show="selectedCityData" x-collapse class="mt-6">
+ <div class="p-4 bg-theme-bg-secondary border border-theme-border border-opacity-30 rounded-xl flex justify-between items-center">
+ <div>
+ <p class="font-bold text-sm">Shipping to <span x-text="selectedCityData?.name"></span></p>
+ <template x-if="selectedCityData?.estimated_days">
+ <p class="text-xs opacity-70 mt-0.5"><i class="fa-regular fa-clock mr-1"></i> <span x-text="selectedCityData.estimated_days"></span></p>
+ </template>
+ </div>
+ <div class="text-right">
+ <template x-if="selectedCityData?.is_free_above && productPrice >= parseFloat(selectedCityData.is_free_above)">
+ <div>
+ <span class="border border-theme-border px-2.5 py-1 rounded-md uppercase tracking-wider text-xs font-bold text-emerald-500 border-emerald-500">Free</span>
+ </div>
+ </template>
+ <template x-if="!selectedCityData?.is_free_above || productPrice < parseFloat(selectedCityData.is_free_above)">
+ <span class="font-bold text-lg" x-text="`${brandCurrency}${selectedCityData?.rate}`"></span>
+ </template>
+ </div>
+ </div>
+ </div>
+
+ <input type="hidden" name="delivery_city" :value="selectedCity">
+ </section>
+ {% else %}
+ <div class="p-6 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex flex-col items-center text-center">
+ <i class="fa-solid fa-triangle-exclamation text-rose-500 text-2xl mb-2"></i>
+ <h3 class="font-bold text-sm">Delivery Unavailable</h3>
+ <p class="opacity-80 text-xs mt-1">This store has not configured any delivery locations.</p>
+ </div>
+ {% endif %}
+ 
+ <input type="hidden" name="shipping_method" value="STANDARD">
+
+ <!-- 3. Payment Method -->
+ <section x-data="{ selectedPayment: '' }" class="bg-theme-surface  border border-theme-border-subtle rounded-3xl p-6 sm:p-8 shadow-2xl">
+ <h2 class="text-lg font-bold mb-6 flex items-center">
+ <span class="border border-theme-border rounded-full w-7 h-7 inline-flex items-center justify-center text-xs mr-3 opacity-80">3</span> 
+ Payment Method
+ </h2>
+ 
+ <div class="space-y-4">
+ {% for pm in payment_methods %}
+ <label class="relative flex flex-col cursor-pointer rounded-2xl border p-5 shadow-sm focus:outline-none transition-all" 
+ :class="selectedPayment === '{{ pm.integration.provider_code }}' ? 'border-theme-border bg-theme-bg-secondary ring-1 ring-current' : 'border-theme-border-subtle bg-transparent hover:border-theme-border'">
+ <input type="radio" name="payment_method" value="{{ pm.integration.provider_code }}" x-model="selectedPayment" required class="sr-only">
+ 
+ <div class="flex w-full items-center">
+ <div class="h-12 w-12 flex-shrink-0 bg-theme-bg-secondary border border-theme-border-subtle rounded-xl flex items-center justify-center mr-4 overflow-hidden p-1.5">
+ {% if pm.integration.logo %}
+ <img src="{{ pm.integration.logo.url }}" alt="{{ pm.integration.name }}" class="h-full w-full object-contain">
+ {% elif pm.integration.provider_code == 'ESEWA' %}
+ <img src="{% static 'images/esewa-icon.png' %}" alt="eSewa" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
+ {% elif pm.integration.provider_code == 'KHALTI' %}
+ <img src="{% static 'images/khalti-icon.png' %}" alt="Khalti" class="h-6 w-auto" onerror="this.outerHTML='<i class=\'fa-solid fa-wallet text-xl opacity-80\'></i>'">
+ {% elif pm.integration.provider_code == 'STRIPE' %}
+ <i class="fa-brands fa-stripe text-3xl opacity-80 text-[#635BFF]"></i>
+ {% elif pm.integration.provider_code == 'PAYPAL' %}
+ <i class="fa-brands fa-paypal text-2xl opacity-80 text-[#003087]"></i>
+ {% elif pm.integration.provider_code == 'RAZORPAY' %}
+ <div class="font-bold text-[10px] uppercase bg-blue-50 text-blue-600 px-1 py-1 rounded w-full text-center tracking-tighter">Razorpay</div>
+ {% else %}
+ <i class="fa-solid fa-money-bill-wave text-xl opacity-80"></i>
+ {% endif %}
+ </div>
+ <div class="flex-1">
+ <p class="font-bold text-base">{{ pm.integration.name }}</p>
+ <p class="text-xs opacity-70 mt-1">{{ pm.integration.description }}</p>
+ </div>
+ 
+ <!-- Check Circle Icon when selected -->
+ <div x-show="selectedPayment === '{{ pm.integration.provider_code }}'" class="ml-4 flex-shrink-0">
+ <i class="fa-solid fa-circle-check text-xl"></i>
+ </div>
+ </div>
+ 
+ <!-- Custom Payment Instructions (Expanded details) -->
+ {% if pm.integration.provider_code == 'STRIPE' %}
+ <div x-show="selectedPayment === 'STRIPE'" x-collapse class="mt-5 pt-5 border-t border-theme-border-subtle">
+ <div class="flex items-start space-x-3">
+ <i class="fa-solid fa-lock text-emerald-500 mt-1"></i>
+ <div>
+ <p class="font-bold text-sm">Secure Payment via Stripe</p>
+ <p class="text-xs opacity-80 mt-1 leading-relaxed">After clicking "Complete Order", you will be securely redirected to Stripe's encrypted payment gateway to safely enter your credit card details. We do not store your card information.</p>
+ </div>
+ </div>
+ </div>
+ {% endif %}
+
+ {% if pm.integration.provider_code == 'PAYPAL' %}
+ <div x-show="selectedPayment === 'PAYPAL'" x-collapse class="mt-5 pt-5 border-t border-theme-border-subtle">
+ <div class="flex items-start space-x-3">
+ <i class="fa-solid fa-shield-halved text-blue-600 mt-1"></i>
+ <div>
+ <p class="font-bold text-sm">Pay with PayPal</p>
+ <p class="text-xs opacity-80 mt-1 leading-relaxed">You will be redirected to PayPal to complete your purchase securely.</p>
+ </div>
+ </div>
+ </div>
+ {% endif %}
+
+ {% if pm.integration.provider_code == 'RAZORPAY' %}
+ <div x-show="selectedPayment === 'RAZORPAY'" x-collapse class="mt-5 pt-5 border-t border-theme-border-subtle">
+ <div class="flex items-start space-x-3">
+ <i class="fa-solid fa-credit-card text-blue-500 mt-1"></i>
+ <div>
+ <p class="font-bold text-sm">Secure Indian Payments</p>
+ <p class="text-xs opacity-80 mt-1 leading-relaxed">Pay easily via UPI, Credit/Debit Cards, or Netbanking securely powered by Razorpay.</p>
+ </div>
+ </div>
+ </div>
+ {% endif %}
+
+ {% if pm.integration.provider_code == 'CUSTOM_MANUAL' %}
+ <div x-show="selectedPayment === 'CUSTOM_MANUAL'" x-collapse class="mt-5 pt-5 border-t border-theme-border-subtle">
+ {% if pm.credentials.custom_payment_type == 'BANK_TRANSFER' %}
+ <div class="flex justify-between items-center mb-3">
+ <p class="font-bold text-sm">Bank Transfer Details</p>
+ <button type="button" class="opacity-80 hover:opacity-100 font-bold text-xs flex items-center bg-theme-bg-secondary border border-theme-border-subtle px-3 py-1.5 rounded-lg transition" onclick="navigator.clipboard.writeText(`{{ pm.credentials.instructions|escapejs }}`); this.innerHTML = '<i class=\'fa-solid fa-check mr-1.5\'></i> Copied!'; setTimeout(() => this.innerHTML = '<i class=\'fa-regular fa-copy mr-1.5\'></i> Copy Details', 2000);">
+ <i class="fa-regular fa-copy mr-1.5"></i> Copy Details
+ </button>
+ </div>
+ <div class="bg-theme-bg-secondary p-4 rounded-xl border border-theme-border-subtle">
+ <p class="whitespace-pre-wrap font-mono text-sm leading-relaxed opacity-90">{{ pm.credentials.instructions }}</p>
+ </div>
+ {% elif pm.credentials.custom_payment_type == 'QR_CODE' %}
+ <p class="font-bold text-sm mb-3">Scan QR Code to Pay</p>
+ <div class="flex flex-col sm:flex-row gap-6 items-start">
+ {% if pm.credentials.qr_code_url %}
+ <div class="bg-theme-surface p-2 rounded-xl shadow-lg shrink-0">
+ <img src="{{ pm.credentials.qr_code_url }}" alt="Payment QR Code" class="h-32 w-32 object-contain">
+ </div>
+ {% endif %}
+ {% if pm.credentials.instructions %}
+ <p class="whitespace-pre-wrap text-sm leading-relaxed opacity-90">{{ pm.credentials.instructions }}</p>
+ {% endif %}
+ </div>
+ {% else %}
+ <p class="font-bold text-sm mb-2">Cash on Delivery / Manual Payment</p>
+ {% if pm.credentials.instructions %}
+ <p class="whitespace-pre-wrap text-sm leading-relaxed opacity-90">{{ pm.credentials.instructions }}</p>
+ {% else %}
+ <p class="text-sm opacity-70">Please pay upon receiving your order.</p>
+ {% endif %}
+ {% endif %}
+ </div>
+ {% endif %}
+ </label>
+ {% empty %}
+ <div class="p-6 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex flex-col items-center text-center">
+ <i class="fa-solid fa-triangle-exclamation text-rose-500 text-2xl mb-2"></i>
+ <h3 class="font-bold text-sm">No Payment Methods</h3>
+ <p class="opacity-80 text-xs mt-1">This store currently has no active payment methods configured.</p>
+ </div>
+ {% endfor %}
+ </div>
+ </section>
+
+ <!-- Mobile Submit Button (Hidden on Desktop) -->
+ <div class="lg:hidden mt-8">
+ <button type="submit" class="w-full flex items-center justify-center bg-theme-text-primary text-theme-text-primary bg-opacity-10  border border-theme-border rounded-xl py-4 px-6 text-base font-bold transition-all hover:bg-opacity-20 shadow-xl">
+ <span class="  px-2">Complete Order <i class="fa-solid fa-arrow-right ml-2"></i></span>
+ </button>
+ </div>
+
+ <!-- Hidden fields to submit with form -->
+ <input type="hidden" name="applied_coupon" :value="appliedCouponCode">
+ <input type="hidden" name="cart_data" :value="JSON.stringify($store.cart.items)">
+ </form>
+ </div>
+
+ <!-- Order Summary (Right Column) -->
+ <div class="mt-16 lg:mt-0 lg:col-span-5">
+ <div class="bg-theme-surface  rounded-3xl shadow-2xl border border-theme-border-subtle overflow-hidden sticky top-24">
+ 
+ <!-- Products Summary -->
+ <div class="p-6 sm:p-8 border-b border-theme-border-subtle bg-theme-bg-secondary max-h-[40vh] overflow-y-auto custom-scrollbar">
+ <h2 class="text-lg font-bold mb-6">Order Summary</h2>
+ <div class="space-y-6">
+ <template x-for="item in $store.cart.items" :key="item.id">
+ <div class="flex space-x-5">
+ <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-theme-border-subtle bg-theme-bg-secondary">
+ <template x-if="item.image">
+ <img :src="item.image" :alt="item.name" class="h-full w-full object-cover object-center  dark:">
+ </template>
+ <template x-if="!item.image">
+ <div class="h-full w-full flex items-center justify-center"><i class="fa-solid fa-shirt opacity-30 text-2xl"></i></div>
+ </template>
+ </div>
+
+ <div class="flex flex-1 flex-col justify-between">
+ <div>
+ <h3 class="text-sm font-bold leading-tight" x-text="item.name"></h3>
+ <p class="mt-1 text-xs font-medium opacity-70" x-text="item.variant_name"></p>
+ </div>
+ <div class="flex items-end justify-between">
+ <p class="text-xs font-medium opacity-80 border border-theme-border border-opacity-30 px-2 py-0.5 rounded-md uppercase tracking-wider" x-text="`Qty: ${item.quantity}`"></p>
+ <p class="text-sm font-bold" x-text="`{{ brand.currency_symbol|default:'$' }}${item.price}`"></p>
+ </div>
+ </div>
+ </div>
+ </template>
+ </div>
+ </div>
+
+ <!-- Discount Section -->
+ <div class="p-6 sm:p-8 border-b border-theme-border-subtle">
+ <label for="coupon_code" class="block text-xs font-bold uppercase tracking-wider opacity-70 mb-3">Gift Card or Discount Code</label>
+ <div class="flex space-x-3">
+ <input type="text" name="coupon_code" id="coupon_code" x-model="couponCode" @input="couponMessage = ''" class="block w-full rounded-xl bg-theme-bg-secondary border-theme-border py-3 px-4 text-sm focus:border-theme-border focus:ring-1 focus:ring-theme-text-primary/30 shadow-inner uppercase font-mono transition-colors text-theme-text-primary placeholder-theme-text-muted" placeholder="ENTER CODE">
+ <button type="button" @click.prevent="applyCoupon()" class="inline-flex items-center justify-center px-6 py-3 border border-theme-border rounded-xl shadow-sm text-sm font-bold bg-transparent hover:bg-theme-bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-text-primary/30 disabled:opacity-30 transition-all" :disabled="isApplyingCoupon || !couponCode">
+ <span x-show="!isApplyingCoupon">Apply</span>
+ <span x-show="isApplyingCoupon" x-cloak><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+ </button>
+ </div>
+ 
+ <div x-show="couponMessage" x-transition class="mt-3 flex items-start" x-cloak>
+ <i class="fa-solid mt-0.5 text-sm mr-2" :class="couponError ? 'fa-circle-xmark text-rose-500' : 'fa-circle-check text-emerald-500'"></i>
+ <p class="text-sm font-bold" :class="couponError ? 'text-rose-500' : 'text-emerald-500'" x-text="couponMessage"></p>
+ </div>
+ 
+ <!-- Applied Coupon Badge -->
+ <div x-show="discountAmount > 0" x-transition class="mt-5 inline-flex items-center bg-theme-text-primary bg-opacity-10 border border-theme-border rounded-lg py-2.5 px-4" x-cloak>
+ <i class="fa-solid fa-tag opacity-80 mr-3 text-sm"></i>
+ <span class="text-sm font-extrabold uppercase tracking-widest mr-4" x-text="appliedCouponCode"></span>
+ <button type="button" @click="removeCoupon()" class="opacity-60 hover:opacity-100 transition-opacity flex items-center justify-center">
+ <i class="fa-solid fa-times text-sm"></i>
+ </button>
+ </div>
+ </div>
+
+ <!-- Totals -->
+ <div class="p-6 sm:p-8">
+ <dl class="space-y-4 text-sm font-medium opacity-80">
+ <div class="flex items-center justify-between">
+ <dt>Subtotal</dt>
+ <dd class="font-bold text-base opacity-100" x-text="`{{ brand.currency_symbol|default:'$' }}${$store.cart.total.toFixed(2)}`"></dd>
+ </div>
+ <div class="flex items-center justify-between" x-show="discountAmount > 0" x-cloak>
+ <dt class="opacity-100 font-bold">Discount</dt>
+ <dd class="font-extrabold opacity-100 border-b border-theme-border border-opacity-30" x-text="'-{{ brand.currency_symbol|default:"$" }}' + discountAmount.toFixed(2)"></dd>
+ </div>
+ 
+ <div class="flex items-center justify-between">
+ <dt class="opacity-100 font-bold">Shipping</dt>
+ <dd class="opacity-100 font-bold text-right">
+ <template x-if="shippingCost === null">
+ <span class="opacity-50 font-normal italic">Select location</span>
+ </template>
+ <template x-if="shippingCost === 0">
+ <span class="font-extrabold border border-theme-border border-opacity-40 px-2 py-0.5 rounded uppercase tracking-wider text-[10px] text-emerald-500 border-emerald-500">Free</span>
+ </template>
+ <template x-if="shippingCost !== null && shippingCost > 0">
+ <span x-text="`${brandCurrency}${shippingCost.toFixed(2)}`"></span>
+ </template>
+ </dd>
+ </div>
+ <div class="flex items-center justify-between border-t border-theme-border-subtle pt-6 mt-6">
+ <dt class="text-base font-extrabold opacity-100 uppercase tracking-widest">Total</dt>
+ <dd class="text-3xl font-black opacity-100 tracking-tighter" x-text="'{{ brand.currency_symbol|default:"$" }}' + grandTotal.toFixed(2)"></dd>
+ </div>
+ </dl>
+ 
+ <!-- Desktop Submit Button -->
+ <div class="hidden lg:block mt-10">
+ <!-- Inverting background/text via mix-blend or simple inversion technique for a universal high-contrast button -->
+ <button type="submit" form="checkoutForm" class="w-full flex items-center justify-center border-2 border-theme-border rounded-2xl py-4 px-6 text-lg font-black transition-all hover:bg-theme-text-primary hover:text-black group shadow-2xl">
+ <span>Complete Order</span>
+ <i class="fa-solid fa-lock ml-3 opacity-60 group-hover:opacity-100 transition-opacity"></i>
+ </button>
+ <p class="text-center text-xs opacity-50 mt-5 font-bold uppercase tracking-widest flex items-center justify-center">
+ <i class="fa-solid fa-shield-halved mr-2"></i> Secure Encrypted Checkout
+ </p>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ </div>
+ </div>
+</div>
+
+<!-- Alpine.js Plugin for Collapse -->
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+
+<script>
+function checkoutApp() {
+ return {
+ brandCurrency: '{{ brand.currency_symbol|default:"Rs." }}',
+ get productPrice() {
+ return this.$store.cart ? this.$store.cart.total : 0;
+ },
+ 
+ // Delivery Hierarchy
+ locations: {{ locations_json|default:"[]"|safe }},
+ selectedProvince: '',
+ selectedDistrict: '',
+ selectedCity: '',
+ 
+ get availableDistricts() {
+ if (!this.selectedProvince) return [];
+ const prov = this.locations.find(p => p.id == this.selectedProvince);
+ return prov ? prov.districts : [];
+ },
+ 
+ get availableCities() {
+ if (!this.selectedDistrict) return [];
+ const dist = this.availableDistricts.find(d => d.id == this.selectedDistrict);
+ return dist ? dist.cities : [];
+ },
+ 
+ get selectedCityData() {
+ if (!this.selectedCity) return null;
+ return this.availableCities.find(c => c.id == this.selectedCity) || null;
+ },
+ 
+ get shippingCost() {
+ const city = this.selectedCityData;
+ if (!city) return null;
+ const rate = parseFloat(city.rate);
+ if (city.is_free_above && this.productPrice >= parseFloat(city.is_free_above)) {
+ return 0;
+ }
+ return rate;
+ },
+ 
+ couponCode: '',
+ appliedCouponCode: '',
+ discountAmount: 0,
+ couponMessage: '',
+ couponError: false,
+ isApplyingCoupon: false,
+ 
+ async applyCoupon() {
+ if (!this.couponCode) return;
+ 
+ this.isApplyingCoupon = true;
+ this.couponMessage = '';
+ this.couponError = false;
+ 
+ try {
+ const res = await fetch(`/checkout/{{ brand.slug }}/validate-coupon/?code=${this.couponCode}&total=${this.productPrice}`);
+ const data = await res.json();
+ 
+ if (data.valid) {
+ this.discountAmount = data.discount;
+ this.appliedCouponCode = this.couponCode.toUpperCase();
+ this.couponMessage = 'Discount applied successfully!';
+ this.couponError = false;
+ } else {
+ this.couponMessage = data.error || 'Invalid coupon code.';
+ this.couponError = true;
+ this.discountAmount = 0;
+ this.appliedCouponCode = '';
+ }
+ } catch(e) {
+ this.couponMessage = 'Error validating coupon.';
+ this.couponError = true;
+ }
+ this.isApplyingCoupon = false;
+ },
+ 
+ removeCoupon() {
+ this.couponCode = '';
+ this.appliedCouponCode = '';
+ this.discountAmount = 0;
+ this.couponMessage = '';
+ this.couponError = false;
+ },
+ 
+ get grandTotal() {
+ let total = this.productPrice;
+ if (this.shippingCost !== null) {
+ total += this.shippingCost;
+ }
+ total -= this.discountAmount;
+ return Math.max(0, total);
+ }
+ }
+}
+</script>
+{% endblock %}
