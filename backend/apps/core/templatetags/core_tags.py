@@ -24,47 +24,37 @@ def highlight(text, word):
 @register.filter
 def embed_url(value):
     """
-    Converts a standard YouTube or Vimeo URL into its embeddable version.
-    If the user pastes an entire <iframe> HTML tag, it extracts the src URL.
-    - <iframe src="https://www.youtube.com/embed/VIDEO_ID"... -> https://www.youtube.com/embed/VIDEO_ID
-    - https://youtu.be/VIDEO_ID -> https://www.youtube.com/embed/VIDEO_ID
-    - https://www.youtube.com/watch?v=VIDEO_ID -> https://www.youtube.com/embed/VIDEO_ID
-    - https://vimeo.com/VIDEO_ID -> https://player.vimeo.com/video/VIDEO_ID
+    Production-ready video URL parser.
+    Converts various YouTube/Vimeo formats into clean, privacy-enhanced embed URLs.
+    Handles: watch, youtu.be, embed, shorts, live, Vimeo, and raw <iframe> HTML.
     """
     if not value:
         return value
         
-    # If the user pasted an iframe tag, extract the src
+    # Extract src if an iframe was pasted
     if '<iframe' in value.lower():
         src_match = re.search(r'src=["\'](.*?)["\']', value, re.IGNORECASE)
         if src_match:
             value = src_match.group(1)
             
-    try:
-        parsed_url = urlparse(value)
+    # Clean up any trailing/leading whitespace or quotes
+    value = value.strip('\'" ')
+
+    # YouTube regex to capture the 11-character video ID
+    yt_regex = r'(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts|live)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})'
+    yt_match = re.search(yt_regex, value)
+    if yt_match:
+        video_id = yt_match.group(1)
+        # Use youtube-nocookie.com for better privacy and fewer playback/CSP errors.
+        # Minimal clean parameters. Removed autoplay to prevent browser blocking issues.
+        return f"https://www.youtube-nocookie.com/embed/{video_id}?rel=0"
         
-        # Handle youtu.be
-        if 'youtu.be' in parsed_url.netloc:
-            video_id = parsed_url.path.lstrip('/')
-            return f"https://www.youtube.com/embed/{video_id}?autoplay=1"
-            
-        # Handle youtube.com
-        elif 'youtube.com' in parsed_url.netloc:
-            if 'watch' in parsed_url.path:
-                qs = parse_qs(parsed_url.query)
-                video_id = qs.get('v', [None])[0]
-                if video_id:
-                    return f"https://www.youtube.com/embed/{video_id}?autoplay=1"
-            # Already an embed or other path?
-            return value
-            
-        # Handle vimeo.com
-        elif 'vimeo.com' in parsed_url.netloc and 'player.vimeo.com' not in parsed_url.netloc:
-            video_id = parsed_url.path.lstrip('/')
-            return f"https://player.vimeo.com/video/{video_id}?autoplay=1"
-            
-    except Exception:
-        pass
+    # Vimeo regex to capture the video ID
+    vimeo_regex = r'(?:vimeo\.com\/(?:video\/|channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|)(\d+)(?:$|\/|\?))'
+    vimeo_match = re.search(vimeo_regex, value)
+    if vimeo_match:
+        video_id = vimeo_match.group(1)
+        return f"https://player.vimeo.com/video/{video_id}?title=0&byline=0&portrait=0"
         
     return value
 

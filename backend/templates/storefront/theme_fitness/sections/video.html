@@ -23,7 +23,7 @@
             </button>
             {% if settings.video_url %}
             <template x-if="videoOpen">
-                <iframe class="w-full h-full" src="{{ settings.video_url|embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class="w-full h-full" src="{{ settings.video_url|embed_url }}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </template>
             {% else %}
             <div class="w-full h-full flex items-center justify-center text-white bg-gray-900 border-2 border-dashed border-gray-700">
