@@ -53,18 +53,4 @@ class BrandSubscription(models.Model):
         return self.try_ons_used < self.plan.try_on_quota
 
 
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from apps.core.notifications import NotificationManager
 
-@receiver(pre_save, sender=BrandSubscription)
-def subscription_status_changed(sender, instance, **kwargs):
-    if instance.id:
-        old_sub = BrandSubscription.objects.get(pk=instance.id)
-        # Trigger if it wasn't active and now is, OR if the plan changed and is active
-        if instance.status == 'ACTIVE' and (old_sub.status != 'ACTIVE' or old_sub.plan_id != instance.plan_id):
-            try:
-                NotificationManager.send_subscription_success(instance.brand, instance)
-            except Exception as e:
-                import logging
-                logging.getLogger(__name__).error(f"Failed to send subscription confirmation: {e}")

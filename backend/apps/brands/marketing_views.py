@@ -345,6 +345,12 @@ def newsletter_subscribe_api(request, brand_slug):
     )
     
     if created:
+        # Trigger email notification async
+        from apps.core.email_utils import dispatch_async_email
+        context = {
+            'email': email,
+        }
+        dispatch_async_email('newsletter_subscribed', context, [email], brand)
         return JsonResponse({'success': True, 'message': 'You have been subscribed successfully!'})
     else:
         return JsonResponse({'success': True, 'message': 'You are already subscribed!'})
@@ -364,12 +370,21 @@ def contact_submit_api(request, brand_slug):
     name = f"{first_name} {last_name}".strip() or "Anonymous"
     
     # Save to the brand's specific contact messages table
-    BrandContactMessage.objects.create(
+    message_obj = BrandContactMessage.objects.create(
         brand=brand,
         name=name,
         email=email,
         message=message
     )
+    
+    # Trigger email notification async
+    from apps.core.email_utils import dispatch_async_email
+    context = {
+        'user': {'first_name': name},
+        'ticket_id': str(message_obj.id).zfill(6),
+        'subject': 'Support Ticket Received'
+    }
+    dispatch_async_email('support_ticket_created', context, [email], brand)
     
     return JsonResponse({'success': True, 'message': 'Your message has been sent successfully!'})
 
@@ -543,16 +558,12 @@ def campaign_send_view(request, campaign_id):
     })
     
     try:
-        # In production this should be handled asynchronously via Celery or similar
-        # For MVP we send synchronously
-        email = EmailMultiAlternatives(
-            subject=campaign.subject,
-            body="Please view this email in an HTML compatible client.",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            bcc=recipients
-        )
-        email.attach_alternative(html_body, "text/html")
-        email.send()
+        from apps.core.email_utils import dispatch_async_email
+        context = {
+            'subject': campaign.subject,
+            'campaign_content': campaign.html_content
+        }
+        dispatch_async_email('custom_campaign', context, recipients, brand)
         
         # Mark as sent
         campaign.status = 'SENT'
@@ -638,38 +649,19 @@ def contact_message_reply_view(request, message_id):
         return redirect('contact_messages_list')
     
     try:
-        from apps.core.email_utils import get_dynamic_email_backend
-        from apps.core.models import GlobalSettings
-        from django.core.mail import EmailMultiAlternatives
-        
-        global_settings = GlobalSettings.get_settings()
-        backend = get_dynamic_email_backend()
-        from_email = f"{brand.name} <{global_settings.support_email}>"
-        
-        subject = f"Re: Your message to {brand.name}"
-        full_body = (
-            f"Hi {contact_msg.name},\n\n"
-            f"{reply_body}\n\n"
-            f"---\n"
-            f"Best regards,\n"
-            f"{brand.name}\n"
-        )
-        
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=full_body,
-            from_email=from_email,
-            to=[contact_msg.email],
-            connection=backend,
-        )
-        email.send()
+        from apps.core.email_utils import dispatch_async_email
+        context = {
+            'user': {'first_name': contact_msg.name},
+            'ticket_id': str(contact_msg.id).zfill(6),
+            'subject': f"Re: Your message to {brand.name}",
+            'reply_body': reply_body
+        }
+        dispatch_async_email('support_ticket_replied', context, [contact_msg.email], brand)
         
         # Mark as read after replying
         contact_msg.is_read = True
         contact_msg.save()
         messages.success(request, f"Reply sent successfully to {contact_msg.email}.")
-    except ValueError as e:
-        messages.error(request, f"Email not configured: {str(e)} Please set up SMTP in Admin → Global Settings → SMTP tab.")
     except Exception as e:
         messages.error(request, f"Failed to send reply: {str(e)}")
     

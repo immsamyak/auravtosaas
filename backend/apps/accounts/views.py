@@ -37,6 +37,9 @@ def login_view(request):
         p = request.POST.get('password')
         user = authenticate(request, username=u, password=p)
         if user is not None:
+            # Reset failed login count
+            request.session['failed_logins'] = 0
+            
             login(request, user)
             
             # Honor 'next' parameter if present
@@ -51,6 +54,27 @@ def login_view(request):
                 return redirect('admin:dashboard')
                 
             return redirect('dashboard')
+        else:
+            # Handle failed login
+            failed_logins = request.session.get('failed_logins', 0) + 1
+            request.session['failed_logins'] = failed_logins
+            
+            if failed_logins >= 5:
+                # Try to find user to send email
+                try:
+                    u_obj = User.objects.get(username=u)
+                    from apps.core.email_utils import dispatch_async_email
+                    context = {
+                        'user': u_obj,
+                        'reason': 'Multiple failed login attempts'
+                    }
+                    dispatch_async_email('account_locked', context, [u_obj.email])
+                    messages.error(request, "Too many failed attempts. For your security, an alert has been sent to your email.")
+                except User.DoesNotExist:
+                    messages.error(request, "Invalid username or password.")
+            else:
+                messages.error(request, "Invalid username or password.")
+
     return render(request, 'accounts/login.html', {'trusted_brands': Brand.objects.exclude(logo='').order_by('-created_at')[:4]})
 
 def logout_view(request):
@@ -117,12 +141,13 @@ def forgot_password_view(request):
             
             # Send Email
             try:
-                send_dynamic_email(
-                    subject="Password Reset Verification Code",
-                    template_name="emails/password_reset_otp.html",
-                    context={'otp_code': otp.otp_code},
-                    to_emails=[user.email]
-                )
+                from apps.core.email_utils import dispatch_async_email
+                context = {
+                    'user': user,
+                    'reset_url': otp.otp_code  # Pass OTP code as the URL (MVP approach)
+                }
+                # No brand specified since it's an account level email
+                dispatch_async_email('password_reset', context, [user.email])
             except Exception as e:
                 logger.error(f"Failed to send OTP email: {e}")
                 # We won't block the user in dev if SMTP fails, but log it.
