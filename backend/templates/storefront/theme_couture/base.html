@@ -123,7 +123,7 @@
  </div>
  {% endif %}
 {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/header.html" %}
-<main class="flex-grow pt-28">{% block content %}{% endblock %}</main>
+<main class="flex-grow">{% block content %}{% endblock %}</main>
 {% include "storefront/"|add:brand.theme.template_folder|add:"/sections/footer.html" %}
 <!-- Search Modal -->
 <div class="fixed inset-0 z-[100] flex items-start justify-center pt-20" style="display: none;" x-show="isSearchOpen" x-transition.opacity="">

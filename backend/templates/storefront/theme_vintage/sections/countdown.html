@@ -1,14 +1,15 @@
 <div class="w-full py-20 bg-[#F5F5DC] text-[#4A4A4A]" 
     x-data="{ 
-        endDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(), 
-        days: 0, hours: 0, mins: 0, 
-        init() { this.update(); setInterval(() => this.update(), 60000); },
+        endDate: {% if settings.target_date %}new Date('{{ settings.target_date }}').getTime(){% else %}new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(){% endif %}, 
+        days: 0, hours: 0, mins: 0, secs: 0,
+        init() { this.update(); setInterval(() => this.update(), 1000); },
         update() {
             let distance = this.endDate - new Date().getTime();
-            if (distance < 0) { this.days = 0; this.hours = 0; this.mins = 0; return; }
+            if (distance < 0) { this.days = 0; this.hours = 0; this.mins = 0; this.secs = 0; return; }
             this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
             this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             this.mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            this.secs = Math.floor((distance % (1000 * 60)) / 1000);
         }
     }">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
