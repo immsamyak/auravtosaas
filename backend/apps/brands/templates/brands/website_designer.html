@@ -102,7 +102,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Navigation Links</label>
                                 <div class="space-y-2 mb-3">
-                                    <template x-for="(link, lIndex) in (sections[activeSectionIndex].settings.links || [])" :key="lIndex">
+                                    <template x-if="sections[activeSectionIndex].settings.links">
+<template x-for="(link, lIndex) in sections[activeSectionIndex].settings.links" :key="lIndex">
                                         <div class="flex items-center space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
                                             <div class="flex-1 space-y-2">
                                                 <input type="text" x-model="link.text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Link Text" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
@@ -110,6 +111,7 @@
                                             </div>
                                             <button @click="removeLink(activeSectionIndex, lIndex)" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-times"></i></button>
                                         </div>
+                                    </template>
                                     </template>
                                 </div>
                                 <button @click="addLink(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium transition flex items-center justify-center">
@@ -302,7 +304,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Customer Reviews</label>
                                 <div class="space-y-3 mb-3">
-                                    <template x-for="(review, rIndex) in (sections[activeSectionIndex].settings.testimonials || [])" :key="rIndex">
+                                    <template x-if="sections[activeSectionIndex].settings.testimonials">
+<template x-for="(review, rIndex) in sections[activeSectionIndex].settings.testimonials" :key="rIndex">
                                         <div class="p-3 bg-theme-bg border border-theme-border rounded-lg relative">
                                             <button @click="removeTestimonial(activeSectionIndex, rIndex)" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fa-solid fa-times"></i></button>
                                             <div class="space-y-2 mt-2">
@@ -315,6 +318,7 @@
                                                 <textarea x-model="review.text" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Review Text..." class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm h-16 focus:ring-1 outline-none"></textarea>
                                             </div>
                                         </div>
+                                    </template>
                                     </template>
                                 </div>
                                 <button @click="addTestimonial(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium transition flex items-center justify-center">
@@ -423,7 +427,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">FAQ Items</label>
                                 <div class="space-y-2 mb-3">
-                                    <template x-for="(item, iIndex) in (sections[activeSectionIndex].settings.items || [])" :key="iIndex">
+                                    <template x-if="sections[activeSectionIndex].settings.items">
+<template x-for="(item, iIndex) in sections[activeSectionIndex].settings.items" :key="iIndex">
                                         <div class="flex items-start space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
                                             <div class="flex-1 space-y-2">
                                                 <input type="text" x-model="item.question" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Question" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
@@ -431,6 +436,7 @@
                                             </div>
                                             <button @click="removeFaqItem(activeSectionIndex, iIndex)" class="text-red-400 hover:text-red-600 px-2 mt-1"><i class="fa-solid fa-times"></i></button>
                                         </div>
+                                    </template>
                                     </template>
                                 </div>
                                 <button @click="addFaqItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
@@ -451,16 +457,18 @@
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Logos</label>
                                 <div class="space-y-2 mb-3">
-                                    <template x-for="(logo, lIndex) in (sections[activeSectionIndex].settings.logos || [])" :key="lIndex">
+                                    <template x-if="sections[activeSectionIndex].settings.logos">
+<template x-for="(logo, lIndex) in sections[activeSectionIndex].settings.logos" :key="lIndex">
                                         <div class="flex items-center space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
                                             <div class="flex-1 space-y-2">
                                                 <div class="space-y-2 w-full">
                                                 <div x-show="logo.image_url" class="w-full h-16 bg-contain bg-center bg-no-repeat rounded border border-theme-border bg-gray-50" :style="`background-image: url('${logo.image_url}')`"></div>
-                                                <input type="file" accept="image/*" @change="uploadArrayImage($event, activeSectionIndex, 'logos', idx, 'image_url')" class="block w-full text-xs text-theme-text-muted file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                                                <input type="file" accept="image/*" @change="uploadArrayImage($event, activeSectionIndex, 'logos', lIndex, 'image_url')" class="block w-full text-xs text-theme-text-muted file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
                                             </div>
                                             </div>
                                             <button @click="removeLogoItem(activeSectionIndex, lIndex)" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-times"></i></button>
                                         </div>
+                                    </template>
                                     </template>
                                 </div>
                                 <button @click="addLogoItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
@@ -485,7 +493,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Blocks</label>
                                 <div class="space-y-2 mb-3">
-                                    <template x-for="(block, bIndex) in (sections[activeSectionIndex].settings.blocks || [])" :key="bIndex">
+                                    <template x-if="sections[activeSectionIndex].settings.blocks">
+<template x-for="(block, bIndex) in sections[activeSectionIndex].settings.blocks" :key="bIndex">
                                         <div class="flex items-start space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
                                             <div class="flex-1 space-y-2">
                                                 <input type="text" x-model="block.icon" @input.debounce.500ms="triggerPreviewUpdate" placeholder="Icon (e.g. fa-star) or Image URL" class="w-full px-2 py-1 bg-white border border-slate-200 rounded text-sm focus:ring-1 focus:ring-indigo-500 outline-none">
@@ -494,6 +503,7 @@
                                             </div>
                                             <button @click="removeBlockItem(activeSectionIndex, bIndex)" class="text-red-400 hover:text-red-600 px-2 mt-1"><i class="fa-solid fa-times"></i></button>
                                         </div>
+                                    </template>
                                     </template>
                                 </div>
                                 <button @click="addBlockItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
@@ -551,7 +561,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Images</label>
                                 <div class="space-y-2 mb-3">
-                                    <template x-for="(slide, sIndex) in (sections[activeSectionIndex].settings.slides || [])" :key="sIndex">
+                                    <template x-if="sections[activeSectionIndex].settings.slides">
+<template x-for="(slide, sIndex) in sections[activeSectionIndex].settings.slides" :key="sIndex">
                                         <div class="flex items-start space-x-2 bg-theme-bg p-2 rounded border border-theme-border">
                                             <div class="flex-1 space-y-2">
                                                 <div class="space-y-2 w-full">
@@ -562,6 +573,7 @@
                                             </div>
                                             <button @click="removeSlideItem(activeSectionIndex, sIndex)" class="text-red-400 hover:text-red-600 px-2 mt-1"><i class="fa-solid fa-times"></i></button>
                                         </div>
+                                    </template>
                                     </template>
                                 </div>
                                 <button @click="addSlideItem(activeSectionIndex)" class="w-full py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium border border-indigo-200 transition-colors">
@@ -787,6 +799,12 @@ document.addEventListener('alpine:init', () => {
             return 'fa-solid ' + (icons[type] || 'fa-cube');
         },
         
+        
+        getArray(sectionIndex, key) {
+            if (sectionIndex === null || !this.sections[sectionIndex] || !this.sections[sectionIndex].settings) return [];
+            return this.sections[sectionIndex].settings[key] || [];
+        },
+
         addLink(sectionIndex) {
             if(!this.sections[sectionIndex].settings.links) this.sections[sectionIndex].settings.links = [];
             this.sections[sectionIndex].settings.links.push({text: 'New Link', url: '#'});

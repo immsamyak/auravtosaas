@@ -28,7 +28,7 @@ from .landing_page_features import LandingPageFeatureListView, LandingPageFeatur
 from .landing_page_extras import FAQItemListView, FAQItemCreateView, FAQItemUpdateView, FAQItemDeleteView, MetricListView, MetricCreateView, MetricUpdateView, MetricDeleteView, IntegrationPlatformListView, IntegrationPlatformCreateView, IntegrationPlatformUpdateView, IntegrationPlatformDeleteView
 from .feature_flags import FeatureFlagListView, FeatureFlagCreateView, FeatureFlagUpdateView
 from .platform_integrations import PlatformIntegrationListView, PlatformIntegrationCreateView, PlatformIntegrationUpdateView
-from .global_settings import GlobalSettingsUpdateView
+from .global_settings import GlobalSettingsUpdateView, TestEmailView
 from .users import UserListView, UserCreateView, UserUpdateView
 from .roles_groups import GroupListView, GroupCreateView, GroupUpdateView
 from .consumers import ConsumerProfileListView, ConsumerProfileCreateView, ConsumerProfileUpdateView
@@ -178,6 +178,7 @@ urlpatterns = [
     path('platformintegration/add/', PlatformIntegrationCreateView.as_view(), name='platformintegration_add'),
     path('platformintegration/<str:pk>/', PlatformIntegrationUpdateView.as_view(), name='platformintegration_edit'),
     path('globalsettings/', GlobalSettingsUpdateView.as_view(), name='globalsettings_edit'),
+    path('globalsettings/test-email/', TestEmailView.as_view(), name='globalsettings_test_email'),
     path('users/', UserListView.as_view(), name='user_list'),
     path('users/add/', UserCreateView.as_view(), name='user_add'),
     path('users/<str:pk>/', UserUpdateView.as_view(), name='user_edit'),
