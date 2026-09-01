@@ -57,15 +57,18 @@ def get_dynamic_email_backend():
             host=settings.smtp_host,
             port=settings.smtp_port,
             username=settings.smtp_username,
-            password=settings.smtp_password,
-            use_tls=(settings.smtp_encryption == 'tls'),
-            use_ssl=(settings.smtp_encryption == 'ssl'),
+            password=settings.smtp_password or "",
+            use_tls=(settings.smtp_encryption == 'tls' or settings.smtp_encryption == 'TLS'),
+            use_ssl=(settings.smtp_encryption == 'ssl' or settings.smtp_encryption == 'SSL'),
             fail_silently=False,
+            timeout=10,
+            ssl_keyfile="",
+            ssl_certfile=""
         )
 
 def send_dynamic_email(subject, template_name, context, to_emails):
     settings = GlobalSettings.get_settings()
-    from_email = f"{settings.site_name} <{settings.support_email}>"
+    from_email = f'"{settings.site_name}" <{settings.support_email}>'
     
     # Inject platform settings into email context
     context['platform_settings'] = settings
@@ -103,7 +106,7 @@ def send_transactional_email(event_type, context_dict, to_emails):
         text_content = strip_tags(final_html)
         
         backend = get_dynamic_email_backend()
-        from_email = f"{settings.site_name} <{settings.support_email}>"
+        from_email = f'"{settings.site_name}" <{settings.support_email}>'
         
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
         msg.attach_alternative(final_html, "text/html")

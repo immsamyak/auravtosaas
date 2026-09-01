@@ -479,11 +479,65 @@ class NotificationCampaign(models.Model):
 
 class SystemEmailTemplate(models.Model):
     class EventType(models.TextChoices):
+        # Account & Security (10)
         WELCOME = 'welcome', 'Welcome / Registration'
-        ORDER_CONFIRMATION = 'order_confirmation', 'Order Confirmation'
         SIGNUP_VERIFICATION = 'signup_verification', 'Signup Verification / OTP'
-        BILLING_INVOICE = 'billing_invoice', 'Billing / Invoice'
-        PASSWORD_RESET = 'password_reset', 'Password Reset'
+        PASSWORD_RESET = 'password_reset', 'Password Reset Request'
+        PASSWORD_CHANGED = 'password_changed', 'Password Changed Successfully'
+        ACCOUNT_LOCKED = 'account_locked', 'Account Locked'
+        TWO_FACTOR_ENABLED = 'two_factor_enabled', '2FA Enabled'
+        TWO_FACTOR_DISABLED = 'two_factor_disabled', '2FA Disabled'
+        NEW_LOGIN_DETECTED = 'new_login_detected', 'New Device Login'
+        EMAIL_CHANGED = 'email_changed', 'Email Address Changed'
+        ACCOUNT_DELETION = 'account_deletion', 'Account Deletion Request'
+
+        # Billing & Subscriptions (10)
+        SUBSCRIPTION_SUCCESS = 'subscription_success', 'Subscription Started/Success'
+        SUBSCRIPTION_CANCELED = 'subscription_canceled', 'Subscription Canceled'
+        SUBSCRIPTION_RENEWED = 'subscription_renewed', 'Subscription Renewed'
+        SUBSCRIPTION_EXPIRING = 'subscription_expiring', 'Subscription Expiring Soon'
+        PAYMENT_FAILED = 'payment_failed', 'Payment Failed'
+        BILLING_INVOICE = 'billing_invoice', 'Billing / Invoice Available'
+        PAYMENT_METHOD_EXPIRING = 'payment_method_expiring', 'Payment Method Expiring'
+        PLAN_UPGRADED = 'plan_upgraded', 'Plan Upgraded'
+        PLAN_DOWNGRADED = 'plan_downgraded', 'Plan Downgraded'
+        TRIAL_ENDING_SOON = 'trial_ending_soon', 'Free Trial Ending Soon'
+
+        # Orders & Fulfillment (10)
+        ORDER_CONFIRMATION = 'order_confirmation', 'Order Confirmation'
+        ORDER_SHIPPED = 'order_shipped', 'Order Shipped'
+        ORDER_DELIVERED = 'order_delivered', 'Order Delivered'
+        ORDER_CANCELED = 'order_canceled', 'Order Canceled'
+        ORDER_REFUNDED = 'order_refunded', 'Order Refunded'
+        ORDER_PARTIALLY_REFUNDED = 'order_partially_refunded', 'Order Partially Refunded'
+        OUT_FOR_DELIVERY = 'out_for_delivery', 'Order Out for Delivery'
+        ABANDONED_CART = 'abandoned_cart', 'Abandoned Cart Reminder'
+        DIGITAL_DOWNLOAD_READY = 'digital_download_ready', 'Digital Product Ready'
+        GIFT_CARD_ISSUED = 'gift_card_issued', 'Gift Card Issued'
+
+        # Store Management & Admin (10)
+        STORE_CREATED = 'store_created', 'New Store Created'
+        DOMAIN_CONNECTED = 'domain_connected', 'Custom Domain Connected'
+        DOMAIN_DISCONNECTED = 'domain_disconnected', 'Custom Domain Disconnected'
+        STAFF_INVITATION = 'staff_invitation', 'Staff Member Invited'
+        STAFF_ROLE_CHANGED = 'staff_role_changed', 'Staff Role Changed'
+        NEW_ORDER_RECEIVED = 'new_order_received', 'New Order Received (Admin Alert)'
+        LOW_INVENTORY_ALERT = 'low_inventory_alert', 'Low Inventory Alert'
+        PAYOUT_PROCESSED = 'payout_processed', 'Payout Processed'
+        PAYOUT_FAILED = 'payout_failed', 'Payout Failed'
+        REPORT_GENERATED = 'report_generated', 'Export/Report Generation Complete'
+
+        # Support & Marketing (10)
+        SUPPORT_TICKET_CREATED = 'support_ticket_created', 'Support Ticket Created'
+        SUPPORT_TICKET_REPLIED = 'support_ticket_replied', 'Support Ticket Replied'
+        SUPPORT_TICKET_CLOSED = 'support_ticket_closed', 'Support Ticket Closed'
+        NEWSLETTER_SUBSCRIBED = 'newsletter_subscribed', 'Newsletter Subscription Confirmed'
+        PRODUCT_REVIEW_REQUEST = 'product_review_request', 'Request for Product Review'
+        CUSTOMER_WELCOME = 'customer_welcome', 'Customer Account Welcome (Store level)'
+        BACK_IN_STOCK = 'back_in_stock', 'Back in Stock Alert'
+        PRICE_DROP = 'price_drop', 'Price Drop Alert'
+        PROMO_CODE_ISSUED = 'promo_code_issued', 'Special Promo Code Issued'
+        CUSTOM_CAMPAIGN = 'custom_campaign', 'Custom Marketing Campaign'
         
     event_type = models.CharField(max_length=50, choices=EventType.choices, unique=True)
     subject = models.CharField(max_length=255)

@@ -1,0 +1,28 @@
+{% extends "emails/base.html" %}
+
+{% block subject %}Test Email from {{ platform_settings.site_name|default:"Aura" }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 24px;">SMTP Configuration Successful! 🎉</h2>
+<p style="color: #334155; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+    Hi there,
+</p>
+<p style="color: #334155; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+    This is a test email to verify that your custom SMTP settings are working perfectly on the platform.
+</p>
+
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
+    <tr>
+        <td style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
+            <h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 18px;">Configuration Details:</h3>
+            <p style="margin: 0 0 8px 0; color: #475569; font-size: 15px;"><strong>Host:</strong> {{ host }}</p>
+            <p style="margin: 0 0 8px 0; color: #475569; font-size: 15px;"><strong>Port:</strong> {{ port }}</p>
+            <p style="margin: 0; color: #475569; font-size: 15px;"><strong>Encryption:</strong> {{ encryption }}</p>
+        </td>
+    </tr>
+</table>
+
+<p style="color: #334155; font-size: 16px; line-height: 1.6; margin-bottom: 0;">
+    If you received this email, you're all set! The system will now use these credentials for all automated outgoing emails.
+</p>
+{% endblock %}

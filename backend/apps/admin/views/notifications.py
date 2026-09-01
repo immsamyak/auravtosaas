@@ -89,15 +89,27 @@ class SystemEmailTemplateListView(SuperAdminRequiredMixin, ListView):
     context_object_name = 'templates'
     
     def get_queryset(self):
-        # Ensure all types exist in the DB
-        for evt, _ in SystemEmailTemplate.EventType.choices:
-            SystemEmailTemplate.objects.get_or_create(
-                event_type=evt,
-                defaults={
-                    'subject': f"{evt.replace('_', ' ').title()}",
-                    'body_html': "<p>Hello {{ user.first_name|default:'User' }},</p><p>This is a default template.</p>"
-                }
-            )
+        # Ensure all types exist in the DB efficiently
+        current_count = SystemEmailTemplate.objects.count()
+        expected_count = len(SystemEmailTemplate.EventType.choices)
+        
+        if current_count < expected_count:
+            from apps.core.template_seed_data import get_seed_data
+            existing_events = set(SystemEmailTemplate.objects.values_list('event_type', flat=True))
+            new_templates = []
+            
+            for evt, _ in SystemEmailTemplate.EventType.choices:
+                if evt not in existing_events:
+                    subject, body_html = get_seed_data(evt)
+                    new_templates.append(SystemEmailTemplate(
+                        event_type=evt,
+                        subject=subject,
+                        body_html=body_html
+                    ))
+            
+            if new_templates:
+                SystemEmailTemplate.objects.bulk_create(new_templates)
+                
         return SystemEmailTemplate.objects.all().order_by('event_type')
 
 class SystemEmailTemplateUpdateView(SuperAdminRequiredMixin, UpdateView):

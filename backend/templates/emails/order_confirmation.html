@@ -1,37 +1,43 @@
 {% extends "emails/base.html" %}
 
 {% block content %}
-<h1>Thank You For Your Order!</h1>
-<p>Hi {{ customer_name }},</p>
-<p>We've received your order <strong>#{{ order.id }}</strong> and we're getting it ready for you. Below is a summary of your purchase.</p>
+<h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 24px;">Thank You For Your Order! 🛍️</h2>
+<p style="color: #334155; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+    Hi {{ customer_name }},
+</p>
+<p style="color: #334155; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+    We've received your order <strong>#{{ order.id }}</strong> and we're getting it ready for you. Below is a summary of your purchase.
+</p>
 
-<table class="data-table">
- <thead>
- <tr>
- <th>Item</th>
- <th>Qty</th>
- <th style="text-align: right;">Price</th>
- </tr>
- </thead>
- <tbody>
- {% for item in order.items.all %}
- <tr>
- <td>
- <strong>{{ item.product_variant.product.name }}</strong><br>
- <span class="text-sm">Color: {{ item.product_variant.color.name }}, Size: {{ item.product_variant.size.name }}</span>
- </td>
- <td>{{ item.quantity }}</td>
- <td style="text-align: right;">${{ item.price_at_purchase }}</td>
- </tr>
- {% endfor %}
- </tbody>
- <tfoot>
- <tr>
- <td colspan="2" style="text-align: right; padding-top: 20px;"><strong>Total:</strong></td>
- <td style="text-align: right; padding-top: 20px;"><strong>${{ order.total_amount }}</strong></td>
- </tr>
- </tfoot>
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0; text-align: left; color: #64748b; font-size: 14px; text-transform: uppercase;">Item</th>
+            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0; text-align: left; color: #64748b; font-size: 14px; text-transform: uppercase;">Qty</th>
+            <th style="padding: 12px; border-bottom: 2px solid #e2e8f0; text-align: right; color: #64748b; font-size: 14px; text-transform: uppercase;">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+        <tr>
+            <td style="padding: 16px 12px; border-bottom: 1px solid #f1f5f9;">
+                <p style="margin: 0; color: #0f172a; font-weight: 600;">{{ item.product_variant.product.name }}</p>
+                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">Color: {{ item.product_variant.color.name }}, Size: {{ item.product_variant.size.name }}</p>
+            </td>
+            <td style="padding: 16px 12px; border-bottom: 1px solid #f1f5f9; color: #334155;">{{ item.quantity }}</td>
+            <td style="padding: 16px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; color: #334155;">${{ item.price_at_purchase }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2" style="padding: 20px 12px 0 12px; text-align: right; color: #0f172a; font-size: 16px; font-weight: 600;">Total:</td>
+            <td style="padding: 20px 12px 0 12px; text-align: right; color: #0f172a; font-size: 18px; font-weight: 800;">${{ order.total_amount }}</td>
+        </tr>
+    </tfoot>
 </table>
 
-<p class="text-sm">You will receive another notification when your order ships.</p>
+<p style="color: #64748b; font-size: 14px; line-height: 1.6; text-align: center;">
+    You will receive another notification when your order ships.
+</p>
 {% endblock %}

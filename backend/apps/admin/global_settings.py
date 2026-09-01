@@ -48,22 +48,37 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                 host=settings.smtp_host,
                 port=settings.smtp_port,
                 username=settings.smtp_username,
-                password=settings.smtp_password,
+                password=settings.smtp_password or "",
                 use_tls=use_tls,
                 use_ssl=use_ssl,
-                fail_silently=False
+                fail_silently=False,
+                timeout=10,
+                ssl_keyfile="",
+                ssl_certfile=""
             )
             
             from_email = settings.support_email or settings.smtp_username
             
+            from django.template.loader import render_to_string
+            html_message = render_to_string('emails/test_email.html', {
+                'platform_settings': settings,
+                'host': settings.smtp_host,
+                'port': settings.smtp_port,
+                'encryption': settings.smtp_encryption
+            })
+            
             send_mail(
-                subject='Test Email from Aura Platform',
-                message='This is a test email to verify your SMTP settings are working correctly.\n\nSettings used:\nHost: {}\nPort: {}'.format(settings.smtp_host, settings.smtp_port),
+                subject=f'Test Email from {settings.site_name or "Aura"}',
+                message=f'This is a test email to verify your SMTP settings are working correctly.\n\nSettings used:\nHost: {settings.smtp_host}\nPort: {settings.smtp_port}',
                 from_email=from_email,
                 recipient_list=[email],
-                connection=backend
+                connection=backend,
+                html_message=html_message
             )
             
             return JsonResponse({'success': True})
         except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+            import traceback
+            error_details = traceback.format_exc()
+            print("TEST EMAIL ERROR:", error_details)
+            return JsonResponse({'success': False, 'error': str(e), 'traceback': error_details}, status=500)
