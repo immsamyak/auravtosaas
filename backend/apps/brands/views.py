@@ -66,8 +66,11 @@ def dashboard_view(request):
 
     metrics = DashboardAnalyticsService.get_dashboard_metrics(brand)
     
+    from apps.core.utils import get_brand_url
+    
     context = {
         'brand': brand,
+        'storefront_url': get_brand_url(brand),
         **metrics
     }
     return render(request, 'brands/dashboard.html', context)

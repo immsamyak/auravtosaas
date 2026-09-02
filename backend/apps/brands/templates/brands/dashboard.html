@@ -24,7 +24,7 @@
  </div>
  <div class="flex items-center space-x-4">
  <div class="flex items-center bg-white/60 backdrop-blur-md rounded-xl p-1.5 border border-slate-200/60 shadow-sm group hover:border-indigo-300 transition-colors">
- <input type="text" id="storeLink" readonly value="http://localhost:8000{% url 'store' brand.slug %}" class="bg-transparent border-none focus:ring-0 text-sm font-medium text-theme-text-muted px-3 w-48 lg:w-64 outline-none">
+ <input type="text" id="storeLink" readonly value="{{ storefront_url }}" class="bg-transparent border-none focus:ring-0 text-sm font-medium text-theme-text-muted px-3 w-48 lg:w-64 outline-none">
  <button onclick="copyStoreLink()" class="bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 text-indigo-700 rounded-lg px-4 py-2 text-sm font-bold shadow-sm transition-all flex items-center">
  <i class="fa-solid fa-link mr-2"></i> Copy Link
  </button>
