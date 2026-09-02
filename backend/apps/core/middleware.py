@@ -60,6 +60,15 @@ class CustomDomainMiddleware:
         
         brand = Brand.objects.filter(custom_domain__iexact=host).first()
         
+        # If not found by custom_domain, check if it's a subdomain (e.g. brandslug.alvicsxinfo.tech)
+        if not brand:
+            # We assume the main domain is the base of the URL.
+            # A more robust way is to check if the host has multiple parts, and if the first part matches a slug.
+            parts = host.split('.')
+            if len(parts) >= 3: # e.g. alvicsx.alvicsxinfo.tech
+                subdomain = parts[0]
+                brand = Brand.objects.filter(slug__iexact=subdomain).first()
+        
         if brand and brand.subscription and brand.subscription.plan and brand.subscription.plan.allow_custom_domain:
             original_path = request.path_info
             
