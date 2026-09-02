@@ -37,20 +37,28 @@
 
  <!-- Tree View -->
  <div class="bg-theme-surface rounded-2xl shadow-sm border border-theme-border overflow-hidden">
- <div class="px-6 py-5 border-b border-theme-border bg-slate-50/50 flex justify-between items-center">
- <div>
- <h3 class="text-lg font-bold text-theme-text-primary">Your Shipping Hierarchy</h3>
- <p class="text-xs text-theme-text-muted mt-1">Customers will select locations in this exact order at checkout.</p>
- </div>
- <button @click="expandAll = !expandAll" class="text-xs font-bold text-indigo-600 hover:text-indigo-700">
- <span x-text="expandAll ? 'Collapse All' : 'Expand All'"></span>
- </button>
- </div>
+ <div class="px-6 py-5 border-b border-theme-border">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-theme-text-primary">Your Shipping Hierarchy</h3>
+                    <p class="text-xs text-theme-text-muted mt-1">Customers will select locations in this exact order at checkout.</p>
+                </div>
+                <button @click="expandAll = !expandAll" class="text-xs font-bold text-indigo-600 hover:text-indigo-700">
+                    <span x-text="expandAll ? 'Collapse All' : 'Expand All'"></span>
+                </button>
+            </div>
+            
+            <div class="mb-4 relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-search text-theme-text-disabled"></i>
+                </div>
+                <input type="text" x-model="searchQuery" class="block w-full bg-theme-bg text-theme-text-primary border-theme-input-border rounded-xl pl-10 pr-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition-all" placeholder="Search provinces, districts, or cities...">
+            </div>
 
- {% if provinces %}
- <div class="divide-y divide-slate-100">
- {% for prov in provinces %}
- <div class="w-full" x-data="{ openProv: expandAll }" x-init="$watch('expandAll', value => openProv = value)">
+        {% if provinces %}
+        <div class="divide-y divide-slate-100">
+            {% for prov in provinces %}
+            <div class="w-full" x-data="{ openProv: expandAll }" x-init="$watch('expandAll', value => openProv = value); $watch('searchQuery', q => { if(q && $el.textContent.toLowerCase().includes(q.toLowerCase())) openProv = true; })" x-show="!searchQuery || $el.textContent.toLowerCase().includes(searchQuery.toLowerCase())">
  
  <!-- Province Header -->
  <div class="flex items-center justify-between px-6 py-4 hover:bg-theme-surface-hover transition-colors group cursor-pointer" @click="openProv = !openProv">
@@ -78,7 +86,7 @@
  <!-- Districts Container -->
  <div x-show="openProv" x-collapse class="bg-theme-bg border-t border-theme-border-subtle border-l-4 border-l-indigo-100">
  {% for dist in prov.districts.all %}
- <div class="w-full border-b border-theme-border-subtle last:border-b-0" x-data="{ openDist: expandAll }" x-init="$watch('expandAll', value => openDist = value)">
+ <div class="w-full border-b border-theme-border-subtle last:border-b-0" x-data="{ openDist: expandAll }" x-init="$watch('expandAll', value => openDist = value); $watch('searchQuery', q => { if(q && $el.textContent.toLowerCase().includes(q.toLowerCase())) openDist = true; })" x-show="!searchQuery || $el.textContent.toLowerCase().includes(searchQuery.toLowerCase())">
  
  <!-- District Header -->
  <div class="flex items-center justify-between pl-12 pr-6 py-3 hover:bg-theme-surface-hover transition-colors group cursor-pointer" @click="openDist = !openDist">
@@ -104,9 +112,9 @@
  </div>
 
  <!-- Cities Container (Pricing) -->
- <div x-show="openDist" x-collapse class="bg-theme-surface border-l-4 border-l-sky-100 shadow-inner">
+ <div x-show="openDist" x-collapse class="bg-theme-surface border-t border-theme-border-subtle">
  {% for city in dist.cities.all %}
- <div class="flex items-center justify-between pl-20 pr-6 py-3 border-b border-slate-50 last:border-b-0 hover:bg-theme-surface-hover transition-colors group">
+ <div class="flex items-center justify-between py-3 pl-20 pr-6 hover:bg-theme-surface-hover transition-colors group border-b border-theme-border-subtle last:border-b-0" x-show="!searchQuery || $el.textContent.toLowerCase().includes(searchQuery.toLowerCase())">
  <div class="flex items-center space-x-3">
  <i class="fa-solid fa-location-dot text-slate-300 text-sm"></i>
  <span class="font-medium text-theme-text-secondary text-sm">{{ city.name }}</span>
@@ -171,8 +179,8 @@
  {% endif %}
 
 <!-- Universal Modals -->
+    
  <template x-teleport="body">
- 
  <!-- Add/Edit Modal -->
  <div x-show="modal.isOpen" class="fixed inset-0 z-[100] overflow-y-auto" style="display: none;">
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -249,7 +257,9 @@
  </div>
  </div>
  </div>
-
+ </template>
+ 
+ <template x-teleport="body">
  <!-- Delete Modal -->
  <div x-show="deleteModal.isOpen" class="fixed inset-0 z-[100] overflow-y-auto" style="display: none;">
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -285,7 +295,9 @@
  </div>
  </div>
  </div>
-
+ </template>
+ 
+ <template x-teleport="body">
  <!-- Load Default Data Modal -->
  <div x-show="loadDataModal.isOpen" class="fixed inset-0 z-[100] overflow-y-auto" style="display: none;">
  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -310,7 +322,16 @@
  <div class="p-4 text-center text-theme-text-muted text-sm">Failed to load countries or none found.</div>
  </template>
  <template x-if="isLoadingCountries">
- <div class="p-4 text-center text-theme-text-muted text-sm"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Fetching countries...</div>
+ <div>
+ <template x-for="i in 5">
+ <div class="p-3 border-b border-theme-border flex items-center justify-between animate-pulse">
+ <div class="flex items-center">
+ <div class="w-6 h-6 bg-slate-200 dark:bg-slate-700 rounded-full mr-3"></div>
+ <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-32"></div>
+ </div>
+ </div>
+ </template>
+ </div>
  </template>
  <template x-for="country in filteredCountries" :key="country.iso2">
  <div @click="selectCountry(country)" class="p-3 hover:bg-theme-surface-hover cursor-pointer flex items-center justify-between group transition-colors" :class="{'bg-indigo-50 dark:bg-indigo-900/20': selectedCountry && selectedCountry.iso2 === country.iso2}">
@@ -341,15 +362,15 @@
  </div>
  </div>
  </div>
- </div>
  </template>
+
 </div> <!-- CLOSE x-data="shippingDashboard()" DIV -->
 
 <script>
 function shippingDashboard() {
  return {
  expandAll: false,
- 
+ searchQuery: '',
  modal: {
  isOpen: false,
  isEdit: false,
