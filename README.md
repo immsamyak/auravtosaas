@@ -96,5 +96,15 @@ docker run -d -p 8000:8000 --env-file .env aura-app
 
 For marketplace review, please reference `DEMO_CREDENTIALS.md` for safe usernames and passwords to explore the various permission roles.
 
+## Documentation Pack
+
+Comprehensive project documentation is available in `/docs`:
+- `APPLICATION_OVERVIEW_AND_PROJECT_PLAN.md`
+- `UML_DIAGRAM.md`
+- `SYSTEM_ARCHITECTURE.md`
+- `USER_MANUAL.md`
+- `INSTALLATION_MANUAL.md`
+- `INSTALLATION_MANUAL.pdf`
+
 ## License & Support
 For installation and configuration support, please contact the developer profile directly. Extensive custom ML model integration (beyond the provided Replicate API structure) falls outside standard support.
