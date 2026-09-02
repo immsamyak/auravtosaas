@@ -65,6 +65,18 @@
  <p class="text-sm font-bold text-theme-text-muted"><i class="fa-solid fa-infinity text-indigo-500 mr-2"></i>Unlimited Quota</p>
  </div>
  {% endif %}
+
+ {% if subscription.status == 'active' %}
+ <div class="w-full md:w-auto mt-4 md:mt-0 flex flex-col md:items-end">
+ <p class="text-xs font-bold text-theme-text-disabled mb-2">Renews on {{ subscription.current_period_end|date:"M d, Y" }}</p>
+ <form action="{% url 'cancel_subscription' %}" method="POST" onsubmit="return confirm('Are you sure you want to cancel your subscription? You will lose access at the end of your billing period.');">
+ {% csrf_token %}
+ <button type="submit" class="text-rose-600 hover:text-rose-700 font-bold text-sm bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-xl transition-colors">
+ Cancel Subscription
+ </button>
+ </form>
+ </div>
+ {% endif %}
  </div>
  </div>
  
@@ -100,7 +112,11 @@
  <form action="{% url 'create_checkout_session' plan.id %}" method="POST">
  {% csrf_token %}
  <button type="submit" class="w-full {% if plan.is_popular %}bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/25{% else %}bg-slate-900 hover:bg-slate-800 text-white shadow-md{% endif %} font-bold py-3 px-4 rounded-xl transition-all">
+ {% if subscription.plan and plan.monthly_price < subscription.plan.monthly_price %}
+ Downgrade to {{ plan.name }}
+ {% else %}
  Upgrade to {{ plan.name }}
+ {% endif %}
  </button>
  </form>
  {% endif %}

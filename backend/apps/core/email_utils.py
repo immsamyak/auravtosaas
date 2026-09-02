@@ -137,8 +137,29 @@ def dispatch_async_email(event_type, context, to_emails, brand=None):
     except (ImportError, Exception):
         # Fallback to synchronous if celery is not configured or fails
         try:
-            from apps.core.tasks import send_email_async
-            send_email_async(event_type, context, to_emails)
+            from django.utils import timezone
+            from apps.core.models import EmailLog
+            
+            for recipient in to_emails:
+                email_log = EmailLog.objects.create(
+                    recipient=recipient,
+                    subject=f"Processing {event_type}...",
+                    template_type=event_type,
+                    status=EmailLog.Status.PENDING
+                )
+                success = send_transactional_email(event_type, context, [recipient])
+                if success:
+                    email_log.status = EmailLog.Status.SENT
+                    email_log.sent_at = timezone.now()
+                    if isinstance(success, str):
+                        email_log.subject = success
+                    else:
+                        email_log.subject = f"Sent {event_type} to {recipient}"
+                    email_log.save()
+                else:
+                    email_log.status = EmailLog.Status.FAILED
+                    email_log.error_message = "Email backend failed to send."
+                    email_log.save()
         except Exception as e:
             print(f"Failed to send email synchronously: {e}")
 

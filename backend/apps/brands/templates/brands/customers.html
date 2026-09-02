@@ -1,0 +1,131 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-12">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-users text-theme-text-disabled mr-2"></i>
+                    <span class="text-sm font-bold text-theme-text-primary">Management</span>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs mx-2"></i>
+                    <span class="text-sm font-medium text-theme-text-muted">Customers</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between">
+        <div>
+            <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Customer <span class="text-indigo-600 font-light">Management</span></h1>
+            <p class="text-theme-text-muted mt-2 text-sm font-medium">View your registered customers and manage B2B Wholesale status.</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex gap-4">
+            <div class="bg-theme-surface rounded-2xl border border-theme-border dark:border-slate-600/50 p-4 min-w-[150px]">
+                <p class="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Total Customers</p>
+                <p class="text-2xl font-black mt-1">{{ total_customers }}</p>
+            </div>
+            <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800 p-4 min-w-[150px]">
+                <p class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Wholesale Partners</p>
+                <p class="text-2xl font-black text-indigo-700 dark:text-indigo-300 mt-1">{{ b2b_customers }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customers List -->
+    <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border dark:border-slate-600/50 overflow-hidden">
+        
+        {% if not brand.subscription.plan.allow_b2b_wholesale %}
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800 p-4 flex items-start">
+            <i class="fa-solid fa-lock text-yellow-600 dark:text-yellow-500 mt-1 mr-3"></i>
+            <div>
+                <h4 class="text-sm font-bold text-yellow-800 dark:text-yellow-400">B2B Wholesale Disabled</h4>
+                <p class="text-xs text-yellow-700 dark:text-yellow-500 mt-1">Your current subscription plan does not support B2B Wholesale features. Upgrading will allow you to offer wholesale pricing to specific partners.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-theme-bg/50 border-b border-theme-border dark:border-slate-600/50">
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-theme-text-secondary">Customer</th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-theme-text-secondary">Registered</th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-theme-text-secondary text-center">Wholesale Partner</th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-theme-text-secondary text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-theme-border dark:divide-slate-600/50">
+                    {% for customer in customers %}
+                    <tr class="hover:bg-theme-bg/30 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm border border-indigo-200 dark:border-indigo-800 shrink-0">
+                                    {{ customer.user.first_name|default:customer.user.email|make_list|first|upper }}
+                                </div>
+                                <div class="ml-4">
+                                    <a href="{% url 'customer_detail' customer.user.id %}" class="block group">
+                                        <p class="text-sm font-bold text-theme-text-primary group-hover:text-indigo-600 transition-colors">{{ customer.user.first_name }} {{ customer.user.last_name }}</p>
+                                        <p class="text-xs text-theme-text-muted mt-0.5 group-hover:text-indigo-500 transition-colors">{{ customer.user.email }}</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6">
+                            <span class="text-sm text-theme-text-secondary">{{ customer.created_at|date:"M d, Y" }}</span>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            {% if customer.is_b2b %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                                    <i class="fa-solid fa-check mr-1.5"></i> Active
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                                    Standard
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 px-6 text-right">
+                            <form action="{% url 'customers_management' %}" method="POST" class="inline-block">
+                                {% csrf_token %}
+                                <input type="hidden" name="customer_id" value="{{ customer.id }}">
+                                
+                                {% if brand.subscription.plan.allow_b2b_wholesale %}
+                                    {% if customer.is_b2b %}
+                                        <input type="hidden" name="is_b2b" value="off">
+                                        <button type="submit" class="text-sm font-bold text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-lg transition-colors border border-rose-200">
+                                            Revoke Wholesale
+                                        </button>
+                                    {% else %}
+                                        <input type="hidden" name="is_b2b" value="on">
+                                        <button type="submit" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors border border-indigo-200">
+                                            Grant Wholesale
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    <button type="button" disabled class="text-sm font-bold text-theme-text-muted bg-theme-bg px-3 py-1.5 rounded-lg opacity-50 cursor-not-allowed border border-theme-border">
+                                        Locked
+                                    </button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-12 text-center">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-theme-bg mb-4">
+                                <i class="fa-solid fa-users-slash text-2xl text-theme-text-disabled"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-theme-text-primary">No customers yet</h3>
+                            <p class="text-sm text-theme-text-muted mt-1 max-w-sm mx-auto">When users register on your storefront or place an order, they will appear here.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

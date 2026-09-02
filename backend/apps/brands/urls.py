@@ -28,6 +28,7 @@ urlpatterns = [
     path('dashboard/notifications/mark-read/', views.mark_notifications_read, name='mark_notifications_read'),
     
     path('dashboard/marketing/', marketing_views.marketing_dashboard_view, name='marketing_dashboard'),
+    path('dashboard/customers/', views.customers_view, name='customers_management'),
     path('dashboard/marketing/popups/', marketing_views.popup_list_view, name='popup_list'),
     path('dashboard/marketing/coupons/', marketing_views.coupon_list_view, name='coupon_list'),
     path('dashboard/marketing/popup/create/', marketing_views.popup_create_view, name='popup_create'),

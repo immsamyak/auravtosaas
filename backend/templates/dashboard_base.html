@@ -142,7 +142,7 @@
  <a href="{% url 'abandoned_carts' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'abandoned' in request.resolver_match.url_name %}active{% endif %}">
  <i class="fa-solid fa-cart-arrow-down w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'abandoned' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Abandoned Carts
  </a>
- <a href="{% url 'manage_customers' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'customer' in request.resolver_match.url_name %}active{% endif %}">
+ <a href="{% url 'customers_management' %}" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group {% if 'customer' in request.resolver_match.url_name %}active{% endif %}">
  <i class="fa-solid fa-users w-6 text-center mr-3 text-theme-text-muted group-hover:text-indigo-400 transition-colors {% if 'customer' in request.resolver_match.url_name %}text-indigo-400{% endif %}"></i> Customers
  </a>
  <a href="{% url 'pos_terminal' %}" target="_blank" class="sidebar-link flex items-center px-6 py-3 text-sm text-slate-400 group hover:text-emerald-400">

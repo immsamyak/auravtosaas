@@ -96,6 +96,10 @@ def brand_settings_view(request):
         brand.contact_email = request.POST.get('contact_email', brand.contact_email)
         brand.status = request.POST.get('status', brand.status)
         
+        # Enforce Custom Domain lock
+        if brand.subscription and brand.subscription.plan and brand.subscription.plan.allow_custom_domain:
+            brand.custom_domain = request.POST.get('custom_domain', brand.custom_domain)
+        
         # New Store Details
         brand.description = request.POST.get('description', brand.description)
         brand.support_email = request.POST.get('support_email', brand.support_email)
@@ -106,6 +110,15 @@ def brand_settings_view(request):
         # Currency Override
         brand.currency_code = request.POST.get('currency_code', brand.currency_code)
         brand.currency_symbol = request.POST.get('currency_symbol', brand.currency_symbol)
+        
+        # B2B Wholesale
+        if brand.subscription and brand.subscription.plan and brand.subscription.plan.allow_b2b_wholesale:
+            try:
+                b2b_discount = request.POST.get('b2b_discount_percent')
+                if b2b_discount is not None:
+                    brand.b2b_discount_percent = float(b2b_discount)
+            except ValueError:
+                pass
         
         # New Social Links - We receive usernames, we store full URLs
         insta_user = request.POST.get('instagram_url', '').strip()
@@ -256,6 +269,57 @@ def team_management_view(request):
         'roles': BrandStaff.ROLE_CHOICES,
         'active_tab': 'team'
     })
+
+@login_required(login_url='/login/')
+def customers_view(request):
+    """
+    Brand Owner view to manage storefront customers and their B2B wholesale status.
+    """
+    brand = None
+    if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+        brand = request.user.owned_brand
+    else:
+        staff = request.user.brand_roles.select_related('brand').first()
+        if staff:
+            brand = staff.brand
+            
+    if not brand:
+        return redirect('index')
+
+    from apps.brands.models import BrandCustomer
+
+    if request.method == 'POST':
+        customer_id = request.POST.get('customer_id')
+        is_b2b_val = request.POST.get('is_b2b') == 'on'
+        
+        try:
+            customer = BrandCustomer.objects.get(id=customer_id, brand=brand)
+            customer.is_b2b = is_b2b_val
+            customer.save()
+            status_text = "enabled" if is_b2b_val else "disabled"
+            messages.success(request, f"Wholesale B2B status {status_text} for {customer.user.email}.")
+        except BrandCustomer.DoesNotExist:
+            messages.error(request, "Customer not found.")
+            
+        return redirect('customers_management')
+
+    # Get all customers for this brand
+    customers = BrandCustomer.objects.filter(brand=brand).select_related('user').order_by('-created_at')
+    
+    # Calculate some stats for the UI
+    total_customers = customers.count()
+    b2b_customers = customers.filter(is_b2b=True).count()
+    
+    # Optional: We can annotate order count if we want, but for now simple query is fine.
+    
+    return render(request, 'brands/customers.html', {
+        'brand': brand,
+        'customers': customers,
+        'total_customers': total_customers,
+        'b2b_customers': b2b_customers,
+        'active_tab': 'customers'
+    })
+
 @xframe_options_sameorigin
 def storefront_view(request, slug):
     """
@@ -544,6 +608,19 @@ def store_product_detail_view(request, slug, product_slug):
     from apps.catalog.models import ProductReview
     reviews = ProductReview.objects.filter(product=product).order_by('-created_at')
     
+    is_b2b_customer = False
+    b2b_price = product.price
+    if request.user.is_authenticated:
+        from apps.brands.models import BrandCustomer
+        customer_record, _ = BrandCustomer.objects.get_or_create(brand=brand, user=request.user)
+        is_b2b_customer = customer_record.is_b2b
+        
+        if is_b2b_customer and brand.subscription and brand.subscription.plan and brand.subscription.plan.allow_b2b_wholesale:
+            if brand.b2b_discount_percent > 0:
+                from decimal import Decimal
+                discount = (product.price * brand.b2b_discount_percent) / Decimal('100.00')
+                b2b_price = product.price - discount
+    
     return render(request, 'brands/store_product_detail.html', {
         'brand': brand,
         'product': product,
@@ -557,6 +634,8 @@ def store_product_detail_view(request, slug, product_slug):
         'whatsapp_message': whatsapp_message,
         'related_products': related_products,
         'reviews': reviews,
+        'is_b2b_customer': is_b2b_customer,
+        'b2b_price': b2b_price,
     })
 
 @login_required(login_url='/login/')
@@ -871,7 +950,15 @@ def developer_api_view(request):
     if not brand:
         return redirect('index')
         
+    has_api_access = False
+    if hasattr(brand, 'subscription') and brand.subscription and brand.subscription.plan:
+        has_api_access = brand.subscription.plan.allow_api_access
+        
     if request.method == 'POST':
+        if not has_api_access:
+            messages.error(request, "API Access is not available on your current plan.")
+            return redirect('developer_api')
+            
         action = request.POST.get('action')
         if action == 'create_key':
             name = request.POST.get('name', 'New API Key')
@@ -926,7 +1013,8 @@ def developer_api_view(request):
         'brand': brand,
         'api_keys': api_keys,
         'webhooks': webhooks,
-        'api_logs': api_logs
+        'api_logs': api_logs,
+        'has_api_access': has_api_access
     })
 
 @login_required(login_url='/login/')

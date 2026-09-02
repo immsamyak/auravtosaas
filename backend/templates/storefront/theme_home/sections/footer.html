@@ -50,7 +50,9 @@
 </div>
 <div class="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-hab-sand/50">
 <p>© {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
+{% if not brand.subscription or not brand.subscription.plan.allow_remove_watermark %}
 <p class="mt-4 md:mt-0">Powered by Aura</p>
+{% endif %}
 </div>
 <div class="max-w-7xl mx-auto px-6 pb-8">
 <div class="text-center mb-6">

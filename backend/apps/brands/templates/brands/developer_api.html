@@ -24,6 +24,18 @@
  <p class="text-theme-text-muted mt-2 text-sm font-medium">Manage your API keys and webhook endpoints for custom integrations.</p>
  </div>
 
+ {% if not has_api_access %}
+ <div class="bg-theme-surface rounded-3xl p-12 shadow-sm border border-theme-border-subtle text-center">
+    <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="fa-solid fa-lock text-3xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-theme-text-primary mb-3">API Access is Locked</h2>
+    <p class="text-theme-text-muted max-w-lg mx-auto mb-8">Your current subscription plan does not include access to the Developer API. Upgrade your plan to generate API keys, configure webhooks, and build custom integrations.</p>
+    <a href="{% url 'brand_billing' %}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+        View Subscription Plans
+    </a>
+ </div>
+ {% else %}
  <div class="space-y-8">
  
  <!-- API Keys Section -->
@@ -298,6 +310,7 @@
  </div>
  </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_modals %}

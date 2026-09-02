@@ -145,6 +145,60 @@
  </div>
  </div>
 
+ <!-- Feature Gates Card -->
+ <div class="bg-theme-surface p-8 rounded-3xl shadow-sm border border-theme-border-subtle mt-6">
+ <h2 class="text-xl font-extrabold text-theme-text-primary mb-6 flex items-center gap-2">
+ <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+ Feature Gates (Locks)
+ </h2>
+ 
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <label class="flex items-center gap-3 cursor-pointer p-4 border border-theme-border rounded-xl hover:bg-theme-bg transition-colors">
+ <div class="flex-1">
+ <span class="block text-sm font-bold text-theme-text-primary">Custom Domain</span>
+ <span class="block text-xs text-theme-text-muted mt-0.5">Allow custom domain routing</span>
+ </div>
+ {{ form.allow_custom_domain }}
+ </label>
+
+ <label class="flex items-center gap-3 cursor-pointer p-4 border border-theme-border rounded-xl hover:bg-theme-bg transition-colors">
+ <div class="flex-1">
+ <span class="block text-sm font-bold text-theme-text-primary">API Access</span>
+ <span class="block text-xs text-theme-text-muted mt-0.5">Allow generating developer API keys</span>
+ </div>
+ {{ form.allow_api_access }}
+ </label>
+
+ <label class="flex items-center gap-3 cursor-pointer p-4 border border-theme-border rounded-xl hover:bg-theme-bg transition-colors">
+ <div class="flex-1">
+ <span class="block text-sm font-bold text-theme-text-primary">B2B Wholesale</span>
+ <span class="block text-xs text-theme-text-muted mt-0.5">Unlock wholesale pricing configuration</span>
+ </div>
+ {{ form.allow_b2b_wholesale }}
+ </label>
+
+ <label class="flex items-center gap-3 cursor-pointer p-4 border border-theme-border rounded-xl hover:bg-theme-bg transition-colors">
+ <div class="flex-1">
+ <span class="block text-sm font-bold text-theme-text-primary">Custom Products</span>
+ <span class="block text-xs text-theme-text-muted mt-0.5">Allow creating non-native products</span>
+ </div>
+ {{ form.allow_custom_products }}
+ </label>
+
+ <label class="flex items-center gap-3 cursor-pointer p-4 border border-theme-border rounded-xl hover:bg-theme-bg transition-colors">
+ <div class="flex-1">
+ <span class="block text-sm font-bold text-theme-text-primary">Remove Watermark</span>
+ <span class="block text-xs text-theme-text-muted mt-0.5">Remove Aura watermark from storefront</span>
+ </div>
+ {{ form.allow_remove_watermark }}
+ </label>
+ </div>
+ <style>
+ /* Quick override for the checkboxes */
+ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; border-radius: 0.375rem; color: #4f46e5; border-color: #cbd5e1; cursor: pointer; }
+ </style>
+ </div>
+
  </div>
 
  <!-- Right Column: Integrations & Status -->

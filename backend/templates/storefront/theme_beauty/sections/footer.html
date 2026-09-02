@@ -45,7 +45,9 @@
 <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-[#e8e4db] flex flex-col md:flex-row justify-between items-center">
 <p class="text-sm text-theme-text-disabled">© {% now "Y" %} {{ brand.name }}. All rights reserved.</p>
 <div class="flex space-x-6 mt-4 md:mt-0 text-sm text-theme-text-disabled">
+{% if not brand.subscription or not brand.subscription.plan.allow_remove_watermark %}
 <span>Powered by Aura</span>
+{% endif %}
 </div>
 </div>
 <div class="max-w-7xl mx-auto px-6 pb-8">

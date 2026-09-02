@@ -49,7 +49,10 @@
                 
                 <div class="mt-4 flex items-end space-x-4">
                     <div class="flex items-center gap-3">
-                        {% if product.sale_price %}
+                        {% if is_b2b_customer and brand.subscription.plan.allow_b2b_wholesale and brand.b2b_discount_percent > 0 %}
+                            <p class="text-2xl font-bold text-indigo-600">{{ brand.currency_symbol|default:"$" }}{{ b2b_price|floatformat:2 }} <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded ml-2">Wholesale</span></p>
+                            <p class="text-lg font-medium opacity-50 line-through">{{ brand.currency_symbol|default:"$" }}{{ product.price }}</p>
+                        {% elif product.sale_price %}
                             <p class="text-2xl font-bold text-red-600">{{ brand.currency_symbol|default:"$" }}{{ product.sale_price }}</p>
                             <p class="text-lg font-medium opacity-50 line-through">{{ brand.currency_symbol|default:"$" }}{{ product.price }}</p>
                         {% else %}
@@ -110,7 +113,7 @@
                     <div class="mt-12 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 pt-10 border-t border-black/10">
                         
                         <button type="button" 
-                                @click="$store.cart.add({id: currentVariant ? currentVariant.id : '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, variant_name: (currentVariant ? (currentVariant.color_name + ' / ' + currentVariant.size_code) : ''), image: currentImageUrl}); window.showToast('Added to cart', 'success');" 
+                                @click="$store.cart.add({id: currentVariant ? currentVariant.id : '{{product.id}}', name: '{{product.name|escapejs}}', price: {% if is_b2b_customer and brand.subscription.plan.allow_b2b_wholesale and brand.b2b_discount_percent > 0 %}{{ b2b_price }}{% elif product.sale_price %}{{ product.sale_price }}{% else %}{{ product.price }}{% endif %}, variant_name: (currentVariant ? (currentVariant.color_name + ' / ' + currentVariant.size_code) : ''), image: currentImageUrl}); window.showToast('Added to cart', 'success');" 
                                 :disabled="!currentVariant || currentVariant.stock <= 0" 
                                 :class="(!currentVariant || currentVariant.stock <= 0) ? 'opacity-50 cursor-not-allowed bg-theme-bg' : 'hover:opacity-70'" 
                                 class="flex-1 border border-current bg-transparent py-4 px-8 flex items-center justify-center text-sm font-bold uppercase tracking-widest transition-opacity">

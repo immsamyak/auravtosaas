@@ -27,6 +27,7 @@ class Brand(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='owned_brand', null=True, blank=True)
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=100, default='my-brand')
+    custom_domain = models.CharField(max_length=255, blank=True, null=True, help_text="e.g. shop.mybrand.com")
     contact_email = models.EmailField()
     logo = models.ImageField(validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp', 'svg'])], upload_to='brand_logos/', blank=True, null=True)
     banner = models.ImageField(validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp', 'svg'])], upload_to='brand_banners/', blank=True, null=True)
@@ -147,6 +148,19 @@ class BrandStaff(models.Model):
         
     def __str__(self):
         return f"{self.user.username} - {self.role} at {self.brand.name}"
+
+class BrandCustomer(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='customers')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='brand_customers')
+    is_b2b = models.BooleanField(default=False, help_text="Mark as a B2B wholesale customer for this specific brand")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('brand', 'user')
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"{self.user.username} - {self.brand.name}"
 
 class MediaAsset(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='media_assets')

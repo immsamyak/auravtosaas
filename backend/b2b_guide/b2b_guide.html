@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Wholesale Workflow Guide (With Screenshots)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .step-card { transition: transform 0.2s; }
+        .step-card:hover { transform: translateY(-2px); }
+        img { border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); width: 100%; max-width: 900px; margin: 20px 0; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    
+    <header class="bg-indigo-600 text-white py-12 px-6 shadow-lg">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl font-extrabold mb-4"><i class="fa-solid fa-handshake mr-3"></i>B2B Wholesale Complete Walkthrough</h1>
+            <p class="text-lg text-indigo-100">Here are the real, actual screenshots of how your wholesale integration works from end to end!</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        <div class="space-y-16">
+            
+            <!-- Step 1 -->
+            <div class="step-card bg-white rounded-3xl shadow-sm border border-slate-200 p-8 sm:p-12">
+                <div class="flex flex-col sm:flex-row mb-6">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-black text-2xl mr-6 shrink-0 mb-4 sm:mb-0">1</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2">Configure Your Discount</h2>
+                        <p class="text-slate-500 text-lg mb-6">Log into your Brand Owner dashboard at <code>http://localhost:8000/login</code>, go to <strong>Settings</strong>, and set your desired B2B Discount (e.g. 25%). Click Save.</p>
+                        
+                        <img src="ss1.png" alt="Settings Screenshot">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card bg-white rounded-3xl shadow-sm border border-slate-200 p-8 sm:p-12">
+                <div class="flex flex-col sm:flex-row mb-6">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-black text-2xl mr-6 shrink-0 mb-4 sm:mb-0">2</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2">Grant Wholesale Privileges</h2>
+                        <p class="text-slate-500 text-lg mb-6">In your dashboard, navigate to the <strong>Customers</strong> tab. When a customer registers on your storefront, they appear here. Click the <span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-sm font-bold border border-indigo-200">Grant Wholesale</span> button next to their name.</p>
+                        
+                        <img src="ss2.png" alt="Customers Dashboard Screenshot">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card bg-white rounded-3xl shadow-sm border border-slate-200 p-8 sm:p-12">
+                <div class="flex flex-col sm:flex-row mb-6">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-black text-2xl mr-6 shrink-0 mb-4 sm:mb-0">3</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2">The Customer Experience</h2>
+                        <p class="text-slate-500 text-lg mb-6">When the customer logs in and visits your storefront (<code>http://localhost:8000/store/alvicsx/</code>), the system identifies them as a Wholesale Partner and automatically recalculates all prices site-wide!</p>
+                        
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-8 text-green-800 flex items-center">
+                            <i class="fa-solid fa-circle-check text-xl mr-3 text-green-500"></i>
+                            <span class="font-medium">In the screenshot below, notice how the retail price is crossed out, and the new 25% discounted B2B price is shown automatically!</span>
+                        </div>
+
+                        <img src="ss3.png" alt="Product Discount Screenshot">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

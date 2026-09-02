@@ -25,6 +25,79 @@ def owner_billing_view(request):
         return redirect('index')
 
     subscription, created = BrandSubscription.objects.get_or_create(brand=brand)
+    
+    # Process session_id if redirected from Stripe Checkout
+    session_id = request.GET.get('session_id')
+    if session_id:
+        try:
+            settings_obj = GlobalSettings.get_settings()
+            stripe.api_key = settings_obj.get_stripe_secret_key
+            session = stripe.checkout.Session.retrieve(session_id)
+            
+            if session.payment_status == 'paid':
+                metadata = session.metadata.to_dict() if getattr(session, 'metadata', None) else {}
+                if metadata.get('type') == 'subscription_payment':
+                    plan_id = metadata.get('plan_id')
+                    if plan_id:
+                        from django.utils import timezone
+                        from datetime import timedelta
+                        from apps.billing.models import SubscriptionHistory
+                        
+                        plan = SubscriptionPlan.objects.get(id=plan_id)
+                        old_plan = subscription.plan
+                        
+                        action = 'renewed'
+                        if old_plan:
+                            if plan.monthly_price > old_plan.monthly_price:
+                                action = 'upgraded'
+                            elif plan.monthly_price < old_plan.monthly_price:
+                                action = 'downgraded'
+                        else:
+                            action = 'upgraded'
+                            
+                        # Retrieve payment intent to get payment method
+                        payment_details = {}
+                        pi_id = getattr(session, 'payment_intent', None)
+                        if pi_id:
+                            try:
+                                pi = stripe.PaymentIntent.retrieve(pi_id, expand=['payment_method'])
+                                if pi.payment_method and pi.payment_method.type == 'card':
+                                    card = pi.payment_method.card
+                                    payment_details = {
+                                        'brand': card.brand,
+                                        'last4': card.last4,
+                                        'wallet': card.wallet.type if card.wallet else None
+                                    }
+                            except Exception:
+                                pass
+                                
+                        SubscriptionHistory.objects.create(
+                            brand=brand,
+                            action=action,
+                            previous_plan_name=old_plan.name if old_plan else "None",
+                            new_plan_name=plan.name,
+                            amount_paid=plan.monthly_price,
+                            transaction_id=pi_id or session.id,
+                            payment_details=payment_details
+                        )
+
+                        subscription.plan = plan
+                        subscription.status = 'active'
+                        subscription.try_ons_used = 0
+                        subscription.stripe_customer_id = getattr(session, 'customer', None)
+                        subscription.stripe_subscription_id = pi_id or session.id
+                        subscription.current_period_end = timezone.now() + timedelta(days=30)
+                        subscription.save()
+                        
+                        from django.contrib import messages
+                        messages.success(request, f"Successfully upgraded to {plan.name}!")
+                        
+                        # Redirect to clean the URL
+                        return redirect('owner_billing')
+        except Exception as e:
+            from django.contrib import messages
+            messages.error(request, f"Failed to verify payment: {str(e)}")
+            
     plans = SubscriptionPlan.objects.all().order_by('monthly_price')
     
     return render(request, 'billing/dashboard_billing.html', {
@@ -57,46 +130,78 @@ def create_checkout_session(request, plan_id):
         
     stripe.api_key = settings_obj.get_stripe_secret_key
     
-    # Auto-provision Stripe Price ID if missing
-    if not plan.stripe_price_id:
-        try:
-            # Create the Product in Stripe
-            stripe_product = stripe.Product.create(
-                name=f"Aura {plan.name} Plan",
-                description=f"Monthly subscription for Aura ({plan.try_on_quota} try-ons/mo)"
-            )
-            # Create the Price in Stripe
-            stripe_price = stripe.Price.create(
-                product=stripe_product.id,
-                unit_amount=int(plan.monthly_price * 100), # Convert to cents
-                currency=getattr(settings_obj, 'currency', 'usd').lower(),
-                recurring={"interval": "month"}
-            )
-            # Save the new Price ID to the database
-            plan.stripe_price_id = stripe_price.id
-            plan.save()
-        except Exception as e:
-            from django.contrib import messages
-            messages.error(request, f"Failed to auto-provision Stripe plan: {str(e)}")
-            return redirect('owner_billing')
-
+    # Determine which environment we are using
+    is_test_mode = (settings_obj.stripe_environment == 'test')
+    
+    # Get the correct Price ID
+    current_price_id = plan.stripe_test_price_id if is_test_mode else plan.stripe_price_id
+    
     try:
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
-                'price': plan.stripe_price_id,
+                'price_data': {
+                    'currency': getattr(settings_obj, 'currency', 'usd').lower(),
+                    'product_data': {
+                        'name': f"Aura {plan.name} Plan (1 Month)",
+                        'description': f"{plan.try_on_quota} try-ons/mo",
+                    },
+                    'unit_amount': int(plan.monthly_price * 100),
+                },
                 'quantity': 1,
             }],
-            mode='subscription',
+            mode='payment',
+            customer_email=brand.owner.email if brand.owner else request.user.email,
+            customer_creation='always',
             success_url=request.build_absolute_uri(reverse('owner_billing')) + "?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=request.build_absolute_uri(reverse('owner_billing')) + "?cancel=1",
             client_reference_id=str(brand.id),
+            metadata={
+                'plan_id': plan.id,
+                'brand_id': brand.id,
+                'type': 'subscription_payment'
+            }
         )
         return redirect(checkout_session.url)
     except Exception as e:
         from django.contrib import messages
         messages.error(request, str(e))
         return redirect('owner_billing')
+
+@login_required
+def cancel_subscription(request):
+    if request.method == 'POST':
+        # Multi-tenant Team Management Check
+        brand = None
+        if hasattr(request.user, 'owned_brand') and request.user.owned_brand:
+            brand = request.user.owned_brand
+        else:
+            staff = request.user.brand_roles.select_related('brand').first()
+            if staff:
+                brand = staff.brand
+                
+        if not brand:
+            return redirect('index')
+
+        subscription = brand.subscription
+        if subscription.status == 'active':
+            from apps.billing.models import SubscriptionHistory
+            SubscriptionHistory.objects.create(
+                brand=brand,
+                action='canceled',
+                previous_plan_name=subscription.plan.name if subscription.plan else "None",
+                new_plan_name="Canceled",
+                amount_paid=0.00,
+                transaction_id="N/A",
+                payment_details={}
+            )
+            subscription.status = 'canceled'
+            # We keep current_period_end so they have access until it expires
+            subscription.save()
+            from django.contrib import messages
+            messages.success(request, "Your subscription has been canceled successfully.")
+    
+    return redirect('owner_billing')
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -116,14 +221,65 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        brand_id = session.get('client_reference_id')
-        if brand_id:
-            brand = Brand.objects.get(id=brand_id)
-            sub = brand.subscription
-            sub.stripe_customer_id = session.get('customer')
-            sub.stripe_subscription_id = session.get('subscription')
-            sub.status = 'active'
-            sub.save()
+        session_dict = session.to_dict()
+        brand_id = session_dict.get('client_reference_id')
+        metadata = session_dict.get('metadata', {})
+        
+        if brand_id and metadata.get('type') == 'subscription_payment':
+            plan_id = metadata.get('plan_id')
+            if plan_id:
+                from apps.billing.models import SubscriptionHistory
+                from django.utils import timezone
+                from datetime import timedelta
+                
+                brand = Brand.objects.get(id=brand_id)
+                plan = SubscriptionPlan.objects.get(id=plan_id)
+                sub = brand.subscription
+                old_plan = sub.plan
+                
+                action = 'renewed'
+                if old_plan:
+                    if plan.monthly_price > old_plan.monthly_price:
+                        action = 'upgraded'
+                    elif plan.monthly_price < old_plan.monthly_price:
+                        action = 'downgraded'
+                else:
+                    action = 'upgraded'
+                    
+                # Retrieve payment intent to get payment method
+                payment_details = {}
+                pi_id = session_dict.get('payment_intent')
+                if pi_id:
+                    try:
+                        pi = stripe.PaymentIntent.retrieve(pi_id, expand=['payment_method'])
+                        if getattr(pi, 'payment_method', None) and pi.payment_method.type == 'card':
+                            card = pi.payment_method.card
+                            payment_details = {
+                                'brand': card.brand,
+                                'last4': card.last4,
+                                'wallet': getattr(card.wallet, 'type', None) if getattr(card, 'wallet', None) else None
+                            }
+                    except Exception:
+                        pass
+                        
+                SubscriptionHistory.objects.create(
+                    brand=brand,
+                    action=action,
+                    previous_plan_name=old_plan.name if old_plan else "None",
+                    new_plan_name=plan.name,
+                    amount_paid=plan.monthly_price,
+                    transaction_id=pi_id or session_dict.get('id'),
+                    payment_details=payment_details
+                )
+                
+                # Update subscription locally (no Stripe recurring subscription)
+                sub.plan = plan
+                sub.status = 'active'
+                sub.try_ons_used = 0
+                sub.stripe_customer_id = session_dict.get('customer')
+                sub.stripe_subscription_id = pi_id or session_dict.get('id')
+                sub.current_period_end = timezone.now() + timedelta(days=30)
+                sub.save()
             
     elif event['type'] == 'invoice.payment_succeeded':
         # Reset usage limits at the start of billing cycle

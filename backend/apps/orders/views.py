@@ -8,6 +8,7 @@ from apps.orders.models import Order, ReturnRequest
 from apps.orders.services.payment_gateways import EsewaService, KhaltiService
 import json
 import base64
+from decimal import Decimal
 from django.urls import reverse
 
 @login_required(login_url='/login/')
@@ -339,11 +340,26 @@ def storefront_checkout_view(request, brand_slug):
             # Automatically log the user in to associate them with the session
             checkout_user = user
             login(request, user)
+            
+        # Ensure BrandCustomer exists
+        b2b_customer_record = None
+        if checkout_user:
+            from apps.brands.models import BrandCustomer
+            b2b_customer_record, _ = BrandCustomer.objects.get_or_create(brand=brand, user=checkout_user)
+
+        # Base Discount Initialization
+        discount_amount = Decimal('0.00')
+
+        # Handle B2B Wholesale Discount
+        if b2b_customer_record and b2b_customer_record.is_b2b:
+            if brand.subscription and brand.subscription.plan and brand.subscription.plan.allow_b2b_wholesale:
+                if brand.b2b_discount_percent > 0:
+                    b2b_discount = (total_items_price * brand.b2b_discount_percent) / Decimal('100.00')
+                    discount_amount += b2b_discount
 
         # Handle Coupon
         coupon_code = request.POST.get('applied_coupon')
         applied_coupon = None
-        discount_amount = 0
         
         if coupon_code:
             from apps.brands.models import Coupon
@@ -353,9 +369,9 @@ def storefront_checkout_view(request, brand_slug):
                     if c.min_order_value <= total_items_price:
                         # Apply coupon
                         if c.discount_type == 'PERCENTAGE':
-                            discount_amount = (total_items_price * c.discount_value) / 100
+                            discount_amount += (total_items_price * c.discount_value) / Decimal('100.00')
                         else:
-                            discount_amount = c.discount_value
+                            discount_amount += c.discount_value
                         
                         applied_coupon = c
                         c.times_used += 1
@@ -940,12 +956,14 @@ def customer_detail_view(request, customer_id):
     
     customer_user = get_object_or_404(User, id=customer_id)
     
-    # Ensure they have actually ordered from this brand
+    # Ensure they have actually ordered from this brand or are registered as a brand customer
     orders = Order.objects.filter(brand=brand, user=customer_user).order_by('-created_at')
+    from apps.brands.models import BrandCustomer
+    is_brand_customer = BrandCustomer.objects.filter(brand=brand, user=customer_user).exists()
     
-    if not orders.exists():
-        messages.error(request, "This customer has not placed any orders with your brand.")
-        return redirect('manage_customers')
+    if not orders.exists() and not is_brand_customer:
+        messages.error(request, "This customer has not placed any orders and is not registered with your brand.")
+        return redirect('customers_management')
         
     stats = orders.aggregate(total_spend=Sum('total_amount'))
     total_spend = stats['total_spend'] or 0

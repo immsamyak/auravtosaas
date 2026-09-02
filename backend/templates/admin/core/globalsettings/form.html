@@ -402,7 +402,7 @@
         if (!this.email) return;
         this.loading = true;
         
-        fetch('{% url "admin:globalsettings_test_email" %}', {
+        fetch('{% url 'admin:globalsettings_test_email' %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -418,7 +418,7 @@
                 window.showToast('Test email sent successfully!', 'success');
             } else {
                 if (data.traceback) {
-                    console.error("Test Email Detailed Traceback:\n" + data.traceback);
+                    console.error('Test Email Detailed Traceback:\n' + data.traceback);
                 }
                 window.showToast(data.error || 'Failed to send test email. Check console for details.', 'error');
             }
@@ -444,7 +444,8 @@ class="relative z-[9999]" aria-labelledby="modal-title" role="dialog" aria-modal
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                  @click.away="open = false"
-                 class="relative transform overflow-hidden rounded-2xl bg-theme-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 border border-theme-border-subtle">
+                 class="relative transform overflow-hidden rounded-2xl bg-theme-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 border border-theme-border-subtle"
+                 style="display: none;">
                 
                 <div>
                     <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 mb-4">

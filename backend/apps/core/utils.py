@@ -26,7 +26,13 @@ def get_brand_url(brand=None):
         return base_url
 
     # In production/staging with custom domains, you would check brand.custom_domain
-    if getattr(brand, 'custom_domain', None):
+    # Only use custom domain if they have one AND their plan allows it
+    has_access = False
+    if hasattr(brand, 'subscription') and brand.subscription and brand.subscription.plan:
+        if brand.subscription.plan.allow_custom_domain:
+            has_access = True
+            
+    if getattr(brand, 'custom_domain', None) and has_access:
         return f"https://{brand.custom_domain}"
     
     # Fallback to local routing

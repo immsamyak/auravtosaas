@@ -80,6 +80,24 @@
  </div>
 
  <div>
+ <div class="flex items-center justify-between mb-2">
+ <label for="custom_domain" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide">Custom Domain</label>
+ {% if not brand.subscription.plan.allow_custom_domain %}
+ <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+ <i class="fa-solid fa-lock text-[10px]"></i> Upgrade to Unlock
+ </span>
+ {% endif %}
+ </div>
+ <div class="relative">
+ <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+ <i class="fa-solid fa-globe text-theme-text-disabled"></i>
+ </div>
+ <input type="text" name="custom_domain" id="custom_domain" value="{{ brand.custom_domain|default_if_none:'' }}" placeholder="e.g. shop.mybrand.com" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all {% if not brand.subscription.plan.allow_custom_domain %}opacity-60 cursor-not-allowed bg-slate-50 dark:bg-slate-800{% endif %}" {% if not brand.subscription.plan.allow_custom_domain %}readonly{% endif %}>
+ </div>
+ <p class="mt-2 text-xs text-theme-text-muted">Connect your own custom domain (e.g., www.yourstore.com). Requires DNS configuration.</p>
+ </div>
+
+ <div>
  <label for="description" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Store Description (Footer)</label>
  <textarea name="description" id="description" rows="3" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder-theme-placeholder" placeholder="A short description of your brand to show in the footer...">{{ brand.description|default_if_none:"" }}</textarea>
  </div>
@@ -153,6 +171,25 @@
  <input type="text" name="currency_symbol" id="currency_symbol" value="{{ brand.currency_symbol|default_if_none:'' }}" placeholder="e.g. Rs., $, ₹" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
  </div>
  </div>
+ 
+ <div class="border-t border-theme-border-subtle dark:border-slate-600/50/50 pt-6 mt-6">
+ <div class="flex items-center justify-between mb-2">
+ <label for="b2b_discount_percent" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide">B2B Wholesale Discount (%)</label>
+ {% if not brand.subscription.plan.allow_b2b_wholesale %}
+ <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+ <i class="fa-solid fa-lock text-[10px]"></i> Upgrade to Unlock
+ </span>
+ {% endif %}
+ </div>
+ <div class="relative">
+ <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+ <i class="fa-solid fa-percent text-theme-text-disabled"></i>
+ </div>
+ <input type="number" step="0.01" min="0" max="100" name="b2b_discount_percent" id="b2b_discount_percent" value="{{ brand.b2b_discount_percent|default_if_none:'0.00' }}" placeholder="e.g. 15.00" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all {% if not brand.subscription.plan.allow_b2b_wholesale %}opacity-60 cursor-not-allowed bg-slate-50 dark:bg-slate-800{% endif %}" {% if not brand.subscription.plan.allow_b2b_wholesale %}readonly{% endif %}>
+ </div>
+ <p class="mt-2 text-xs text-theme-text-muted">Set a global percentage discount for authenticated wholesale customers.</p>
+ </div>
+ 
  </div>
  </div>
  </div>

@@ -26,6 +26,18 @@
  </div>
 
  <!-- Form Container -->
+ {% if not has_custom_products_access %}
+ <div class="bg-theme-surface rounded-3xl p-12 shadow-sm border border-theme-border-subtle text-center">
+    <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="fa-solid fa-lock text-3xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-theme-text-primary mb-3">Custom Products are Locked</h2>
+    <p class="text-theme-text-muted max-w-lg mx-auto mb-8">Your current subscription plan does not include the ability to create custom products. Upgrade your plan to expand your catalog beyond the native Aura collection.</p>
+    <a href="{% url 'brand_billing' %}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+        View Subscription Plans
+    </a>
+ </div>
+ {% else %}
  <div class="bg-theme-surface rounded-3xl shadow-sm border border-theme-border p-8">
  <form action="{% url 'create_product' %}" method="POST" enctype="multipart/form-data" class="space-y-8">
  {% csrf_token %}
@@ -276,7 +288,7 @@
  </div>
  </form>
  </div>
-</div>
+ {% endif %}
 </div>
 {% endblock %}
 

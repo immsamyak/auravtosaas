@@ -21,8 +21,16 @@
                 <template x-for="(section, index) in sections" :key="index">
                     <div 
                         class="p-3 border rounded-lg flex items-center justify-between cursor-pointer transition-all"
-                        :class="activeSectionIndex === index ? 'border-indigo-500 bg-indigo-50/10' : 'border-theme-border hover:border-theme-border-hover bg-theme-surface'"
+                        :class="[
+                            activeSectionIndex === index ? 'border-indigo-500 bg-indigo-50/10' : 'border-theme-border hover:border-theme-border-hover bg-theme-surface',
+                            draggedSectionIndex === index ? 'opacity-50 border-dashed bg-gray-50' : ''
+                        ]"
                         @click="activeSectionIndex = index"
+                        draggable="true"
+                        @dragstart="dragStart(index, $event)"
+                        @dragover.prevent="dragOver(index, $event)"
+                        @drop="drop(index, $event)"
+                        @dragenter.prevent
                     >
                         <div class="flex items-center">
                             <i class="fa-solid fa-grip-vertical text-theme-text-muted mr-3 cursor-grab hover:text-theme-text-primary"></i>
@@ -34,8 +42,6 @@
                             <button @click.stop="toggleSection(index)" class="text-theme-text-muted hover:text-indigo-500">
                                 <i class="fa-solid" :class="section.is_active ? 'fa-eye' : 'fa-eye-slash'"></i>
                             </button>
-                            <button @click.stop="moveUp(index)" x-show="index > 0" class="text-theme-text-muted hover:text-theme-text-primary"><i class="fa-solid fa-arrow-up"></i></button>
-                            <button @click.stop="moveDown(index)" x-show="index < sections.length - 1" class="text-theme-text-muted hover:text-theme-text-primary"><i class="fa-solid fa-arrow-down"></i></button>
                         </div>
                     </div>
                 </template>
@@ -739,6 +745,7 @@ document.addEventListener('alpine:init', () => {
         isAddModalOpen: false,
         isDeleteModalOpen: false,
         searchQuery: '',
+        draggedSectionIndex: null,
         availableSectionTypes: [
             'hero', 'products', 'collections', 'categories', 'testimonials', 
             'newsletter', 'features', 'header', 'footer',
@@ -950,6 +957,37 @@ document.addEventListener('alpine:init', () => {
                 this.activeSectionIndex = index + 1;
                 this.triggerPreviewUpdate();
             }
+        },
+        
+        dragStart(index, event) {
+            this.draggedSectionIndex = index;
+            event.dataTransfer.effectAllowed = 'move';
+        },
+        
+        dragOver(index, event) {
+            event.preventDefault();
+        },
+        
+        drop(index, event) {
+            event.preventDefault();
+            if (this.draggedSectionIndex === null || this.draggedSectionIndex === index) return;
+            
+            const item = this.sections.splice(this.draggedSectionIndex, 1)[0];
+            this.sections.splice(index, 0, item);
+            
+            // Adjust active index
+            if (this.activeSectionIndex === this.draggedSectionIndex) {
+                this.activeSectionIndex = index;
+            } else if (this.activeSectionIndex !== null) {
+                if (this.draggedSectionIndex < this.activeSectionIndex && index >= this.activeSectionIndex) {
+                    this.activeSectionIndex--;
+                } else if (this.draggedSectionIndex > this.activeSectionIndex && index <= this.activeSectionIndex) {
+                    this.activeSectionIndex++;
+                }
+            }
+            
+            this.draggedSectionIndex = null;
+            this.triggerPreviewUpdate();
         },
         
         toggleSection(index) {

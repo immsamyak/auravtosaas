@@ -118,7 +118,15 @@ def create_product_view(request):
     if not brand:
         return redirect('index')
         
+    has_custom_products_access = False
+    if hasattr(brand, 'subscription') and brand.subscription and brand.subscription.plan:
+        has_custom_products_access = brand.subscription.plan.allow_custom_products
+        
     if request.method == 'POST':
+        if not has_custom_products_access:
+            messages.error(request, "Creating custom products is not available on your current plan.")
+            return redirect('manage_products')
+            
         name = request.POST.get('name', '').strip()
         description = request.POST.get('description', '').strip()
         category_id = request.POST.get('category')
@@ -226,6 +234,7 @@ def create_product_view(request):
         'product_types': product_types, 
         'sizes': sizes, 
         'colors': colors,
+        'has_custom_products_access': has_custom_products_access,
     }
     return render(request, 'catalog/create_product.html', context)
 

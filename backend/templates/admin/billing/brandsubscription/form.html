@@ -2,16 +2,23 @@
 {% block content %}
 <div class="max-w-7xl mx-auto">
  {% include "components/breadcrumb.html" with current="Brandsubscription Details" %}
- <div class="mb-8">
+ <div class="mb-8 flex items-center justify-between">
+ <div>
  <h1 class="text-4xl font-extrabold text-theme-text-primary tracking-tight">Brandsubscription <span class="text-indigo-600 font-light">Details</span></h1>
  <p class="text-theme-text-muted mt-1">Fill out the fields below.</p>
+ </div>
+ {% if form.instance.brand and form.instance.brand.logo %}
+ <img src="{{ form.instance.brand.logo.url }}" alt="{{ form.instance.brand.name }} Logo" class="h-16 w-16 object-cover rounded-full shadow-sm border border-slate-200">
+ {% endif %}
  </div>
  
  <div class="bg-theme-surface p-8 rounded-2xl shadow-sm border border-theme-border-subtle">
  <form method="post" enctype="multipart/form-data" class="space-y-6">
 
  {% csrf_token %}
- <div x-data="{ activeTab: 'general' }">
+ <div x-data="{ 
+    activeTab: new URLSearchParams(window.location.search).get('tab') || 'general' 
+ }">
  
  <!-- Tab Navigation -->
  <div class="flex border-b border-theme-border mb-8 space-x-8">
@@ -29,6 +36,13 @@
  Advanced Settings
  </button>
  {% endif %}
+
+ <!-- Subscription History Tab -->
+ <button type="button" @click="activeTab = 'history'" 
+ :class="activeTab === 'history' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-theme-text-muted hover:text-slate-700'" 
+ class="pb-3 border-b-2 font-bold px-2 transition-colors">
+ Subscription History
+ </button>
  </div>
 
  <!-- General Tab Content (Fields 1-6) -->
@@ -79,6 +93,86 @@
  </div>
  {% endif %}
  
+ <!-- Subscription History Tab Content -->
+ <div x-show="activeTab === 'history'" style="display: none;" class="w-full">
+ 
+ <!-- Date Filters -->
+ <div class="mb-6 flex flex-wrap items-end gap-4 bg-slate-50 p-4 rounded-xl border border-theme-border-subtle">
+    <div>
+        <label for="history_date_start" class="block text-xs font-bold text-theme-text-secondary mb-1">Start Date</label>
+        <input type="date" id="history_date_start" value="{{ history_date_start }}" class="block w-full bg-white border border-theme-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <div>
+        <label for="history_date_end" class="block text-xs font-bold text-theme-text-secondary mb-1">End Date</label>
+        <input type="date" id="history_date_end" value="{{ history_date_end }}" class="block w-full bg-white border border-theme-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <div class="flex gap-2">
+        <button type="button" onclick="filterHistory()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow hover:bg-indigo-700 transition">Filter</button>
+        <button type="button" onclick="clearHistoryFilters()" class="px-4 py-2 bg-white text-theme-text-secondary border border-theme-border rounded-lg text-sm font-bold shadow-sm hover:bg-slate-50 transition">Clear</button>
+    </div>
+ </div>
+
+ {% if history_list %}
+ <div class="overflow-x-auto rounded-xl border border-theme-border-subtle shadow-sm">
+ <table class="w-full text-left border-collapse bg-white">
+ <thead>
+ <tr class="bg-theme-bg border-b border-theme-border text-xs font-semibold text-theme-text-muted uppercase tracking-wider">
+ <th class="p-4 w-40">Date</th>
+ <th class="p-4">Action</th>
+ <th class="p-4">Plan Change</th>
+ <th class="p-4 text-right">Amount</th>
+ <th class="p-4">Transaction Details</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for entry in history_list %}
+ <tr class="border-b border-theme-border-subtle hover:bg-slate-50 transition-colors text-sm">
+ <td class="p-4 font-medium text-theme-text-secondary whitespace-nowrap">{{ entry.created_at|date:"M d, Y h:i a" }}</td>
+ <td class="p-4 font-bold 
+ {% if entry.action == 'upgraded' %}text-emerald-600
+ {% elif entry.action == 'downgraded' %}text-orange-500
+ {% elif entry.action == 'canceled' %}text-rose-600
+ {% else %}text-indigo-600{% endif %} capitalize">
+ {{ entry.action }}
+ </td>
+ <td class="p-4 text-theme-text-primary">
+ <div class="flex items-center gap-2">
+ <span class="text-theme-text-muted line-through">{{ entry.previous_plan_name }}</span>
+ <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+ <span class="font-bold">{{ entry.new_plan_name }}</span>
+ </div>
+ </td>
+ <td class="p-4 font-medium text-theme-text-primary text-right">${{ entry.amount_paid }}</td>
+ <td class="p-4">
+ <div class="text-theme-text-primary font-medium">{{ entry.transaction_id }}</div>
+ {% if entry.payment_details %}
+ <div class="text-xs text-theme-text-muted mt-1 flex items-center gap-1">
+ <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+ {% if entry.payment_details.brand %}
+ <span class="capitalize">{{ entry.payment_details.brand }}</span> •••• {{ entry.payment_details.last4 }}
+ {% endif %}
+ {% if entry.payment_details.wallet %}
+ (Wallet: <span class="capitalize">{{ entry.payment_details.wallet }}</span>)
+ {% endif %}
+ </div>
+ {% endif %}
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ {% else %}
+ <div class="bg-white border border-theme-border border-dashed rounded-xl p-12 text-center">
+ <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4">
+ <svg class="w-8 h-8 text-theme-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+ </div>
+ <h3 class="text-lg font-extrabold text-theme-text-primary mb-1">No Subscription History</h3>
+ <p class="text-theme-text-muted text-sm">There are no recorded subscription changes for this brand yet.</p>
+ </div>
+ {% endif %}
+ </div>
+
  </div>
 
  <div class="pt-6 border-t border-theme-border-subtle flex justify-end gap-4">
@@ -88,4 +182,38 @@
  </form>
  </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function filterHistory() {
+    const startDate = document.getElementById('history_date_start').value;
+    const endDate = document.getElementById('history_date_end').value;
+    
+    let url = new URL(window.location.href);
+    url.searchParams.set('tab', 'history');
+    
+    if (startDate) {
+        url.searchParams.set('history_date_start', startDate);
+    } else {
+        url.searchParams.delete('history_date_start');
+    }
+    
+    if (endDate) {
+        url.searchParams.set('history_date_end', endDate);
+    } else {
+        url.searchParams.delete('history_date_end');
+    }
+    
+    window.location.href = url.toString();
+}
+
+function clearHistoryFilters() {
+    let url = new URL(window.location.href);
+    url.searchParams.set('tab', 'history');
+    url.searchParams.delete('history_date_start');
+    url.searchParams.delete('history_date_end');
+    window.location.href = url.toString();
+}
+</script>
 {% endblock %}

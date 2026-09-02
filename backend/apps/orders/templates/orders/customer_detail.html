@@ -105,6 +105,15 @@
  </span>
  </td>
  </tr>
+ {% empty %}
+ <tr>
+ <td colspan="6" class="px-6 py-8 text-center">
+ <div class="flex flex-col items-center justify-center text-theme-text-disabled">
+ <i class="fa-solid fa-receipt text-4xl mb-3"></i>
+ <p class="text-sm font-medium">This customer hasn't placed any orders yet.</p>
+ </div>
+ </td>
+ </tr>
  {% endfor %}
  </tbody>
  </table>
