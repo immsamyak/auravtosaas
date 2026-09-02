@@ -79,6 +79,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.core.middleware.AuditLoggingMiddleware',
+    'apps.core.middleware.CustomDomainMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

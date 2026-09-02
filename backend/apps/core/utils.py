@@ -35,12 +35,9 @@ def get_brand_url(brand=None):
     if getattr(brand, 'custom_domain', None) and has_access:
         return f"https://{brand.custom_domain}"
     
-    # Fallback to local routing
-    # Check if we should use subdomain routing (e.g., brand_slug.domain.com)
-    protocol = "https" if "https" in base_url else "http"
-    base_domain = base_url.split("://")[-1]
-    
-    if hasattr(brand, 'slug'):
-        return f"{protocol}://{brand.slug}.{base_domain}"
-    
-    return base_url
+    # Fallback to local path-based routing
+    from django.urls import reverse
+    storefront_path = reverse('storefront', kwargs={'slug': brand.slug})
+    # Remove trailing slash from base_url to avoid double slashes
+    base_url = base_url.rstrip('/')
+    return f"{base_url}{storefront_path}"
