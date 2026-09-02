@@ -76,11 +76,14 @@
  </div>
  <div class="mt-5">
  <label class="block text-[10px] font-bold opacity-60 uppercase tracking-widest mb-2">Fit Preference</label>
- <select name="fit_preference" class="w-full bg-neutral-500/10 border border-neutral-500/30 text-current rounded-xl p-3 text-sm focus:border-current focus:ring-1 focus:ring-current transition-all" required>
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="fit_preference" class="w-full bg-neutral-500/10 border border-neutral-500/30 text-current rounded-xl p-3 text-sm focus:border-current focus:ring-1 focus:ring-current transition-all hidden" required>
  <option value="REGULAR" class="text-black">Regular Fit</option>
  <option value="TIGHT" class="text-black">Tight Fit</option>
  <option value="LOOSE" class="text-black">Loose/Oversized Fit</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  </div>
  

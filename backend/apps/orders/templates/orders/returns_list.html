@@ -74,11 +74,14 @@
  <form action="{% url 'returns_list' %}" method="POST" class="flex items-center space-x-2">
  {% csrf_token %}
  <input type="hidden" name="return_id" value="{{ ret.id }}">
- <select name="status" class="border border-theme-border rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 bg-theme-bg text-theme-text-secondary">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="status" class="border border-theme-border rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 bg-theme-bg text-theme-text-secondary hidden">
  {% for status_val, status_name in status_choices %}
  <option value="{{ status_val }}" {% if ret.status == status_val %}selected{% endif %}>{{ status_name }}</option>
  {% endfor %}
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white p-1.5 rounded-lg transition" title="Update Status">
  <i class="fa-solid fa-check text-xs"></i>
  </button>

@@ -19,6 +19,10 @@
  <div class="md:col-span-5 group">
  {% endif %}
  <a class="block overflow-hidden relative {% if forloop.counter|divisibleby:3 %}aspect-[16/9]{% else %}aspect-[3/4]{% endif %} bg-theme-bg-secondary" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.total_stock <= 0 %}
+ <div class="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-20">Out of Stock</div>
+ {% endif %}
+
  {% if product.images.first %}
  <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
  {% elif product.variants.first.image %}

@@ -124,14 +124,22 @@ def send_transactional_email(event_type, context_dict, to_emails):
 
 def dispatch_async_email(event_type, context, to_emails, brand=None):
     """
-    Fire-and-forget email dispatcher using Celery.
+    Fire-and-forget email dispatcher using Celery (or sync fallback).
     """
     if brand:
         context['brand_name'] = brand.name
         if brand.logo:
             context['brand_logo'] = brand.logo.url
     
-    from apps.core.tasks import send_email_async
-    send_email_async.delay(event_type, context, to_emails)
+    try:
+        from apps.core.tasks import send_email_async
+        send_email_async.delay(event_type, context, to_emails)
+    except (ImportError, Exception):
+        # Fallback to synchronous if celery is not configured or fails
+        try:
+            from apps.core.tasks import send_email_async
+            send_email_async(event_type, context, to_emails)
+        except Exception as e:
+            print(f"Failed to send email synchronously: {e}")
 
 

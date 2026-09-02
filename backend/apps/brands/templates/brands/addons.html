@@ -120,11 +120,14 @@
  <div id="field-custom-type" class="hidden space-y-4 mt-2">
  <div>
  <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Payment Type</label>
- <select id="input-custom-type" name="custom_payment_type" onchange="toggleCustomFields()" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" id="input-custom-type" name="custom_payment_type" onchange="toggleCustomFields()" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all hidden">
  <option value="BANK_TRANSFER">Direct Bank Transfer</option>
  <option value="QR_CODE">QR Code (Fonepay, etc.)</option>
  <option value="COD">Cash on Delivery</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <div id="field-instructions" class="hidden">
  <label class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Instructions / Details</label>

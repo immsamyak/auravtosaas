@@ -19,7 +19,7 @@ class DropdownNode(template.Node):
         content = self.nodelist.render(context)
         
         # Load the dropdown wrapper template
-        t = context.template.engine.get_template('components/dropdown.html')
+        t = context.template.engine.get_template('components/action_menu.html')
         
         # Push the inner HTML content to the context and render
         with context.push(dropdown_content=content):

@@ -42,6 +42,17 @@ class StockLevel(models.Model):
                 
         super().save(*args, **kwargs)
         
+        # Create Audit Log if quantity changed
+        if is_new or (old_quantity is not None and old_quantity != self.quantity):
+            StockAuditLog.objects.create(
+                stock_level=self,
+                previous_quantity=old_quantity if old_quantity is not None else 0,
+                new_quantity=self.quantity,
+                action_type=getattr(self, '_audit_action', 'MANUAL'),
+                reference_id=getattr(self, '_audit_reference', None),
+                notes=getattr(self, '_audit_notes', None)
+            )
+        
         # trigger notification if dropping to or below 5
         if self.quantity <= 5 and (is_new or (old_quantity is not None and old_quantity > 5)):
             from apps.core.utils import notify
@@ -71,3 +82,25 @@ class StockLevel(models.Model):
 
     def __str__(self):
         return f"{self.product_variant} @ {self.location.name}: {self.quantity}"
+
+class StockAuditLog(models.Model):
+    ACTION_CHOICES = (
+        ('MANUAL', 'Manual Adjustment'),
+        ('ORDER', 'Order Fulfillment'),
+        ('RESTOCK', 'Restock/Purchase'),
+        ('RETURN', 'Customer Return'),
+        ('POS', 'POS Sale'),
+    )
+    stock_level = models.ForeignKey(StockLevel, on_delete=models.CASCADE, related_name='audit_logs')
+    previous_quantity = models.IntegerField()
+    new_quantity = models.IntegerField()
+    action_type = models.CharField(max_length=20, choices=ACTION_CHOICES, default='MANUAL')
+    reference_id = models.CharField(max_length=100, null=True, blank=True, help_text="Order ID or Transaction ID")
+    notes = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.stock_level.product_variant} - {self.action_type}: {self.previous_quantity} -> {self.new_quantity}"

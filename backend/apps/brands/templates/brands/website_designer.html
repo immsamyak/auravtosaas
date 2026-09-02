@@ -143,18 +143,24 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image Position</label>
-                                    <select x-model="sections[activeSectionIndex].settings.image_position" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" x-model="sections[activeSectionIndex].settings.image_position" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none hidden">
                                         <option value="">Right (Default)</option>
                                         <option value="left">Left</option>
                                     </select>
+    {% include 'components/dropdown.html' %}
+</div>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Text Alignment</label>
-                                    <select x-model="sections[activeSectionIndex].settings.text_alignment" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" x-model="sections[activeSectionIndex].settings.text_alignment" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none hidden">
                                         <option value="">Left (Default)</option>
                                         <option value="center">Center</option>
                                         <option value="right">Right</option>
                                     </select>
+    {% include 'components/dropdown.html' %}
+</div>
                                 </div>
                             </div>
 
@@ -366,10 +372,13 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image Position</label>
-                                <select x-model="sections[activeSectionIndex].settings.image_position" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" x-model="sections[activeSectionIndex].settings.image_position" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none hidden">
                                     <option value="left">Left</option>
                                     <option value="right">Right</option>
                                 </select>
+    {% include 'components/dropdown.html' %}
+</div>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Heading</label>
@@ -403,11 +412,14 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Text Alignment</label>
-                                <select x-model="sections[activeSectionIndex].settings.text_alignment" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" x-model="sections[activeSectionIndex].settings.text_alignment" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none hidden">
                                     <option value="center">Center</option>
                                     <option value="left">Left</option>
                                     <option value="right">Right</option>
                                 </select>
+    {% include 'components/dropdown.html' %}
+</div>
                             </div>
                         </div>
                     </template>
@@ -539,20 +551,26 @@
                                 <div class="space-y-4 pt-4 border-t border-theme-border mt-4">
                                     <div>
                                         <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Gallery Layout</label>
-                                        <select x-model="sections[activeSectionIndex].settings.layout" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                        <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" x-model="sections[activeSectionIndex].settings.layout" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none hidden">
                                             <option value="zigzag">Masonry Layout</option>
                                             <option value="4_column">Grid Layout</option>
                                             <option value="bento">Bento Grid</option>
                                             <option value="carousel">Fullscreen Carousel</option>
                                         </select>
+    {% include 'components/dropdown.html' %}
+</div>
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold text-theme-text-muted uppercase mb-2">Image Fit</label>
-                                        <select x-model="sections[activeSectionIndex].settings.image_fit" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                        <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" x-model="sections[activeSectionIndex].settings.image_fit" @change="triggerPreviewUpdate" class="w-full px-3 py-2 bg-theme-bg border border-theme-border rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none hidden">
                                             <option value="cover">Crop to Fill (Default)</option>
                                             <option value="contain">Fit (Show Entire Image)</option>
                                             <option value="fill">Stretch</option>
                                         </select>
+    {% include 'components/dropdown.html' %}
+</div>
                                     </div>
                                 </div>
                             </template>

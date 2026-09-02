@@ -87,28 +87,35 @@
  <label for="category" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide">Category</label>
  <button type="button" onclick="openQuickCreate('category')" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold"><i class="fa-solid fa-plus"></i> New</button>
  </div>
- <select id="category" name="category" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" id="category" name="category" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer hidden">
  {% for cat in categories %}
  <option value="{{ cat.id }}" {% if product.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
  {% endfor %}
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <div>
  <div class="flex justify-between items-center mb-1">
  <label for="product_type" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide">Product Type</label>
  <button type="button" onclick="openQuickCreate('product_type')" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold"><i class="fa-solid fa-plus"></i> New</button>
  </div>
- <select id="product_type" name="product_type" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" id="product_type" name="product_type" required class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer hidden">
  {% for pt in product_types %}
  <option value="{{ pt.id }}" {% if product.product_type_id == pt.id %}selected{% endif %}>{{ pt.name }}</option>
  {% endfor %}
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <div>
  <div class="flex justify-between items-center mb-1">
  <label for="occasion" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide">Occasion</label>
  </div>
- <select id="occasion" name="occasion" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" id="occasion" name="occasion" class="block w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-3 text-sm text-theme-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer hidden">
  <option value="" {% if not product.occasion %}selected{% endif %}>None / Any</option>
  <option value="CASUAL" {% if product.occasion == "CASUAL" %}selected{% endif %}>Casual</option>
  <option value="FORMAL" {% if product.occasion == "FORMAL" %}selected{% endif %}>Formal</option>
@@ -118,6 +125,8 @@
  <option value="TRAVEL" {% if product.occasion == "TRAVEL" %}selected{% endif %}>Travel</option>
  <option value="ACTIVEWEAR" {% if product.occasion == "ACTIVEWEAR" %}selected{% endif %}>Activewear</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  
  <div class="border-t border-theme-border-subtle pt-6 mt-6">

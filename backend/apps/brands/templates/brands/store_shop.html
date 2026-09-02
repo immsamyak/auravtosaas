@@ -106,8 +106,13 @@
  <div class="w-full h-full flex items-center justify-center text-theme-text-disabled">No Image</div>
  {% endif %}
  
+ {% if product.total_stock <= 0 %}
+ <div class="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-10">
+ Out of Stock
+ </div>
+ {% endif %}
  {% if product.is_vto_ready %}
- <div class="absolute top-3 right-3 bg-theme-surface px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+ <div class="absolute top-3 right-3 bg-theme-surface px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-10">
  VTO Ready
  </div>
  {% endif %}

@@ -466,5 +466,56 @@
  
  <script src="{% static 'js/app.js' %}?v=2.0"></script>
 </div>
+<script>
+function customSelect() {
+    return {
+        open: false,
+        options: [],
+        selectedValue: '',
+        selectedLabel: '',
+        init() {
+            this.$nextTick(() => {
+                const select = this.$refs.nativeSelect;
+                if (!select) return;
+                
+                // Parse options from native select
+                Array.from(select.options).forEach(opt => {
+                    this.options.push({
+                        value: opt.value,
+                        label: opt.text,
+                        selected: opt.selected
+                    });
+                    if (opt.selected || (!this.selectedValue && !opt.disabled)) {
+                        this.selectedValue = opt.value;
+                        this.selectedLabel = opt.text;
+                    }
+                });
+                
+                // Sync initial state back to native select
+                select.value = this.selectedValue;
+                
+                // Watch for external changes to native select
+                select.addEventListener('change', () => {
+                    this.selectedValue = select.value;
+                    let opt = this.options.find(o => o.value === select.value);
+                    if (opt) this.selectedLabel = opt.label;
+                });
+            });
+        },
+        selectOption(val) {
+            this.selectedValue = val;
+            let opt = this.options.find(o => o.value === val);
+            if (opt) this.selectedLabel = opt.label;
+            
+            // Dispatch change event to native select
+            if (this.$refs.nativeSelect) {
+                this.$refs.nativeSelect.value = val;
+                this.$refs.nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            this.open = false;
+        }
+    }
+}
+</script>
 </body>
 </html>

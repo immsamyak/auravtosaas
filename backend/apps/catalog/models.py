@@ -106,6 +106,10 @@ class Product(models.Model):
             self.slug = unique_slug
         super().save(*args, **kwargs)
 
+    @property
+    def total_stock(self):
+        return sum(v.total_stock for v in self.variants.all())
+
     def clean(self):
         super().clean()
         if self.category and self.category.brand and self.brand != self.category.brand:

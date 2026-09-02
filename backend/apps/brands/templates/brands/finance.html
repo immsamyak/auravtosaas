@@ -35,16 +35,20 @@
  <form method="GET" class="mb-8 bg-theme-surface rounded-2xl shadow-sm border border-theme-border dark:border-slate-600/50/50 p-4 flex flex-wrap items-end gap-4">
  <div class="flex-1 min-w-[140px]">
  <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Time Range</label>
- <select name="range" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="range" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="7" {% if filter_range == '7' %}selected{% endif %}>Last 7 Days</option>
  <option value="30" {% if filter_range == '30' %}selected{% endif %}>Last 30 Days</option>
  <option value="90" {% if filter_range == '90' %}selected{% endif %}>Last 90 Days</option>
  <option value="365" {% if filter_range == '365' %}selected{% endif %}>This Year</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <div class="flex-1 min-w-[140px]">
  <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Order Status</label>
- <select name="status" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="status" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="">All Statuses</option>
  <option value="PENDING" {% if filter_status == 'PENDING' %}selected{% endif %}>Pending</option>
  <option value="PAID" {% if filter_status == 'PAID' %}selected{% endif %}>Paid</option>
@@ -52,15 +56,20 @@
  <option value="DELIVERED" {% if filter_status == 'DELIVERED' %}selected{% endif %}>Delivered</option>
  <option value="CANCELLED" {% if filter_status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <div class="flex-1 min-w-[140px]">
  <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Payment Method</label>
- <select name="payment" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="payment" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="">All Methods</option>
  {% for provider in provider_choices %}
  <option value="{{ provider.code }}" {% if filter_payment == provider.code %}selected{% endif %}>{{ provider.label }}</option>
  {% endfor %}
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
  <i class="fa-solid fa-filter mr-2"></i> Apply

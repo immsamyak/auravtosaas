@@ -400,7 +400,8 @@
  <input type="hidden" name="order_id" value="{{ order.id }}">
  <input type="hidden" name="action" value="update_status">
  <div class="flex gap-2">
- <select name="new_status" x-model="selectedStatus" class="block w-full rounded-xl border-theme-input-border py-2.5 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="new_status" x-model="selectedStatus" class="block w-full rounded-xl border-theme-input-border py-2.5 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="PENDING" {% if order.status == 'PENDING' %}selected{% endif %}>Pending</option>
  <option value="PAID" {% if order.status == 'PAID' %}selected{% endif %}>Paid</option>
  <option value="PROCESSING" {% if order.status == 'PROCESSING' %}selected{% endif %}>Processing</option>
@@ -409,6 +410,8 @@
  <option value="DELIVERED" {% if order.status == 'DELIVERED' %}selected{% endif %}>Delivered</option>
  <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  <button type="submit" class="inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition">
  Update
  </button>
@@ -434,12 +437,15 @@
  {% csrf_token %}
  <input type="hidden" name="order_id" value="{{ order.id }}">
  <input type="hidden" name="action" value="dispatch_order">
- <select name="shipping_provider" required class="block w-full rounded-xl border-theme-input-border py-2.5 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="shipping_provider" required class="block w-full rounded-xl border-theme-input-border py-2.5 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="">Select shipping partner...</option>
  {% for sm in active_shipping_methods %}
  <option value="{{ sm.integration.provider_code }}">{{ sm.integration.name }}</option>
  {% endfor %}
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition">
  <i class="fa-solid fa-truck-fast mr-2"></i> Dispatch Order
  </button>

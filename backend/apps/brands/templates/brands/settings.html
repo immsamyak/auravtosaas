@@ -184,10 +184,13 @@
  <label for="logo_alignment" class="block text-xs font-bold text-theme-text-secondary uppercase tracking-wide mb-2">Logo Alignment</label>
  <p class="text-sm text-theme-text-muted mb-4">Choose how your logo is positioned in your storefront header.</p>
  <div class="relative max-w-sm">
- <select name="logo_alignment" id="logo_alignment" class="block w-full rounded-xl border-theme-border dark:border-slate-600/50/50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-4 py-3 bg-theme-bg text-theme-text-secondary font-medium cursor-pointer appearance-none">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="logo_alignment" id="logo_alignment" class="block w-full rounded-xl border-theme-border dark:border-slate-600/50/50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-4 py-3 bg-theme-bg text-theme-text-secondary font-medium cursor-pointer appearance-none hidden">
  <option value="left" {% if brand.logo_alignment == 'left' %}selected{% endif %}>Left Aligned</option>
  <option value="center" {% if brand.logo_alignment == 'center' %}selected{% endif %}>Center Aligned</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-theme-text-muted">
  <i class="fa-solid fa-chevron-down"></i>
  </div>
@@ -405,10 +408,13 @@
  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
  <i class="fa-solid fa-print text-theme-text-disabled w-5 text-center"></i>
  </div>
- <select name="pos_thermal_paper_size" id="pos_thermal_paper_size" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="pos_thermal_paper_size" id="pos_thermal_paper_size" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer hidden">
  <option value="58mm" {% if brand.settings.pos_thermal_paper_size == '58mm' %}selected{% endif %}>58mm (Compact Roll)</option>
  <option value="80mm" {% if brand.settings.pos_thermal_paper_size == '80mm' or not brand.settings.pos_thermal_paper_size %}selected{% endif %}>80mm (Standard Roll)</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
  <i class="fa-solid fa-chevron-down text-theme-text-disabled"></i>
  </div>
@@ -427,13 +433,16 @@
  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
  <i class="fa-solid fa-file-invoice text-theme-text-disabled w-5 text-center"></i>
  </div>
- <select name="tax_id_type" id="tax_id_type" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="tax_id_type" id="tax_id_type" class="block w-full bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none cursor-pointer hidden">
  <option value="" {% if not brand.settings.tax_id_type %}selected{% endif %}>None</option>
  <option value="PAN" {% if brand.settings.tax_id_type == 'PAN' %}selected{% endif %}>PAN</option>
  <option value="VAT" {% if brand.settings.tax_id_type == 'VAT' %}selected{% endif %}>VAT</option>
  <option value="GST" {% if brand.settings.tax_id_type == 'GST' %}selected{% endif %}>GST</option>
  <option value="ABN" {% if brand.settings.tax_id_type == 'ABN' %}selected{% endif %}>ABN</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
  <i class="fa-solid fa-chevron-down text-theme-text-disabled"></i>
  </div>

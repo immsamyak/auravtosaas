@@ -50,11 +50,14 @@
  
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-2">Target Audience <span class="text-rose-500">*</span></label>
- <select name="target_audience" required class="w-full px-4 py-3 bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="target_audience" required class="w-full px-4 py-3 bg-theme-bg border border-theme-border dark:border-slate-600/50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none hidden">
  <option value="SUBSCRIBERS" {% if campaign.target_audience == 'SUBSCRIBERS' %}selected{% endif %}>Newsletter Subscribers</option>
  <option value="CUSTOMERS" {% if campaign.target_audience == 'CUSTOMERS' %}selected{% endif %}>Registered Customers</option>
  <option value="BOTH" {% if campaign.target_audience == 'BOTH' %}selected{% endif %}>Everyone (Subscribers & Customers)</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  </div>
  

@@ -269,7 +269,9 @@ def storefront_checkout_view(request, brand_slug):
             cart_items = []
             
         if not cart_items:
-            return HttpResponse("Cart is empty", status=400)
+            from django.contrib import messages
+            messages.error(request, "Your cart is empty.")
+            return redirect('storefront_checkout', brand_slug=brand.slug)
             
         # Validate variants and calculate base total
         total_items_price = 0
@@ -278,6 +280,13 @@ def storefront_checkout_view(request, brand_slug):
             try:
                 item_variant = ProductVariant.objects.get(id=item.get('id'), product__brand=brand)
                 qty = int(item.get('quantity', 1))
+                
+                # STOCK VALIDATION
+                if item_variant.total_stock < qty:
+                    from django.contrib import messages
+                    messages.error(request, f"Insufficient stock for {item_variant.product.name} ({item_variant.size.code}). Only {item_variant.total_stock} left.")
+                    return redirect('storefront_checkout', brand_slug=brand.slug)
+                    
                 total_items_price += item_variant.product.price * qty
                 validated_items.append({
                     'variant': item_variant,
@@ -288,7 +297,9 @@ def storefront_checkout_view(request, brand_slug):
                 continue
                 
         if not validated_items:
-            return HttpResponse("Invalid items in cart", status=400)
+            from django.contrib import messages
+            messages.error(request, "Invalid items in cart.")
+            return redirect('storefront_checkout', brand_slug=brand.slug)
 
         # Calculate shipping cost from city
         shipping_cost = 0
@@ -383,10 +394,21 @@ def storefront_checkout_view(request, brand_slug):
                 price_at_purchase=item['price']
             )
             
-            stock = StockLevel.objects.filter(product_variant=v, location__brand=brand).first()
-            if stock and stock.quantity >= q:
-                stock.quantity -= q
+            # Decrement stock and audit log
+            # We decrement from the first location that has enough stock, or split it if necessary.
+            # For simplicity, we just decrement from the primary location with stock.
+            remaining_q = q
+            stocks = StockLevel.objects.filter(product_variant=v, location__brand=brand, quantity__gt=0).order_by('-quantity')
+            for stock in stocks:
+                if remaining_q <= 0:
+                    break
+                deduct = min(stock.quantity, remaining_q)
+                stock._audit_action = 'ORDER'
+                stock._audit_reference = str(order.id)
+                stock._audit_notes = f"Order Fulfillment for {order.customer_name}"
+                stock.quantity -= deduct
                 stock.save()
+                remaining_q -= deduct
                 
                 if stock.quantity < 5 and brand.owner:
                     notify(
@@ -457,12 +479,17 @@ def storefront_checkout_view(request, brand_slug):
             return redirect('order_success', order_id=order.id)
     theme_base = f"storefront/{brand.theme.template_folder}/base.html" if brand.theme and brand.theme.is_active else "brands/store_base.html"
     template_name = f"storefront/{brand.theme.template_folder}/checkout.html" if brand.theme and brand.theme.is_active else 'orders/checkout.html'
-            
+    
+    import json
+    stock_dict = {str(v.id): v.total_stock for v in ProductVariant.objects.filter(product__brand=brand)}
+    stock_json = json.dumps(stock_dict)
+
     return render(request, template_name, {
         'brand': brand,
         'payment_methods': payment_methods,
         'shipping_methods': shipping_methods,
         'locations_json': locations_json,
+        'stock_json': stock_json,
         'theme_base': theme_base
     })
 

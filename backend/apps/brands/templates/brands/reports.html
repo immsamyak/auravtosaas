@@ -87,13 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
  <input type="hidden" name="tab" value="{{ filter_tab }}">
  <div class="flex-1 min-w-[200px]">
  <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Time Range</label>
- <select name="range" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="range" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="7" {% if filter_range == '7' %}selected{% endif %}>Last 7 Days</option>
  <option value="30" {% if filter_range == '30' %}selected{% endif %}>Last 30 Days</option>
  <option value="90" {% if filter_range == '90' %}selected{% endif %}>Last 90 Days</option>
  <option value="365" {% if filter_range == '365' %}selected{% endif %}>Year to Date</option>
  <option value="all" {% if filter_range == 'all' %}selected{% endif %}>All Time</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
  <i class="fa-solid fa-filter mr-2"></i> Update View

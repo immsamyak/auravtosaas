@@ -82,12 +82,15 @@
  </div>
  <div class="min-w-[160px]">
  <label class="block text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Category</label>
- <select name="category" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="category" class="block w-full rounded-lg border-theme-input-border py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500 hidden">
  <option value="">All Categories</option>
  {% for cat in categories %}
  <option value="{{ cat.id }}" {% if filter_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
  {% endfor %}
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
  <button type="submit" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm">
  <i class="fa-solid fa-filter mr-2"></i> Filter

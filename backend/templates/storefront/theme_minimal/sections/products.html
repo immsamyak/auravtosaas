@@ -7,6 +7,10 @@
 {% for product in featured_products|slice:limit %}
  <div class="group">
 <a class="block aspect-[3/4] bg-stone-100 mb-6 overflow-hidden relative" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.total_stock <= 0 %}
+ <div class="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-20">Out of Stock</div>
+ {% endif %}
+
  {% if product.images.first %}
  <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
  {% elif product.variants.first.image %}
@@ -18,7 +22,11 @@
  {% endif %}
  </a>
 <div class="flex justify-between items-center">
-<a class="text-lg font-light hover:text-stone-500 transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a>
+<a class="text-lg font-light hover:text-stone-500 transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.total_stock <= 0 %}
+ <div class="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-20">Out of Stock</div>
+ {% endif %}
+{{ product.name }}</a>
 <span class="text-sm font-medium">{% if product.sale_price %}
     <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
     <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>

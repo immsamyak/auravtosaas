@@ -52,10 +52,13 @@
  <!-- Discount -->
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-2">Discount Type <span class="text-rose-500">*</span></label>
- <select name="discount_type" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="discount_type" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm hidden">
  <option value="PERCENTAGE" {% if coupon and coupon.discount_type == 'PERCENTAGE' %}selected{% endif %}>Percentage (%)</option>
  <option value="FIXED_AMOUNT" {% if coupon and coupon.discount_type == 'FIXED_AMOUNT' %}selected{% endif %}>Fixed Amount ($)</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
 
  <div>
@@ -66,10 +69,13 @@
  <!-- Conditions -->
  <div>
  <label class="block text-sm font-bold text-theme-text-secondary mb-2">Condition <span class="text-rose-500">*</span></label>
- <select name="condition" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+ <div x-data="customSelect()" class="relative">
+    <select x-ref="nativeSelect" name="condition" class="block w-full rounded-xl border-theme-input-border py-2.5 px-4 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm hidden">
  <option value="NONE" {% if coupon and coupon.condition == 'NONE' %}selected{% endif %}>No restrictions</option>
  <option value="MINIMUM_PURCHASE" {% if coupon and coupon.condition == 'MINIMUM_PURCHASE' %}selected{% endif %}>Minimum Purchase Amount</option>
  </select>
+    {% include 'components/dropdown.html' %}
+</div>
  </div>
 
  <div>

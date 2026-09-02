@@ -1,9 +1,19 @@
-{# Usage Example for {% dropdown %} is in the Walkthrough artifact #}
-<div class="relative" x-data="{ open: false }" @click.stop>
- <button @click="open = !open" @click.away="open = false" type="button" class="text-theme-text-disabled hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-theme-surface-hover focus:outline-none">
- <i class="fa-solid fa-ellipsis-vertical w-4 text-center"></i>
- </button>
- <div x-show="open" x-transition class="absolute right-0 mt-2 w-48 bg-theme-surface rounded-xl shadow-lg border border-theme-border-subtle py-1 z-50" x-cloak>
- {{ dropdown_content|safe }}
- </div>
+<!-- Alpine Custom Select UI -->
+<!-- Requires the parent to be: <div x-data="customSelect()" class="relative"> -->
+<!-- Requires the native select to have: x-ref="nativeSelect" class="hidden" -->
+<button type="button" @click="open = !open" @click.outside="open = false" class="relative w-full bg-theme-bg text-theme-text-primary border border-theme-input-border rounded-xl px-4 py-3 shadow-sm text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors hover:border-indigo-400">
+    <span class="block truncate font-bold text-sm" x-text="selectedLabel || 'Select an option'"></span>
+    <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+        <i class="fa-solid fa-chevron-down text-theme-text-muted transition-transform duration-200" :class="{'rotate-180': open}"></i>
+    </span>
+</button>
+<div x-show="open" x-transition.opacity.duration.200ms class="absolute z-50 mt-2 w-full bg-theme-surface shadow-xl border border-theme-border rounded-xl py-2 text-base overflow-auto sm:text-sm max-h-60" style="display: none;">
+    <template x-for="opt in options" :key="opt.value">
+        <div @click="selectOption(opt.value)" class="text-theme-text-primary cursor-pointer select-none relative py-2.5 pl-4 pr-9 hover:bg-theme-bg transition-colors font-bold group">
+            <span x-text="opt.label"></span>
+            <span x-show="selectedValue === opt.value" class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
+                <i class="fa-solid fa-check"></i>
+            </span>
+        </div>
+    </template>
 </div>

@@ -16,6 +16,10 @@
  <div class="group cursor-pointer">
 <div class="aspect-[2/3] overflow-hidden bg-theme-bg-secondary mb-6 relative">
 <a class="block w-full h-full" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.total_stock <= 0 %}
+ <div class="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-20">Out of Stock</div>
+ {% endif %}
+
  {% if product.images.first %}
  <img alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" src="{{ product.images.first.image.url }}" onerror="this.onerror=null; this.src='{% if brand.logo %}{{ brand.logo.url }}{% else %}https://placehold.co/400x600/e2e8f0/64748b?text=No+Image{% endif %}';"/>
  {% elif product.variants.first.image %}
@@ -32,7 +36,11 @@
 </div>
 </div>
 <div class="text-center">
-<h3 class="font-serif text-lg mb-1"><a class="hover:text-[#c5a059] transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">{{ product.name }}</a></h3>
+<h3 class="font-serif text-lg mb-1"><a class="hover:text-[#c5a059] transition-colors" href="{% url 'store_product_detail' brand.slug product.slug %}">
+ {% if product.total_stock <= 0 %}
+ <div class="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm z-20">Out of Stock</div>
+ {% endif %}
+{{ product.name }}</a></h3>
 <p class="text-sm font-light text-theme-text-secondary">{% if product.sale_price %}
     <span class="text-gray-400 line-through mr-2 opacity-50">{{ brand.currency_symbol|default:'$' }}{{ product.price }}</span>
     <span class="text-red-500 font-bold">{{ brand.currency_symbol|default:'$' }}{{ product.sale_price }}</span>

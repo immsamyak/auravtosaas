@@ -111,19 +111,30 @@
                         
                         <button type="button" 
                                 @click="$store.cart.add({id: currentVariant ? currentVariant.id : '{{product.id}}', name: '{{product.name|escapejs}}', price: {{product.price}}, variant_name: (currentVariant ? (currentVariant.color_name + ' / ' + currentVariant.size_code) : ''), image: currentImageUrl}); window.showToast('Added to cart', 'success');" 
-                                :disabled="isTryOnDisabled" 
-                                :class="isTryOnDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-70'" 
+                                :disabled="!currentVariant || currentVariant.stock <= 0" 
+                                :class="(!currentVariant || currentVariant.stock <= 0) ? 'opacity-50 cursor-not-allowed bg-theme-bg' : 'hover:opacity-70'" 
                                 class="flex-1 border border-current bg-transparent py-4 px-8 flex items-center justify-center text-sm font-bold uppercase tracking-widest transition-opacity">
-                            <i class="fa-solid fa-cart-plus mr-2"></i> Add to Cart
+                            <template x-if="currentVariant && currentVariant.stock > 0">
+                                <span><i class="fa-solid fa-cart-plus mr-2"></i> Add to Cart</span>
+                            </template>
+                            <template x-if="!currentVariant || currentVariant.stock <= 0">
+                                <span><i class="fa-solid fa-box-open mr-2"></i> Out of Stock</span>
+                            </template>
                         </button>
                         
                         {% if feature_flags.virtual_try_on %}
-                            <a :href="isTryOnDisabled ? '#' : tryOnUrl" 
-                               :class="isTryOnDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-70'" 
-                               class="flex-1 border border-current bg-current text-white py-4 px-8 flex items-center justify-center text-sm font-bold uppercase tracking-widest transition-opacity relative group overflow-hidden">
-                                <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none"></span>
-                                <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Try On Virtually</span>
-                            </a>
+                            {% if product.is_vto_ready %}
+                                <a :href="isTryOnDisabled ? '#' : tryOnUrl" 
+                                   :class="isTryOnDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-70'" 
+                                   class="flex-1 border border-current bg-current text-white py-4 px-8 flex items-center justify-center text-sm font-bold uppercase tracking-widest transition-opacity relative group overflow-hidden">
+                                    <span class="absolute inset-0 w-full h-full bg-theme-surface mix-blend-difference pointer-events-none"></span>
+                                    <span class="relative z-10 mix-blend-exclusion text-white flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Try On Virtually</span>
+                                </a>
+                            {% else %}
+                                <button type="button" disabled class="flex-1 border border-current opacity-50 bg-transparent py-4 px-8 flex items-center justify-center text-sm font-bold uppercase tracking-widest cursor-not-allowed">
+                                    <i class="fa-solid fa-ban mr-2"></i> VTO Not Available
+                                </button>
+                            {% endif %}
                         {% else %}
                             <button type="button" disabled class="flex-1 border border-current opacity-50 bg-transparent py-4 px-8 flex items-center justify-center text-sm font-bold uppercase tracking-widest cursor-not-allowed">
                                 <i class="fa-solid fa-wrench mr-2"></i> Maintenance
