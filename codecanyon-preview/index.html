@@ -1838,6 +1838,59 @@
         </div>
     </section>
 
+    <!-- CUSTOM DOMAINS & DEPLOYMENT -->
+    <section class="py-24 bg-gradient-to-br from-slate-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black text-primary tracking-tight mb-6">Custom Domains &amp; Cloud Deployment</h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto">Every brand gets their own white-label storefront URL out-of-the-box. Deploy anywhere with production-ready Docker and Traefik configuration.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white p-10 rounded-3xl border border-slate-200 shadow-lg">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Wildcard Subdomains</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Each brand automatically gets a subdomain like <code class="bg-slate-100 px-2 py-1 rounded text-sm text-accent">brandname.yourdomain.com</code>. No manual DNS configuration needed per brand.</p>
+                    <div class="bg-slate-900 p-5 rounded-xl font-mono text-sm text-slate-300 border border-slate-700">
+                        <div class="text-slate-500 mb-2"># DNS Configuration</div>
+                        <div>Type: A &nbsp;&nbsp; Name: * &nbsp;&nbsp; Value: SERVER_IP</div>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-3xl border border-slate-200 shadow-lg">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Fully Custom Domains</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">Brands on premium plans can connect their own domain like <code class="bg-slate-100 px-2 py-1 rounded text-sm text-accent">try.mybrand.com</code>. Just add a CNAME record — Aura handles the rest.</p>
+                    <div class="bg-slate-900 p-5 rounded-xl font-mono text-sm text-slate-300 border border-slate-700">
+                        <div class="text-slate-500 mb-2"># Brand's DNS</div>
+                        <div>CNAME: try → aura.yourdomain.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl mb-3">🐳</div>
+                    <h4 class="font-bold text-lg text-primary mb-2">Docker Ready</h4>
+                    <p class="text-sm text-slate-500">Production Dockerfile included with multi-stage build for PyTorch, OpenCV &amp; ML dependencies.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl mb-3">🌊</div>
+                    <h4 class="font-bold text-lg text-primary mb-2">DigitalOcean / VPS</h4>
+                    <p class="text-sm text-slate-500">Deploy on any $24/mo DigitalOcean Droplet with Coolify for a Heroku-like PaaS experience.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="text-3xl mb-3">🔒</div>
+                    <h4 class="font-bold text-lg text-primary mb-2">Auto SSL</h4>
+                    <p class="text-sm text-slate-500">Automatic Let's Encrypt SSL certificate provisioning via Traefik for all domains &amp; subdomains.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- DEMO ACCESS -->
     <section class="py-24 bg-primary text-white" id="demo">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
