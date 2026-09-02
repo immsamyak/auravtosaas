@@ -9,6 +9,14 @@ Aura is a complete out-of-the-box marketplace architecture where:
 - **Brand Owners** operate their own isolated dashboards, managing their product catalog, variations (colors/sizes), and orders.
 - **Customers** browse products, generate Virtual Try-On previews using their personal fit profiles, and purchase apparel.
 
+## Documentation Overview
+
+- [Project Plan](./PROJECT_PLAN.md)
+- [UML Diagram](./UML_DIAGRAM.md)
+- [System Architecture](./SYSTEM_ARCHITECTURE.md)
+- [User Manual](./USER_MANUAL.md)
+- [Application Installation Manual](./APPLICATION_INSTALLATION_MANUAL.md)
+
 ## Key Features
 
 - **Multi-Role Architecture:** Admin, Brand Owner, and Customer isolation.
