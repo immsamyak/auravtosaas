@@ -26,6 +26,13 @@ AURA is engineered with a strict **Role-Based Access Control (RBAC)** architectu
 2. **Brand Owners (Tenants):** Operate their own isolated dashboards. They can manage their custom product catalog, upload high-resolution AI masks for garments, track orders, and customize their digital storefront themes.
 3. **Customers:** Browse tenant storefronts, generate highly accurate Virtual Try-On previews using their personal fit passports (height/weight), and seamlessly purchase apparel through an encrypted checkout flow.
 
+## 🔑 Demo Credentials
+
+To evaluate the platform, use the following pre-configured credentials:
+
+- **Admin Login:** `admin` / `admin`
+- **Brand Owner Login:** `alvy` / `12345678`
+
 ## 🚀 Key Features
 
 - **Multi-Tenant Isolation:** Complete data separation for individual brands, preventing any cross-tenant data leaks (IDOR prevention).
@@ -96,5 +103,5 @@ AURA is container-ready. For production environments, it is recommended to use D
 
 ```bash
 docker build -t aura-app .
-docker run -d -p 8000:8000 --env-file .env aura-app
+docker run -d -p 8000:80 --env-file backend/.env -e DATABASE_URL="postgres://host.docker.internal:5432/aura_db" aura-app
 ```
