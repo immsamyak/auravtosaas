@@ -13,4 +13,10 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
 
+try:
+    from core.licensing import verify_license
+    verify_license()
+except ImportError:
+    pass
+
 application = get_wsgi_application()

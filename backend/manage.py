@@ -15,6 +15,13 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+        
+    try:
+        from core.licensing import verify_license
+        verify_license()
+    except ImportError:
+        pass # Handle case where core package is missing during initial setup
+        
     execute_from_command_line(sys.argv)
 
 
