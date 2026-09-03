@@ -8,13 +8,8 @@ def get_dynamic_email_backend():
     settings = GlobalSettings.get_settings()
     
     if settings.email_provider == 'resend':
-        if not settings.resend_api_key:
-            raise ValueError("Resend API Key is missing in Global Settings.")
-        from anymail.backends.resend import EmailBackend as ResendBackend
-        return ResendBackend(
-            api_key=settings.resend_api_key,
-            fail_silently=False,
-        )
+        # Handled natively in the send_ functions to enforce the Python SDK
+        return None
     elif settings.email_provider == 'sendgrid':
         if not settings.sendgrid_api_key:
             raise ValueError("SendGrid API Key is missing in Global Settings.")
@@ -68,7 +63,9 @@ def get_dynamic_email_backend():
 
 def send_dynamic_email(subject, template_name, context, to_emails):
     settings = GlobalSettings.get_settings()
-    from_email = f'"{settings.site_name}" <{settings.support_email}>'
+    
+    raw_sender = settings.email_sender_address or settings.support_email or settings.smtp_username
+    from_email = f'{settings.site_name} <{raw_sender}>' if raw_sender and '<' not in raw_sender else raw_sender
     
     # Inject platform settings into email context
     context['platform_settings'] = settings
@@ -76,11 +73,24 @@ def send_dynamic_email(subject, template_name, context, to_emails):
     html_content = render_to_string(template_name, context)
     text_content = strip_tags(html_content)
     
-    backend = get_dynamic_email_backend()
-    
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    if settings.email_provider == 'resend':
+        import os
+        import resend
+        os.environ["RESEND_API_KEY"] = settings.resend_api_key
+        resend.api_key = os.environ["RESEND_API_KEY"]
+        
+        params: resend.Emails.SendParams = {
+            "from": from_email,
+            "to": to_emails if isinstance(to_emails, list) else [to_emails],
+            "subject": subject,
+            "html": html_content,
+        }
+        resend.Emails.send(params)
+    else:
+        backend = get_dynamic_email_backend()
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 
 from django.template import Template, Context
@@ -105,12 +115,27 @@ def send_transactional_email(event_type, context_dict, to_emails):
         final_html = render_to_string('emails/custom_campaign.html', wrapper_context)
         text_content = strip_tags(final_html)
         
-        backend = get_dynamic_email_backend()
-        from_email = f'"{settings.site_name}" <{settings.support_email}>'
+        raw_sender = settings.email_sender_address or settings.support_email or settings.smtp_username
+        from_email = f'{settings.site_name} <{raw_sender}>' if raw_sender and '<' not in raw_sender else raw_sender
         
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
-        msg.attach_alternative(final_html, "text/html")
-        msg.send()
+        if settings.email_provider == 'resend':
+            import os
+            import resend
+            os.environ["RESEND_API_KEY"] = settings.resend_api_key
+            resend.api_key = os.environ["RESEND_API_KEY"]
+            
+            params: resend.Emails.SendParams = {
+                "from": from_email,
+                "to": to_emails if isinstance(to_emails, list) else [to_emails],
+                "subject": subject,
+                "html": final_html,
+            }
+            resend.Emails.send(params)
+        else:
+            backend = get_dynamic_email_backend()
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
+            msg.attach_alternative(final_html, "text/html")
+            msg.send()
         return subject
         
     except SystemEmailTemplate.DoesNotExist:
