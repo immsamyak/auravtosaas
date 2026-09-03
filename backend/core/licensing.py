@@ -6,6 +6,7 @@ import urllib.request
 import urllib.error
 import json
 import uuid
+import base64
 
 def verify_license():
     # If we are just collecting static files during Docker build, skip license check
@@ -36,7 +37,9 @@ def verify_license():
 
     # API Endpoint
     # We now strictly ping the live Hostinger License Validation Server
-    default_url = "https://license.alvicsxinfo.tech/api/verify"
+    # URL is obfuscated to prevent easy string scraping
+    _enc_url = b"aHR0cHM6Ly9saWNlbnNlLmFsdmljc3hpbmZvLnRlY2gvYXBpL3ZlcmlmeQ=="
+    default_url = base64.b64decode(_enc_url).decode('utf-8')
     api_url = os.environ.get('LICENSE_SERVER_URL', default_url)
     
     data = json.dumps({
