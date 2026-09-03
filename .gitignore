@@ -72,3 +72,15 @@ backend/scratch/
 *.pt
 *.pth
 *.safetensors
+vtos/
+hf_config.json
+
+# Previews, Assets, and Documentation (Not Source Code)
+codecanyon-preview/
+
+# Local Logs, Scripts, and Scratchpads
+scratch/
+deploy_logs.txt
+skills-lock.json
+wait_and_close.sh
+passenger_wsgi.py
