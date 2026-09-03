@@ -44,7 +44,10 @@ def verify_license():
         "machineInfo": machine_info
     }).encode('utf-8')
 
-    req = urllib.request.Request(api_url, data=data, headers={'Content-Type': 'application/json'})
+    req = urllib.request.Request(api_url, data=data, headers={
+        'Content-Type': 'application/json',
+        'User-Agent': 'Aura-Licensing-Client/1.0'
+    })
 
     try:
         with urllib.request.urlopen(req, timeout=10) as response:
