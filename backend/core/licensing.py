@@ -21,7 +21,7 @@ def verify_license():
     except ImportError:
         pass
 
-    license_key = os.environ.get('AURA_LICENSE_KEY')
+    license_key = os.environ.get('AURA_LICENSE_KEY', '').strip()
     if not license_key:
         print("\n\033[91m[CRITICAL ERROR] AURA_LICENSE_KEY is missing from environment variables!\033[0m")
         print("Please purchase a valid license from CodeCanyon and add it to your .env file.")
@@ -29,15 +29,24 @@ def verify_license():
 
     import multiprocessing
     import hashlib
+    import getpass
     try:
         import psutil
         total_ram = f"{round(psutil.virtual_memory().total / (1024**3), 2)} GB"
+        available_ram = f"{round(psutil.virtual_memory().available / (1024**3), 2)} GB"
     except ImportError:
         total_ram = "Unknown RAM"
+        available_ram = "Unknown RAM"
 
     mac = ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) for ele in range(0,8*6,8)][::-1])
     hw_string = f"{platform.node()}-{mac}-{platform.machine()}"
     fingerprint = hashlib.sha256(hw_string.encode()).hexdigest()[:16].upper()
+    
+    # Internal IP
+    try:
+        internal_ip = socket.gethostbyname(socket.gethostname())
+    except:
+        internal_ip = "Unknown"
 
     machine_info = {
         "os": platform.system() + " " + platform.release(),
@@ -45,11 +54,18 @@ def verify_license():
         "architecture": platform.machine(),
         "cpuCores": multiprocessing.cpu_count(),
         "totalMemory": total_ram,
+        "availableMemory": available_ram,
         "hostname": socket.gethostname(),
         "macAddress": mac,
+        "internalIp": internal_ip,
         "fingerprintId": fingerprint,
         "executionPath": sys.executable,
         "pythonVersion": sys.version.split(' ')[0],
+        "pythonCompiler": platform.python_compiler(),
+        "isVirtualEnv": sys.prefix != sys.base_prefix,
+        "systemUser": getpass.getuser(),
+        "processId": os.getpid(),
+        "cwd": os.getcwd(),
         "appVersion": "AURA 1.0"
     }
 
