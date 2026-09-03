@@ -12,7 +12,7 @@ AURA is an enterprise-grade, multi-tenant B2B2C e-commerce platform built specif
 
 For a comprehensive breakdown of the project—including the Project Plan, UML Diagrams (Use Case, Sequence, Class, State, Activity, Component), System Architecture, Database Entity-Relationship (ER) model, and a visual User Manual—please open the official documentation file:
 
-👉 **[docs/AURA_Documentation.html](docs/AURA_Documentation.html)**
+👉 **[docs/AURA_Documentation.pdf](docs/AURA_Documentation.pdf)**
 
 *(Simply double-click the HTML file to open it in any web browser. It contains all architectural diagrams and live workflow screenshots.)*
 

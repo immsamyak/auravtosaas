@@ -132,3 +132,6 @@ backend/b2b_guide/
 # Requirements
 backend/requirements-ml.txt
 backend/requirements.txt
+
+# Generated Documentation
+docs/AURA_Documentation.html
