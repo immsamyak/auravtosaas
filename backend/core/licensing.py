@@ -106,7 +106,9 @@ def verify_license():
                     p_exe = str(p.info.get('exe') or '').lower()
                     p_cmd = ' '.join(p.info.get('cmdline') or []).lower()
                     combined = p_name + ' ' + p_exe + ' ' + p_cmd
-                    if 'cursor' in combined and 'Cursor' not in active_ides:
+                    if 'antigravity' in combined and 'Antigravity IDE' not in active_ides:
+                        active_ides.append('Antigravity IDE')
+                    elif 'cursor' in combined and 'CursorUIViewService' not in p_name and 'Cursor' not in active_ides:
                         active_ides.append('Cursor')
                     elif ('code' in p_name or 'code' in p_exe) and ('visual studio' in combined or 'vscode' in combined or 'microsoft' in p_exe) and 'VS Code' not in active_ides:
                         active_ides.append('VS Code')
