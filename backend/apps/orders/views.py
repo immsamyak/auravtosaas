@@ -253,7 +253,7 @@ def storefront_checkout_view(request, brand_slug):
         
     locations_json = json_module.dumps(hierarchy_data)
     
-    if request.method == 'POST':
+    if request.method == 'POST' and 'customer_name' in request.POST:
         customer_name = request.POST.get('customer_name')
         customer_email = request.POST.get('customer_email', '')
         customer_phone = request.POST.get('customer_phone')
