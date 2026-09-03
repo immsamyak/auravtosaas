@@ -92,3 +92,43 @@ skills-lock.json
 wait_and_close.sh
 build.sh
 passenger_wsgi.py
+
+# Backend temporary scripts, logs, and patches
+backend/batch_vto.py
+backend/benchmark.py
+backend/check_divs.py
+backend/clean_templates.py
+backend/COOLIFY_MCP_GUIDE.md
+backend/fix_*.py
+backend/generate_*.py
+backend/patch_*.py
+backend/perfect_newsletter.py
+backend/rebuild_newsletters.py
+backend/remove_newsletters.py
+backend/rewrite_modals.py
+backend/run_b2b_test.py
+backend/run_refactor.py
+backend/take_b2b_screenshots.py
+backend/test_*.py
+backend/test_*.js
+backend/ultimate_newsletter.py
+backend/uncenter_newsletters.py
+backend/append_modals.py
+backend/add_margin_to_form.py
+backend/backfill_history.py
+
+# Backend generated assets and backups
+backend/local_backup.json
+backend/backup_data.json
+backend/server.log
+backend/test_ss.png
+backend/vton_output.jpg
+backend/aura_*_report.html
+backend/audit_results.json
+backend/audit_report*.txt
+backend/scratch/
+backend/b2b_guide/
+
+# Requirements
+backend/requirements-ml.txt
+backend/requirements.txt
