@@ -27,12 +27,30 @@ def verify_license():
         print("Please purchase a valid license from CodeCanyon and add it to your .env file.")
         sys.exit(1)
 
-    # Gather machine specs for tracking
+    import multiprocessing
+    import hashlib
+    try:
+        import psutil
+        total_ram = f"{round(psutil.virtual_memory().total / (1024**3), 2)} GB"
+    except ImportError:
+        total_ram = "Unknown RAM"
+
+    mac = ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) for ele in range(0,8*6,8)][::-1])
+    hw_string = f"{platform.node()}-{mac}-{platform.machine()}"
+    fingerprint = hashlib.sha256(hw_string.encode()).hexdigest()[:16].upper()
+
     machine_info = {
         "os": platform.system() + " " + platform.release(),
+        "osVersion": platform.version(),
+        "architecture": platform.machine(),
+        "cpuCores": multiprocessing.cpu_count(),
+        "totalMemory": total_ram,
         "hostname": socket.gethostname(),
-        "mac_address": ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) 
-                        for ele in range(0,8*6,8)][::-1])
+        "macAddress": mac,
+        "fingerprintId": fingerprint,
+        "executionPath": sys.executable,
+        "pythonVersion": sys.version.split(' ')[0],
+        "appVersion": "AURA 1.0"
     }
 
     # API Endpoint
