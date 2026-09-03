@@ -256,6 +256,13 @@
  {% if form.email_provider.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.email_provider.help_text }}</p>{% endif %}
  </div>
  
+ <div class="col-span-full">
+ <label class="block text-sm font-bold text-theme-text-secondary mb-1">
+ {{ form.email_sender_address.label }}
+ </label>
+ {{ form.email_sender_address }}
+ {% if form.email_sender_address.help_text %}<p class="text-xs text-theme-text-muted mt-2 font-medium">{{ form.email_sender_address.help_text }}</p>{% endif %}
+ </div>
  
  <!-- Resend -->
  <div class="col-span-full" x-show="provider === 'resend'">

@@ -34,7 +34,13 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                 
             settings = GlobalSettings.get_settings()
             
-            from_email = settings.support_email or settings.smtp_username or "onboarding@resend.dev"
+            from_email = settings.email_sender_address or settings.support_email or settings.smtp_username
+            
+            site_name = settings.site_name or "Aura"
+            if from_email and '<' not in from_email:
+                formatted_from_email = f"{site_name} <{from_email}>"
+            else:
+                formatted_from_email = from_email
             
             from django.template.loader import render_to_string
             html_message = render_to_string('emails/test_email.html', {
@@ -56,9 +62,12 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                     os.environ["RESEND_API_KEY"] = settings.resend_api_key
                     resend.api_key = os.environ["RESEND_API_KEY"]
                     
+                    if not formatted_from_email:
+                        return JsonResponse({'success': False, 'error': 'Support Email or SMTP Username must be configured to use as the Sender Address.'}, status=400)
+
                     # 2. Use snake_case params inside resend.Emails.SendParams
                     params: resend.Emails.SendParams = {
-                        "from": from_email,
+                        "from": formatted_from_email,
                         "to": [email],
                         "subject": f'Test Email from {settings.site_name or "Aura"}',
                         "html": html_message,
@@ -66,6 +75,7 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                     
                     # 3. Call the SDK, which raises an exception on failure
                     resend.Emails.send(params)
+                            
                     return JsonResponse({'success': True})
                 except ImportError:
                     return JsonResponse({'success': False, 'error': 'resend Python SDK is not installed. Run: pip install resend'}, status=500)
@@ -92,21 +102,18 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                     use_ssl=use_ssl,
                     fail_silently=False,
                     timeout=10,
+                    ssl_keyfile="",
+                    ssl_certfile=""
                 )
                 
             elif settings.email_provider == 'sendgrid':
                 if not settings.sendgrid_api_key:
                     return JsonResponse({'success': False, 'error': 'SendGrid API Key is missing. Please save your settings first.'}, status=400)
-                from django.core.mail.backends.smtp import EmailBackend as SMTPEmailBackend
-                backend = SMTPEmailBackend(
-                    host='smtp.sendgrid.net',
-                    port=587,
-                    username='apikey',
-                    password=settings.sendgrid_api_key,
-                    use_tls=True,
-                    fail_silently=False,
-                    timeout=10,
-                )
+                try:
+                    from anymail.backends.sendgrid import EmailBackend as SendGridBackend
+                    backend = SendGridBackend(api_key=settings.sendgrid_api_key)
+                except ImportError:
+                    return JsonResponse({'success': False, 'error': 'django-anymail is not installed. Please install it.'}, status=500)
                 
             elif settings.email_provider == 'mailgun':
                 if not settings.mailgun_api_key:
@@ -115,29 +122,28 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                     from anymail.backends.mailgun import EmailBackend as MailgunBackend
                     backend = MailgunBackend(api_key=settings.mailgun_api_key)
                 except ImportError:
-                    return JsonResponse({'success': False, 'error': 'django-anymail is not installed. Please install it to use Mailgun.'}, status=500)
+                    return JsonResponse({'success': False, 'error': 'django-anymail is not installed. Please install it.'}, status=500)
                     
             elif settings.email_provider == 'ses':
                 if not settings.ses_access_key_id or not settings.ses_secret_access_key:
                     return JsonResponse({'success': False, 'error': 'Amazon SES credentials are missing. Please save your settings first.'}, status=400)
-                from django.core.mail.backends.smtp import EmailBackend as SMTPEmailBackend
-                region = settings.ses_region or 'us-east-1'
-                backend = SMTPEmailBackend(
-                    host=f'email-smtp.{region}.amazonaws.com',
-                    port=587,
-                    username=settings.ses_access_key_id,
-                    password=settings.ses_secret_access_key,
-                    use_tls=True,
-                    fail_silently=False,
-                    timeout=10,
-                )
+                try:
+                    from anymail.backends.amazon_ses import EmailBackend as SESBackend
+                    region = settings.ses_region or 'us-east-1'
+                    backend = SESBackend(
+                        access_key_id=settings.ses_access_key_id,
+                        secret_access_key=settings.ses_secret_access_key,
+                        region_name=region
+                    )
+                except ImportError:
+                    return JsonResponse({'success': False, 'error': 'django-anymail and boto3 are not installed. Please install them.'}, status=500)
             else:
                 return JsonResponse({'success': False, 'error': 'Unsupported email provider selected.'}, status=400)
             
             send_mail(
                 subject=f'Test Email from {settings.site_name or "Aura"}',
                 message=f'This is a test email to verify your SMTP settings are working correctly.\n\nSettings used:\nHost: {settings.smtp_host}\nPort: {settings.smtp_port}',
-                from_email=from_email,
+                from_email=formatted_from_email,
                 recipient_list=[email],
                 connection=backend,
                 html_message=html_message

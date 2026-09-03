@@ -258,6 +258,7 @@ class GlobalSettings(models.Model):
         NONE = 'none', 'None'
 
     email_provider = models.CharField(max_length=20, choices=EmailProvider.choices, default=EmailProvider.SMTP)
+    email_sender_address = models.EmailField(blank=True, help_text="The email address to send outgoing system emails from (e.g. noreply@yourdomain.com). If blank, Support Email is used. Must be a verified domain for API providers.")
     
     # Specific API Keys
     resend_api_key = models.CharField(max_length=255, blank=True, help_text="API Key for Resend")

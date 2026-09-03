@@ -204,6 +204,7 @@ class GlobalSettingsForm(forms.ModelForm):
         widgets = {
             'site_name': UnfoldAdminTextInputWidget(attrs={'class': 'font-bold text-xl'}),
             'support_email': UnfoldAdminEmailInputWidget(),
+            'email_sender_address': UnfoldAdminEmailInputWidget(),
             'site_logo': UnfoldAdminImageFieldWidget(),
             'site_favicon': UnfoldAdminImageFieldWidget(),
             'primary_color': UnfoldAdminColorInputWidget(),
