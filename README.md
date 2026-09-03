@@ -139,3 +139,12 @@ To stop the container:
 ```bash
 docker rm -f <container_id>
 ```
+
+---
+
+## ©️ Copyright & Intellectual Property Notice
+**© 2026 AURA SaaS Platform. All Rights Reserved.**
+
+This software, including all source code, machine learning pipelines, UI designs, and database architectures, is the exclusive intellectual property of **Samyak K. Chaudhary**. 
+
+> **Digital Fingerprint & Tracking:** This specific repository snapshot has been uniquely fingerprinted for academic evaluation. Unauthorized distribution, commercial resale (e.g., via CodeCanyon/Envato), or plagiarism of this codebase will be actively tracked. Violators will face immediate DMCA takedown notices, academic penalties, and legal prosecution to the fullest extent of the law.
