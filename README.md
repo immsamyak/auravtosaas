@@ -2,7 +2,7 @@
 
 AURA is an enterprise-grade, multi-tenant B2B2C e-commerce platform built specifically for modern fashion brands. It features advanced **AI Virtual Try-On (VTO)** capabilities, allowing customers to visualize garments on their own personal fit profiles before purchasing.
 
-**Course / Module:** Enterprise Application Development
+**Subject:** DBMS
 **Instructor:** Bikash Khadka
 **Prepared & Developed by:** Samyak K. Chaudhary
 
