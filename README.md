@@ -1,43 +1,48 @@
-# Aura - Virtual Try-On SaaS Commerce Platform
+# AURA - Virtual Try-On Multi-Tenant SaaS Platform
 
-Aura is a modern, multi-tenant Django platform built for fashion brands and technology startups to offer Virtual Try-On (VTO) and digital storefront experiences. It features a complete Role-Based Access Control (RBAC) architecture isolating Customers, Brand Owners, and System Administrators.
+AURA is an enterprise-grade, multi-tenant B2B2C e-commerce platform built specifically for modern fashion brands. It features advanced **AI Virtual Try-On (VTO)** capabilities, allowing customers to visualize garments on their own personal fit profiles before purchasing.
 
-## Overview
+**Course / Module:** Enterprise Application Development
+**Instructor:** Bikash Khadka
+**Prepared & Developed by:** Samyak K. Chaudhary
 
-Aura is a complete out-of-the-box marketplace architecture where:
-- **System Admins** oversee the entire platform and users.
-- **Brand Owners** operate their own isolated dashboards, managing their product catalog, variations (colors/sizes), and orders.
-- **Customers** browse products, generate Virtual Try-On previews using their personal fit profiles, and purchase apparel.
+---
 
-## Key Features
+## 📖 Complete Project Documentation
 
-- **Multi-Role Architecture:** Admin, Brand Owner, and Customer isolation.
-- **VTO Integration Engine:** Backend pipeline ready for external Stable Diffusion/Replicate APIs to generate customer clothing previews.
-- **Advanced Catalog:** Support for complex product variants (combinations of sizes, colors, and stock).
-- **Security-First:** Proven IDOR (Insecure Direct Object Reference) prevention. Brands cannot access or mutate competitor data.
-- **Modern UI:** Built heavily on Tailwind CSS for fully responsive and beautiful interfaces.
-- **Commerce Ready:** Pre-built checkout flows and order tracking modules.
+For a comprehensive breakdown of the project—including the Project Plan, UML Diagrams (Use Case, Sequence, Class, State, Activity, Component), System Architecture, Database Entity-Relationship (ER) model, and a visual User Manual—please open the official documentation file:
 
-## Technology Stack
+👉 **[docs/AURA_Documentation.html](docs/AURA_Documentation.html)**
 
-- **Backend Framework:** Python 3.12 / Django 5+
-- **Database:** PostgreSQL (with SQLite for local development)
-- **Frontend:** HTML5, Tailwind CSS, minimal vanilla JavaScript
-- **Deployment:** Docker, Gunicorn, WhiteNoise (for static file serving)
+*(Simply double-click the HTML file to open it in any web browser. It contains all architectural diagrams and live workflow screenshots.)*
 
-## Server Requirements
+---
 
-| Requirement | Minimum | Recommended (Production) |
-| :--- | :--- | :--- |
-| **CPU** | 1 Core | 2+ Cores |
-| **RAM** | 1 GB | 2 GB+ |
-| **Storage** | 10 GB | 20 GB+ (SSD highly recommended for media) |
-| **OS** | Linux (Ubuntu/Debian) | Linux (Ubuntu 22.04 LTS) |
-| **Software** | Docker & Docker Compose | Docker & Docker Compose |
+## 🌟 Platform Overview
 
-*(Note: The internal application runs headless backend ML queues. If you wish to run your own local Stable Diffusion weights rather than hitting the Replicate API, a dedicated GPU server is required.)*
+AURA is engineered with a strict **Role-Based Access Control (RBAC)** architecture that isolates three primary user groups:
 
-## Installation & Local Development
+1. **System Administrators:** Oversee the entire SaaS platform, manage global integrations, approve new tenant brands, and monitor platform health.
+2. **Brand Owners (Tenants):** Operate their own isolated dashboards. They can manage their custom product catalog, upload high-resolution AI masks for garments, track orders, and customize their digital storefront themes.
+3. **Customers:** Browse tenant storefronts, generate highly accurate Virtual Try-On previews using their personal fit passports (height/weight), and seamlessly purchase apparel through an encrypted checkout flow.
+
+## 🚀 Key Features
+
+- **Multi-Tenant Isolation:** Complete data separation for individual brands, preventing any cross-tenant data leaks (IDOR prevention).
+- **VTO Integration Engine:** A sophisticated pipeline designed to generate customer clothing previews via AI processing.
+- **Dynamic Storefronts:** Brands can select UI themes and customize their digital presence dynamically.
+- **Advanced Catalog & Inventory:** Support for complex product variants (size/color matrix) with real-time stock deductions.
+- **Secure Commerce Flow:** PCI-compliant ready checkout architecture with dynamic shipping and discount configurations.
+
+## 💻 Technology Stack
+
+- **Backend Framework:** Python 3.12 & Django 5+
+- **Database:** PostgreSQL (production) / SQLite (local dev fallback)
+- **Caching & Queues:** Redis & Celery (for asynchronous VTO processing)
+- **Frontend Engine:** HTML5, Tailwind CSS, Alpine.js (for reactive storefront components)
+- **Deployment & Infra:** Docker, Gunicorn, WhiteNoise
+
+## 🛠️ Local Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -52,59 +57,40 @@ Aura is a complete out-of-the-box marketplace architecture where:
    pip install -r requirements.txt
    ```
 
-3. **Database Migrations**
+3. **Environment Configuration (.env)**
+   Create a `.env` file in the `backend/` directory:
+   ```env
+   SECRET_KEY=your-secure-django-key
+   DJANGO_DEBUG=True
+   # DATABASE_URL=sqlite:///db.sqlite3  (Defaults to local SQLite)
+   ```
+
+4. **Run Migrations**
    ```bash
    python manage.py migrate
    ```
 
-4. **Run Development Server**
+5. **Start the Development Server**
    ```bash
    python manage.py runserver
    ```
 
-## Environment Variables (.env)
+## 🔐 Environment Variables (.env) Reference
 
-Aura utilizes `.env` files for configuration. The following variables dictate the application behavior:
+AURA utilizes `.env` files for core infrastructure configuration. Integrations (like Stripe for payments or Twilio for SMS) are **not** stored here; they are managed dynamically per-tenant in the Database for maximum security and multi-tenant flexibility.
 
-| Variable | Purpose | Required? | Example | Security Note |
-| :--- | :--- | :--- | :--- | :--- |
-| `SECRET_KEY` | Django cryptographic key | **YES** | `django-insecure-xxx` | NEVER expose |
-| `DEBUG` | Enable debug mode | **YES** | `False` | MUST be `False` in prod |
-| `DATABASE_URL` | PostgreSQL connection string | Optional | `postgres://user:pass@host/db` | Keep private |
-| `REPLICATE_API_TOKEN` | Generates VTO Images | **Required for VTO** | `r8_abc123` | Do not commit |
-| `STRIPE_SECRET_KEY` | Processes Orders | **Required for Commerce**| `sk_test_xxx` | Do not commit |
+| Variable | Purpose | Required? | Example |
+| :--- | :--- | :--- | :--- |
+| `SECRET_KEY` | Django cryptographic key | **YES** | `django-insecure-xxx` |
+| `DJANGO_DEBUG` | Enable debug mode | **YES** | `True` or `False` |
+| `DATABASE_URL` | DB Connection string | No | `postgres://user:pass@host/db` |
+| `REDIS_URL` | Redis for Celery & Cache | No | `redis://localhost:6379/1` |
 
-## Virtual Try-On (VTO) Configuration Status
+## 📦 Production Deployment
 
-Aura ships with the internal workflow and database architecture to handle VTO. **However, external ML image generation is NOT included out-of-the-box.** 
-
-- **AVAILABLE:** The user interface, the queuing system, the customer fit profile database, and the image upload architecture.
-- **CONFIGURATION REQUIRED:** You MUST supply a valid `REPLICATE_API_TOKEN` in your `.env` for the platform to actually ping the Stable Diffusion model and receive generated images. Without this token, the VTO feature will safely block itself.
-
-## Production Deployment (Docker)
-
-Aura is production-ready via Docker.
+AURA is container-ready. For production environments, it is recommended to use Docker alongside a robust WSGI server (Gunicorn) and a reverse proxy (Nginx/Traefik).
 
 ```bash
-cd aura
 docker build -t aura-app .
 docker run -d -p 8000:8000 --env-file .env aura-app
 ```
-*(For full production, we recommend deploying behind a reverse proxy like Traefik, Caddy, or Nginx with Let's Encrypt SSL certificates.)*
-
-## Demo & Testing
-
-For marketplace review, please reference `DEMO_CREDENTIALS.md` for safe usernames and passwords to explore the various permission roles.
-
-## Documentation Pack
-
-Comprehensive project documentation is available in `/docs`:
-- `APPLICATION_OVERVIEW_AND_PROJECT_PLAN.md`
-- `UML_DIAGRAM.md`
-- `SYSTEM_ARCHITECTURE.md`
-- `USER_MANUAL.md`
-- `INSTALLATION_MANUAL.md`
-- `INSTALLATION_MANUAL.pdf`
-
-## License & Support
-For installation and configuration support, please contact the developer profile directly. Extensive custom ML model integration (beyond the provided Replicate API structure) falls outside standard support.
