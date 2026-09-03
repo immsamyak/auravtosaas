@@ -77,10 +77,18 @@ hf_config.json
 
 # Previews, Assets, and Documentation (Not Source Code)
 codecanyon-preview/
+CHANGELOG.md
+DEMO_CREDENTIALS.md
+FEATURE_MATRIX.md
+IDM_VTON_IMPLEMENTATION.md
+implementation.md
+SCREENSHOT_INDEX.md
+windows_vto_testing_guide.md
 
 # Local Logs, Scripts, and Scratchpads
 scratch/
 deploy_logs.txt
 skills-lock.json
 wait_and_close.sh
+build.sh
 passenger_wsgi.py
