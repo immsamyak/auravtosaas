@@ -64,6 +64,7 @@ from .size_recommendations import SizeRecommendationListView, SizeRecommendation
 from .subscriptions import BrandSubscriptionListView, BrandSubscriptionCreateView, BrandSubscriptionUpdateView
 from .subscription_plans import SubscriptionPlanListView, SubscriptionPlanCreateView, SubscriptionPlanUpdateView
 from .audit_logs import AuditLogListView
+from .email_logs import EmailLogListView
 
 app_name = 'admin'
 
@@ -281,6 +282,7 @@ urlpatterns = [
     path('subscriptionplan/add/', SubscriptionPlanCreateView.as_view(), name='subscriptionplan_add'),
     path('subscriptionplan/<str:pk>/', SubscriptionPlanUpdateView.as_view(), name='subscriptionplan_edit'),
     path('audit-logs/', AuditLogListView.as_view(), name='audit_log_list'),
+    path('email-logs/', EmailLogListView.as_view(), name='email_log_list'),
 
     # Brand Staff
     path('brandstaff/', BrandStaffListView.as_view(), name='brandstaff_list'),

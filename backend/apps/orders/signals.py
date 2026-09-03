@@ -1,17 +1,8 @@
-import threading
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from .models import Order
-from apps.core.email_utils import send_transactional_email
 from apps.core.utils import get_brand_url
-
-def dispatch_async_email(event_type, context, to_emails):
-    def send():
-        try:
-            send_transactional_email(event_type, context, to_emails)
-        except Exception as e:
-            print(f"Error sending automated email ({event_type}): {e}")
-    threading.Thread(target=send, daemon=True).start()
+from apps.core.email_utils import dispatch_async_email
 
 
 @receiver(pre_save, sender=Order)

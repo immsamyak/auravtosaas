@@ -90,11 +90,28 @@ from apps.core.models import GlobalSettings
 import threading
 
 def send_async_email(subject, template_name, context, to_emails):
+    from apps.core.models import EmailLog
+    from django.utils import timezone
+    
     def send():
-        try:
-            send_dynamic_email(subject, template_name, context, to_emails)
-        except Exception as e:
-            print(f"Error sending automated email: {e}")
+        for recipient in to_emails:
+            email_log = EmailLog.objects.create(
+                recipient=recipient,
+                subject=subject,
+                template_type='Automated Reply',
+                status=EmailLog.Status.PENDING
+            )
+            try:
+                send_dynamic_email(subject, template_name, context, [recipient])
+                email_log.status = EmailLog.Status.SENT
+                email_log.sent_at = timezone.now()
+                email_log.save()
+            except Exception as e:
+                print(f"Error sending automated email: {e}")
+                email_log.status = EmailLog.Status.FAILED
+                email_log.error_message = str(e)
+                email_log.save()
+
     threading.Thread(target=send, daemon=True).start()
 
 @receiver(post_save, sender=ContactMessage)

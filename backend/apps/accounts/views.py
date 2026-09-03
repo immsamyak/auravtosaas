@@ -126,7 +126,6 @@ def profile_view(request):
 
 from django.contrib.auth.models import User
 from django.contrib import messages
-from apps.core.email_utils import send_dynamic_email
 from .models import PasswordResetOTP
 import logging
 

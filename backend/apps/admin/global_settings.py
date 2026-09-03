@@ -73,8 +73,20 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                         "html": html_message,
                     }
                     
-                    # 3. Call the SDK, which raises an exception on failure
-                    resend.Emails.send(params)
+                    import socket
+                    old_getaddrinfo = socket.getaddrinfo
+                    
+                    def force_ipv4_getaddrinfo(*args, **kwargs):
+                        if len(args) >= 1 and args[0] == 'api.resend.com':
+                            kwargs['family'] = socket.AF_INET
+                        return old_getaddrinfo(*args, **kwargs)
+                        
+                    socket.getaddrinfo = force_ipv4_getaddrinfo
+                    
+                    try:
+                        resend.Emails.send(params)
+                    finally:
+                        socket.getaddrinfo = old_getaddrinfo
                             
                     return JsonResponse({'success': True})
                 except ImportError:

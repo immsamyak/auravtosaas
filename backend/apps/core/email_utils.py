@@ -148,44 +148,44 @@ def send_transactional_email(event_type, context_dict, to_emails):
         return False
 
 def dispatch_async_email(event_type, context, to_emails, brand=None):
-    """
-    Fire-and-forget email dispatcher using Celery (or sync fallback).
-    """
+    from django.utils import timezone
+    from apps.core.models import EmailLog
+    import threading
+    
     if brand:
         context['brand_name'] = brand.name
         if brand.logo:
             context['brand_logo'] = brand.logo.url
-    
-    try:
-        from apps.core.tasks import send_email_async
-        send_email_async.delay(event_type, context, to_emails)
-    except (ImportError, Exception):
-        # Fallback to synchronous if celery is not configured or fails
-        try:
-            from django.utils import timezone
-            from apps.core.models import EmailLog
             
-            for recipient in to_emails:
-                email_log = EmailLog.objects.create(
-                    recipient=recipient,
-                    subject=f"Processing {event_type}...",
-                    template_type=event_type,
-                    status=EmailLog.Status.PENDING
-                )
-                success = send_transactional_email(event_type, context, [recipient])
+    # 1. Instantly create the queue items in the database so the UI is updated
+    email_logs = []
+    for recipient in to_emails:
+        log = EmailLog.objects.create(
+            recipient=recipient,
+            subject=f"Processing {event_type}...",
+            template_type=event_type,
+            status=EmailLog.Status.PENDING
+        )
+        email_logs.append(log)
+
+    # 2. Process in a background thread to instantly free the HTTP response
+    def process_queue():
+        for email_log in email_logs:
+            try:
+                success = send_transactional_email(event_type, context, [email_log.recipient])
                 if success:
                     email_log.status = EmailLog.Status.SENT
                     email_log.sent_at = timezone.now()
-                    if isinstance(success, str):
-                        email_log.subject = success
-                    else:
-                        email_log.subject = f"Sent {event_type} to {recipient}"
-                    email_log.save()
+                    email_log.subject = success if isinstance(success, str) else f"Sent {event_type}"
                 else:
                     email_log.status = EmailLog.Status.FAILED
                     email_log.error_message = "Email backend failed to send."
-                    email_log.save()
-        except Exception as e:
-            print(f"Failed to send email synchronously: {e}")
+                email_log.save()
+            except Exception as e:
+                email_log.status = EmailLog.Status.FAILED
+                email_log.error_message = str(e)
+                email_log.save()
+                
+    threading.Thread(target=process_queue, daemon=True).start()
 
 

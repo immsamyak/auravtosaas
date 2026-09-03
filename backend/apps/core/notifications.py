@@ -8,73 +8,52 @@ class NotificationManager:
 
     @staticmethod
     def send_custom_campaign(user, campaign):
-        from .email_utils import send_dynamic_email
+        from .email_utils import dispatch_async_email
         context = {
             'user': user,
             'campaign': campaign,
             'body_html': campaign.body_html
         }
-        send_dynamic_email(
-            subject=campaign.subject,
-            template_name='emails/custom_campaign.html',
-            context=context,
-            to_emails=[user.email]
-        )
+        dispatch_async_email('custom_campaign', context, [user.email])
 
     @staticmethod
     def send_welcome_email(user, brand=None):
+        from .email_utils import dispatch_async_email
         context = {
             'user': user,
             'brand': brand,
         }
-        send_dynamic_email(
-            subject=f"Welcome to Aura, {user.first_name or user.username}!",
-            template_name='emails/welcome.html',
-            context=context,
-            to_emails=[user.email]
-        )
+        dispatch_async_email('welcome', context, [user.email], brand=brand)
 
     @staticmethod
     def send_password_reset_email(user, reset_url):
+        from .email_utils import dispatch_async_email
         context = {
             'user': user,
             'reset_url': reset_url,
         }
-        send_dynamic_email(
-            subject="Reset Your Aura Password",
-            template_name='emails/password_reset.html',
-            context=context,
-            to_emails=[user.email]
-        )
+        dispatch_async_email('password_reset', context, [user.email])
 
     @staticmethod
     def send_order_confirmation(order):
+        from .email_utils import dispatch_async_email
         context = {
             'order': order,
             'customer_name': order.customer_name or order.user.username,
         }
         email = order.user.email if order.user else getattr(order, 'customer_email', None)
         if email:
-            send_dynamic_email(
-                subject=f"Order Confirmation #{order.id}",
-                template_name='emails/order_confirmation.html',
-                context=context,
-                to_emails=[email]
-            )
+            dispatch_async_email('order_confirmation', context, [email])
 
     @staticmethod
     def send_subscription_success(brand, subscription):
+        from .email_utils import dispatch_async_email
         context = {
             'brand': brand,
             'subscription': subscription,
         }
         if brand.owner:
-            send_dynamic_email(
-                subject="Subscription Upgrade Successful",
-                template_name='emails/subscription_success.html',
-                context=context,
-                to_emails=[brand.owner.email]
-            )
+            dispatch_async_email('subscription_success', context, [brand.owner.email], brand=brand)
 
     @staticmethod
     def send_sms_alert(phone_number, message):
