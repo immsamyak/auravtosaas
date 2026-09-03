@@ -97,11 +97,34 @@ AURA utilizes `.env` files for core infrastructure configuration. Integrations (
 | `DATABASE_URL` | DB Connection string | No | `postgres://user:pass@host/db` |
 | `REDIS_URL` | Redis for Celery & Cache | No | `redis://localhost:6379/1` |
 
-## 📦 Production Deployment
+## 📦 Docker Deployment (Recommended)
 
-AURA is container-ready. For production environments, it is recommended to use Docker alongside a robust WSGI server (Gunicorn) and a reverse proxy (Nginx/Traefik).
+AURA is completely container-ready. The included `Dockerfile` bundles the Python environment, ML models, and a robust WSGI server (Gunicorn) running on internal port 80.
 
+### 1. Build the Docker Image
+From the root of the project (where the `Dockerfile` is located), build the image. *(Note: This may take several minutes as it downloads large ML libraries like PyTorch).*
 ```bash
 docker build -t aura-app .
-docker run -d -p 8000:80 --env-file backend/.env -e DATABASE_URL="postgres://host.docker.internal:5432/aura_db" aura-app
+```
+
+### 2. Run the Container
+You need to pass your local `.env` file to the container. If you are running PostgreSQL on your local Mac/Windows host machine, you **must** override the database URL to point to `host.docker.internal` instead of `localhost`, and specify your computer's OS username (e.g., `postgres://<your-mac-username>@host.docker.internal:5432/aura_db`) so the container doesn't try to log in as `root`.
+
+```bash
+docker run -d -p 8000:80 --env-file backend/.env -e DATABASE_URL="postgres://YOUR_MAC_USERNAME@host.docker.internal:5432/aura_db" aura-app
+```
+*(Replace `YOUR_MAC_USERNAME` with your actual computer username).*
+
+### 3. Verify & Access
+Once running, open your browser and navigate to:
+👉 **http://localhost:8000/**
+
+To check the live server logs:
+```bash
+docker logs -f <container_id>
+```
+
+To stop the container:
+```bash
+docker rm -f <container_id>
 ```
