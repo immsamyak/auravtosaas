@@ -8,6 +8,17 @@ AURA is an enterprise-grade, multi-tenant B2B2C e-commerce platform built specif
 
 ---
 
+> [!CAUTION]
+> ## ⚠️ LEGAL DISCLAIMER & COPYRIGHT NOTICE
+> **This repository contains proprietary, commercial software.** 
+> AURA is a premium commercial product intended for exclusive distribution and sale via **CodeCanyon / Envato Market**. 
+> 
+> This source code is being made temporarily accessible **STRICTLY for the purpose of academic evaluation and assignment grading** by the designated instructor/institution. 
+> 
+> **UNAUTHORIZED USE IS STRICTLY PROHIBITED.** You may not copy, fork, distribute, share, or repurpose any part of this codebase for personal or commercial use. Any unauthorized sharing, piracy, or intellectual property theft will be subject to strict legal action and penalty.
+
+---
+
 ## 📖 Complete Project Documentation
 
 For a comprehensive breakdown of the project—including the Project Plan, UML Diagrams (Use Case, Sequence, Class, State, Activity, Component), System Architecture, Database Entity-Relationship (ER) model, and a visual User Manual—please open the official documentation file:
