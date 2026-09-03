@@ -11,6 +11,14 @@ def verify_license():
     # If we are just collecting static files during Docker build, skip license check
     if len(sys.argv) > 1 and sys.argv[1] == 'collectstatic':
         return
+        
+    try:
+        from dotenv import load_dotenv
+        # Find .env at project root (backend/.env)
+        env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+        load_dotenv(env_path)
+    except ImportError:
+        pass
 
     license_key = os.environ.get('AURA_LICENSE_KEY')
     if not license_key:
