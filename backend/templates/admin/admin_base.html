@@ -37,7 +37,7 @@
 </script>
 
 </head>
-<body class="bg-theme-bg text-theme-text-primary flex min-h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
+<body class="bg-[#0f172a] text-slate-300 flex min-h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
  
  <!-- Mobile Sidebar Overlay -->
  <div x-show="sidebarOpen" 
@@ -48,21 +48,21 @@
  x-transition:leave-start="opacity-100"
  x-transition:leave-end="opacity-0"
  @click="sidebarOpen = false" 
- class="fixed inset-0 bg-slate-900/50 z-40 md:hidden" style="display: none;"></div>
+ class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
 
  <!-- Sidebar Navigation -->
  <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
- class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-950 text-white flex flex-col h-screen overflow-y-auto border-r border-slate-800 shrink-0 custom-scrollbar transform md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
- <div class="sticky top-0 bg-slate-950/95 backdrop-blur-sm px-6 py-8 z-10 border-b border-slate-800/50 flex items-center justify-between">
+ class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 flex flex-col h-screen overflow-y-auto border-r border-slate-800 shrink-0 custom-scrollbar transform md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+ <div class="sticky top-0 bg-slate-900 px-6 py-6 z-10 border-b border-slate-800 flex items-center justify-between">
  <div>
  <h2 class="text-3xl font-extrabold tracking-tighter flex items-center gap-2">
- <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+ <i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i>
  <span><span class="text-white">AU</span><span class="text-indigo-500">RA.</span></span>
  </h2>
- <p class="text-xs text-theme-text-muted font-medium mt-1">Superuser Console v2.0</p>
+ <p class="text-xs text-slate-400 font-medium mt-1">Superuser Console v2.0</p>
  </div>
  <!-- Close Sidebar Button (Mobile Only) -->
- <button @click="sidebarOpen = false" class="md:hidden text-theme-text-disabled hover:text-white transition focus:outline-none">
+ <button @click="sidebarOpen = false" class="md:hidden text-slate-500 hover:text-white transition focus:outline-none">
  <i class="fa-solid fa-xmark text-xl"></i>
  </button>
  </div>
@@ -238,13 +238,13 @@
  // Remove inactive classes
  bestMatch.classList.remove('hover:bg-neutral-800', 'text-neutral-300', 'hover:text-white', 'font-medium');
  // Add active classes
- bestMatch.classList.add('bg-indigo-600', 'text-white', 'font-bold', 'shadow-lg', 'shadow-indigo-900/20');
+ bestMatch.classList.add('bg-indigo-600/10', 'text-indigo-400', 'font-bold');
  
  // Highlight the icon
  const icon = bestMatch.querySelector('i');
  if (icon) {
  icon.classList.remove('text-theme-text-disabled');
- icon.classList.add('text-indigo-200');
+ icon.classList.add('text-indigo-400');
  }
  
  // Auto-scroll sidebar to show the active link
@@ -257,14 +257,17 @@
  </aside>
 
  <!-- Main Content Area -->
- <main class="flex-1 flex flex-col h-screen overflow-hidden w-full relative">
+ <main class="flex-1 flex flex-col min-w-0 h-screen relative">
  <!-- Top Nav -->
- <header class="bg-theme-surface border-b border-theme-border h-16 shrink-0 flex items-center justify-between px-4 md:px-8 z-10 w-full">
+ <header class="h-16 bg-slate-900/50 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-4 md:px-6 z-10 sticky top-0 flex-shrink-0">
  <div class="flex items-center gap-3">
- <button @click="sidebarOpen = true" class="md:hidden text-theme-text-muted hover:text-indigo-600 transition p-2 focus:outline-none">
+ <button @click="sidebarOpen = true" class="md:hidden text-slate-400 hover:text-white transition-colors focus:outline-none">
  <i class="fa-solid fa-bars text-xl"></i>
  </button>
- <div class="text-xs md:text-sm font-semibold text-theme-text-muted uppercase tracking-wider hidden sm:block">AURA Cloud Architecture</div>
+ <div class="flex items-center space-x-2 text-emerald-400 bg-emerald-400/10 px-2.5 py-1.5 rounded-full text-xs font-medium border border-emerald-500/20">
+ <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse hidden sm:block"></span>
+ <span>API Secure</span>
+ </div>
  </div>
  <div class="flex items-center gap-4 md:gap-6">
  <!-- Notification Bell (Alpine.js) -->
@@ -369,9 +372,11 @@
  </header>
 
  <!-- Scrollable Page Content -->
- <div class="flex-1 overflow-y-auto p-8 relative">
+ <main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+ <!-- Background glow effects for dashboard -->
+ <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[100px] pointer-events-none"></div>
  {% block content %}{% endblock %}
- </div>
+ </main>
  </main>
  
  <style>
