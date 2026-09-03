@@ -131,6 +131,10 @@ backend/b2b_guide/
 
 
 
+# Obfuscation scripts
+backend/obfuscate_licensing.py
+backend/obfuscated_licensing_final.py
+
 # Generated Documentation
 docs/AURA_Documentation.html
 license
