@@ -129,10 +129,6 @@ backend/audit_report*.txt
 backend/scratch/
 backend/b2b_guide/
 
-# Requirements
-backend/requirements.txt
-backend/requirements-ml.txt
-
 # Obfuscation scripts
 backend/obfuscate_licensing.py
 backend/obfuscated_licensing_final.py
