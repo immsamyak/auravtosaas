@@ -76,10 +76,10 @@ class TestEmailView(PlatformAdminRequiredMixin, View):
                     import socket
                     old_getaddrinfo = socket.getaddrinfo
                     
-                    def force_ipv4_getaddrinfo(*args, **kwargs):
-                        if len(args) >= 1 and args[0] == 'api.resend.com':
-                            kwargs['family'] = socket.AF_INET
-                        return old_getaddrinfo(*args, **kwargs)
+                    def force_ipv4_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+                        if host == 'api.resend.com':
+                            family = socket.AF_INET
+                        return old_getaddrinfo(host, port, family, type, proto, flags)
                         
                     socket.getaddrinfo = force_ipv4_getaddrinfo
                     

@@ -85,7 +85,18 @@ def send_dynamic_email(subject, template_name, context, to_emails):
             "subject": subject,
             "html": html_content,
         }
-        resend.Emails.send(params)
+        import socket
+        old_getaddrinfo = socket.getaddrinfo
+        def force_ipv4_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+            if host == 'api.resend.com':
+                family = socket.AF_INET
+            return old_getaddrinfo(host, port, family, type, proto, flags)
+        socket.getaddrinfo = force_ipv4_getaddrinfo
+        
+        try:
+            resend.Emails.send(params)
+        finally:
+            socket.getaddrinfo = old_getaddrinfo
     else:
         backend = get_dynamic_email_backend()
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)
@@ -130,7 +141,18 @@ def send_transactional_email(event_type, context_dict, to_emails):
                 "subject": subject,
                 "html": final_html,
             }
-            resend.Emails.send(params)
+            import socket
+            old_getaddrinfo = socket.getaddrinfo
+            def force_ipv4_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+                if host == 'api.resend.com':
+                    family = socket.AF_INET
+                return old_getaddrinfo(host, port, family, type, proto, flags)
+            socket.getaddrinfo = force_ipv4_getaddrinfo
+            
+            try:
+                resend.Emails.send(params)
+            finally:
+                socket.getaddrinfo = old_getaddrinfo
         else:
             backend = get_dynamic_email_backend()
             msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, connection=backend)

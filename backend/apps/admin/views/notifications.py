@@ -64,19 +64,22 @@ def test_email_api(request):
     if not request.user.is_superuser:
         return redirect('admin:login')
         
-    from apps.core.email_utils import send_dynamic_email
+    from apps.core.email_utils import dispatch_async_email
     settings = GlobalSettings.get_settings()
     
     try:
-        send_dynamic_email(
-            subject=f"Aura Test - {settings.get_email_provider_display()}",
-            template_name='emails/custom_campaign.html',
-            context={'body_html': f'<p>This is a test of the <strong>{settings.email_provider.upper()}</strong> API integration via Django Anymail.</p>'},
-            to_emails=[request.user.email]
-        )
-        messages.success(request, f"Test email sent successfully to {request.user.email} using {settings.email_provider.upper()} API!")
+        context = {
+            'subject': f"Aura Test - {settings.get_email_provider_display()}",
+            'campaign_content': f'<p>This is a test of the <strong>{settings.email_provider.upper()}</strong> API integration via the background queue.</p>',
+            'body_html': f'<p>This is a test of the <strong>{settings.email_provider.upper()}</strong> API integration via the background queue.</p>'
+        }
+        
+        # Route it through the queue system so it shows up in the logs
+        dispatch_async_email('custom_campaign', context, [request.user.email])
+        
+        messages.success(request, f"Test email queued successfully for {request.user.email} using {settings.email_provider.upper()} API!")
     except Exception as e:
-        messages.error(request, f"Failed to send test email: {str(e)}")
+        messages.error(request, f"Failed to queue test email: {str(e)}")
         
     return redirect('admin:notification_list')
 
