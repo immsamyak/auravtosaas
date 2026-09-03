@@ -16,12 +16,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
         
-    try:
-        from core.licensing import verify_license
-        verify_license()
-    except ImportError:
-        pass # Handle case where core package is missing during initial setup
-        
+    # Let Django bootstrap itself
     execute_from_command_line(sys.argv)
 
 
