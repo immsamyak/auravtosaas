@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Aura Virtual Try-On - Documentation</title>
+    <title>AURA Enterprise Application Development - Documentation</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -1554,7 +1554,7 @@
                     subgraph AsyncLayer["Asynchronous GPU Infrastructure"]
                     Redis --> Celery["CELERY WORKERS"]
                     Celery --> AI["AI / GPU PROCESSOR"]
-                    AI --> Result[VTO RESULT (S3)]
+                    AI --> Result["VTO RESULT (S3)"]
                     end
                     AI --> ORM
 

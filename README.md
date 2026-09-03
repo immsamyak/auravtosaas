@@ -65,9 +65,13 @@ AURA is engineered with a strict **Role-Based Access Control (RBAC)** architectu
    # DATABASE_URL=sqlite:///db.sqlite3  (Defaults to local SQLite)
    ```
 
-4. **Run Migrations**
+4. **Restore Database (Required)**
+   Do NOT run `python manage.py migrate` on a fresh database, as you will lose the pre-configured mock data, AI models, and user roles. Instead, restore the provided SQL dump:
    ```bash
-   python manage.py migrate
+   # From the project root
+   cd ../database
+   ./migrate.sh postgres://user:password@localhost:5432/aura_db
+   cd ../backend
    ```
 
 5. **Start the Development Server**
